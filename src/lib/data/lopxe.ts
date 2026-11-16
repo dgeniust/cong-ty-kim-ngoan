@@ -96,7 +96,7 @@ export const content: CatalogContent = {
   productNoun: "lốp",
   hero: {
     eyebrow: "Đại lý lốp ô tô chính hãng",
-    title: ["Bám đường.", "Bền bỉ.", "Chính hãng."],
+    title: ["Bám đường, bền bỉ", "trên mọi hành trình"],
     description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách. Tư vấn đúng cỡ lốp, thay lắp và cân bằng động ngay tại cửa hàng.",
     stats: [
       { value: "4", label: "Dòng lốp theo loại xe" },

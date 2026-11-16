@@ -21,7 +21,7 @@ function Tyre({ variant }: { variant: "tyre" | "tyre-at" | "tyre-truck" }) {
       <circle cx="100" cy="100" r="84" fill="none" stroke="#3b3b40" strokeWidth={treadW} strokeDasharray={tread} />
       <circle cx="100" cy="100" r={84 - treadW / 2 - 2} fill="#141416" />
       <circle cx="100" cy="100" r={rimR + 12} fill="none" stroke="#2c2c30" strokeWidth="1.5" />
-      <circle cx="100" cy="100" r={rimR + 6} fill="none" stroke="var(--v-mark, #ff6b1a)" strokeWidth="1.5" strokeDasharray="38 400" strokeLinecap="round" transform="rotate(-70 100 100)" />
+      <circle cx="100" cy="100" r={rimR + 6} fill="none" stroke="var(--v-mark, #8f86ff)" strokeWidth="1.5" strokeDasharray="38 400" strokeLinecap="round" transform="rotate(-70 100 100)" />
       {/* mâm */}
       <circle cx="100" cy="100" r={rimR} fill={STEEL.low} />
       <circle cx="100" cy="100" r={rimR - 4} fill="#232326" />

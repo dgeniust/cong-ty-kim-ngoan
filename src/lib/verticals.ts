@@ -63,7 +63,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     phone: "0123 456 782",
     seoTitle: "Lốp xe ô tô Kim Ngoan – Lốp chính hãng, thay lắp tại Chơn Thành",
     seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Báo giá nhanh, thay lắp và cân bằng động tại chỗ.",
-    themeColor: "#0c0c0d",
+    themeColor: "#08080a",
   },
   satthep: {
     id: "satthep",

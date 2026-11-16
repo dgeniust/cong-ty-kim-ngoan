@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
   const tones = {
     green: "bg-brand-950 text-white/70 [--on:#fff]",
-    dark: "bg-black text-white/60 [--on:#ff6b1a]",
+    dark: "bg-black text-white/60 [--on:#a39cff]",
     light: "bg-[#2b221e] text-white/60 [--on:#fff]",
   } as const;
   return (

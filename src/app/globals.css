@@ -42,8 +42,6 @@
 
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
-  /* Lốp xe: Barlow Condensed cho tiêu đề. Sắt thép: chỉ dùng Be Vietnam Pro */
-  --font-condensed: "Barlow Condensed", "Be Vietnam Pro", ui-sans-serif, sans-serif;
 
   /* Landing tổng (hub) – trung tính, không thuộc ngành nào */
   --color-hub-ink: #14171a;
@@ -52,18 +50,13 @@
   --color-hub-sand: #ece8de;
   --color-hub-gold: #b0812f;
   --color-sector-phanbon: #2e7d32;
-  --color-sector-lopxe: #ff6b1a;
+  --color-sector-lopxe: #5b4dff;
   --color-sector-satthep: #6f747a;
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-marquee: marquee 32s linear infinite;
-  --animate-spin-slow: spin 28s linear infinite;
   --animate-rise: rise 0.9s var(--ease-soft) both;
   --animate-progress: progress linear both;
 
-  @keyframes marquee {
-    to { transform: translateX(-50%); }
-  }
   @keyframes rise {
     from { opacity: 0; transform: translateY(28px); }
     to { opacity: 1; transform: none; }
@@ -205,33 +198,38 @@
 /* =====================================================================
  * THEME CHUYÊN TRANG
  * Nguyên tắc chung cho lốp xe & sắt thép: không viền card, tách khối bằng
- * mảng màu + khoảng trắng; chữ tiêu đề đậm, in hoa; chuyển động ngắn, mềm.
+ * mảng màu + khoảng trắng; một font Be Vietnam Pro; gần như không animation.
  * ===================================================================== */
 .theme-lopxe {
-  /* Đen + cam: tốc độ, nghiêng, vát chéo */
-  --v-bg: #0b0b0c;
-  --v-raise: #17171a;
-  --v-sunk: #111113;
-  --v-fg: #f4f2ee;
-  --v-mute: #a19e98;
-  --v-accent: #ff6b1a;
-  --v-on-accent: #0b0b0c;
-  --v-invert: #ff6b1a;
-  --v-on-invert: #0b0b0c;
-  --v-mark: #ff6b1a;
-  --v-display: var(--font-condensed);
-  --v-display-style: italic;
-  --v-display-weight: 800;
-  --v-display-track: -0.005em;
-  --v-display-leading: 0.88;
-  --v-hero-size: clamp(3.5rem, 8.6vw, 7.75rem);
-  --v-cut: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
-  --v-zoom: scale(1.07) rotate(-3deg);
-  --v-art-bg: radial-gradient(120% 90% at 70% 10%, #2a2a2f 0%, #141416 60%);
-  --heading: #f4f2ee;
-  --focus: #ff6b1a;
-  --selection-bg: #ff6b1a;
-  --selection-fg: #0b0b0c;
+  /* Đen sâu + ánh xám mềm + tím-xanh: chữ thường gọn, thẻ nền phẳng bo nhẹ, gần như tĩnh */
+  --v-bg: #08080a;
+  --v-raise: #141417;
+  --v-sunk: #0d0d10;
+  --v-fg: #f3f3f5;
+  --v-mute: #9c9ca6;
+  --v-accent: #5b4dff;
+  --v-on-accent: #ffffff;
+  --v-invert: #141417;
+  --v-on-invert: #f3f3f5;
+  --v-mark: #8f86ff;
+  --v-display: var(--font-sans);
+  --v-display-style: normal;
+  --v-display-weight: 600;
+  --v-display-track: -0.025em;
+  --v-display-leading: 1.12;
+  --v-display-case: none;
+  --v-label-case: none;
+  --v-label-track: 0;
+  --v-hero-size: clamp(2.25rem, 4.2vw, 3.5rem);
+  --v-cut: none;
+  --v-radius: 8px;
+  --v-radius-lg: 16px;
+  --v-art-bg: radial-gradient(110% 80% at 50% 0%, #26262c 0%, #121215 62%);
+  --v-zoom: scale(1.04);
+  --heading: #f3f3f5;
+  --focus: #8f86ff;
+  --selection-bg: #5b4dff;
+  --selection-fg: #ffffff;
   color-scheme: dark;
 }
 .theme-satthep {
@@ -261,12 +259,14 @@
   --selection-bg: #d9440c;
   --selection-fg: #ffffff;
 }
-/* Sắt thép: bỏ hiệu ứng hiện dần / trượt vào – chỉ giữ chuyển màu khi hover */
+/* Lốp xe & sắt thép: bỏ hiệu ứng hiện dần / trượt vào – chỉ giữ chuyển màu khi hover */
+.theme-lopxe .reveal,
 .theme-satthep .reveal {
   opacity: 1;
   transform: none;
   transition: none;
 }
+.theme-lopxe .animate-rise,
 .theme-satthep .animate-rise {
   animation: none;
 }
@@ -292,8 +292,11 @@
     font-family: var(--v-display);
     font-style: var(--v-display-style);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: var(--v-label-case, uppercase);
+    letter-spacing: var(--v-label-track, 0.08em);
+  }
+  .theme-lopxe .v-label {
+    font-weight: 500;
   }
   .theme-satthep .v-label {
     font-weight: 600;
@@ -302,9 +305,16 @@
   /* Vát chéo (lốp xe) / vuông (sắt thép) */
   .v-cut {
     clip-path: var(--v-cut);
+    border-radius: var(--v-radius, 0);
   }
   .v-art {
     background: var(--v-art-bg);
+    border-radius: var(--v-radius-lg, 0);
+  }
+  /* Thẻ nền phẳng, KHÔNG viền – bo góc theo theme */
+  .v-panel {
+    background: var(--v-raise);
+    border-radius: var(--v-radius-lg, 0);
   }
   /* Phóng nhẹ hình khi hover thẻ – mức độ theo theme */
   .v-hover-zoom {
@@ -333,9 +343,6 @@
   .reveal[data-visible="true"] {
     opacity: 1;
     transform: none;
-  }
-  .marquee-mask {
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   }
 }
 

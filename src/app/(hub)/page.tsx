@@ -21,7 +21,7 @@ const SLIDES: HubSlide[] = [
 
 const SECTOR_STYLE = {
   phanbon: { panel: "bg-brand-900 text-white", sub: "text-white/70", chip: "bg-sun-300 text-brand-950" },
-  lopxe: { panel: "bg-[#0b0b0c] text-white", sub: "text-white/65", chip: "bg-sector-lopxe text-black" },
+  lopxe: { panel: "bg-[#0b0b0c] text-white", sub: "text-white/65", chip: "bg-sector-lopxe text-white" },
   satthep: { panel: "bg-[#ddd6d2] text-[#0f0f10]", sub: "text-black/60", chip: "bg-[#0f0f10] text-white" },
 } as const;
 

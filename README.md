@@ -6,7 +6,7 @@ Next.js (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui.
 | --- | --- | --- |
 | `/` | Landing tổng: giới thiệu công ty, 3 chuyên trang, sản phẩm theo ngành, tin mới nhất (tất cả ngành), liên hệ 3 số điện thoại, bản đồ | Trung tính (giấy + mực) |
 | `/phanbon` | Chuyên trang phân bón & thuốc BVTV – giữ nguyên từ nhánh `fe/vuon-xanh-v1` của repo `cong-ty-phan-bon` | "Vườn Xanh" xanh lá + vàng |
-| `/lopxe` | Chuyên trang lốp xe ô tô | Đen + cam, chữ nghiêng Barlow Condensed |
+| `/lopxe` | Chuyên trang lốp xe ô tô | Đen sâu + tím-xanh, chữ thường Be Vietnam Pro, thẻ không viền, gần như không animation |
 | `/satthep` | Chuyên trang tôn – sắt thép | Xám ấm + cam, chữ thường Be Vietnam Pro, gần như không animation |
 | `/tin-tuc` | Tất cả tin tức, lọc `?nganh=phanbon|lopxe|satthep` | |
 | `/admin` | CMS nội dung chuyên trang phân bón (như cũ) | |

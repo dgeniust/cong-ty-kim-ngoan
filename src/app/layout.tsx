@@ -10,11 +10,6 @@ import "@fontsource/be-vietnam-pro/latin-700.css";
 // Phân bón: chữ viết tay cho trích dẫn
 import "@fontsource/dancing-script/vietnamese-600.css";
 import "@fontsource/dancing-script/latin-600.css";
-// Lốp xe: Barlow Condensed (tiêu đề)
-import "@fontsource/barlow-condensed/vietnamese-700-italic.css";
-import "@fontsource/barlow-condensed/vietnamese-800-italic.css";
-import "@fontsource/barlow-condensed/latin-700-italic.css";
-import "@fontsource/barlow-condensed/latin-800-italic.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_URL } from "@/lib/site";
