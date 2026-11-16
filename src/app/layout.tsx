@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "@fontsource/be-vietnam-pro/vietnamese-300.css";
+import "@fontsource/be-vietnam-pro/latin-300.css";
 import "@fontsource/be-vietnam-pro/vietnamese-400.css";
 import "@fontsource/be-vietnam-pro/vietnamese-500.css";
 import "@fontsource/be-vietnam-pro/vietnamese-600.css";

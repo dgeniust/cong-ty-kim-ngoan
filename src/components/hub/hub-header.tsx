@@ -23,11 +23,11 @@ const SECTORS = [
 export function HubMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" aria-hidden className={className}>
-      <rect width="48" height="48" rx="10" className="fill-hub-ink" />
+      <rect width="48" height="48" rx="12" className="fill-hub-ink" />
       <path d="M14 12v24M14 24l12-12M14 24l12 12" stroke="#fff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       <circle cx="34" cy="14" r="4" className="fill-sector-phanbon" />
       <circle cx="34" cy="24" r="4" className="fill-sector-lopxe" />
-      <circle cx="34" cy="34" r="4" className="fill-sector-satthep" />
+      <circle cx="34" cy="34" r="4" fill="#e4f222" />
     </svg>
   );
 }
@@ -65,7 +65,7 @@ export function HubHeader() {
           <HubMark className="size-11 shrink-0" />
           <span className="leading-none">
             <span className="block text-[10px] font-semibold tracking-[0.2em] text-hub-ink-soft">{COMPANY.prefix}</span>
-            <span className="mt-1 block text-[22px] font-bold tracking-tight text-hub-ink">{COMPANY.name}</span>
+            <span className="mt-1 block text-[22px] font-semibold tracking-tight text-hub-ink">{COMPANY.name}</span>
             <span className="mt-1 hidden text-[11px] text-hub-ink-soft sm:block">{COMPANY.slogan}</span>
           </span>
         </Link>
@@ -74,12 +74,12 @@ export function HubHeader() {
           <div className="flex items-center gap-1">
             <nav aria-label="Điều hướng chính" className="flex items-center">
               {MAIN.map((m) => (
-                <Link key={m.href} href={m.href} className="rounded-full px-4 py-2 text-[15px] font-medium text-hub-ink-soft transition-colors hover:bg-hub-sand hover:text-hub-ink">
+                <Link key={m.href} href={m.href} className="rounded-full px-4 py-2 text-sm font-medium text-hub-ink-soft transition-colors hover:bg-hub-sand hover:text-hub-ink">
                   {m.label}
                 </Link>
               ))}
             </nav>
-            <a href={telHref(COMPANY.hotline)} className="ml-2 inline-flex h-10 items-center gap-2 rounded-full bg-hub-ink px-5 text-sm font-semibold text-white transition-transform duration-300 ease-soft hover:scale-[1.03]">
+            <a href={telHref(COMPANY.hotline)} className="ml-2 inline-flex h-10 items-center gap-2 rounded-full bg-hub-ink px-5 text-sm font-medium text-white">
               <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
             </a>
           </div>
@@ -102,7 +102,7 @@ export function HubHeader() {
         <div id="menu-hub" className="fixed inset-x-0 bottom-0 top-[68px] overflow-y-auto bg-hub-paper px-4 py-6 sm:px-6 lg:hidden">
           <nav aria-label="Lĩnh vực kinh doanh" className="grid gap-2">
             {SECTORS.map((s, i) => (
-              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-2xl bg-white px-5 py-4 text-lg font-semibold text-hub-ink">
+              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-[20px] bg-hub-sand px-5 py-4 text-lg font-medium text-hub-ink">
                 <span aria-hidden className={cn("size-2.5 rounded-full", s.dot)} /> {s.label}
               </Link>
             ))}

@@ -4,10 +4,10 @@ Next.js (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui.
 
 | URL | Nội dung | Theme |
 | --- | --- | --- |
-| `/` | Landing tổng: giới thiệu công ty, 3 chuyên trang, sản phẩm theo ngành, tin mới nhất (tất cả ngành), liên hệ 3 số điện thoại, bản đồ | Trung tính (giấy + mực) |
+| `/` | Landing tổng: tiêu đề giới thiệu, bảng 3 tab ngành (tự chuyển 5 giây), sản phẩm theo ngành, giới thiệu, tin mới nhất (tất cả ngành), 3 số điện thoại, bản đồ | Giấy kem ấm + mực đen, tiêu đề nét mảnh, nút viên thuốc |
 | `/phanbon` | Chuyên trang phân bón & thuốc BVTV – giữ nguyên từ nhánh `fe/vuon-xanh-v1` của repo `cong-ty-phan-bon` | "Vườn Xanh" xanh lá + vàng |
-| `/lopxe` | Chuyên trang lốp xe ô tô | Đen sâu + tím-xanh, chữ thường Be Vietnam Pro, thẻ không viền, gần như không animation |
-| `/satthep` | Chuyên trang tôn – sắt thép | Xám ấm + cam, chữ thường Be Vietnam Pro, gần như không animation |
+| `/lopxe` | Chuyên trang lốp xe ô tô | Nâu-đen ấm + chữ kem IN HOA, kẻ đứt mảnh, thẻ vuông, gần như không animation |
+| `/satthep` | Chuyên trang tôn – sắt thép | Đen lạnh + trắng + một điểm vàng chanh, bảng quy cách, thẻ vuông, gần như không animation |
 | `/tin-tuc` | Tất cả tin tức, lọc `?nganh=phanbon|lopxe|satthep` | |
 | `/admin` | CMS nội dung chuyên trang phân bón (như cũ) | |
 
@@ -32,7 +32,8 @@ src/components/hub/            component landing tổng
 
 ### Theme lốp xe / sắt thép
 Hai theme dùng chung component, khác nhau qua biến CSS trong `globals.css`
-(`.theme-lopxe`, `.theme-satthep`): màu, font tiêu đề, độ nghiêng, kiểu vát nút.
+(`.theme-lopxe`, `.theme-satthep`): màu, cỡ/kiểu chữ tiêu đề, bo góc, kiểu kẻ phân cách.
+Toàn hệ thống dùng một font: Be Vietnam Pro (phân bón có thêm Dancing Script cho trích dẫn).
 Nguyên tắc: không viền card – tách khối bằng mảng màu và khoảng trắng.
 
 ### Hình sản phẩm

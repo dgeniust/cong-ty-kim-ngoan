@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 export function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
   const tones = {
     green: "bg-brand-950 text-white/70 [--on:#fff]",
-    dark: "bg-black text-white/60 [--on:#a39cff]",
-    light: "bg-[#2b221e] text-white/60 [--on:#fff]",
+    dark: "bg-[#0a0502] text-[#ffedd7]/60 [--on:#ffedd7]",
+    light: "bg-black text-white/55 [--on:#e4f222]",
   } as const;
   return (
     <nav aria-label="Các lĩnh vực của Kim Ngoan" className={cn("text-[13px]", tones[tone])}>
