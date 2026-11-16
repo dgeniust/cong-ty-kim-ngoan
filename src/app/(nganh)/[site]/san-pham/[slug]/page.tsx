@@ -1,0 +1,146 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Check, MessageCircle, Phone } from "lucide-react";
+import { ProductVisual } from "@/components/nganh/product-visual";
+import { VButton } from "@/components/nganh/v-button";
+import { VPageHead } from "@/components/nganh/v-page-head";
+import { VProductCard } from "@/components/nganh/v-product-card";
+import { VContainer, VHeading } from "@/components/nganh/v-section";
+import { JsonLd } from "@/components/shared/json-ld";
+import { Reveal } from "@/components/shared/reveal";
+import { getCategory, getProduct, getProducts } from "@/lib/data/catalog";
+import { absoluteUrl } from "@/lib/site";
+import { resolveSite } from "@/lib/site-params";
+import { CATALOG_SITES, COMPANY, VERTICALS, isCatalogSite, telHref } from "@/lib/verticals";
+
+type Params = Promise<{ site: string; slug: string }>;
+
+export function generateStaticParams() {
+  return CATALOG_SITES.flatMap((site) => getProducts(site).map((p) => ({ site, slug: p.slug })));
+}
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { site, slug } = await params;
+  if (!isCatalogSite(site)) return {};
+  const p = getProduct(site, slug);
+  if (!p) return {};
+  const url = `${VERTICALS[site].base}/san-pham/${p.slug}`;
+  const title = `${p.name} – ${p.keySpec}`;
+  return {
+    title: p.name,
+    description: p.shortDescription,
+    alternates: { canonical: url },
+    openGraph: { url, title, description: p.shortDescription, ...(p.images?.length ? { images: [p.images[0]] } : {}) },
+  };
+}
+
+export default async function ProductDetail({ params }: { params: Params }) {
+  const { site: rawSite, slug } = await params;
+  const { site, vertical } = resolveSite(rawSite);
+  const product = getProduct(site, slug);
+  if (!product) notFound();
+  const category = getCategory(site, product.categorySlug);
+  const related = getProducts(site, { category: product.categorySlug }).filter((p) => p.slug !== slug).slice(0, 4);
+  const url = `${vertical.base}/san-pham/${product.slug}`;
+
+  const structured = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.shortDescription,
+    sku: product.sku,
+    brand: { "@type": "Brand", name: product.brand },
+    category: category?.name,
+    url: absoluteUrl(url),
+    ...(product.images?.length ? { image: product.images.map((i) => absoluteUrl(i)) } : {}),
+    additionalProperty: product.specs.map((s) => ({ "@type": "PropertyValue", name: s.name, value: s.value })),
+  };
+
+  return (
+    <>
+      <JsonLd data={structured} />
+      <VPageHead
+        vertical={vertical}
+        crumbs={[
+          { label: "Sản phẩm", href: `${vertical.base}/san-pham` },
+          ...(category ? [{ label: category.name, href: `${vertical.base}/san-pham?nhom=${category.slug}` }] : []),
+          { label: product.name },
+        ]}
+        title={product.name}
+      />
+
+      <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-2 lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} priority sizes="(min-width: 1024px) 50vw, 100vw" className="animate-rise aspect-square" />
+        </div>
+
+        <div>
+          <p className="v-label text-sm text-v-mute">
+            {product.brand} <span className="text-v-mark">/</span> {product.sku}
+          </p>
+          <p className="v-display mt-3 text-5xl text-v-fg md:text-6xl">{product.keySpec}</p>
+          <p className="mt-5 text-lg leading-relaxed text-v-mute">{product.shortDescription}</p>
+
+          <ul className="mt-8 space-y-3">
+            {product.highlights.map((h) => (
+              <li key={h} className="flex gap-3 text-[17px] text-v-fg">
+                <span className="mt-1 grid size-5 shrink-0 place-items-center bg-v-accent text-v-on-accent"><Check className="size-3.5" strokeWidth={3} aria-hidden /></span>
+                {h}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-9 bg-v-raise p-6 md:p-8">
+            <p className="v-label text-xs text-v-mute">Giá</p>
+            <p className="v-display mt-1 text-3xl text-v-fg">Liên hệ báo giá</p>
+            <p className="mt-2 text-sm text-v-mute">Giá thay đổi theo ngày và số lượng. Gọi hoặc nhắn Zalo để nhận giá tốt nhất hôm nay.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <VButton asChild size="lg">
+                <a href={telHref(vertical.phone)}><Phone /> <span className="tabular-nums">{vertical.phone}</span></a>
+              </VButton>
+              <VButton asChild size="lg" variant="solid">
+                <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer"><MessageCircle /> Zalo</a>
+              </VButton>
+              <VButton asChild size="lg" variant="quiet" className="bg-v-sunk">
+                <Link href={`${vertical.base}/lien-he?san-pham=${product.slug}`}>Gửi yêu cầu</Link>
+              </VButton>
+            </div>
+          </div>
+
+          <section aria-labelledby="thong-so-title" className="mt-14">
+            <h2 id="thong-so-title" className="v-display text-3xl text-v-fg">Thông số kỹ thuật</h2>
+            <dl className="mt-5">
+              {product.specs.map((s, i) => (
+                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-[15px] ${i % 2 === 0 ? "bg-v-raise" : ""}`}>
+                  <dt className="text-v-mute">{s.name}</dt>
+                  <dd className="font-semibold text-v-fg">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section aria-labelledby="mo-ta-title" className="mt-14">
+            <h2 id="mo-ta-title" className="v-display text-3xl text-v-fg">Mô tả</h2>
+            {product.description.map((t) => (
+              <p key={t} className="mt-4 text-[17px] leading-[1.75] text-v-mute">{t}</p>
+            ))}
+          </section>
+        </div>
+      </VContainer>
+
+      {related.length > 0 && (
+        <section aria-labelledby="lien-quan-title" className="bg-v-sunk py-16 md:py-24">
+          <VContainer>
+            <VHeading id="lien-quan-title" title="Sản phẩm cùng nhóm" href={`${vertical.base}/san-pham?nhom=${product.categorySlug}`} />
+            <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:gap-x-5 lg:grid-cols-4">
+              {related.map((p, i) => (
+                <Reveal key={p.slug} delay={i * 70}><VProductCard product={p} /></Reveal>
+              ))}
+            </div>
+          </VContainer>
+        </section>
+      )}
+    </>
+  );
+}

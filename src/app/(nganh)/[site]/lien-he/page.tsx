@@ -1,0 +1,72 @@
+import type { Metadata } from "next";
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { VContactForm } from "@/components/nganh/v-contact-form";
+import { VPageHead } from "@/components/nganh/v-page-head";
+import { VContainer } from "@/components/nganh/v-section";
+import { getProduct } from "@/lib/data/catalog";
+import { resolveSite } from "@/lib/site-params";
+import { COMPANY, VERTICALS, isCatalogSite, telHref } from "@/lib/verticals";
+
+type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ "san-pham"?: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { site } = await params;
+  if (!isCatalogSite(site)) return {};
+  const v = VERTICALS[site];
+  return {
+    title: `Liên hệ báo giá ${v.short.toLowerCase()}`,
+    description: `${v.contactLabel}: ${v.phone}. Địa chỉ: ${COMPANY.address}.`,
+    alternates: { canonical: `${v.base}/lien-he` },
+  };
+}
+
+export default async function Contact({ params, searchParams }: Props) {
+  const { site, vertical } = resolveSite((await params).site);
+  const slug = (await searchParams)["san-pham"];
+  const product = slug ? getProduct(site, slug) : undefined;
+
+  const rows = [
+    { icon: Phone, label: "Điện thoại", value: vertical.phone, href: telHref(vertical.phone) },
+    { icon: MessageCircle, label: "Zalo", value: "Nhắn Zalo báo giá", href: COMPANY.zalo },
+    { icon: Mail, label: "Email", value: COMPANY.email, href: `mailto:${COMPANY.email}` },
+    { icon: MapPin, label: "Địa chỉ", value: COMPANY.address },
+    { icon: Clock, label: "Giờ mở cửa", value: "07:00 – 18:00, tất cả các ngày" },
+  ];
+
+  return (
+    <>
+      <VPageHead vertical={vertical} crumbs={[{ label: "Liên hệ" }]} title="Liên hệ báo giá" lead={`${vertical.contactLabel}. Gửi quy cách và số lượng, chúng tôi sẽ gọi lại.`} />
+      <VContainer className="grid gap-12 py-12 md:py-20 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <address className="not-italic">
+          <a href={telHref(vertical.phone)} className="v-display block text-[clamp(2.75rem,6vw,5rem)] tabular-nums text-v-fg transition-colors hover:text-v-mark">{vertical.phone}</a>
+          <ul className="mt-10 space-y-6">
+            {rows.map((r) => (
+              <li key={r.label} className="flex gap-4">
+                <span className="grid size-11 shrink-0 place-items-center bg-v-raise text-v-fg"><r.icon className="size-5" aria-hidden /></span>
+                <div>
+                  <p className="v-label text-xs text-v-mute">{r.label}</p>
+                  {r.href ? (
+                    <a href={r.href} className="mt-0.5 block text-[17px] font-semibold text-v-fg underline-offset-4 hover:underline">{r.value}</a>
+                  ) : (
+                    <p className="mt-0.5 text-[17px] font-semibold text-v-fg">{r.value}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </address>
+        <div className="bg-v-raise p-6 md:p-10">
+          <h2 className="v-display mb-7 text-3xl text-v-fg md:text-4xl">Gửi yêu cầu</h2>
+          <VContactForm defaultMessage={product ? `Tôi cần báo giá: ${product.name} (${product.keySpec}). Số lượng: ` : ""} />
+        </div>
+      </VContainer>
+      <iframe
+        title={`Bản đồ ${COMPANY.legalName}`}
+        src={`https://www.google.com/maps?q=${encodeURIComponent(COMPANY.mapQuery)}&output=embed`}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        className="block h-[420px] w-full border-0 grayscale"
+      />
+    </>
+  );
+}

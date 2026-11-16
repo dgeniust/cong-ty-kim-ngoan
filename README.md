@@ -1,0 +1,59 @@
+# Công ty TNHH Kim Ngoan – website đa chuyên trang
+
+Next.js (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui.
+
+| URL | Nội dung | Theme |
+| --- | --- | --- |
+| `/` | Landing tổng: giới thiệu công ty, 3 chuyên trang, sản phẩm theo ngành, tin mới nhất (tất cả ngành), liên hệ 3 số điện thoại, bản đồ | Trung tính (giấy + mực) |
+| `/phanbon` | Chuyên trang phân bón & thuốc BVTV – giữ nguyên từ nhánh `fe/vuon-xanh-v1` của repo `cong-ty-phan-bon` | "Vườn Xanh" xanh lá + vàng |
+| `/lopxe` | Chuyên trang lốp xe ô tô | Đen + cam, chữ nghiêng Barlow Condensed |
+| `/satthep` | Chuyên trang tôn – sắt thép | Đen + trắng + xám, chữ Archivo Black |
+| `/tin-tuc` | Tất cả tin tức, lọc `?nganh=phanbon|lopxe|satthep` | |
+| `/admin` | CMS nội dung chuyên trang phân bón (như cũ) | |
+
+## Cấu trúc
+
+```
+src/app/(hub)/                 landing tổng + /tin-tuc
+src/app/(phanbon)/phanbon/     chuyên trang phân bón (code cũ, chỉ đổi tiền tố link)
+src/app/(nganh)/[site]/        route dùng chung cho lopxe & satthep (generateStaticParams)
+src/app/api/tin-tuc/route.ts   GET /api/tin-tuc?site=&limit=
+src/lib/verticals.ts           thông tin công ty + 3 chuyên trang (SĐT, SEO, địa chỉ)  ← SỬA Ở ĐÂY
+src/lib/data/news.ts           getNews({ site?, limit? }) – nguồn tin duy nhất
+src/lib/data/{lopxe,satthep}.ts  dữ liệu mẫu sản phẩm
+src/components/nganh/          component theo theme (token CSS --v-*)
+src/components/hub/            component landing tổng
+```
+
+### Tin tức
+- Landing tổng gọi `getNews()` → không lọc.
+- Chuyên trang gọi `getNews({ site })` → lọc theo chuyên trang.
+- Khi có backend: thay thân hàm `getNews` bằng `fetch`, giữ nguyên chữ ký.
+
+### Theme lốp xe / sắt thép
+Hai theme dùng chung component, khác nhau qua biến CSS trong `globals.css`
+(`.theme-lopxe`, `.theme-satthep`): màu, font tiêu đề, độ nghiêng, kiểu vát nút.
+Nguyên tắc: không viền card – tách khối bằng mảng màu và khoảng trắng.
+
+### Hình sản phẩm
+Lốp xe và sắt thép đang dùng **hình minh hoạ vector** (`components/nganh/product-art.tsx`).
+Khi có ảnh chụp thật: đặt vào `/public`, điền `images: ["/ten-anh.jpg"]` cho sản phẩm – ảnh sẽ tự thay hình minh hoạ.
+
+## SEO
+- `metadataBase`, title template, canonical cho mọi trang; Open Graph theo từng chuyên trang.
+- `sitemap.xml`, `robots.txt` sinh tự động.
+- JSON-LD: `Organization` + `WebSite` (landing tổng), `Store`/`TireShop`/`HardwareStore`, `Product`, `Article`, `BreadcrumbList`.
+- Trang sản phẩm/tin tức được prerender tĩnh (SSG).
+
+## Trước khi go-live
+1. `NEXT_PUBLIC_SITE_URL=https://kimngoan.com`
+2. Sửa SĐT, địa chỉ, Zalo, Facebook, năm thành lập, `mapQuery` trong `src/lib/verticals.ts` (đang là số mẫu).
+3. Thay dữ liệu mẫu sản phẩm/tin tức, thêm ảnh thật.
+4. Thêm mã xác minh Google Search Console vào `metadata.verification` (`src/app/layout.tsx`) và submit sitemap.
+
+## Chạy
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build && npm start
+```
