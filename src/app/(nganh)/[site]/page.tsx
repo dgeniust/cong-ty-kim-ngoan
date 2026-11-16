@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowUpRight, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { ProductArt } from "@/components/nganh/product-art";
 import { VButton } from "@/components/nganh/v-button";
-import { LopXeHero, SatThepHero } from "@/components/nganh/v-hero";
+import { SatThepHome } from "@/components/nganh/satthep-home";
+import { LopXeHero } from "@/components/nganh/v-hero";
 import { VNewsCard } from "@/components/nganh/v-news-card";
 import { VProductCard } from "@/components/nganh/v-product-card";
 import { VContainer, VHeading } from "@/components/nganh/v-section";
@@ -11,7 +12,6 @@ import { getBrands, getCatalog, getFeatured } from "@/lib/data/catalog";
 import { getNews } from "@/lib/data/news";
 import { resolveSite } from "@/lib/site-params";
 import { telHref } from "@/lib/verticals";
-import { cn } from "@/lib/utils";
 
 export default async function VerticalHome({ params }: { params: Promise<{ site: string }> }) {
   const { site, vertical } = resolveSite((await params).site);
@@ -19,12 +19,13 @@ export default async function VerticalHome({ params }: { params: Promise<{ site:
   const featured = getFeatured(site, 4);
   const brands = getBrands(site);
   const news = await getNews({ site, limit: 3 }); // tin tức lọc theo chuyên trang
-  const Hero = site === "lopxe" ? LopXeHero : SatThepHero;
-  const tiles = site === "lopxe";
+
+  // Sắt thép có bố cục trang chủ riêng (xám ấm + cam, ít chuyển động)
+  if (site === "satthep") return <SatThepHome vertical={vertical} categories={categories} content={content} featured={featured} brands={brands} news={news} />;
 
   return (
     <>
-      <Hero vertical={vertical} hero={content.hero} />
+      <LopXeHero vertical={vertical} hero={content.hero} />
 
       {/* Thương hiệu – dải chữ chạy */}
       <section aria-label="Thương hiệu phân phối" className="overflow-hidden bg-v-invert py-5 text-v-on-invert">
@@ -46,10 +47,10 @@ export default async function VerticalHome({ params }: { params: Promise<{ site:
           <VHeading
             id="danh-muc-title"
             index="01"
-            title={site === "lopxe" ? "Chọn lốp theo loại xe" : "Nhóm vật tư"}
-            subtitle={site === "lopxe" ? "Mỗi dòng xe một yêu cầu khác nhau về tải trọng, độ êm và độ bám." : "Đủ chủng loại cho phần thô, kết cấu và hoàn thiện mái."}
+            title="Chọn lốp theo loại xe"
+            subtitle="Mỗi dòng xe một yêu cầu khác nhau về tải trọng, độ êm và độ bám."
           />
-          {tiles ? (
+          {(
             <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               {categories.map((c, i) => (
                 <Reveal as="li" key={c.slug} delay={i * 80}>
@@ -58,23 +59,6 @@ export default async function VerticalHome({ params }: { params: Promise<{ site:
                     <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 to-transparent transition-opacity duration-500 group-hover:opacity-0" />
                     <h3 className="v-display relative text-3xl text-v-fg transition-colors duration-500 group-hover:text-v-on-accent md:text-4xl">{c.name.replace("Lốp ", "")}</h3>
                     <p className="relative mt-2 hidden text-sm leading-snug text-v-mute transition-colors duration-500 group-hover:text-v-on-accent sm:block">{c.description}</p>
-                  </Link>
-                </Reveal>
-              ))}
-            </ul>
-          ) : (
-            <ul>
-              {categories.map((c, i) => (
-                <Reveal as="li" key={c.slug} delay={i * 60}>
-                  <Link
-                    href={`${vertical.base}/san-pham?nhom=${c.slug}`}
-                    className={cn("group grid grid-cols-[auto_1fr_auto] items-center gap-5 px-4 py-6 transition-colors duration-500 hover:bg-v-invert md:grid-cols-[5rem_1.1fr_1.4fr_7rem_auto] md:gap-8 md:px-8 md:py-7", i % 2 === 0 && "bg-v-raise")}
-                  >
-                    <span className="v-display text-2xl text-v-mark">0{i + 1}</span>
-                    <h3 className="v-display text-2xl text-v-fg transition-colors duration-500 group-hover:text-v-on-invert md:text-4xl">{c.name}</h3>
-                    <p className="hidden text-[15px] leading-relaxed text-v-mute transition-colors duration-500 group-hover:text-white/70 md:block">{c.description}</p>
-                    <ProductArt kind={c.art} className="hidden size-24 transition-transform duration-700 ease-soft group-hover:scale-110 md:block" />
-                    <ArrowUpRight aria-hidden className="size-7 text-v-fg transition-all duration-500 ease-soft group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-v-on-invert" />
                   </Link>
                 </Reveal>
               ))}

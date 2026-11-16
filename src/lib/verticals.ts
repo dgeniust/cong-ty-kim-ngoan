@@ -76,7 +76,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     phone: "0123 456 783",
     seoTitle: "Tôn sắt thép Kim Ngoan – Thép xây dựng, thép hình, tôn lợp tại Chơn Thành",
     seoDescription: "Cung cấp thép xây dựng, thép hình, thép ống hộp, tôn lợp chính phẩm tại Chơn Thành. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
-    themeColor: "#111111",
+    themeColor: "#ebe6e3",
   },
 };
 

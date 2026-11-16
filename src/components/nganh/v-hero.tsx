@@ -80,28 +80,3 @@ export function LopXeHero({ vertical, hero }: HeroProps) {
     </section>
   );
 }
-
-/** Sắt thép: nền trắng, chữ đen khổ lớn, khối đen vuông chứa thép hình. */
-export function SatThepHero({ vertical, hero }: HeroProps) {
-  return (
-    <section className="bg-v-bg">
-      <VContainer className="grid gap-10 pb-0 pt-12 lg:grid-cols-12 lg:gap-0 lg:pt-20">
-        <div className="lg:col-span-7 lg:pb-24 lg:pr-12">
-          <HeroCopy vertical={vertical} hero={hero} />
-        </div>
-        <div className="relative lg:col-span-5">
-          <div className="animate-rise relative aspect-[4/3] bg-v-invert lg:absolute lg:inset-0 lg:aspect-auto" style={{ animationDelay: "250ms" }}>
-            <div aria-hidden className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:44px_44px]" />
-            <ProductArt kind="ibeam" className="absolute inset-0 m-auto size-[82%] drop-shadow-[0_30px_40px_rgb(0_0_0/0.6)]" />
-            <p className="v-label absolute bottom-5 left-6 text-xs text-white/50">I200 × 100 · SS400</p>
-          </div>
-        </div>
-      </VContainer>
-      <div className="bg-v-sunk">
-        <VContainer>
-          <Stats stats={hero.stats} className="grid grid-cols-3 gap-6 py-9 text-v-fg md:py-11" />
-        </VContainer>
-      </div>
-    </section>
-  );
-}

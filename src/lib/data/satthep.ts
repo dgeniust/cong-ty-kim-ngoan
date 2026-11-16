@@ -117,7 +117,7 @@ export const content: CatalogContent = {
   productNoun: "thép",
   hero: {
     eyebrow: "Tôn – sắt thép công trình",
-    title: ["Vững từ", "lõi thép."],
+    title: ["Tôn – sắt thép", "vững cho mọi", "công trình"],
     description: "Thép xây dựng, thép hình, ống – hộp, tôn lợp và thép tấm chính phẩm. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
     stats: [
       { value: "5", label: "Nhóm vật tư thép" },

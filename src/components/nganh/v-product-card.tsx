@@ -15,7 +15,7 @@ export function VProductCard({ product, headingLevel: Heading = "h3" }: { produc
           art={product.art}
           image={product.images?.[0]}
           className="aspect-[4/5] sm:aspect-square"
-          artClassName="transition-transform duration-700 ease-soft group-hover:scale-[1.07] group-hover:-rotate-3"
+          artClassName="v-hover-zoom"
         />
         <div className="absolute left-0 top-4 flex flex-col items-start gap-1.5">
           {product.isNew && <span className="v-label bg-v-accent px-3 py-1 text-xs text-v-on-accent">Mới</span>}

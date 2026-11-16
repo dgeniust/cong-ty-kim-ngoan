@@ -15,11 +15,6 @@ import "@fontsource/barlow-condensed/vietnamese-700-italic.css";
 import "@fontsource/barlow-condensed/vietnamese-800-italic.css";
 import "@fontsource/barlow-condensed/latin-700-italic.css";
 import "@fontsource/barlow-condensed/latin-800-italic.css";
-// Sắt thép: Archivo (tiêu đề)
-import "@fontsource/archivo/vietnamese-700.css";
-import "@fontsource/archivo/vietnamese-900.css";
-import "@fontsource/archivo/latin-700.css";
-import "@fontsource/archivo/latin-900.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_URL } from "@/lib/site";

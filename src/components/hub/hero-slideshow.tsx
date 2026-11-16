@@ -25,7 +25,7 @@ const INTERVAL = 5000; // phác thảo của khách: 5 giây chuyển 1 hình
 const TONES = {
   green: { panel: "bg-brand-900 text-white", chip: "bg-sun-300 text-brand-950", bar: "bg-sun-300" },
   dark: { panel: "bg-[#0b0b0c] text-white", chip: "bg-sector-lopxe text-black", bar: "bg-sector-lopxe" },
-  steel: { panel: "bg-[#dcdcd9] text-[#0f0f10]", chip: "bg-[#0f0f10] text-white", bar: "bg-[#0f0f10]" },
+  steel: { panel: "bg-[#ddd6d2] text-[#0f0f10]", chip: "bg-[#0f0f10] text-white", bar: "bg-[#0f0f10]" },
 } as const;
 
 export function HeroSlideshow({ slides }: { slides: HubSlide[] }) {

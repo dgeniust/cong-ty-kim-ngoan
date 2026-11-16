@@ -42,9 +42,8 @@
 
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
-  /* Chuyên trang lốp xe / sắt thép – mỗi trang 1 font tiêu đề + Be Vietnam Pro cho nội dung */
+  /* Lốp xe: Barlow Condensed cho tiêu đề. Sắt thép: chỉ dùng Be Vietnam Pro */
   --font-condensed: "Barlow Condensed", "Be Vietnam Pro", ui-sans-serif, sans-serif;
-  --font-grotesk: "Archivo", "Be Vietnam Pro", ui-sans-serif, sans-serif;
 
   /* Landing tổng (hub) – trung tính, không thuộc ngành nào */
   --color-hub-ink: #14171a;
@@ -227,6 +226,7 @@
   --v-display-leading: 0.88;
   --v-hero-size: clamp(3.5rem, 8.6vw, 7.75rem);
   --v-cut: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  --v-zoom: scale(1.07) rotate(-3deg);
   --v-art-bg: radial-gradient(120% 90% at 70% 10%, #2a2a2f 0%, #141416 60%);
   --heading: #f4f2ee;
   --focus: #ff6b1a;
@@ -235,29 +235,40 @@
   color-scheme: dark;
 }
 .theme-satthep {
-  /* Đen + trắng + xám: vuông vức, tĩnh, nặng */
-  --v-bg: #ffffff;
-  --v-raise: #f0f0ee;
-  --v-sunk: #e4e4e1;
-  --v-fg: #0f0f10;
-  --v-mute: #5b5b58;
-  --v-accent: #0f0f10;
+  /* Xám ấm + cam: chữ thường nét tròn, khối xếp lớp, gần như tĩnh */
+  --v-bg: #ebe6e3;
+  --v-raise: #dfd8d4;
+  --v-sunk: #d3cac5;
+  --v-fg: #171413;
+  --v-mute: #5f5753;
+  --v-accent: #d9440c;
   --v-on-accent: #ffffff;
-  --v-invert: #0f0f10;
-  --v-on-invert: #f0f0ee;
-  --v-mark: #8a8d91;
-  --v-display: var(--font-grotesk);
+  --v-invert: #4b3a33;
+  --v-on-invert: #f4efec;
+  --v-mark: #d9440c;
+  --v-display: var(--font-sans);
   --v-display-style: normal;
-  --v-display-weight: 900;
-  --v-display-track: -0.045em;
-  --v-display-leading: 0.94;
-  --v-hero-size: clamp(2.75rem, 6.4vw, 5.75rem);
+  --v-display-weight: 700;
+  --v-display-track: -0.035em;
+  --v-display-leading: 1.04;
+  --v-display-case: none;
+  --v-hero-size: clamp(2.6rem, 5.4vw, 4.75rem);
   --v-cut: none;
-  --v-art-bg: linear-gradient(160deg, #f4f4f2 0%, #e2e2df 100%);
-  --heading: #0f0f10;
-  --focus: #0f0f10;
-  --selection-bg: #0f0f10;
+  --v-art-bg: linear-gradient(160deg, #e2dbd7 0%, #cfc5bf 100%);
+  --v-zoom: scale(1.03);
+  --heading: #171413;
+  --focus: #d9440c;
+  --selection-bg: #d9440c;
   --selection-fg: #ffffff;
+}
+/* Sắt thép: bỏ hiệu ứng hiện dần / trượt vào – chỉ giữ chuyển màu khi hover */
+.theme-satthep .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.theme-satthep .animate-rise {
+  animation: none;
 }
 .theme-hub {
   --heading: var(--color-hub-ink);
@@ -274,7 +285,7 @@
     font-weight: var(--v-display-weight);
     letter-spacing: var(--v-display-track);
     line-height: var(--v-display-leading);
-    text-transform: uppercase;
+    text-transform: var(--v-display-case, uppercase);
   }
   /* Nhãn nhỏ in hoa (eyebrow, thông số) */
   .v-label {
@@ -285,8 +296,8 @@
     letter-spacing: 0.08em;
   }
   .theme-satthep .v-label {
-    font-size: 0.72em;
-    letter-spacing: 0.14em;
+    font-weight: 600;
+    letter-spacing: 0.12em;
   }
   /* Vát chéo (lốp xe) / vuông (sắt thép) */
   .v-cut {
@@ -294,6 +305,19 @@
   }
   .v-art {
     background: var(--v-art-bg);
+  }
+  /* Phóng nhẹ hình khi hover thẻ – mức độ theo theme */
+  .v-hover-zoom {
+    transition: transform 0.7s var(--ease-soft);
+  }
+  .group:hover .v-hover-zoom {
+    transform: var(--v-zoom);
+  }
+  /* Quầng sáng cam nhạt ở góc khối (sắt thép) */
+  .v-glow {
+    background: radial-gradient(closest-side, rgb(240 96 40 / 0.42), transparent);
+    filter: blur(24px);
+    pointer-events: none;
   }
 
   /* Hiện dần khi cuộn tới – xem components/shared/reveal.tsx */

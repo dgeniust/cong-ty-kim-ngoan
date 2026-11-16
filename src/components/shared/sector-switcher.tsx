@@ -10,7 +10,7 @@ export function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "
   const tones = {
     green: "bg-brand-950 text-white/70 [--on:#fff]",
     dark: "bg-black text-white/60 [--on:#ff6b1a]",
-    light: "bg-[#0f0f10] text-white/60 [--on:#fff]",
+    light: "bg-[#2b221e] text-white/60 [--on:#fff]",
   } as const;
   return (
     <nav aria-label="Các lĩnh vực của Kim Ngoan" className={cn("text-[13px]", tones[tone])}>

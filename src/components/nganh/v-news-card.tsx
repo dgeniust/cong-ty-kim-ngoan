@@ -10,9 +10,9 @@ export function VNewsCard({ item, large, headingLevel: Heading = "h3" }: { item:
     <article className={cn("group relative flex flex-col", large && "md:grid md:grid-cols-2 md:items-end md:gap-10")}>
       <div className={cn("v-art relative overflow-hidden", large ? "aspect-[16/11]" : "aspect-[16/10]")}>
         {item.cover ? (
-          <SmartImage src={item.cover} alt="" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105" />
+          <SmartImage src={item.cover} alt="" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover v-hover-zoom" />
         ) : (
-          item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto size-[64%] transition-transform duration-700 ease-soft group-hover:scale-110" />
+          item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto size-[64%] v-hover-zoom" />
         )}
       </div>
       <div className={cn("pt-5", large && "md:pb-2 md:pt-0")}>
