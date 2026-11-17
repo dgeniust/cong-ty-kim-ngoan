@@ -43,23 +43,48 @@
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
 
-  /* Landing tổng (hub) – nền trắng, mực đen dịu + bộ pastel tươi (mint, vàng, lam, trời) */
-  --color-hub-ink: #030302;
-  --color-hub-graphite: #41413f;
-  --color-hub-ink-soft: #5f5b56;
-  --color-hub-muted: #a8a19a;
+  /* Landing tổng (hub) – phong cách "sổ giấy dưới nắng chiều" (Notion):
+   * nền giấy ấm, thẻ trắng viền mảnh không đổ bóng, MỘT màu xanh cho hành động chính,
+   * các mảng màu phẳng (vàng, xanh trời, đào, xanh đêm) như giấy note. Không dùng gradient. */
+  --color-hub-ink: #000000;
+  --color-hub-graphite: #37352f;
+  --color-hub-ink-soft: #615d59;
+  --color-hub-muted: #a39e98;
   --color-hub-paper: #ffffff;
-  --color-hub-sand: #fff6ec; /* canvas kem ấm cho các dải nền */
-  --color-hub-stone: #efe4d7; /* kẻ / viền ấm */
+  --color-hub-canvas: #f6f5f4;
+  --color-hub-sand: #f6f5f4;
+  --color-hub-stone: #e9e8e6;
+  --color-hub-line: rgb(0 0 0 / 0.08);
+  --color-hub-blue: #0075de;
+  --color-hub-blue-hover: #005bab;
+  --color-hub-blue-tint: #e6f3fe;
+  --color-hub-marigold: #ffb110;
+  --color-hub-marigold-soft: #fff4d9;
+  --color-hub-coral: #f64932;
+  --color-hub-coral-soft: #fee6e1;
+  --color-hub-sky: #62aef0;
+  --color-hub-sky-soft: #e6f3fe;
+  --color-hub-signal: #097fe8;
+  --color-hub-peach: #f6d5b8;
+  --color-hub-mocha: #b18164;
+  --color-hub-midnight: #02093a;
   --color-hub-mint: #9bd8a9;
-  --color-hub-mint-soft: #e5f5e9;
-  --color-hub-marigold: #fde99b;
-  --color-hub-marigold-soft: #fff7d6;
-  --color-hub-peri: #b8caf5;
-  --color-hub-peri-soft: #ebf0fd;
-  --color-hub-sky: #9ed4ef;
-  --color-hub-sky-soft: #e4f4fb;
-  --color-hub-papaya: #ff5a1f;
+  --color-hub-mint-soft: #e7f5ea;
+  --color-hub-peri: #62aef0;
+  --color-hub-peri-soft: #e6f3fe;
+  --shadow-hub-nav: 0 0.7px 1.462px rgb(0 0 0 / 0.015), 0 3px 9px rgb(0 0 0 / 0.03);
+  --shadow-hub-ui: 0 4px 12px rgb(0 0 0 / 0.1);
+  --animate-bob: bob 3.2s ease-in-out infinite;
+  --animate-pop: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(-4deg); }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(0.35em) scale(0.92); }
+    to { opacity: 1; transform: none; }
+  }
   /* Màu đại diện ngành trên trang tổng – lấy từ theme của từng chuyên trang:
    * phân bón = xanh lá; lốp xe = kem + cam than hồng (/lopxe nâu-đen, chữ kem);
    * sắt thép = xám thép + vàng chanh (/satthep đen lạnh, điểm vàng chanh). */
@@ -69,6 +94,7 @@
   --color-lopxe-soft: #fff1e2;
   --color-lopxe-cream: #ffedd7;
   --color-lopxe-caramel: #f0c9a0;
+  --color-lopxe-peach: #f6d5b8;
   --color-satthep-soft: #eef0f3;
   --color-satthep-steel: #cdd2d9;
   --color-satthep-lime: #e4f222;
@@ -317,8 +343,8 @@
 }
 .theme-hub {
   --heading: var(--color-hub-ink);
-  --focus: var(--color-sector-satthep);
-  --selection-bg: var(--color-hub-marigold);
+  --focus: var(--color-hub-blue);
+  --selection-bg: var(--color-hub-blue-tint);
   --selection-fg: var(--color-hub-ink);
 }
 
@@ -376,16 +402,10 @@
     transform: var(--v-zoom);
   }
 
-  /* Nền giấy kẻ chấm & mảnh giấy xé (phong cách cắt dán) – chỉ dùng ở landing tổng */
+  /* Nền giấy kẻ chấm – chỉ dùng ở landing tổng */
   .hub-dots {
     background-image: radial-gradient(rgb(3 3 2 / 0.09) 1.2px, transparent 1.3px);
     background-size: 22px 22px;
-  }
-  .hub-torn {
-    clip-path: polygon(0 6%, 9% 0, 21% 5%, 34% 1%, 47% 6%, 61% 0, 74% 4%, 88% 0, 100% 5%, 98% 22%, 100% 41%, 97% 60%, 100% 79%, 98% 95%, 86% 100%, 72% 96%, 58% 100%, 43% 95%, 29% 100%, 15% 96%, 0 100%, 2% 81%, 0 62%, 3% 43%, 0 24%);
-  }
-  .hub-sky {
-    background: linear-gradient(in oklab 160deg, #9ed4ef 0%, #d1eef9 100%);
   }
   .marquee-mask {
     mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);

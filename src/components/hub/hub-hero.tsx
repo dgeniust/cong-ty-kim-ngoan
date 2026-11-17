@@ -3,177 +3,227 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Sprout } from "lucide-react";
 import { ProductArt } from "@/components/nganh/product-art";
 import type { ArtKind } from "@/lib/data/types";
 import { cn } from "@/lib/utils";
 
-export type HeroSlide = {
+export type HeroSector = {
   id: "phanbon" | "lopxe" | "satthep";
-  /** Dòng tiêu đề tương ứng với ngành (VD: "Phân bón cho vườn.") */
-  line: string;
-  label: string;
+  /** Từ nằm trong viên màu của tiêu đề: "đồng hành cùng [nhà nông]" */
+  audience: string;
+  short: string;
+  name: string;
   tagline: string;
+  description: string;
   href: string;
   url: string;
+  phone: string;
   image?: string;
   art?: ArtKind;
-  spot?: { name: string; meta: string; href: string };
+  groups: { name: string; href: string }[];
+  products: { name: string; meta: string; href: string }[];
 };
 
 const INTERVAL = 5000; // phác thảo của khách: 5 giây chuyển 1 hình
 
-/** Mỗi ngành một "tờ giấy" riêng, cùng tông với chuyên trang: phân bón = ảnh thật, lốp xe = kem–caramel, sắt thép = xám thép + vàng chanh. */
-const STAGE = {
-  phanbon: { panel: "bg-brand-900 text-white", dot: "bg-sector-phanbon", bar: "bg-white", track: "bg-white/35", chip: "bg-white/85 text-hub-ink" },
-  lopxe: { panel: "bg-gradient-to-br from-lopxe-cream to-lopxe-caramel text-hub-ink", dot: "bg-sector-lopxe", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
-  satthep: { panel: "bg-gradient-to-br from-satthep-soft to-satthep-steel text-hub-ink", dot: "bg-sector-satthep", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
+/** Màu từng ngành – phẳng, không gradient; khớp theme chuyên trang con. */
+const TONE = {
+  phanbon: { pill: "bg-[#cfeed6]", dot: "bg-sector-phanbon", stage: "bg-brand-900", tag: "bg-hub-mint-soft" },
+  lopxe: { pill: "bg-hub-peach", dot: "bg-sector-lopxe", stage: "bg-lopxe-cream", tag: "bg-lopxe-soft" },
+  satthep: { pill: "bg-satthep-lime", dot: "bg-sector-satthep", stage: "bg-satthep-steel", tag: "bg-satthep-soft" },
 } as const;
 
+/** Hàng "dấu tròn" kiểu Notion: biểu tượng trong vòng viền màu, nhún nhẹ, bật lên khi rê chuột. */
+const MARKS: { ring: string; art?: ArtKind; leaf?: boolean }[] = [
+  { ring: "border-hub-signal", leaf: true },
+  { ring: "border-hub-coral", art: "tyre" },
+  { ring: "border-hub-marigold", art: "rebar" },
+  { ring: "border-hub-sky", art: "tyre-truck" },
+  { ring: "border-sector-phanbon", art: "ibeam" },
+  { ring: "border-hub-coral", art: "roofing" },
+  { ring: "border-hub-signal", art: "tyre-at" },
+];
+
+function Squiggle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 24" aria-hidden className={className} fill="none">
+      <path d="M2 16c6-10 10-10 14 0s8 10 14 0 8-10 14 0 8 10 14 0" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+function Sparkle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className={className}>
+      <path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /**
- * Hero landing tổng: tiêu đề 3 dòng ĐỒNG BỘ với slideshow 3 ngành bên phải.
- * Dòng của ngành đang hiện được tô đậm; rê chuột vào dòng nào thì slideshow nhảy sang ngành đó.
- * `children` là phần mô tả + nút (render ở server).
+ * Hero landing tổng (Notion): dấu tròn → tiêu đề có viên màu → mô tả → 2 nút → "cửa sổ" xem trước chuyên trang.
+ * Ba tab trong cửa sổ tự chuyển 5 giây/lần; viên màu trong tiêu đề đổi theo ngành đang hiện.
  */
-export function HubHero({ eyebrow, slides, children }: { eyebrow: React.ReactNode; slides: HeroSlide[]; children: React.ReactNode }) {
+export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lead: React.ReactNode; actions: React.ReactNode }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [auto, setAuto] = useState(true);
   const reduced = useRef(false);
 
   useEffect(() => {
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced.current) setAuto(false);
   }, []);
 
-  const go = useCallback((i: number) => setIndex((i + slides.length) % slides.length), [slides.length]);
+  const go = useCallback((i: number) => setIndex((i + sectors.length) % sectors.length), [sectors.length]);
 
   useEffect(() => {
-    if (paused || reduced.current) return;
+    if (!auto || paused) return;
     const t = setTimeout(() => go(index + 1), INTERVAL);
     return () => clearTimeout(t);
-  }, [index, paused, go]);
+  }, [index, paused, auto, go]);
 
+  const s = sectors[index];
+  const tone = TONE[s.id];
   const hold = { onMouseEnter: () => setPaused(true), onMouseLeave: () => setPaused(false), onFocusCapture: () => setPaused(true), onBlurCapture: () => setPaused(false) };
-  const current = slides[index];
 
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-      <div>
-        <div className="animate-rise">{eyebrow}</div>
-        <h1 id="hero-title" className="mt-6 text-[clamp(2.1rem,3.7vw,3.4rem)] font-light leading-[1.12] tracking-[-0.02em]" {...hold}>
-          {slides.map((s, i) => (
-            <Link
-              key={s.id}
-              href={s.href}
-              onMouseEnter={() => setIndex(i)}
-              onFocus={() => setIndex(i)}
-              style={{ animationDelay: `${80 + i * 90}ms` }}
-              className={cn(
-                "group animate-rise flex w-fit items-center gap-3 outline-none transition-colors duration-500 focus-visible:underline",
-                i === index ? "text-hub-ink" : "text-hub-muted hover:text-hub-ink-soft",
-              )}
-            >
-              <span
-                aria-hidden
-                className={cn("size-2.5 shrink-0 rounded-full transition-[transform,opacity] duration-500 ease-soft", STAGE[s.id].dot, i === index ? "scale-100 opacity-100" : "scale-0 opacity-0")}
-              />
-              <span className={cn("transition-transform duration-500 ease-soft xl:whitespace-nowrap", i === index ? "translate-x-0" : "-translate-x-[1.375rem]")}>{s.line}</span>
-            </Link>
-          ))}
-        </h1>
-        <div className="animate-rise" style={{ animationDelay: "380ms" }}>
-          {children}
-        </div>
-      </div>
+    <div className="text-center">
+      {/* dấu tròn */}
+      <ul aria-hidden className="flex flex-wrap items-center justify-center gap-2.5">
+        {MARKS.map((m, i) => (
+          <li
+            key={i}
+            style={{ animationDelay: `${i * 0.35}s` }}
+            className={cn("grid size-11 animate-bob place-items-center rounded-full border-2 bg-hub-paper transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:scale-125", m.ring, i > 4 && "max-sm:hidden")}
+          >
+            {m.leaf ? <Sprout className="size-5 text-sector-phanbon" strokeWidth={2} /> : <ProductArt kind={m.art!} className="!size-7" />}
+          </li>
+        ))}
+      </ul>
 
-      {/* Slideshow 3 ngành */}
-      <div className="animate-rise relative" style={{ animationDelay: "200ms" }}>
-        {/* mảnh giấy cắt dán phía sau */}
-        <div aria-hidden className="hub-torn absolute -right-4 -top-5 h-2/5 w-1/2 rotate-3 bg-hub-mint sm:-right-6 sm:-top-6" />
-        <div aria-hidden className="hub-torn hub-dots absolute -bottom-6 -left-5 h-1/3 w-2/5 -rotate-3 bg-hub-marigold" />
-        <div role="region" aria-roledescription="carousel" aria-label="Ba lĩnh vực của Kim Ngoan" className="relative aspect-[4/5] max-h-[640px] w-full overflow-hidden rounded-[28px] shadow-[var(--shadow-craft)] sm:aspect-[5/4] lg:aspect-[4/5]" {...hold}>
-          {slides.map((s, i) => {
+      {/* tiêu đề */}
+      <div className="relative mx-auto mt-8 max-w-5xl">
+        <Squiggle className="absolute -left-2 top-2 hidden w-14 -rotate-12 text-hub-coral md:block lg:-left-10" />
+        <Sparkle className="absolute -right-1 -top-3 hidden size-7 text-hub-marigold md:block lg:-right-8" />
+        <Sparkle className="absolute -bottom-4 right-[18%] hidden size-4 text-hub-sky md:block" />
+        <h1 id="hero-title" className="text-[clamp(2.4rem,6vw,4.5rem)] font-semibold leading-[1.12] tracking-[-0.035em] text-hub-ink">
+          Một địa chỉ tin cậy,
+          <br />
+          đồng hành cùng{" "}
+          <span className={cn("relative inline-block rounded-full px-[0.4em] pb-[0.06em] align-baseline transition-colors duration-500", tone.pill)}>
+            <span key={s.id} className="inline-block animate-pop">
+              {s.audience}
+            </span>
+          </span>
+        </h1>
+      </div>
+      <div className="mx-auto mt-6 max-w-2xl">{lead}</div>
+      <div className="mt-8 flex flex-wrap justify-center gap-2.5">{actions}</div>
+
+      {/* cửa sổ xem trước chuyên trang */}
+      <div className="relative mx-auto mt-14 max-w-6xl text-left" {...hold}>
+        <div role="tablist" aria-label="Xem trước chuyên trang" className="mb-3 flex flex-wrap justify-center gap-1.5">
+          {sectors.map((x, i) => {
             const active = i === index;
             return (
-              <div
-                key={s.id}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${i + 1} / ${slides.length}: ${s.label}`}
-                aria-hidden={!active}
-                inert={!active}
-                className={cn("absolute inset-0 transition-opacity duration-700 ease-soft", STAGE[s.id].panel, active ? "opacity-100" : "pointer-events-none opacity-0")}
-              >
-                {s.image ? (
-                  <>
-                    <Image src={s.image} alt="" fill priority={i === 0} sizes="(min-width: 1024px) 48vw, 100vw" className={cn("object-cover transition-transform duration-[7000ms] ease-out", active ? "scale-110" : "scale-100")} />
-                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/25" />
-                  </>
-                ) : (
-                  <>
-                    <div aria-hidden className="hub-dots absolute inset-0 opacity-70" />
-                    <div aria-hidden className={cn("absolute left-1/2 top-[40%] size-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[60px]", s.id === "lopxe" ? "bg-[#e9a46a]/60" : "bg-white/80")} />
-                    {s.id === "satthep" && <div aria-hidden className="hub-torn absolute right-[12%] top-[20%] h-[34%] w-[46%] rotate-6 bg-satthep-lime" />}
-                    {s.art && (
-                      <div className={cn("absolute inset-x-0 top-[6%] mx-auto size-[72%] transition-[transform,opacity] duration-1000 ease-soft", active ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0")}>
-                        <ProductArt kind={s.art} className="animate-float" />
-                      </div>
-                    )}
-                  </>
+              <button
+                key={x.id}
+                role="tab"
+                type="button"
+                id={`tab-${x.id}`}
+                aria-selected={active}
+                aria-controls="cua-so-chuyen-trang"
+                onClick={() => {
+                  go(i);
+                  setAuto(false);
+                }}
+                className={cn(
+                  "relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-lg px-4 text-sm font-medium transition-colors duration-200",
+                  active ? "bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-line)]" : "text-hub-ink/55 hover:text-hub-ink",
                 )}
-
-                <p className={cn("absolute left-6 top-6 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] backdrop-blur-md", STAGE[s.id].chip)}>
-                  <span aria-hidden className={cn("size-2 rounded-full", STAGE[s.id].dot)} /> {s.url}
-                </p>
-
-                <div className="absolute inset-x-0 bottom-0 p-6 pb-16 sm:p-8 sm:pb-[4.5rem]">
-                  <p className="text-sm opacity-80">{s.label}</p>
-                  <p className={cn("mt-1 text-[clamp(1.75rem,3vw,2.5rem)] font-light leading-[1.1] tracking-[-0.02em] transition-[transform,opacity] delay-100 duration-700 ease-soft", active ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0")}>
-                    {s.tagline}
-                  </p>
-                  <Link href={s.href} className={cn("group mt-5 inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm font-medium shadow-[var(--shadow-craft)]", s.image ? "bg-white text-hub-ink" : "bg-hub-ink text-white")}>
-                    Vào chuyên trang <ArrowRight className="size-4 transition-transform duration-300 ease-soft group-hover:translate-x-1" aria-hidden />
-                  </Link>
-                </div>
-              </div>
+              >
+                <span aria-hidden className={cn("size-2 rounded-full", TONE[x.id].dot)} />
+                {x.name}
+                {active && auto && !paused && (
+                  <span aria-hidden key={index} className="absolute inset-x-0 bottom-0 h-0.5 origin-left animate-progress bg-hub-blue" style={{ animationDuration: `${INTERVAL}ms` }} />
+                )}
+              </button>
             );
           })}
-
-          {/* thanh tiến trình 5 giây / chấm chuyển slide */}
-          <div className="absolute inset-x-6 bottom-6 flex gap-2 sm:inset-x-8">
-            {slides.map((s, i) => (
-              <button key={s.id} type="button" aria-label={`Xem ${s.label}`} aria-current={i === index ? "true" : undefined} onClick={() => go(i)} className="group relative h-6 flex-1">
-                <span className={cn("absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 overflow-hidden rounded-full transition-[height] group-hover:h-[5px]", STAGE[current.id].track)}>
-                  {i < index && <span className={cn("block h-full", STAGE[current.id].bar)} />}
-                  {i === index && (
-                    <span
-                      key={`${index}-${paused}`}
-                      className={cn("block h-full origin-left", STAGE[current.id].bar, !paused && "animate-progress")}
-                      style={{ animationDuration: `${INTERVAL}ms` }}
-                    />
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
         </div>
 
-        {/* thẻ sản phẩm bán chạy của ngành đang hiện – nổi lệch mép trái */}
-        {current.spot && (
-          <Link
-            key={current.id}
-            href={current.spot.href}
-            className="group animate-rise absolute -left-8 top-[18%] hidden w-60 -rotate-2 items-center gap-3 rounded-[20px] bg-hub-paper p-4 shadow-[var(--shadow-craft)] transition-transform duration-300 ease-soft hover:-translate-y-1 hover:rotate-0 xl:flex"
-          >
-            <span>
-              <span className="inline-block rounded-full bg-hub-mint-soft px-2 py-0.5 text-[12px] text-hub-graphite">Bán chạy · {current.label}</span>
-              <span className="mt-1.5 block text-[15px] font-medium leading-snug text-hub-ink">{current.spot.name}</span>
-              <span className="mt-0.5 block text-[13px] tabular-nums text-hub-ink-soft">{current.spot.meta}</span>
+        <div id="cua-so-chuyen-trang" role="tabpanel" aria-labelledby={`tab-${s.id}`} className="overflow-hidden rounded-xl bg-hub-paper shadow-[0_0_0_1px_var(--color-hub-line),var(--shadow-hub-ui)]">
+          {/* thanh trình duyệt */}
+          <div className="flex items-center gap-3 border-b border-hub-line px-4 py-3">
+            <span aria-hidden className="flex gap-1.5">
+              <span className="size-3 rounded-full bg-hub-coral" />
+              <span className="size-3 rounded-full bg-hub-marigold" />
+              <span className="size-3 rounded-full bg-sector-phanbon" />
             </span>
-            <span className="ml-auto grid size-9 shrink-0 place-items-center rounded-full bg-hub-marigold text-hub-ink transition-transform duration-300 group-hover:rotate-45">
-              <ArrowUpRight className="size-4" aria-hidden />
+            <span className="mx-auto flex h-7 min-w-0 max-w-sm flex-1 items-center justify-center rounded-md bg-hub-canvas px-3 text-[13px] text-hub-ink-soft">
+              <span className="truncate">{s.url}</span>
             </span>
-          </Link>
-        )}
+            <span aria-hidden className="w-[46px]" />
+          </div>
+
+          <div key={s.id} className="grid animate-fade md:grid-cols-[1fr_1.1fr]">
+            <div className="flex flex-col p-6 sm:p-9">
+              <span className={cn("inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[13px] font-medium text-hub-ink", tone.tag)}>
+                <span aria-hidden className={cn("size-1.5 rounded-full", tone.dot)} /> {s.tagline}
+              </span>
+              <h2 className="mt-4 text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.03em] text-hub-ink">{s.name}</h2>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-hub-ink-soft">{s.description}</p>
+
+              <ul className="mt-6 flex flex-wrap gap-1.5">
+                {s.groups.map((g) => (
+                  <li key={g.href}>
+                    <Link href={g.href} className="inline-flex h-8 items-center rounded-full bg-hub-canvas px-3 text-[13px] text-hub-ink transition-colors duration-200 hover:bg-hub-stone">
+                      {g.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* sản phẩm tiêu biểu – dạng thẻ việc kiểu bảng Kanban */}
+              <ul className="mt-6 space-y-2">
+                {s.products.map((p) => (
+                  <li key={p.href}>
+                    <Link href={p.href} className="group flex items-center justify-between gap-3 rounded-lg border border-hub-line bg-hub-paper px-3 py-2.5 transition-colors duration-200 hover:bg-hub-canvas">
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium text-hub-ink">{p.name}</span>
+                        <span className="block text-[12px] tabular-nums text-hub-ink-soft">{p.meta}</span>
+                      </span>
+                      <ArrowUpRight className="size-4 shrink-0 text-hub-ink/40 transition-colors group-hover:text-hub-blue" aria-hidden />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto flex flex-wrap items-center gap-2 pt-7">
+                <Link href={s.href} className="group inline-flex h-10 items-center gap-2 rounded-lg bg-hub-blue-tint px-4 text-sm font-medium text-hub-blue transition-colors duration-200 hover:bg-[#d4eafd]">
+                  Vào chuyên trang <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                </Link>
+                <a href={`tel:${s.phone.replace(/\s/g, "")}`} className="inline-flex h-10 items-center rounded-lg px-4 text-sm font-medium tabular-nums text-hub-ink/80 transition-colors hover:bg-hub-canvas">
+                  {s.phone}
+                </a>
+              </div>
+            </div>
+
+            <div className={cn("relative min-h-[280px] overflow-hidden md:min-h-[460px]", tone.stage)}>
+              {s.image ? (
+                <Image src={s.image} alt={s.name} fill priority sizes="(min-width: 768px) 55vw, 100vw" className="object-cover" />
+              ) : (
+                <>
+                  <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
+                  {s.id === "satthep" && <div aria-hidden className="absolute right-[14%] top-[16%] h-[38%] w-[40%] rotate-6 rounded-xl bg-satthep-lime" />}
+                  {s.id === "lopxe" && <div aria-hidden className="absolute left-[12%] top-[14%] size-[46%] rounded-full bg-hub-peach" />}
+                  {s.art && <ProductArt kind={s.art} title={s.name} className="absolute inset-0 m-auto !size-[70%]" />}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
 import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
 
-export const viewport: Viewport = { themeColor: "#ffffff" };
+export const viewport: Viewport = { themeColor: "#f6f5f4" };
 
 /** Landing tổng của công ty – điều hướng về 3 chuyên trang. */
 export default function HubLayout({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
   const website = { "@context": "https://schema.org", "@type": "WebSite", name: COMPANY.legalName, url: absoluteUrl("/"), inLanguage: "vi" };
 
   return (
-    <div className="theme-hub min-h-screen bg-hub-paper text-hub-ink">
+    <div className="theme-hub min-h-screen bg-hub-canvas text-hub-ink">
       <JsonLd data={[organization, website]} />
       <HubHeader />
       <main id="noi-dung" tabIndex={-1} className="outline-none">{children}</main>

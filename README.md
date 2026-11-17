@@ -4,7 +4,7 @@ Next.js (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui.
 
 | URL | Nội dung | Theme |
 | --- | --- | --- |
-| `/` | Landing tổng: hero (tiêu đề đồng bộ với slideshow 3 ngành, 5 giây/hình), số liệu, 3 chuyên trang, thương hiệu, lý do chọn, sản phẩm theo ngành, giới thiệu + quy trình, tin mới nhất (tất cả ngành), hỏi đáp, liên hệ + bản đồ | Nền trắng + pastel tươi (mint, vàng, lam, xanh trời) kiểu cắt dán, tiêu đề nét mảnh, nút viên thuốc |
+| `/` | Landing tổng: hero (tiêu đề đồng bộ với slideshow 3 ngành, 5 giây/hình), số liệu, 3 chuyên trang, thương hiệu, lý do chọn, sản phẩm theo ngành, giới thiệu + quy trình, tin mới nhất (tất cả ngành), hỏi đáp, liên hệ + bản đồ | Phong cách Notion (nhánh `fe/notion-style-v1`): nền giấy ấm, thẻ trắng viền mảnh, một nút xanh chính, mảng màu phẳng |
 | `/phanbon` | Chuyên trang phân bón & thuốc BVTV – giữ nguyên từ nhánh `fe/vuon-xanh-v1` của repo `cong-ty-phan-bon` | "Vườn Xanh" xanh lá + vàng |
 | `/lopxe` | Chuyên trang lốp xe ô tô | Nâu-đen ấm + chữ kem IN HOA, kẻ đứt mảnh, thẻ vuông, gần như không animation |
 | `/satthep` | Chuyên trang tôn – sắt thép | Đen lạnh + trắng + một điểm vàng chanh, bảng quy cách, thẻ vuông, gần như không animation |

@@ -10,7 +10,7 @@ function Accordion(props: React.ComponentProps<typeof AccordionPrimitive.Root>) 
 }
 
 function AccordionItem({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Item>) {
-  return <AccordionPrimitive.Item data-slot="accordion-item" className={cn("border-b border-hub-stone", className)} {...props} />;
+  return <AccordionPrimitive.Item data-slot="accordion-item" className={cn("border-b border-hub-line", className)} {...props} />;
 }
 
 function AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
@@ -19,13 +19,13 @@ function AccordionTrigger({ className, children, ...props }: React.ComponentProp
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group flex flex-1 items-center justify-between gap-6 py-5 text-left text-[17px] font-medium text-hub-ink outline-none transition-colors hover:text-hub-graphite focus-visible:ring-2 focus-visible:ring-sector-satthep focus-visible:ring-offset-4",
+          "group flex flex-1 items-center justify-between gap-6 py-5 text-left text-[17px] font-semibold tracking-[-0.01em] text-hub-ink outline-none transition-colors duration-200 hover:text-hub-blue focus-visible:ring-2 focus-visible:ring-hub-blue focus-visible:ring-offset-4",
           className,
         )}
         {...props}
       >
         {children}
-        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-hub-sand transition-[transform,background-color] duration-300 ease-soft group-data-[state=open]:rotate-45 group-data-[state=open]:bg-hub-mint">
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-hub-canvas transition-[transform,background-color,color] duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-data-[state=open]:rotate-45 group-data-[state=open]:bg-hub-blue group-data-[state=open]:text-white">
           <Plus className="size-4" aria-hidden />
         </span>
       </AccordionPrimitive.Trigger>

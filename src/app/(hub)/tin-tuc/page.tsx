@@ -21,14 +21,14 @@ export default async function HubNews({ searchParams }: { searchParams: Promise<
   return (
     <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 md:py-20 lg:px-10">
       <p className="text-sm text-hub-ink-soft">Tin tức</p>
-      <h1 className="animate-rise mt-2 text-[clamp(2.25rem,4vw,3rem)] font-light leading-[1.08] tracking-[-0.02em] text-hub-ink">Mới nhất từ Kim Ngoan</h1>
+      <h1 className="animate-rise mt-2 text-[clamp(2.25rem,4.5vw,3.5rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-hub-ink">Mới nhất từ Kim Ngoan</h1>
       <nav aria-label="Lọc theo lĩnh vực" className="mt-8 flex flex-wrap gap-2">
         {chips.map((c) => (
           <Link
             key={c.label}
             href={c.id ? `/tin-tuc?nganh=${c.id}` : "/tin-tuc"}
             aria-current={site === c.id ? "true" : undefined}
-            className={cn("inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-colors duration-200", site === c.id ? "bg-hub-marigold text-hub-ink" : "bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-stone)] hover:bg-hub-stone")}
+            className={cn("inline-flex h-10 items-center rounded-lg px-4 text-[15px] font-medium transition-colors duration-200", site === c.id ? "bg-hub-blue-tint text-hub-blue" : "border border-hub-line bg-hub-paper text-hub-ink/70 hover:text-hub-ink")}
           >
             {c.label}
           </Link>

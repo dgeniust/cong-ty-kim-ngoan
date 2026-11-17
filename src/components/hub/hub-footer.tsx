@@ -3,15 +3,15 @@ import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
 
 export function HubFooter() {
   return (
-    <footer className="bg-hub-sand text-hub-ink-soft">
+    <footer className="border-t border-hub-line bg-hub-paper text-hub-ink-soft">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-10">
         <div>
           <p className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-hub-ink">
             {COMPANY.name}
             <span aria-hidden className="flex gap-1">
-              <span className="size-2 rounded-full bg-hub-mint" />
-              <span className="size-2 rounded-full bg-hub-marigold" />
-              <span className="size-2 rounded-full bg-hub-peri" />
+              <span className="size-2 rounded-full bg-sector-phanbon" />
+              <span className="size-2 rounded-full bg-sector-lopxe" />
+              <span className="size-2 rounded-full bg-sector-satthep" />
             </span>
           </p>
           <p className="mt-3 max-w-sm text-[15px] leading-relaxed">
@@ -44,7 +44,7 @@ export function HubFooter() {
           </ul>
         </address>
       </div>
-      <p className="mx-auto max-w-[1400px] border-t border-hub-stone px-4 py-6 text-[13px] sm:px-6 lg:px-10">
+      <p className="mx-auto max-w-[1400px] border-t border-hub-line px-4 py-6 text-[13px] sm:px-6 lg:px-10">
         © {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.
       </p>
     </footer>
