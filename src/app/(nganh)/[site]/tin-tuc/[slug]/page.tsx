@@ -44,7 +44,7 @@ function Block({ block }: { block: ArticleBlock }) {
         <ul className="mt-5 space-y-3">
           {block.items.map((it) => (
             <li key={it} className="flex gap-3.5">
-              <span aria-hidden className="mt-[11px] size-2 shrink-0 rotate-45 bg-v-mark" />
+              <span aria-hidden className="mt-[11px] size-2 shrink-0 rounded-full bg-v-accent" />
               <span>{it}</span>
             </li>
           ))}
@@ -52,14 +52,14 @@ function Block({ block }: { block: ArticleBlock }) {
       );
     case "quote":
       return (
-        <blockquote className="my-10 bg-v-invert px-7 py-8 text-v-on-invert md:px-10">
+        <blockquote className="my-10 rounded-xl bg-v-island px-7 py-8 text-v-on-island md:px-10">
           <p className="v-display text-2xl md:text-3xl">{block.text}</p>
         </blockquote>
       );
     case "img":
       return (
         <figure className="my-10">
-          <div className="relative aspect-[16/9] overflow-hidden bg-v-raise">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-v-raise">
             <SmartImage src={block.src} alt={block.caption ?? ""} fill sizes="(min-width: 1024px) 720px, 100vw" className="object-cover" />
           </div>
           {block.caption && <figcaption className="mt-3 text-sm text-v-mute">{block.caption}</figcaption>}
@@ -90,7 +90,7 @@ export default async function NewsDetail({ params }: { params: Params }) {
         }}
       />
       <VPageHead vertical={vertical} crumbs={[{ label: "Tin tức", href: `${vertical.base}/tin-tuc` }, { label: item.title }]} title={item.title}>
-        <p className="v-label mt-6 flex flex-wrap gap-x-3 text-xs text-v-mute">
+        <p className="mt-6 flex flex-wrap gap-x-3 text-[13px] text-v-mute">
           <time dateTime={item.date}>{formatDate(item.date)}</time>
           <span aria-hidden className="text-v-mark">/</span>
           <span>{item.author}</span>
@@ -114,14 +114,14 @@ export default async function NewsDetail({ params }: { params: Params }) {
           </div>
           <ul className="mt-10 flex flex-wrap gap-2">
             {item.tags.map((t) => (
-              <li key={t} className="v-label bg-v-raise px-3 py-1.5 text-xs text-v-mute">{t}</li>
+              <li key={t} className="rounded-full bg-v-chip px-3 py-1 text-[13px] text-v-fg">{t}</li>
             ))}
           </ul>
         </div>
       </VContainer>
 
       {others.length > 0 && (
-        <section aria-labelledby="bai-khac-title" className="bg-v-sunk py-16 md:py-24">
+        <section aria-labelledby="bai-khac-title" className="border-t border-v-line bg-v-sunk py-16 md:py-24">
           <VContainer>
             <VHeading id="bai-khac-title" title="Bài viết khác" href={`${vertical.base}/tin-tuc`} />
             <div className="grid gap-x-5 gap-y-12 md:grid-cols-3">

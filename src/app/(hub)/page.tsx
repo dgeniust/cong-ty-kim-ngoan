@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
  *  - một màu xanh #0075de duy nhất cho hành động chính, hành động phụ dùng nền xanh nhạt;
  *  - màu sắc nằm ở các mảng phẳng (vàng, xanh trời, đào, xanh đêm) như giấy note;
  *  - chuyển động 200ms, riêng các dấu trang trí được nhún/bật cho sinh động.
- * Màu ngành giữ khớp chuyên trang: phân bón = xanh lá, lốp xe = kem/đào + cam, sắt thép = xám thép + vàng chanh.
+ * Màu ngành giữ khớp chuyên trang: phân bón = xanh lá, lốp xe = đen + cam, sắt thép = trắng + xám + chữ đen.
  */
 
 const WRAP = "mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10"; // khớp lề với header
@@ -33,7 +33,7 @@ const BTN_PRIMARY = `${BTN} group bg-hub-blue text-white hover:bg-hub-blue-hover
 const BTN_GHOST = `${BTN} bg-hub-blue-tint text-hub-blue hover:bg-[#d4eafd]`;
 const BTN_TEXT = `${BTN} text-hub-ink/90 hover:bg-hub-ink/5`;
 const DOT: Record<VerticalId, string> = { phanbon: "bg-sector-phanbon", lopxe: "bg-sector-lopxe", satthep: "bg-sector-satthep" };
-const STAGE: Record<VerticalId, string> = { phanbon: "bg-brand-900", lopxe: "bg-lopxe-cream", satthep: "bg-satthep-steel" };
+const STAGE: Record<VerticalId, string> = { phanbon: "bg-brand-900", lopxe: "bg-lopxe-ink", satthep: "bg-satthep-soft" };
 const ART = { lopxe: "tyre-at", satthep: "ibeam" } as const;
 const AUDIENCE: Record<VerticalId, string> = { phanbon: "nhà nông", lopxe: "chủ xe", satthep: "nhà thầu" };
 
@@ -258,9 +258,13 @@ export default async function HubHome() {
                       <Image src="/fertilize-img.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />
                     ) : (
                       <>
-                        <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
-                        {c.id === "satthep" && <div aria-hidden className="absolute right-[14%] top-[14%] h-[42%] w-[40%] rotate-6 rounded-xl bg-satthep-lime" />}
-                        {c.id === "lopxe" && <div aria-hidden className="absolute left-[16%] top-[10%] size-[60%] rounded-full bg-hub-peach" />}
+                        {c.id === "satthep" && (
+                          <>
+                            <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
+                            <div aria-hidden className="absolute right-[14%] top-[14%] h-[42%] w-[40%] rotate-6 rounded-xl bg-satthep-ink" />
+                          </>
+                        )}
+                        {c.id === "lopxe" && <div aria-hidden className="absolute left-[18%] top-[10%] size-[64%] rounded-full bg-lopxe-orange" />}
                         <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-500 ease-soft group-hover:-rotate-6 group-hover:scale-105" />
                       </>
                     )}
@@ -468,7 +472,7 @@ export default async function HubHome() {
                 <li key={v.id}>
                   <a href={telHref(v.phone)} className="group flex items-center justify-between gap-4 rounded-lg bg-white/[0.07] px-4 py-3.5 transition-colors duration-200 hover:bg-white/[0.13]">
                     <span className="flex min-w-0 items-center gap-3">
-                      <span aria-hidden className={cn("size-2.5 shrink-0 rounded-full", v.id === "satthep" ? "bg-satthep-lime" : DOT[v.id])} />
+                      <span aria-hidden className={cn("size-2.5 shrink-0 rounded-full", v.id === "satthep" ? "bg-white" : DOT[v.id])} />
                       <span className="min-w-0">
                         <span className="block truncate text-[13px] text-white/60">{v.contactLabel}</span>
                         <span className="block text-xl font-semibold tabular-nums tracking-[-0.02em]">{v.phone}</span>

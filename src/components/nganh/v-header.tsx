@@ -42,20 +42,20 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-[background-color,box-shadow] duration-300",
-        scrolled || open ? "bg-v-bg/92 shadow-[0_10px_40px_-20px_rgb(0_0_0/0.45)] backdrop-blur-md" : "bg-v-bg",
+        "sticky top-0 z-50 transition-[background-color,box-shadow] duration-200",
+        scrolled || open ? "bg-v-bg/90 shadow-[0_1px_0_var(--v-line),0_3px_9px_rgb(0_0_0/0.04)] backdrop-blur-md" : "bg-v-bg",
       )}
     >
-      <a href="#noi-dung" className="sr-only z-[60] bg-v-accent px-5 py-3 text-sm font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+      <a href="#noi-dung" className="sr-only z-[60] rounded-lg bg-v-accent px-5 py-3 text-sm font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
-        <Link href={vertical.base} aria-label={`${COMPANY.legalName} – ${vertical.name}`} className="flex items-baseline gap-2.5">
-          <span className="v-display text-[28px] text-v-fg">{COMPANY.name}</span>
-          <span className="v-label bg-v-accent px-2 py-0.5 text-xs text-v-on-accent">{vertical.short}</span>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        <Link href={vertical.base} aria-label={`${COMPANY.legalName} – ${vertical.name}`} className="flex items-center gap-2.5">
+          <span className="text-[22px] font-semibold tracking-[-0.03em] text-v-fg">{COMPANY.name}</span>
+          <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-[12px] font-medium text-v-on-pill">{vertical.short}</span>
         </Link>
 
-        <nav aria-label="Điều hướng chính" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Điều hướng chính" className="hidden items-center gap-1 lg:flex">
           {nav.map((item) => {
             const active = isActive(item.href);
             return (
@@ -64,8 +64,8 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "v-label relative py-2 text-[15px] transition-colors duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[3px] after:origin-left after:bg-v-mark after:transition-transform after:duration-300 after:ease-soft",
-                  active ? "text-v-fg after:scale-x-100" : "text-v-mute after:scale-x-0 hover:text-v-fg hover:after:scale-x-100",
+                  "rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors duration-200",
+                  active ? "bg-v-raise text-v-fg" : "text-v-fg/55 hover:text-v-fg",
                 )}
               >
                 {item.label}
@@ -94,7 +94,7 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
       </div>
 
       {open && (
-        <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-[72px] overflow-y-auto bg-v-bg lg:hidden">
+        <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-v-bg lg:hidden">
           <nav aria-label="Điều hướng di động" className="flex flex-col px-4 py-6 sm:px-6">
             {nav.map((item, i) => (
               <Link
@@ -103,7 +103,7 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
                 onClick={() => setOpen(false)}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 style={{ animationDelay: `${i * 60}ms` }}
-                className={cn("v-display animate-rise py-3 text-5xl", isActive(item.href) ? "text-v-mark" : "text-v-fg")}
+                className={cn("animate-rise rounded-lg px-3 py-3 text-3xl font-semibold tracking-[-0.03em]", isActive(item.href) ? "bg-v-raise text-v-fg" : "text-v-fg/70")}
               >
                 {item.label}
               </Link>

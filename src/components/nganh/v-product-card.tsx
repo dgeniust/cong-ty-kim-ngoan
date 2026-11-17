@@ -4,41 +4,30 @@ import type { CatalogProduct } from "@/lib/data/types";
 import { VERTICALS } from "@/lib/verticals";
 import { ProductVisual } from "./product-visual";
 
-/** Thẻ sản phẩm không viền: mảng nền + hình lớn, cả thẻ là một link. */
+/** Thẻ sản phẩm kiểu Notion: nền thẻ, viền mảnh, bo 12px, hình đặt trong khung bo 8px; cả thẻ là một link. */
 export function VProductCard({ product, headingLevel: Heading = "h3" }: { product: CatalogProduct; headingLevel?: "h2" | "h3" }) {
   const href = `${VERTICALS[product.site].base}/san-pham/${product.slug}`;
   return (
-    <article className="group relative flex flex-col">
-      <div className="relative">
-        <ProductVisual
-          name={product.name}
-          art={product.art}
-          image={product.images?.[0]}
-          className="aspect-[4/5] sm:aspect-square"
-          artClassName="v-hover-zoom"
-        />
-        <div className="absolute left-0 top-4 flex flex-col items-start gap-1.5">
-          {product.isNew && <span className="v-label bg-v-accent px-3 py-1 text-xs text-v-on-accent">Mới</span>}
-          {product.featured && <span className="v-label bg-v-fg px-3 py-1 text-xs text-v-bg">Bán chạy</span>}
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-v-line bg-v-card transition-colors duration-200 hover:border-v-mark/60">
+      <div className="relative m-1.5 mb-0">
+        <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} className="aspect-square !rounded-lg" artClassName="v-hover-zoom" />
+        <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">
+          {product.isNew && <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-[12px] font-medium text-v-on-pill">Mới</span>}
+          {product.featured && <span className="rounded-full bg-v-card px-2.5 py-0.5 text-[12px] font-medium text-v-fg">Bán chạy</span>}
         </div>
-        <span
-          aria-hidden
-          className="absolute bottom-0 right-0 grid size-11 translate-y-2 place-items-center bg-v-accent text-v-on-accent opacity-0 transition-all duration-300 ease-soft group-hover:translate-y-0 group-hover:opacity-100"
-        >
-          <ArrowUpRight className="size-5" />
-        </span>
       </div>
-      <div className="flex flex-1 flex-col pt-4">
-        <p className="v-label text-[13px] text-v-mute">{product.brand}</p>
-        <Heading className="mt-1 text-[17px] font-semibold leading-snug text-v-fg">
-          <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-v-accent">
+      <div className="flex flex-1 flex-col p-4">
+        <p className="text-[13px] text-v-mute">{product.brand}</p>
+        <Heading className="mt-0.5 text-[16px] font-semibold leading-snug tracking-[-0.01em] text-v-fg">
+          <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-xl focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-v-accent">
             {product.name}
           </Link>
         </Heading>
         <p className="mt-1.5 line-clamp-2 hidden text-sm leading-relaxed text-v-mute sm:block">{product.shortDescription}</p>
-        <p className="v-display mt-auto pt-3 text-xl text-v-fg">
-          <span className="text-v-mark">/</span> {product.keySpec}
-        </p>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-4">
+          <span className="truncate rounded-md bg-v-chip px-2 py-1 text-[13px] font-medium tabular-nums text-v-fg">{product.keySpec}</span>
+          <ArrowUpRight className="size-4 shrink-0 text-v-mute transition-[color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-v-accent" aria-hidden />
+        </div>
       </div>
     </article>
   );

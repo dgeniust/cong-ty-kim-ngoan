@@ -76,23 +76,23 @@ export default async function ProductDetail({ params }: { params: Params }) {
         </div>
 
         <div>
-          <p className="v-label text-sm text-v-mute">
+          <p className="text-sm text-v-mute">
             {product.brand} <span className="text-v-mark">/</span> {product.sku}
           </p>
-          <p className="v-display mt-3 text-5xl text-v-fg md:text-6xl">{product.keySpec}</p>
+          <p className="mt-3"><span className="inline-block rounded-full bg-v-pill px-4 py-1 text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tabular-nums tracking-[-0.03em] text-v-on-pill">{product.keySpec}</span></p>
           <p className="mt-5 text-lg leading-relaxed text-v-mute">{product.shortDescription}</p>
 
           <ul className="mt-8 space-y-3">
             {product.highlights.map((h) => (
               <li key={h} className="flex gap-3 text-[17px] text-v-fg">
-                <span className="mt-1 grid size-5 shrink-0 place-items-center bg-v-accent text-v-on-accent"><Check className="size-3.5" strokeWidth={3} aria-hidden /></span>
+                <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-v-accent text-v-on-accent"><Check className="size-3.5" strokeWidth={3} aria-hidden /></span>
                 {h}
               </li>
             ))}
           </ul>
 
-          <div className="mt-9 bg-v-raise p-6 md:p-8">
-            <p className="v-label text-xs text-v-mute">Giá</p>
+          <div className="mt-9 rounded-xl border border-v-line bg-v-card p-6 md:p-8">
+            <p className="text-[13px] font-medium text-v-mute">Giá</p>
             <p className="v-display mt-1 text-3xl text-v-fg">Liên hệ báo giá</p>
             <p className="mt-2 text-sm text-v-mute">Giá thay đổi theo ngày và số lượng. Gọi hoặc nhắn Zalo để nhận giá tốt nhất hôm nay.</p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -102,7 +102,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
               <VButton asChild size="lg" variant="solid">
                 <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer"><MessageCircle /> Zalo</a>
               </VButton>
-              <VButton asChild size="lg" variant="quiet" className="bg-v-sunk">
+              <VButton asChild size="lg" variant="quiet">
                 <Link href={`${vertical.base}/lien-he?san-pham=${product.slug}`}>Gửi yêu cầu</Link>
               </VButton>
             </div>
@@ -110,9 +110,9 @@ export default async function ProductDetail({ params }: { params: Params }) {
 
           <section aria-labelledby="thong-so-title" className="mt-14">
             <h2 id="thong-so-title" className="v-display text-3xl text-v-fg">Thông số kỹ thuật</h2>
-            <dl className="mt-5">
+            <dl className="mt-5 overflow-hidden rounded-xl border border-v-line bg-v-card">
               {product.specs.map((s, i) => (
-                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-[15px] ${i % 2 === 0 ? "bg-v-raise" : ""}`}>
+                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-[15px] ${i > 0 ? "border-t border-v-line" : ""}`}>
                   <dt className="text-v-mute">{s.name}</dt>
                   <dd className="font-semibold text-v-fg">{s.value}</dd>
                 </div>
@@ -130,7 +130,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
       </VContainer>
 
       {related.length > 0 && (
-        <section aria-labelledby="lien-quan-title" className="bg-v-sunk py-16 md:py-24">
+        <section aria-labelledby="lien-quan-title" className="border-t border-v-line bg-v-sunk py-16 md:py-24">
           <VContainer>
             <VHeading id="lien-quan-title" title="Sản phẩm cùng nhóm" href={`${vertical.base}/san-pham?nhom=${product.categorySlug}`} />
             <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:gap-x-5 lg:grid-cols-4">

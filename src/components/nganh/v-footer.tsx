@@ -4,53 +4,48 @@ import type { CatalogCategory } from "@/lib/data/types";
 import { COMPANY, VERTICAL_LIST, telHref, type Vertical } from "@/lib/verticals";
 
 export function VFooter({ vertical, categories }: { vertical: Vertical; categories: CatalogCategory[] }) {
+  const link = "text-v-fg/65 transition-colors duration-200 hover:text-v-fg";
   return (
-    <footer className="bg-v-invert pb-24 text-v-on-invert lg:pb-0">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <p className="v-display text-[clamp(3rem,11vw,9rem)] opacity-95">{COMPANY.name}</p>
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t border-v-line bg-v-sunk pb-24 lg:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <p className="v-label text-sm opacity-60">{vertical.name}</p>
-            <p className="mt-3 max-w-xs text-[15px] leading-relaxed opacity-80">{vertical.description}</p>
+            <p className="flex items-center gap-2.5">
+              <span className="text-2xl font-semibold tracking-[-0.03em] text-v-fg">{COMPANY.name}</span>
+              <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-[12px] font-medium text-v-on-pill">{vertical.short}</span>
+            </p>
+            <p className="mt-3 max-w-xs text-[15px] leading-relaxed text-v-mute">{vertical.description}</p>
           </div>
           <nav aria-label="Danh mục sản phẩm">
-            <p className="v-label text-sm opacity-60">Sản phẩm</p>
+            <p className="text-sm font-semibold text-v-fg">Sản phẩm</p>
             <ul className="mt-3 space-y-2 text-[15px]">
               {categories.map((c) => (
                 <li key={c.slug}>
-                  <Link href={`${vertical.base}/san-pham?nhom=${c.slug}`} className="opacity-85 transition-opacity hover:opacity-100 hover:underline underline-offset-4">
-                    {c.name}
-                  </Link>
+                  <Link href={`${vertical.base}/san-pham?nhom=${c.slug}`} className={link}>{c.name}</Link>
                 </li>
               ))}
             </ul>
           </nav>
           <nav aria-label="Lĩnh vực khác của Kim Ngoan">
-            <p className="v-label text-sm opacity-60">Kim Ngoan</p>
+            <p className="text-sm font-semibold text-v-fg">Kim Ngoan</p>
             <ul className="mt-3 space-y-2 text-[15px]">
-              <li>
-                <Link href="/" className="opacity-85 hover:opacity-100 hover:underline underline-offset-4">Trang chủ công ty</Link>
-              </li>
+              <li><Link href="/" className={link}>Trang chủ công ty</Link></li>
               {VERTICAL_LIST.filter((v) => v.id !== vertical.id).map((v) => (
-                <li key={v.id}>
-                  <Link href={v.base} className="opacity-85 hover:opacity-100 hover:underline underline-offset-4">{v.name}</Link>
-                </li>
+                <li key={v.id}><Link href={v.base} className={link}>{v.name}</Link></li>
               ))}
-              <li>
-                <Link href={`${vertical.base}/tin-tuc`} className="opacity-85 hover:opacity-100 hover:underline underline-offset-4">Tin tức</Link>
-              </li>
+              <li><Link href={`${vertical.base}/tin-tuc`} className={link}>Tin tức</Link></li>
             </ul>
           </nav>
           <address className="not-italic">
-            <p className="v-label text-sm opacity-60">Liên hệ</p>
+            <p className="text-sm font-semibold text-v-fg">Liên hệ</p>
             <ul className="mt-3 space-y-2.5 text-[15px]">
-              <li className="flex gap-2.5"><Phone className="mt-1 size-4 shrink-0" aria-hidden /><a href={telHref(vertical.phone)} className="font-semibold tabular-nums hover:underline underline-offset-4">{vertical.phone}</a></li>
-              <li className="flex gap-2.5"><Mail className="mt-1 size-4 shrink-0" aria-hidden /><a href={`mailto:${COMPANY.email}`} className="opacity-85 hover:underline underline-offset-4">{COMPANY.email}</a></li>
-              <li className="flex gap-2.5"><MapPin className="mt-1 size-4 shrink-0" aria-hidden /><span className="opacity-85">{COMPANY.address}</span></li>
+              <li className="flex gap-2.5"><Phone className="mt-1 size-4 shrink-0 text-v-accent" aria-hidden /><a href={telHref(vertical.phone)} className="font-semibold tabular-nums text-v-fg hover:text-v-accent">{vertical.phone}</a></li>
+              <li className="flex gap-2.5"><Mail className="mt-1 size-4 shrink-0 text-v-mute" aria-hidden /><a href={`mailto:${COMPANY.email}`} className={link}>{COMPANY.email}</a></li>
+              <li className="flex gap-2.5"><MapPin className="mt-1 size-4 shrink-0 text-v-mute" aria-hidden /><span className="text-v-fg/65">{COMPANY.address}</span></li>
             </ul>
           </address>
         </div>
-        <p className="mt-14 text-[13px] opacity-60">© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
+        <p className="mt-12 border-t border-v-line pt-6 text-[13px] text-v-mute">© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
       </div>
     </footer>
   );

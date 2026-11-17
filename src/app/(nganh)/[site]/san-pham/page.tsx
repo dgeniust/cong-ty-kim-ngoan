@@ -33,8 +33,8 @@ function FilterLink({ href, active, children }: { href: string; active: boolean;
       scroll={false}
       aria-current={active ? "true" : undefined}
       className={cn(
-        "flex items-center gap-3 px-4 py-2.5 text-[15px] transition-colors duration-300",
-        active ? "bg-v-accent font-semibold text-v-on-accent" : "text-v-mute hover:bg-v-raise hover:text-v-fg",
+        "flex items-center gap-3 rounded-lg px-3.5 py-2 text-[15px] transition-colors duration-200",
+        active ? "bg-v-tint font-medium text-v-on-tint" : "text-v-mute hover:bg-v-raise hover:text-v-fg",
       )}
     >
       {children}
@@ -71,14 +71,14 @@ export default async function ProductListing({ params, searchParams }: Props) {
       <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-[250px_1fr] lg:gap-14">
         {/* Bộ lọc: nhóm hàng + thương hiệu (theo phác thảo của khách) */}
         <aside aria-label="Bộ lọc sản phẩm" className="lg:sticky lg:top-28 lg:self-start">
-          <p className="v-label mb-2 px-4 text-xs text-v-mute">Nhóm sản phẩm</p>
+          <p className="mb-2 px-3.5 text-[13px] font-medium text-v-mute">Nhóm sản phẩm</p>
           <ul className="flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] lg:block lg:space-y-0.5 lg:pb-0 [&::-webkit-scrollbar]:hidden [&_a]:whitespace-nowrap">
             <li><FilterLink href={url({ hang: brand })} active={!category}>Tất cả</FilterLink></li>
             {categories.map((c) => (
               <li key={c.slug}><FilterLink href={url({ nhom: c.slug, hang: brand })} active={category?.slug === c.slug}>{c.name}</FilterLink></li>
             ))}
           </ul>
-          <p className="v-label mb-2 mt-6 px-4 text-xs text-v-mute lg:mt-9">Thương hiệu</p>
+          <p className="mb-2 mt-6 px-3.5 text-[13px] font-medium text-v-mute lg:mt-9">Thương hiệu</p>
           <ul className="flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] lg:block lg:space-y-0.5 lg:pb-0 [&::-webkit-scrollbar]:hidden [&_a]:whitespace-nowrap">
             <li><FilterLink href={url({ nhom: category?.slug })} active={!brand}>Tất cả</FilterLink></li>
             {brands.map((b) => (
@@ -100,10 +100,10 @@ export default async function ProductListing({ params, searchParams }: Props) {
               ))}
             </div>
           ) : (
-            <div className="bg-v-raise px-8 py-16 text-center">
+            <div className="rounded-xl border border-v-line bg-v-card px-8 py-16 text-center">
               <p className="v-display text-3xl text-v-fg">Chưa có sản phẩm phù hợp</p>
               <p className="mt-3 text-v-mute">Thử bỏ bớt bộ lọc, hoặc gọi {vertical.phone} để được báo giá theo quy cách riêng.</p>
-              <Link href={base} className="v-label mt-6 inline-block bg-v-accent px-6 py-3 text-sm text-v-on-accent">Xoá bộ lọc</Link>
+              <Link href={base} className="mt-6 inline-flex h-10 items-center rounded-lg bg-v-accent px-4 text-sm font-medium text-v-on-accent">Xoá bộ lọc</Link>
             </div>
           )}
         </div>

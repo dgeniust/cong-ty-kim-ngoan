@@ -85,19 +85,17 @@
     from { opacity: 0; transform: translateY(0.35em) scale(0.92); }
     to { opacity: 1; transform: none; }
   }
-  /* Màu đại diện ngành trên trang tổng – lấy từ theme của từng chuyên trang:
-   * phân bón = xanh lá; lốp xe = kem + cam than hồng (/lopxe nâu-đen, chữ kem);
-   * sắt thép = xám thép + vàng chanh (/satthep đen lạnh, điểm vàng chanh). */
+  /* Màu đại diện ngành trên trang tổng – khớp theme chuyên trang:
+   * phân bón = xanh lá; lốp xe = đen + cam; sắt thép = trắng + xám + chữ đen. */
   --color-sector-phanbon: #2e9e4f;
-  --color-sector-lopxe: #dc5000;
-  --color-sector-satthep: #59606b;
-  --color-lopxe-soft: #fff1e2;
-  --color-lopxe-cream: #ffedd7;
-  --color-lopxe-caramel: #f0c9a0;
-  --color-lopxe-peach: #f6d5b8;
-  --color-satthep-soft: #eef0f3;
-  --color-satthep-steel: #cdd2d9;
-  --color-satthep-lime: #e4f222;
+  --color-sector-lopxe: #ff6b1a;
+  --color-sector-satthep: #3f3f46;
+  --color-lopxe-ink: #0a0a0a;
+  --color-lopxe-orange: #ff6b1a;
+  --color-lopxe-soft: #fff0e6;
+  --color-satthep-ink: #111111;
+  --color-satthep-soft: #f1f1f2;
+  --color-satthep-gray: #e4e4e7;
   --shadow-craft: 0 50px 40px rgb(0 0 0 / 0.01), 0 50px 40px rgb(0 0 0 / 0.02), 0 20px 40px rgb(0 0 0 / 0.05), 0 3px 10px rgb(0 0 0 / 0.08);
   --shadow-craft-hover: 0 12px 12px 2px rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.06);
 
@@ -173,6 +171,15 @@
   --color-v-on-invert: var(--v-on-invert);
   --color-v-mark: var(--v-mark);
   --color-v-spark: var(--v-spark);
+  --color-v-card: var(--v-card);
+  --color-v-tint: var(--v-tint);
+  --color-v-on-tint: var(--v-on-tint);
+  --color-v-pill: var(--v-pill);
+  --color-v-on-pill: var(--v-on-pill);
+  --color-v-chip: var(--v-chip);
+  --color-v-island: var(--v-island);
+  --color-v-on-island: var(--v-on-island);
+  --color-v-accent-hover: var(--v-accent-hover);
   --color-v-line: var(--v-line);
   --font-display: var(--v-display);
 }
@@ -264,71 +271,87 @@
  * Nguyên tắc chung cho lốp xe & sắt thép: không viền card, tách khối bằng
  * mảng màu + khoảng trắng; một font Be Vietnam Pro; gần như không animation.
  * ===================================================================== */
+/* Hai chuyên trang dùng chung cấu trúc Notion (thẻ bo 12px viền mảnh, nút bo 8px, viên màu bọc chữ,
+ * mảng màu phẳng, không gradient, không đổ bóng thẻ); chỉ khác bảng màu. */
 .theme-lopxe {
-  /* Nâu-đen ấm + chữ kem: IN HOA nét vừa, vật thể nổi giữa khoảng tối, kẻ đứt mảnh */
-  --v-bg: #100904;
-  --v-raise: #1c120b;
-  --v-sunk: #160d07;
-  --v-fg: #ffedd7;
-  --v-mute: #b5a694;
-  --v-accent: #ffedd7;
-  --v-on-accent: #100904;
-  --v-invert: #382416;
-  --v-on-invert: #ffedd7;
-  --v-mark: #8c7d6c;
-  --v-spark: #e25a0c;
-  --v-line: #40372e;
-  --v-display: var(--font-sans);
-  --v-display-style: normal;
-  --v-display-weight: 500;
-  --v-display-track: 0;
-  --v-display-leading: 1; /* bản gốc 0.9 – nới ra để dấu tiếng Việt in hoa không chạm nhau */
-  --v-label-track: 0.04em;
-  --v-hero-size: clamp(2.5rem, 6.2vw, 5.5rem);
-  --v-cut: none;
-  --v-radius: 9999px; /* chỉ nút dạng viên thuốc */
-  --v-radius-lg: 0px; /* thẻ & khung hình vuông cạnh */
-  --v-art-bg: radial-gradient(90% 70% at 50% 35%, #2a1b10 0%, #160d07 70%);
-  --v-zoom: scale(1.03);
-  --heading: #ffedd7;
-  --focus: #ffedd7;
-  --selection-bg: #ffedd7;
-  --selection-fg: #100904;
+  /* Lốp xe: nền đen, chữ trắng, điểm nhấn cam */
+  --v-bg: #0a0a0a;
+  --v-card: #151515;
+  --v-raise: #151515;
+  --v-sunk: #111111;
+  --v-fg: #fafafa;
+  --v-mute: #a1a1a1;
+  --v-accent: #ff6b1a;
+  --v-on-accent: #0a0a0a;
+  --v-accent-hover: #ff8540;
+  --v-tint: rgb(255 107 26 / 0.14);
+  --v-on-tint: #ff9a5e;
+  --v-invert: #ff6b1a;
+  --v-on-invert: #0a0a0a;
+  --v-mark: #ff6b1a;
+  --v-spark: #ff6b1a;
+  --v-line: rgb(255 255 255 / 0.1);
+  --v-pill: #ff6b1a;
+  --v-on-pill: #0a0a0a;
+  --v-chip: rgb(255 255 255 / 0.08);
+  --v-ring-1: #ff6b1a;
+  --v-ring-2: rgb(255 255 255 / 0.55);
+  --v-island: #fafafa;
+  --v-on-island: #0a0a0a;
+  --v-art-bg: #1d1d1d;
+  --heading: #fafafa;
+  --focus: #ff6b1a;
+  --selection-bg: #ff6b1a;
+  --selection-fg: #0a0a0a;
   color-scheme: dark;
 }
 .theme-satthep {
-  /* Đen lạnh + trắng + một điểm vàng chanh: chính xác như dụng cụ đo, nét chữ vừa, khít */
-  --v-bg: #08090a;
-  --v-raise: #0f1011;
-  --v-sunk: #0c0d0e;
-  --v-fg: #f7f8f8;
-  --v-mute: #8a8f98;
-  --v-accent: #e4f222;
-  --v-on-accent: #08090a;
-  --v-invert: #0f1011;
-  --v-on-invert: #f7f8f8;
-  --v-mark: #62666d;
-  --v-spark: #e4f222;
-  --v-line: #23252a;
+  /* Sắt thép: nền trắng, phối xám, chữ đen */
+  --v-bg: #ffffff;
+  --v-card: #ffffff;
+  --v-raise: #f4f4f5;
+  --v-sunk: #f4f4f5;
+  --v-fg: #0a0a0a;
+  --v-mute: #66666d;
+  --v-accent: #111111;
+  --v-on-accent: #ffffff;
+  --v-accent-hover: #2b2b2e;
+  --v-tint: #ececee;
+  --v-on-tint: #111111;
+  --v-invert: #111111;
+  --v-on-invert: #ffffff;
+  --v-mark: #8b8b92;
+  --v-spark: #3f3f46;
+  --v-line: rgb(0 0 0 / 0.08);
+  --v-pill: #e4e4e7;
+  --v-on-pill: #0a0a0a;
+  --v-chip: #f4f4f5;
+  --v-ring-1: #111111;
+  --v-ring-2: #a1a1aa;
+  --v-island: #111111;
+  --v-on-island: #ffffff;
+  --v-art-bg: #f1f1f2;
+  --heading: #0a0a0a;
+  --focus: #111111;
+  --selection-bg: #e4e4e7;
+  --selection-fg: #0a0a0a;
+}
+.theme-lopxe,
+.theme-satthep {
   --v-display: var(--font-sans);
   --v-display-style: normal;
-  --v-display-weight: 500;
-  --v-display-track: -0.022em;
-  --v-display-leading: 1.06;
+  --v-display-weight: 600;
+  --v-display-track: -0.035em;
+  --v-display-leading: 1.1;
   --v-display-case: none;
   --v-label-case: none;
   --v-label-track: 0;
-  --v-hero-size: clamp(2.5rem, 5.4vw, 4.5rem);
+  --v-hero-size: clamp(2.5rem, 6vw, 4.5rem);
   --v-cut: none;
-  --v-radius: 4px;
-  --v-radius-lg: 2px;
-  --v-art-bg: linear-gradient(180deg, #161718 0%, #0f1011 100%);
-  --v-zoom: scale(1.03);
-  --heading: #f7f8f8;
-  --focus: #e4f222;
-  --selection-bg: #e4f222;
-  --selection-fg: #08090a;
-  color-scheme: dark;
+  --v-radius: 8px;
+  --v-radius-lg: 12px;
+  --v-zoom: scale(1.04);
+  --v-rule-style: solid;
 }
 /* Lốp xe & sắt thép: bỏ hiệu ứng hiện dần / trượt vào – chỉ giữ chuyển màu khi hover */
 .theme-lopxe .reveal,
@@ -362,24 +385,15 @@
   .v-label {
     font-family: var(--v-display);
     font-style: var(--v-display-style);
-    font-weight: 700;
+    font-weight: 500;
     text-transform: var(--v-label-case, uppercase);
     letter-spacing: var(--v-label-track, 0.08em);
-  }
-  .theme-lopxe .v-label {
-    font-style: normal;
-    font-weight: 500;
-  }
-  .theme-satthep .v-label {
-    font-weight: 500;
   }
   /* Kẻ phân cách mảnh: đứt (lốp xe) / liền (sắt thép) – dùng thay viền thẻ */
   .v-rule {
     border-top: 1px var(--v-rule-style, solid) var(--v-line);
   }
-  .theme-lopxe {
-    --v-rule-style: dashed;
-  }
+
   /* Vát chéo (lốp xe) / vuông (sắt thép) */
   .v-cut {
     clip-path: var(--v-cut);

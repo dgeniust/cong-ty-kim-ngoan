@@ -10,7 +10,7 @@ export type VCrumb = { label: string; href?: string };
 export function VPageHead({ vertical, crumbs, title, lead, children }: { vertical: Vertical; crumbs: VCrumb[]; title: string; lead?: string; children?: React.ReactNode }) {
   const trail: VCrumb[] = [{ label: "Kim Ngoan", href: "/" }, { label: vertical.short, href: vertical.base }, ...crumbs];
   return (
-    <div className="bg-v-raise">
+    <div className="border-b border-v-line bg-v-bg">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -20,10 +20,10 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
       />
       <VContainer className="py-10 md:py-16">
         <nav aria-label="Đường dẫn">
-          <ol className="v-label flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-v-mute">
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-v-mute">
             {trail.map((c, i) => (
               <li key={i} className="flex items-center gap-2.5">
-                {i > 0 && <span aria-hidden className="text-v-mark">/</span>}
+                {i > 0 && <span aria-hidden className="opacity-50">/</span>}
                 {c.href && i < trail.length - 1 ? (
                   <Link href={c.href} className="transition-colors hover:text-v-fg">{c.label}</Link>
                 ) : (
@@ -33,7 +33,7 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
             ))}
           </ol>
         </nav>
-        <h1 className="v-display animate-rise mt-5 max-w-5xl text-[clamp(2.5rem,7vw,6rem)] text-v-fg">{title}</h1>
+        <h1 className="v-display animate-rise mt-5 max-w-5xl text-[clamp(2.25rem,5vw,4rem)] text-v-fg">{title}</h1>
         {lead && <p className="animate-rise mt-5 max-w-2xl text-lg leading-relaxed text-v-mute" style={{ animationDelay: "120ms" }}>{lead}</p>}
         {children}
       </VContainer>

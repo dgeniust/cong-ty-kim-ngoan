@@ -27,11 +27,11 @@ export type HeroSector = {
 
 const INTERVAL = 5000; // phác thảo của khách: 5 giây chuyển 1 hình
 
-/** Màu từng ngành – phẳng, không gradient; khớp theme chuyên trang con. */
+/** Màu từng ngành – phẳng, không gradient; khớp theme chuyên trang con (lốp xe: đen + cam; sắt thép: trắng + xám + đen). */
 const TONE = {
   phanbon: { pill: "bg-[#cfeed6]", dot: "bg-sector-phanbon", stage: "bg-brand-900", tag: "bg-hub-mint-soft" },
-  lopxe: { pill: "bg-hub-peach", dot: "bg-sector-lopxe", stage: "bg-lopxe-cream", tag: "bg-lopxe-soft" },
-  satthep: { pill: "bg-satthep-lime", dot: "bg-sector-satthep", stage: "bg-satthep-steel", tag: "bg-satthep-soft" },
+  lopxe: { pill: "bg-lopxe-orange", dot: "bg-sector-lopxe", stage: "bg-lopxe-ink", tag: "bg-lopxe-soft" },
+  satthep: { pill: "bg-satthep-gray", dot: "bg-sector-satthep", stage: "bg-satthep-soft", tag: "bg-satthep-soft" },
 } as const;
 
 /** Hàng "dấu tròn" kiểu Notion: biểu tượng trong vòng viền màu, nhún nhẹ, bật lên khi rê chuột. */
@@ -215,9 +215,13 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
                 <Image src={s.image} alt={s.name} fill priority sizes="(min-width: 768px) 55vw, 100vw" className="object-cover" />
               ) : (
                 <>
-                  <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
-                  {s.id === "satthep" && <div aria-hidden className="absolute right-[14%] top-[16%] h-[38%] w-[40%] rotate-6 rounded-xl bg-satthep-lime" />}
-                  {s.id === "lopxe" && <div aria-hidden className="absolute left-[12%] top-[14%] size-[46%] rounded-full bg-hub-peach" />}
+                  {s.id === "satthep" && (
+                    <>
+                      <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
+                      <div aria-hidden className="absolute right-[14%] top-[16%] h-[38%] w-[40%] rotate-6 rounded-xl bg-satthep-ink" />
+                    </>
+                  )}
+                  {s.id === "lopxe" && <div aria-hidden className="absolute left-[16%] top-[14%] size-[52%] rounded-full bg-lopxe-orange" />}
                   {s.art && <ProductArt kind={s.art} title={s.name} className="absolute inset-0 m-auto !size-[70%]" />}
                 </>
               )}

@@ -14,7 +14,7 @@ type Values = z.infer<typeof schema>;
 type Errors = Partial<Record<keyof Values, string>>;
 
 const fieldClass =
-  "w-full bg-v-bg px-4 py-3.5 text-base text-v-fg placeholder:text-v-mute/60 outline-none transition-shadow duration-300 focus:shadow-[inset_0_-3px_0_var(--v-mark)] aria-[invalid=true]:shadow-[inset_0_-3px_0_#e5484d]";
+  "w-full rounded-lg border border-v-line bg-v-bg px-4 py-3 text-base text-v-fg placeholder:text-v-mute/60 outline-none transition-[border-color,box-shadow] duration-200 focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)] aria-[invalid=true]:border-[#e5484d]";
 
 /** Chỉ giao diện: kiểm tra dữ liệu phía client và giả lập gửi. Nối `onSubmit` với API/server action khi có backend. */
 export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string }) {
@@ -61,7 +61,7 @@ export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string 
     required: true,
   });
   const err = (k: keyof Values) => errors[k] && <p id={`f-${k}-err`} className="mt-1.5 text-sm text-[#e5484d]">{errors[k]}</p>;
-  const label = "v-label mb-2 block text-xs text-v-mute";
+  const label = "mb-1.5 block text-[13px] font-medium text-v-mute";
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-5">

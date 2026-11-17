@@ -7,7 +7,17 @@ export function VContainer({ className, ...props }: React.ComponentProps<"div">)
   return <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)} {...props} />;
 }
 
-/** Tiêu đề khối: số thứ tự + tiêu đề lớn + link "xem tất cả". */
+/** Viên nhãn nhỏ đầu khối (kiểu tag Notion). */
+export function VTag({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <p className={cn("inline-flex items-center gap-1.5 rounded-full bg-v-chip px-3 py-1 text-[13px] font-medium text-v-fg", className)}>{children}</p>;
+}
+
+/** Từ được bọc trong viên màu – dấu hiệu chữ ký của phong cách Notion. */
+export function VPill({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <span className={cn("inline-block rounded-full bg-v-pill px-[0.35em] leading-[1.15] text-v-on-pill", className)}>{children}</span>;
+}
+
+/** Tiêu đề khối: viên nhãn + tiêu đề lớn + link "xem tất cả". */
 export function VHeading({
   id,
   index,
@@ -16,33 +26,30 @@ export function VHeading({
   href,
   hrefLabel,
   className,
+  center,
 }: {
   id: string;
   index?: string;
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
   href?: string;
   hrefLabel?: string;
   className?: string;
+  center?: boolean;
 }) {
   return (
-    <Reveal className={cn("mb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-5 md:mb-14", className)}>
-      <div className="max-w-2xl">
-        {index && (
-          <p className="v-label mb-3 flex items-center gap-3 text-sm text-v-mute">
-            <span className="text-v-mark">{index}</span>
-            <span aria-hidden className="h-px w-10 bg-current opacity-40" />
-          </p>
-        )}
-        <h2 id={id} className="v-display text-[clamp(2.25rem,5.2vw,4.25rem)] text-v-fg">
+    <Reveal className={cn("mb-10 flex flex-wrap items-end gap-x-10 gap-y-5 md:mb-12", center ? "flex-col items-center text-center" : "justify-between", className)}>
+      <div className={cn("max-w-3xl", center && "flex flex-col items-center")}>
+        {index && <VTag>{index}</VTag>}
+        <h2 id={id} className="v-display mt-3 text-[clamp(2rem,4vw,3.25rem)] text-v-fg">
           {title}
         </h2>
-        {subtitle && <p className="mt-4 text-base leading-relaxed text-v-mute md:text-lg">{subtitle}</p>}
+        {subtitle && <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-v-mute">{subtitle}</p>}
       </div>
       {href && (
-        <Link href={href} className="v-label group inline-flex items-center gap-2 text-[15px] text-v-fg">
-          <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:100%_2px] bg-[position:0_100%] bg-no-repeat pb-1">{hrefLabel ?? "Xem tất cả"}</span>
-          <ArrowRight className="size-4 transition-transform duration-300 ease-soft group-hover:translate-x-1.5" aria-hidden />
+        <Link href={href} className="group inline-flex h-10 items-center gap-2 rounded-lg border border-v-line px-4 text-sm font-medium text-v-fg transition-colors duration-200 hover:bg-v-raise">
+          {hrefLabel ?? "Xem tất cả"}
+          <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
         </Link>
       )}
     </Reveal>
