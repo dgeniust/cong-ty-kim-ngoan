@@ -19,7 +19,7 @@ export default async function HubNews({ searchParams }: { searchParams: Promise<
   const chips = [{ id: undefined, label: "Tất cả" }, ...VERTICAL_LIST.map((v) => ({ id: v.id, label: v.short }))];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">
+    <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 md:py-20 lg:px-10">
       <p className="text-sm text-hub-ink-soft">Tin tức</p>
       <h1 className="animate-rise mt-2 text-[clamp(2.25rem,4vw,3rem)] font-light leading-[1.08] tracking-[-0.02em] text-hub-ink">Mới nhất từ Kim Ngoan</h1>
       <nav aria-label="Lọc theo lĩnh vực" className="mt-8 flex flex-wrap gap-2">

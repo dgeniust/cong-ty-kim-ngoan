@@ -1,9 +1,10 @@
 import type { Viewport } from "next";
 import { HubFooter } from "@/components/hub/hub-footer";
+import { HubFloating } from "@/components/hub/hub-floating";
 import { HubHeader } from "@/components/hub/hub-header";
 import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
-import { COMPANY, VERTICAL_LIST } from "@/lib/verticals";
+import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
 
 export const viewport: Viewport = { themeColor: "#fdfcfc" };
 
@@ -31,6 +32,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
       <HubHeader />
       <main id="noi-dung" tabIndex={-1} className="outline-none">{children}</main>
       <HubFooter />
+      <HubFloating phone={COMPANY.hotline} phoneHref={telHref(COMPANY.hotline)} zalo={COMPANY.zalo} />
     </div>
   );
 }
