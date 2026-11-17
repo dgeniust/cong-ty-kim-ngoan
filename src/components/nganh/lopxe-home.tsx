@@ -5,6 +5,7 @@ import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "
 import { formatDate } from "@/lib/format";
 import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import { AutoCarousel } from "./auto-carousel";
 import { ProductArt } from "./product-art";
 import { TyreFinder } from "./tyre-finder";
 import { VButton } from "./v-button";
@@ -155,15 +156,14 @@ export function LopXeHome({
       {/* 4. Sản phẩm – dải cuộn ngang */}
       <section aria-labelledby="noi-bat-title" className="border-t border-v-line bg-v-sunk py-20 md:py-24">
         <VContainer>
-          <VHeading id="noi-bat-title" index="Bán chạy" title="Lốp được chọn nhiều nhất" subtitle="Kéo ngang để xem thêm." href={`${base}/san-pham`} hrefLabel="Xem tất cả" />
+          <VHeading id="noi-bat-title" index="Bán chạy" title="Lốp được chọn nhiều nhất" subtitle="Rê chuột để dừng, kéo ngang để xem nhanh." href={`${base}/san-pham`} hrefLabel="Xem tất cả" />
         </VContainer>
-        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-4 px-4 pb-4 [scrollbar-width:thin] sm:scroll-px-6 sm:px-6 lg:scroll-px-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]">
+        {/* carousel tự cuộn vòng lặp – xem components/nganh/auto-carousel.tsx */}
+        <AutoCarousel label="Lốp bán chạy" itemClassName="w-[260px] sm:w-[280px]">
           {allProducts.map((p) => (
-            <li key={p.slug} className="w-[260px] shrink-0 snap-start sm:w-[280px]">
-              <VProductCard product={p} />
-            </li>
+            <VProductCard key={p.slug} product={p} />
           ))}
-        </ul>
+        </AutoCarousel>
       </section>
 
       {/* 5. Quy trình thay lốp */}
