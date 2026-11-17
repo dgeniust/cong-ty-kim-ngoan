@@ -75,7 +75,7 @@ export function ProductBrowser({ tabs }: { tabs: BrowserTab[] }) {
             <ul className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {items.map((it) => (
                 <li key={it.href} className="group relative flex flex-col overflow-hidden rounded-[20px] bg-hub-paper shadow-[var(--shadow-craft)] transition-[transform,box-shadow] duration-500 ease-soft hover:-translate-y-1 hover:shadow-[var(--shadow-craft-hover)]">
-                  <div className={cn("relative aspect-square overflow-hidden", t.id === "lopxe" ? "bg-hub-marigold-soft" : t.id === "satthep" ? "bg-hub-peri-soft" : "bg-hub-mint-soft")}>
+                  <div className={cn("relative aspect-square overflow-hidden", t.id === "lopxe" ? "bg-lopxe-soft" : t.id === "satthep" ? "bg-satthep-soft" : "bg-hub-mint-soft")}>
                     {it.image ? (
                       <Image src={it.image} alt={it.name} fill sizes="(min-width: 1280px) 18vw, (min-width: 768px) 28vw, 45vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105" />
                     ) : (

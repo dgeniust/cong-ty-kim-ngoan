@@ -23,11 +23,11 @@ export type HeroSlide = {
 
 const INTERVAL = 5000; // phác thảo của khách: 5 giây chuyển 1 hình
 
-/** Mỗi ngành một "tờ giấy" pastel riêng: phân bón = ảnh thật, lốp xe = vàng, sắt thép = lam. */
+/** Mỗi ngành một "tờ giấy" riêng, cùng tông với chuyên trang: phân bón = ảnh thật, lốp xe = kem–caramel, sắt thép = xám thép + vàng chanh. */
 const STAGE = {
   phanbon: { panel: "bg-brand-900 text-white", dot: "bg-sector-phanbon", bar: "bg-white", track: "bg-white/35", chip: "bg-white/85 text-hub-ink" },
-  lopxe: { panel: "bg-gradient-to-br from-hub-marigold to-[#ffd7a8] text-hub-ink", dot: "bg-sector-lopxe", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
-  satthep: { panel: "bg-gradient-to-br from-hub-peri to-hub-sky-soft text-hub-ink", dot: "bg-sector-satthep", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
+  lopxe: { panel: "bg-gradient-to-br from-lopxe-cream to-lopxe-caramel text-hub-ink", dot: "bg-sector-lopxe", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
+  satthep: { panel: "bg-gradient-to-br from-satthep-soft to-satthep-steel text-hub-ink", dot: "bg-sector-satthep", bar: "bg-hub-ink", track: "bg-hub-ink/15", chip: "bg-white/80 text-hub-ink" },
 } as const;
 
 /**
@@ -111,7 +111,8 @@ export function HubHero({ eyebrow, slides, children }: { eyebrow: React.ReactNod
                 ) : (
                   <>
                     <div aria-hidden className="hub-dots absolute inset-0 opacity-70" />
-                    <div aria-hidden className={cn("absolute left-1/2 top-[40%] size-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[60px]", s.id === "lopxe" ? "bg-[#ffb36b]/70" : "bg-white/70")} />
+                    <div aria-hidden className={cn("absolute left-1/2 top-[40%] size-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[60px]", s.id === "lopxe" ? "bg-[#e9a46a]/60" : "bg-white/80")} />
+                    {s.id === "satthep" && <div aria-hidden className="hub-torn absolute right-[12%] top-[20%] h-[34%] w-[46%] rotate-6 bg-satthep-lime" />}
                     {s.art && (
                       <div className={cn("absolute inset-x-0 top-[6%] mx-auto size-[72%] transition-[transform,opacity] duration-1000 ease-soft", active ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0")}>
                         <ProductArt kind={s.art} className="animate-float" />

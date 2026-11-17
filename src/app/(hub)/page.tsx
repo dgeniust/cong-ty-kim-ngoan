@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 /**
  * Landing tổng – nền trắng, bộ pastel tươi (mint · vàng · lam · trời) kiểu sổ cắt dán,
  * tiêu đề nét mảnh (300), nút viên thuốc, bóng đổ mềm nhiều lớp (--shadow-craft).
- * Màu ngành trên trang tổng: phân bón = mint, lốp xe = vàng, sắt thép = lam.
+ * Màu ngành trên trang tổng khớp chuyên trang: phân bón = xanh lá, lốp xe = kem + cam, sắt thép = xám thép + vàng chanh.
  * Thứ tự khối: Hero → số liệu → 3 chuyên trang → thương hiệu → lý do chọn → sản phẩm
  * → giới thiệu + quy trình → tin tức → hỏi đáp → liên hệ.
  * Các dải nền (trắng / kem / trời) chạy hết chiều ngang để trang không trống hai bên.
@@ -34,7 +34,7 @@ const PILL_INK = `${PILL} group bg-hub-ink text-white`;
 const PILL_OUTLINE = `${PILL} bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-stone)] transition-colors duration-200 hover:bg-hub-stone`;
 const WHISPER = "shadow-[var(--shadow-craft)]";
 /** Nền nhạt theo ngành + chuỗi pastel xoay vòng cho các khối liệt kê. */
-const SOFT: Record<VerticalId, string> = { phanbon: "bg-hub-mint-soft", lopxe: "bg-hub-marigold-soft", satthep: "bg-hub-peri-soft" };
+const SOFT: Record<VerticalId, string> = { phanbon: "bg-hub-mint-soft", lopxe: "bg-lopxe-soft", satthep: "bg-satthep-soft" };
 const PASTELS = ["bg-hub-mint", "bg-hub-marigold", "bg-hub-peri", "bg-hub-sky"];
 const PASTELS_SOFT = ["bg-hub-mint-soft", "bg-hub-marigold-soft", "bg-hub-peri-soft", "bg-hub-sky-soft"];
 
@@ -46,7 +46,7 @@ const HEADLINE: Record<VerticalId, string> = {
   lopxe: "Lốp xe cho đường dài.",
   satthep: "Sắt thép cho công trình.",
 };
-const STAGE: Record<VerticalId, string> = { phanbon: "bg-brand-900", lopxe: "bg-gradient-to-br from-hub-marigold to-[#ffd7a8]", satthep: "bg-gradient-to-br from-hub-peri to-hub-sky-soft" };
+const STAGE: Record<VerticalId, string> = { phanbon: "bg-brand-900", lopxe: "bg-gradient-to-br from-lopxe-cream to-lopxe-caramel", satthep: "bg-gradient-to-br from-satthep-soft to-satthep-steel" };
 const ART = { lopxe: "tyre-at", satthep: "ibeam" } as const;
 
 type SectorCard = { id: VerticalId; groups: { name: string; href: string }[]; count: number; spot?: { name: string; meta: string; href: string } };
@@ -271,6 +271,7 @@ export default async function HubHome() {
                     ) : (
                       <>
                         <div aria-hidden className="hub-dots absolute inset-0 opacity-70" />
+                        {c.id === "satthep" && <div aria-hidden className="hub-torn absolute right-[14%] top-[16%] h-[40%] w-[42%] rotate-6 bg-satthep-lime" />}
                         <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-[1200ms] ease-soft group-hover:scale-110 group-hover:-rotate-6" />
                       </>
                     )}

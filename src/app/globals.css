@@ -60,9 +60,18 @@
   --color-hub-sky: #9ed4ef;
   --color-hub-sky-soft: #e4f4fb;
   --color-hub-papaya: #ff5a1f;
+  /* Màu đại diện ngành trên trang tổng – lấy từ theme của từng chuyên trang:
+   * phân bón = xanh lá; lốp xe = kem + cam than hồng (/lopxe nâu-đen, chữ kem);
+   * sắt thép = xám thép + vàng chanh (/satthep đen lạnh, điểm vàng chanh). */
   --color-sector-phanbon: #2e9e4f;
-  --color-sector-lopxe: #f2610c;
-  --color-sector-satthep: #5b7fe0;
+  --color-sector-lopxe: #dc5000;
+  --color-sector-satthep: #59606b;
+  --color-lopxe-soft: #fff1e2;
+  --color-lopxe-cream: #ffedd7;
+  --color-lopxe-caramel: #f0c9a0;
+  --color-satthep-soft: #eef0f3;
+  --color-satthep-steel: #cdd2d9;
+  --color-satthep-lime: #e4f222;
   --shadow-craft: 0 50px 40px rgb(0 0 0 / 0.01), 0 50px 40px rgb(0 0 0 / 0.02), 0 20px 40px rgb(0 0 0 / 0.05), 0 3px 10px rgb(0 0 0 / 0.08);
   --shadow-craft-hover: 0 12px 12px 2px rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.06);
 
