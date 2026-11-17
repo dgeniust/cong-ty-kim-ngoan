@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, BadgeCheck, Bus, CalendarClock, Car, CarFront
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
+import { Headline } from "./headline";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
@@ -11,7 +12,7 @@ import { ProductArt } from "./product-art";
 import { TyreFinder } from "./tyre-finder";
 import { VButton } from "./v-button";
 import { VProductCard } from "./v-product-card";
-import { VContainer, VHeading, VPill, VTag } from "./v-section";
+import { VContainer, VHeading, VTag } from "./v-section";
 
 /**
  * Trang chủ LỐP XE – phong cách Notion, nền đen · chữ trắng · nhấn cam.
@@ -47,7 +48,7 @@ export async function LopXeHome({
   news: NewsItem[];
 }) {
   const { COMPANY } = await getSettings();
-  const { hero } = content;
+  const { hero, sections: sec } = content;
   const base = vertical.base;
   const spot = featured[0];
   const popular = [...new Set(allProducts.map((p) => p.keySpec).filter((k) => /^\d{3}\/\d{2}R\d{2}$/.test(k)))].slice(0, 5);
@@ -64,7 +65,7 @@ export async function LopXeHome({
               <span aria-hidden className="size-1.5 rounded-full bg-v-accent" /> {hero.eyebrow}
             </VTag>
             <h1 className="v-display mt-5 text-[length:var(--v-hero-size)] leading-[1.1] text-v-fg">
-              Lốp chính hãng cho <VPill>mọi hành trình</VPill>
+              <Headline h={hero} />
             </h1>
             <p className="mt-6 max-w-xl text-[clamp(1.05rem,1.5vw,1.2rem)] leading-relaxed text-v-mute">{hero.description}</p>
             <div className="mt-8 flex flex-wrap gap-2.5">
@@ -123,7 +124,7 @@ export async function LopXeHome({
       {/* 2. Công cụ tra cỡ lốp */}
       <section id="tra-co-lop" aria-labelledby="tra-co-lop-title" className="scroll-mt-28 border-t border-v-line bg-v-sunk py-20 md:py-24">
         <VContainer>
-          <VHeading id="tra-co-lop-title" index="Công cụ" title={<>Tìm lốp theo <VPill>đúng cỡ</VPill> xe bạn</>} subtitle="Không cần nhớ tên mẫu lốp — chỉ cần dãy số in trên hông lốp đang dùng." />
+          <VHeading id="tra-co-lop-title" index="Công cụ" title={<Headline h={sec.finder} />} subtitle={sec.finder?.subtitle} />
           <TyreFinder base={base} popular={popular} />
         </VContainer>
       </section>
@@ -131,7 +132,7 @@ export async function LopXeHome({
       {/* 3. Chọn theo loại xe */}
       <section aria-labelledby="loai-xe-title" className="border-t border-v-line py-20 md:py-24">
         <VContainer>
-          <VHeading id="loai-xe-title" index="Loại xe" title="Mỗi dòng xe một loại lốp" href={`${base}/san-pham`} hrefLabel="Tất cả lốp" />
+          <VHeading id="loai-xe-title" index="Loại xe" title={<Headline h={sec.categories} />} subtitle={sec.categories?.subtitle} href={`${base}/san-pham`} hrefLabel="Tất cả lốp" />
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((c, i) => {
               const Icon = VEHICLE_ICONS[i % VEHICLE_ICONS.length];
@@ -158,7 +159,7 @@ export async function LopXeHome({
       {/* 4. Sản phẩm – dải cuộn ngang */}
       <section aria-labelledby="noi-bat-title" className="border-t border-v-line bg-v-sunk py-20 md:py-24">
         <VContainer>
-          <VHeading id="noi-bat-title" index="Bán chạy" title="Lốp được chọn nhiều nhất" subtitle="Rê chuột để dừng, kéo ngang để xem nhanh." href={`${base}/san-pham`} hrefLabel="Xem tất cả" />
+          <VHeading id="noi-bat-title" index="Bán chạy" title={<Headline h={sec.featured} />} subtitle={sec.featured?.subtitle} href={`${base}/san-pham`} hrefLabel="Xem tất cả" />
         </VContainer>
         {/* carousel tự cuộn vòng lặp – xem components/nganh/auto-carousel.tsx */}
         <AutoCarousel label="Lốp bán chạy" itemClassName="w-[260px] sm:w-[280px]">
@@ -171,7 +172,7 @@ export async function LopXeHome({
       {/* 5. Quy trình thay lốp */}
       <section aria-labelledby="quy-trinh-title" className="border-t border-v-line py-20 md:py-24">
         <VContainer>
-          <VHeading id="quy-trinh-title" index="Tại cửa hàng" title={<>Thay lốp trọn bộ trong <VPill>30 phút</VPill></>} />
+          <VHeading id="quy-trinh-title" index="Tại cửa hàng" title={<Headline h={sec.process} />} subtitle={sec.process?.subtitle} />
           <ol className="grid gap-3 md:grid-cols-3">
             {content.services.map((s, i) => (
               <Reveal as="li" key={s.title} delay={i * 90} className="relative">
@@ -195,7 +196,7 @@ export async function LopXeHome({
             <Reveal className="relative overflow-hidden rounded-xl bg-v-accent p-8 text-v-on-accent sm:p-10">
               <BadgeCheck className="size-9" strokeWidth={1.75} aria-hidden />
               <h3 className="mt-10 max-w-lg text-[clamp(1.75rem,3vw,2.5rem)] font-semibold leading-tight tracking-[-0.03em] !text-current">{content.usps[0].title}</h3>
-              <p className="mt-3 max-w-lg text-[17px] leading-relaxed opacity-80">{content.usps[0].description} {content.about.paragraphs[1]}</p>
+              <p className="mt-3 max-w-lg text-[17px] leading-relaxed opacity-80">{content.usps[0].description} {content.about.paragraphs[1] ?? ""}</p>
               <ProductArt kind="tyre" className="absolute -bottom-16 -right-10 hidden !size-80 md:block" />
             </Reveal>
           )}
@@ -218,7 +219,7 @@ export async function LopXeHome({
       {lead && (
         <section aria-labelledby="tin-tuc-title" className="border-t border-v-line py-20 md:py-24">
           <VContainer>
-            <VHeading id="tin-tuc-title" index="Tin tức" title="Kiến thức về lốp" href={`${base}/tin-tuc`} hrefLabel="Tất cả bài viết" />
+            <VHeading id="tin-tuc-title" index="Tin tức" title={<Headline h={sec.news} />} subtitle={sec.news?.subtitle} href={`${base}/tin-tuc`} hrefLabel="Tất cả bài viết" />
             <div className="grid gap-3 lg:grid-cols-[1.2fr_1fr]">
               <Link href={lead.href} className="group relative overflow-hidden rounded-xl border border-v-line bg-v-card transition-colors hover:border-v-accent">
                 <span className="relative m-1.5 mb-0 block aspect-[16/9] overflow-hidden rounded-lg bg-v-raise">
@@ -255,8 +256,8 @@ export async function LopXeHome({
       <section aria-labelledby="cta-title" className="border-t border-v-line py-20 md:py-24">
         <VContainer className="grid gap-3 lg:grid-cols-[1.3fr_1fr]">
           <div className="relative overflow-hidden rounded-xl bg-v-accent p-8 text-v-on-accent sm:p-12">
-            <h2 id="cta-title" className="v-display text-[clamp(2rem,4.4vw,3.5rem)] !text-current">Chưa biết chọn lốp nào?</h2>
-            <p className="mt-4 max-w-md text-[17px] leading-relaxed opacity-80">Gửi cỡ lốp hoặc đời xe qua Zalo, hoặc gọi trực tiếp — chúng tôi báo giá và hẹn lịch lắp.</p>
+            <h2 id="cta-title" className="v-display text-[clamp(2rem,4.4vw,3.5rem)] !text-current">{content.cta.title}</h2>
+            <p className="mt-4 max-w-md text-[17px] leading-relaxed opacity-80">{content.cta.description}</p>
             <ProductArt kind="tyre-truck" className="absolute -bottom-12 -right-8 !size-56 opacity-90" />
           </div>
           <div className="flex flex-col gap-2 rounded-xl border border-v-line bg-v-card p-6 sm:p-8">

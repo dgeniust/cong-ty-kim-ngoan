@@ -3,13 +3,14 @@ import { ArrowRight, ArrowUpRight, CheckSquare, ClipboardCheck, FileText, Phone,
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
+import { Headline } from "./headline";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { ProductArt } from "./product-art";
 import { CategoryExplorer, WeightCalculator, type ExplorerGroup } from "./steel-tools";
 import { VButton } from "./v-button";
-import { VContainer, VHeading, VPill, VTag } from "./v-section";
+import { VContainer, VHeading, VTag } from "./v-section";
 
 /**
  * Trang chủ SẮT THÉP – phong cách Notion, nền trắng · phối xám · chữ đen.
@@ -38,7 +39,8 @@ export async function SatThepHome({
   news: NewsItem[];
 }) {
   const { COMPANY } = await getSettings();
-  const { hero } = content;
+  const { hero, sections: sec, quote } = content;
+  const card = "bg-v-card shadow-[0_0_0_1px_var(--v-line)]";
   const base = vertical.base;
   const groups: ExplorerGroup[] = categories.map((c) => ({
     slug: c.slug,
@@ -62,7 +64,7 @@ export async function SatThepHome({
               <FileText className="size-3.5" aria-hidden /> {hero.eyebrow}
             </VTag>
             <h1 className="v-display mt-5 text-[length:var(--v-hero-size)] leading-[1.1] text-v-fg">
-              Tôn, sắt thép chính phẩm cho <VPill className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">mọi công trình</VPill>
+              <Headline h={hero} pillClassName={card} />
             </h1>
             <p className="mt-6 max-w-xl text-[clamp(1.05rem,1.5vw,1.2rem)] leading-relaxed text-v-mute">{hero.description}</p>
             <div className="mt-8 flex flex-wrap gap-2.5">
@@ -91,18 +93,18 @@ export async function SatThepHome({
               <span aria-hidden className="grid size-12 place-items-center rounded-lg bg-v-raise">
                 <ProductArt kind="ibeam" className="!size-9" />
               </span>
-              <p className="mt-4 text-[clamp(1.5rem,2.4vw,2rem)] font-semibold tracking-[-0.03em] text-v-fg">Báo giá thép theo ngày</p>
+              <p className="mt-4 text-[clamp(1.5rem,2.4vw,2rem)] font-semibold tracking-[-0.03em] text-v-fg">{quote?.title}</p>
               <dl className="mt-4 grid grid-cols-[7.5rem_1fr] gap-y-2 text-sm">
                 <dt className="text-v-mute">Trạng thái</dt>
                 <dd>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-v-pill px-2.5 py-0.5 text-[13px] font-medium text-v-on-pill">
-                    <span aria-hidden className="size-1.5 rounded-full bg-v-fg" /> Đang nhận đơn
+                    <span aria-hidden className="size-1.5 rounded-full bg-v-fg" /> {quote?.status}
                   </span>
                 </dd>
                 <dt className="text-v-mute">Khu vực giao</dt>
                 <dd className="text-v-fg">{COMPANY.address} và lân cận</dd>
                 <dt className="text-v-mute">Chứng từ</dt>
-                <dd className="text-v-fg">CO/CQ theo từng lô</dd>
+                <dd className="text-v-fg">{quote?.documents}</dd>
               </dl>
               <table className="mt-6 w-full text-left text-sm">
                 <thead className="text-[13px] text-v-mute">
@@ -125,7 +127,7 @@ export async function SatThepHome({
                 </tbody>
               </table>
               <ul className="mt-5 space-y-1.5 text-sm text-v-fg">
-                {["Cắt, uốn, cán sóng theo bản vẽ", "Giao tận chân công trình"].map((t) => (
+                {(quote?.notes ?? []).map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <CheckSquare className="size-4 text-v-fg" aria-hidden /> {t}
                   </li>
@@ -154,7 +156,7 @@ export async function SatThepHome({
       {/* 3. Duyệt vật tư kiểu thanh bên */}
       <section aria-labelledby="vat-tu-title" className="py-20 md:py-24">
         <VContainer>
-          <VHeading id="vat-tu-title" index="Vật tư" title={<>Đủ chủng loại cho <VPill>phần thô</VPill>, kết cấu và mái</>} href={`${base}/san-pham`} hrefLabel="Toàn bộ sản phẩm" />
+          <VHeading id="vat-tu-title" index="Vật tư" title={<Headline h={sec.categories} />} subtitle={sec.categories?.subtitle} href={`${base}/san-pham`} hrefLabel="Toàn bộ sản phẩm" />
           <CategoryExplorer groups={groups} />
         </VContainer>
       </section>
@@ -165,10 +167,10 @@ export async function SatThepHome({
           <Reveal>
             <VTag>Công cụ</VTag>
             <h2 id="tinh-thep-title" className="v-display mt-3 text-[clamp(2rem,4vw,3.25rem)] text-v-fg">
-              Tính nhanh khối lượng thép trước khi đặt hàng
+              <Headline h={sec.tool} />
             </h2>
             <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-v-mute">
-              Chọn đường kính và số cây để biết tổng số ký. Cần bóc tách theo bản vẽ, gửi cho chúng tôi — {content.services[0]?.description.toLowerCase()}
+              {sec.tool?.subtitle}
             </p>
             <VButton asChild variant="tint" className="mt-7">
               <Link href={`${base}/lien-he`}>
@@ -185,7 +187,7 @@ export async function SatThepHome({
       {/* 5. Cam kết – 4 cột ngăn bằng đường kẻ */}
       <section aria-labelledby="cam-ket-title" className="border-t border-v-line bg-v-raise py-20 md:py-24">
         <VContainer>
-          <VHeading id="cam-ket-title" index="Cam kết" center title={<>Cân đủ, đúng quy cách, <VPill className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">đúng tiến độ</VPill></>} />
+          <VHeading id="cam-ket-title" index="Cam kết" center title={<Headline h={sec.commitments} pillClassName={card} />} subtitle={sec.commitments?.subtitle} />
           <ul className="grid overflow-hidden rounded-xl border border-v-line bg-v-card sm:grid-cols-2 lg:grid-cols-4">
             {content.usps.map((u, i) => {
               const Icon = USP_ICONS[i % USP_ICONS.length];
@@ -231,8 +233,9 @@ export async function SatThepHome({
             <div>
               <VTag className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">Tin tức</VTag>
               <h2 id="tin-tuc-title" className="v-display mt-3 text-[clamp(2rem,4vw,3.25rem)] text-v-fg">
-                Kiến thức chọn và dùng thép
+                <Headline h={sec.news} />
               </h2>
+              {sec.news?.subtitle && <p className="mt-4 max-w-sm text-[16px] leading-relaxed text-v-mute">{sec.news.subtitle}</p>}
               <VButton asChild variant="quiet" size="sm" className="mt-6">
                 <Link href={`${base}/tin-tuc`}>
                   Tất cả bài viết <ArrowRight className="arrow" />
@@ -266,9 +269,9 @@ export async function SatThepHome({
           <div className="grid items-center gap-8 rounded-xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-[1.4fr_1fr]">
             <div>
               <h2 id="cta-title" className="v-display text-[clamp(2rem,4.4vw,3.5rem)] !text-current">
-                Cần báo giá thép hôm nay?
+                {content.cta.title}
               </h2>
-              <p className="mt-4 max-w-lg text-[17px] leading-relaxed opacity-70">Gửi quy cách và khối lượng, nhận giá theo barem trong ngày. {vertical.contactLabel}.</p>
+              <p className="mt-4 max-w-lg text-[17px] leading-relaxed opacity-70">{content.cta.description} {vertical.contactLabel}.</p>
             </div>
             <div className="flex flex-col gap-2">
               <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-lg bg-v-on-island px-5 py-4 text-v-island transition-opacity hover:opacity-90">

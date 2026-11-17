@@ -13,11 +13,17 @@ const visible = (el: HTMLElement) => {
   return r.width > 0 && r.height > 0 && r.right > 0 && r.left < window.innerWidth;
 };
 
+/** Chờ phần tử xuất hiện. Phần tử đã có nhưng bị ẩn (VD: mục lục trên điện thoại) → bỏ qua sau 0,4s, thẻ hiện giữa màn hình. */
 async function waitFor(target: string, timeout = 3000) {
   const end = Date.now() + timeout;
+  let hiddenSince = 0;
   while (Date.now() < end) {
     const el = q(target);
     if (el && visible(el)) return el;
+    if (el) {
+      hiddenSince ||= Date.now();
+      if (Date.now() - hiddenSince > 400) return null;
+    }
     await sleep(80);
   }
   return null;

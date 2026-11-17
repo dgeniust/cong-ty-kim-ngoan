@@ -26,12 +26,20 @@ export type CatalogProduct = {
   isNew?: boolean;
 };
 
+/** Tiêu đề một khối: “{title} [highlight]{after}” + mô tả phụ. `highlight` hiện dạng viên nhãn (pill). */
+export type SectionHeading = { title: string; highlight?: string; after?: string; subtitle?: string };
+
+/** Nội dung chữ của trang chủ chuyên trang – sửa được trong admin (data/content-{site}.json). */
 export type CatalogContent = {
-  hero: { eyebrow: string; title: string[]; description: string; stats: { value: string; label: string }[] };
+  hero: { eyebrow: string; title: string; highlight: string; after?: string; description: string; stats: { value: string; label: string }[] };
   usps: { title: string; description: string }[];
   services: { title: string; description: string }[];
   about: { title: string; paragraphs: string[] };
-  productNoun: string;
+  /** tiêu đề các khối theo khoá – mỗi chuyên trang có bộ khoá riêng (xem lib/catalog-content/sections.ts) */
+  sections: Record<string, SectionHeading>;
+  cta: { title: string; description: string };
+  /** thẻ “trang tài liệu báo giá” ở banner sắt thép */
+  quote?: { title: string; status: string; documents: string; notes: string[] };
 };
 
 export type NewsItem = {

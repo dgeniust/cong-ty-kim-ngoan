@@ -1,6 +1,7 @@
 import { LopXeHome } from "@/components/nganh/lopxe-home";
 import { SatThepHome } from "@/components/nganh/satthep-home";
-import { getBrands, getCatalog, getFeatured, getProducts } from "@/lib/data/catalog";
+import { getCatalogContent } from "@/lib/catalog-content/server";
+import { getBrands, getCategories, getFeatured, getProducts } from "@/lib/data/catalog";
 import { getNews } from "@/lib/data/news";
 import { resolveSite } from "@/lib/site-params";
 
@@ -10,7 +11,8 @@ import { resolveSite } from "@/lib/site-params";
  */
 export default async function VerticalHomePage({ params }: { params: Promise<{ site: string }> }) {
   const { site, vertical } = await resolveSite((await params).site);
-  const { categories, content } = getCatalog(site);
+  const categories = getCategories(site);
+  const content = await getCatalogContent(site);
   const props = {
     vertical,
     categories,

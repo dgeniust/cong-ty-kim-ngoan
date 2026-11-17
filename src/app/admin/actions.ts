@@ -11,7 +11,9 @@ import { settingsSchema, type SiteSettings } from "@/lib/settings/schema";
 import { defaultSettings, resetSettings, saveSettings } from "@/lib/settings/server";
 import { catalogProductSchema, fertilizerProductSchema } from "@/lib/products/schema";
 import { getCatalogProducts, getFertilizerProducts, saveCatalogProducts, saveFertilizerProducts, type ProductSite } from "@/lib/products/server";
-import type { CatalogProduct } from "@/lib/data/types";
+import type { CatalogContent, CatalogProduct } from "@/lib/data/types";
+import { catalogContentSchema } from "@/lib/catalog-content/schema";
+import { CATALOG_CONTENT_DEFAULTS, resetCatalogContent, saveCatalogContent } from "@/lib/catalog-content/server";
 import type { Product } from "@/lib/mock/types";
 
 export type ActionResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN" };
@@ -159,4 +161,31 @@ export async function deleteProductAction(site: ProductSite, slug: string): Prom
   }
   revalidatePath("/", "layout");
   return { ok: true };
+}
+
+/* =====================================================================
+ * Nội dung trang chủ chuyên trang lốp xe / sắt thép
+ * ===================================================================== */
+
+const CONTENT_SITES = ["lopxe", "satthep"] as const;
+type ContentSite = (typeof CONTENT_SITES)[number];
+
+export async function saveCatalogContentAction(site: ContentSite, input: CatalogContent): Promise<FormResult> {
+  const denied = await guard();
+  if (denied) return denied;
+  if (!CONTENT_SITES.includes(site)) return { ok: false, error: "Chuyên trang không hợp lệ" };
+  const parsed = catalogContentSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "Vui lòng kiểm tra các ô được đánh dấu", fieldErrors: firstErrors(parsed.error.issues) };
+  await saveCatalogContent(site, parsed.data as CatalogContent);
+  revalidatePath("/", "layout");
+  return { ok: true };
+}
+
+export async function resetCatalogContentAction(site: ContentSite): Promise<FormResult & { content?: CatalogContent }> {
+  const denied = await guard();
+  if (denied) return denied;
+  if (!CONTENT_SITES.includes(site)) return { ok: false, error: "Chuyên trang không hợp lệ" };
+  await resetCatalogContent(site);
+  revalidatePath("/", "layout");
+  return { ok: true, content: CATALOG_CONTENT_DEFAULTS[site] };
 }

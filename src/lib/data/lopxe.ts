@@ -93,10 +93,10 @@ export const products: CatalogProduct[] = [
 ];
 
 export const content: CatalogContent = {
-  productNoun: "lốp",
   hero: {
     eyebrow: "Đại lý lốp ô tô chính hãng",
-    title: ["Bám đường.", "Bền bỉ."],
+    title: "Lốp chính hãng cho",
+    highlight: "mọi hành trình",
     description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách. Tư vấn đúng cỡ lốp, thay lắp và cân bằng động ngay tại cửa hàng.",
     stats: [
       { value: "4", label: "Dòng lốp theo loại xe" },
@@ -122,4 +122,12 @@ export const content: CatalogContent = {
       "Chúng tôi không bán lốp tồn kho lâu năm. Khách được kiểm tra date sản xuất và tem bảo hành ngay khi nhận hàng.",
     ],
   },
+  sections: {
+    finder: { title: "Tìm lốp theo", highlight: "đúng cỡ", after: "xe bạn", subtitle: "Không cần nhớ tên mẫu lốp — chỉ cần dãy số in trên hông lốp đang dùng." },
+    categories: { title: "Mỗi dòng xe một loại lốp" },
+    featured: { title: "Lốp được chọn nhiều nhất", subtitle: "Rê chuột để dừng, kéo ngang để xem nhanh." },
+    process: { title: "Thay lốp trọn bộ trong", highlight: "30 phút" },
+    news: { title: "Kiến thức về lốp" },
+  },
+  cta: { title: "Chưa biết chọn lốp nào?", description: "Gửi cỡ lốp hoặc đời xe qua Zalo, hoặc gọi trực tiếp — chúng tôi báo giá và hẹn lịch lắp." },
 };

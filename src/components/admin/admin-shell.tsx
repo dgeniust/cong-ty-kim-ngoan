@@ -52,11 +52,11 @@ export function AdminShell({
       label: "Thông tin chung",
       icon: Settings2,
     },
-    {
-      href: "/admin/noi-dung-phanbon",
-      label: "Nội dung trang phân bón",
-      icon: FileText,
-    },
+  ];
+  const contents = [
+    { href: "/admin/noi-dung-phanbon", label: "Phân bón", id: "phanbon" as const },
+    { href: "/admin/noi-dung/lopxe", label: "Lốp xe", id: "lopxe" as const },
+    { href: "/admin/noi-dung/satthep", label: "Sắt thép", id: "satthep" as const },
   ];
   const dbs = [
     {
@@ -120,6 +120,19 @@ export function AdminShell({
           </Link>
         ))}
       </nav>
+
+      <div data-tour="nav-content" className="mt-6">
+        <p className="px-2.5 text-[12px] font-medium text-hub-ink/45">Nội dung chuyên trang</p>
+        <nav aria-label="Nội dung chuyên trang" className="mt-1 space-y-0.5">
+          {contents.map((c) => (
+            <Link key={c.href} href={c.href} aria-current={isActive(c.href) ? "page" : undefined} className={item(isActive(c.href))}>
+              <FileText className="size-4 shrink-0" strokeWidth={1.8} aria-hidden />
+              <span className="flex-1">{c.label}</span>
+              <span aria-hidden className={cn("size-1.5 rounded-full", DOT[c.id])} />
+            </Link>
+          ))}
+        </nav>
+      </div>
 
       <div data-tour="nav-products" className="mt-6">
         <p className="px-2.5 text-[12px] font-medium text-hub-ink/45">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { ImageUp, Loader2, Plus, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronUp, ImageUp, Loader2, Plus, Trash2, X } from "lucide-react";
 import { useNotify } from "@/hooks/use-notify";
 import { SmartImage } from "@/components/shared/smart-image";
 import { cn } from "@/lib/utils";
@@ -244,6 +244,103 @@ export function SaveBar({ dirty, pending, onSave, onReset, extra }: { dirty: boo
           {pending && <Loader2 className="animate-spin" />} Lưu thay đổi
         </button>
       </div>
+    </div>
+  );
+}
+
+/** Danh sách mục có nhiều trường (VD: ưu điểm tiêu đề + mô tả) – thêm, xoá, đổi thứ tự. */
+export function ItemsField<T extends Record<string, string>>({
+  label,
+  hint,
+  value,
+  onChange,
+  fields,
+  make,
+  min = 0,
+  max = 8,
+  itemName = "Mục",
+  errorAt,
+  error,
+  badge,
+}: {
+  label: string;
+  hint?: string;
+  value: T[];
+  onChange: (v: T[]) => void;
+  fields: { key: keyof T & string; label: string; multiline?: boolean; placeholder?: string; narrow?: boolean }[];
+  make: () => T;
+  min?: number;
+  max?: number;
+  itemName?: string;
+  errorAt?: (i: number, key: string) => string | undefined;
+  error?: string;
+  /** nhãn nhỏ cạnh số thứ tự (VD: “Ô cam lớn” cho mục đầu tiên) */
+  badge?: (i: number) => string | undefined;
+}) {
+  const move = (i: number, d: -1 | 1) => {
+    const next = [...value];
+    [next[i], next[i + d]] = [next[i + d], next[i]];
+    onChange(next);
+  };
+  const narrow = fields.filter((f) => f.narrow);
+  const wide = fields.filter((f) => !f.narrow);
+  const iconBtn = "grid size-7 place-items-center rounded-md text-hub-ink/40 transition-colors hover:bg-hub-ink/5 hover:text-hub-ink disabled:pointer-events-none disabled:opacity-30";
+  const renderField = (row: T, i: number, f: (typeof fields)[number]) => (
+    <TextField
+      key={f.key}
+      label={f.label}
+      multiline={f.multiline}
+      placeholder={f.placeholder}
+      value={row[f.key] ?? ""}
+      error={errorAt?.(i, f.key)}
+      onChange={(v) => onChange(value.map((r, j) => (j === i ? { ...r, [f.key]: v } : r)))}
+    />
+  );
+  return (
+    <div>
+      <div className="mb-1.5 flex items-baseline justify-between gap-2">
+        <p className="text-[13px] font-medium text-hub-ink/75">{label}</p>
+        <span className="text-[12px] tabular-nums text-hub-ink/40">
+          {value.length}/{max}
+        </span>
+      </div>
+      <ol className="space-y-2">
+        {value.map((row, i) => (
+          <li key={i} className="rounded-lg border border-hub-line bg-hub-canvas/40 p-3 sm:p-4">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <span className="flex items-center gap-2 text-[12px] font-medium text-hub-ink/50">
+                <span className="grid size-5 place-items-center rounded-full bg-hub-paper text-[11px] tabular-nums shadow-[0_0_0_1px_var(--color-hub-line)]">{i + 1}</span>
+                {itemName} {i + 1}
+                {badge?.(i) && <span className="rounded bg-hub-marigold-soft px-1.5 py-0.5 text-[11px] text-[#7a5200]">{badge(i)}</span>}
+              </span>
+              <span className="flex gap-0.5">
+                <button type="button" className={iconBtn} aria-label={`Đưa ${itemName.toLowerCase()} ${i + 1} lên`} disabled={i === 0} onClick={() => move(i, -1)}>
+                  <ChevronUp className="size-4" />
+                </button>
+                <button type="button" className={iconBtn} aria-label={`Đưa ${itemName.toLowerCase()} ${i + 1} xuống`} disabled={i === value.length - 1} onClick={() => move(i, 1)}>
+                  <ChevronDown className="size-4" />
+                </button>
+                <button type="button" className={cn(iconBtn, "hover:bg-[#d1242f]/10 hover:text-[#d1242f]")} aria-label={`Xoá ${itemName.toLowerCase()} ${i + 1}`} disabled={value.length <= min} onClick={() => onChange(value.filter((_, j) => j !== i))}>
+                  <Trash2 className="size-3.5" />
+                </button>
+              </span>
+            </div>
+            <div className="space-y-3">
+              {narrow.length > 0 && <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">{narrow.map((f) => renderField(row, i, f))}</div>}
+              {wide.map((f) => renderField(row, i, f))}
+            </div>
+          </li>
+        ))}
+      </ol>
+      <button
+        type="button"
+        disabled={value.length >= max}
+        onClick={() => onChange([...value, make()])}
+        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-hub-ink/20 py-2.5 text-sm text-hub-ink/55 transition-colors hover:border-hub-blue hover:text-hub-blue disabled:pointer-events-none disabled:opacity-40"
+      >
+        <Plus className="size-4" /> Thêm {itemName.toLowerCase()}
+      </button>
+      {error ? <p className="mt-1 text-[13px] text-[#d1242f]">{error}</p> : hint && <p className="mt-1 text-[12px] text-hub-ink/45">{hint}</p>}
     </div>
   );
 }

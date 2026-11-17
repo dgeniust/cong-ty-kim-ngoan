@@ -114,10 +114,10 @@ export const products: CatalogProduct[] = [
 ];
 
 export const content: CatalogContent = {
-  productNoun: "thép",
   hero: {
     eyebrow: "Tôn – sắt thép công trình",
-    title: ["Tôn, sắt thép chính phẩm", "cho công trình cần sự chính xác"],
+    title: "Tôn, sắt thép chính phẩm cho",
+    highlight: "mọi công trình",
     description: "Thép xây dựng, thép hình, ống – hộp, tôn lợp và thép tấm chính phẩm. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
     stats: [
       { value: "5", label: "Nhóm vật tư thép" },
@@ -143,4 +143,12 @@ export const content: CatalogContent = {
       "Chúng tôi báo giá theo barem rõ ràng, cân đủ ký, giao đúng quy cách — để chủ nhà và thầu thợ yên tâm về tiến độ lẫn chi phí.",
     ],
   },
+  sections: {
+    categories: { title: "Đủ chủng loại cho", highlight: "phần thô", after: ", kết cấu và mái" },
+    tool: { title: "Tính nhanh khối lượng thép trước khi đặt hàng", subtitle: "Chọn đường kính và số cây để biết tổng số ký. Cần bóc tách theo bản vẽ, gửi cho chúng tôi — hỗ trợ tính thép theo bản vẽ để đặt đủ, không dư." },
+    commitments: { title: "Cân đủ, đúng quy cách,", highlight: "đúng tiến độ" },
+    news: { title: "Kiến thức chọn và dùng thép" },
+  },
+  cta: { title: "Cần báo giá thép hôm nay?", description: "Gửi quy cách và khối lượng, nhận giá theo barem trong ngày." },
+  quote: { title: "Báo giá thép theo ngày", status: "Đang nhận đơn", documents: "CO/CQ theo từng lô", notes: ["Cắt, uốn, cán sóng theo bản vẽ", "Giao tận chân công trình"] },
 };

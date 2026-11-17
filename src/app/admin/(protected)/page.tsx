@@ -48,12 +48,25 @@ export default async function AdminOverview() {
           <p className="mt-1.5 text-[15px] text-hub-ink/75">Tên công ty, hotline, địa chỉ, Zalo, Facebook và số điện thoại, mô tả, SEO của từng chuyên trang.</p>
           <ArrowUpRight className="absolute right-5 top-5 size-5 text-hub-ink/60 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
         </Link>
-        <Link href="/admin/noi-dung-phanbon" className="group relative overflow-hidden rounded-xl border border-hub-line bg-hub-paper p-6 sm:p-7 transition-colors hover:bg-hub-canvas/60">
-          <FileText className="size-7 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-12 group-hover:scale-110" strokeWidth={1.75} aria-hidden />
-          <h2 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-hub-ink">Nội dung trang phân bón</h2>
-          <p className="mt-1.5 text-[15px] text-hub-ink-soft">Banner, ưu điểm, nhóm sản phẩm, cây trồng, giới thiệu và footer của chuyên trang /phanbon.</p>
-          <ArrowUpRight className="absolute right-5 top-5 size-5 text-hub-ink/40 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
-        </Link>
+        <div className="relative rounded-xl border border-hub-line bg-hub-paper p-6 sm:p-7">
+          <FileText className="size-7" strokeWidth={1.75} aria-hidden />
+          <h2 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-hub-ink">Nội dung chuyên trang</h2>
+          <p className="mt-1.5 text-[15px] text-hub-ink-soft">Banner, tiêu đề các khối, cam kết, dịch vụ và lời kêu gọi liên hệ của từng ngành.</p>
+          <ul className="mt-4 flex flex-wrap gap-1.5">
+            {[
+              { href: "/admin/noi-dung-phanbon", label: "Phân bón", dot: "bg-sector-phanbon" },
+              { href: "/admin/noi-dung/lopxe", label: "Lốp xe", dot: "bg-sector-lopxe" },
+              { href: "/admin/noi-dung/satthep", label: "Sắt thép", dot: "bg-sector-satthep" },
+            ].map((c) => (
+              <li key={c.href}>
+                <Link href={c.href} className="group inline-flex h-8 items-center gap-1.5 rounded-lg bg-hub-canvas px-3 text-sm font-medium text-hub-ink/80 transition-colors hover:bg-hub-blue-tint hover:text-hub-blue">
+                  <span aria-hidden className={cn("size-1.5 rounded-full", c.dot)} /> {c.label}
+                  <ArrowUpRight className="size-3.5 opacity-50 transition-transform group-hover:-translate-y-px group-hover:translate-x-px group-hover:opacity-100" aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* 3 cơ sở dữ liệu sản phẩm */}
