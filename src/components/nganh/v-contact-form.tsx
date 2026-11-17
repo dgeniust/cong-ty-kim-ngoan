@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { z } from "zod";
+import { useNotify } from "@/hooks/use-notify";
 import { VButton } from "./v-button";
 
 const schema = z.object({
@@ -21,6 +22,7 @@ export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string 
   const [values, setValues] = useState<Values>({ name: "", phone: "", message: defaultMessage });
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const n = useNotify();
 
   const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
@@ -34,11 +36,14 @@ export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string 
       const next: Errors = {};
       for (const issue of parsed.error.issues) next[issue.path[0] as keyof Values] ??= issue.message;
       setErrors(next);
+      n.warning("Vui lòng kiểm tra lại thông tin", { description: Object.values(next)[0] });
+      document.getElementById(`f-${Object.keys(next)[0]}`)?.focus();
       return;
     }
     setStatus("sending");
     await new Promise((r) => setTimeout(r, 900));
     setStatus("sent");
+    n.success("Đã gửi yêu cầu", { description: `Kim Ngoan sẽ gọi lại số ${values.phone} trong thời gian sớm nhất.` });
   }
 
   if (status === "sent")

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowUpRight, CheckSquare, FileText, Package, Settings2, Sparkles, Sprout } from "lucide-react";
+import { ArrowUpRight, BookOpenText, FileText, PackagePlus, Package, PencilLine, Play, Settings2, Sprout } from "lucide-react";
+import { GuideLauncher } from "@/components/admin/guide/guide-provider";
 import { ProductArt } from "@/components/nganh/product-art";
 import { getSession } from "@/lib/auth/server";
 import { getCatalogProducts, getFertilizerProducts } from "@/lib/products/server";
@@ -40,7 +41,7 @@ export default async function AdminOverview() {
       </p>
 
       {/* lối vào chính */}
-      <div className="mt-10 grid gap-3 md:grid-cols-2">
+      <div data-tour="overview-shortcuts" className="mt-10 grid gap-3 md:grid-cols-2">
         <Link href="/admin/thong-tin-chung" className="group relative overflow-hidden rounded-xl bg-hub-marigold p-6 sm:p-7">
           <Settings2 className="size-7 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-12 group-hover:scale-110" strokeWidth={1.75} aria-hidden />
           <h2 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-hub-ink">Thông tin chung</h2>
@@ -59,7 +60,7 @@ export default async function AdminOverview() {
       <h2 className="mt-12 flex items-center gap-2 text-[13px] font-medium text-hub-ink/50">
         <Package className="size-4" aria-hidden /> Cơ sở dữ liệu sản phẩm
       </h2>
-      <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+      <ul data-tour="overview-dbs" className="mt-3 grid gap-3 sm:grid-cols-3">
         {dbs.map((d) => (
           <li key={d.href}>
             <Link href={d.href} className="group flex h-full flex-col rounded-xl border border-hub-line bg-hub-paper p-5 transition-colors hover:border-hub-ink/20">
@@ -79,22 +80,42 @@ export default async function AdminOverview() {
         ))}
       </ul>
 
-      {/* hướng dẫn ngắn – dạng trang tài liệu */}
-      <section id="huong-dan" className="mt-12 scroll-mt-16 rounded-xl border border-hub-line bg-hub-canvas/60 p-6 sm:p-8">
-        <h2 className="flex items-center gap-2 text-[17px] font-semibold text-hub-ink">
-          <Sparkles className="size-5 text-hub-marigold" aria-hidden /> Hướng dẫn nhanh
-        </h2>
-        <ul className="mt-4 space-y-2.5 text-[15px] leading-relaxed text-hub-ink-soft">
+      {/* hướng dẫn – mở trung tâm hướng dẫn / chạy tour tương tác */}
+      <section id="huong-dan" className="mt-12 scroll-mt-16 overflow-hidden rounded-xl border border-hub-line">
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-hub-canvas/70 p-6 sm:p-7">
+          <div className="flex gap-3.5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-hub-ink text-white">
+              <BookOpenText className="size-5" aria-hidden />
+            </span>
+            <div>
+              <h2 className="text-[18px] font-semibold tracking-[-0.01em] text-hub-ink">Mới dùng trang quản trị?</h2>
+              <p className="mt-0.5 text-[14.5px] text-hub-ink-soft">Hướng dẫn tương tác đưa bạn tới đúng trang và chỉ vào từng phần cần thao tác.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <GuideLauncher mode="open" className="inline-flex h-9 items-center rounded-lg px-3.5 text-sm font-medium text-hub-ink/80 hover:bg-hub-ink/5">
+              Xem tất cả hướng dẫn
+            </GuideLauncher>
+            <GuideLauncher guide="intro" className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-hub-blue px-3.5 text-sm font-medium text-white hover:bg-hub-blue-hover">
+              <Play className="size-3.5 fill-current" aria-hidden /> Bắt đầu – 1 phút
+            </GuideLauncher>
+          </div>
+        </div>
+        <ul className="grid divide-hub-line border-t border-hub-line sm:grid-cols-3 sm:divide-x">
           {[
-            "Thêm sản phẩm: vào một cơ sở dữ liệu, bấm “Thêm sản phẩm”, điền thông tin rồi lưu – sản phẩm xuất hiện ngay trên chuyên trang.",
-            "Đường dẫn (slug) được tạo tự động từ tên sản phẩm; chỉ đổi khi thật cần vì link cũ sẽ không còn.",
-            "Đánh dấu “Bán chạy” để sản phẩm lên khối nổi bật ở trang chủ chuyên trang và landing tổng.",
-            "Ảnh: tải lên trực tiếp (JPG, PNG, WEBP – tối đa 5MB) hoặc dán đường dẫn ảnh có sẵn.",
-            "Số điện thoại trong “Thông tin chung” hiện ở header, nút gọi, trang liên hệ và landing tổng.",
-          ].map((t) => (
-            <li key={t} className="flex gap-2.5">
-              <CheckSquare className="mt-1 size-4 shrink-0 text-hub-blue" aria-hidden />
-              <span>{t}</span>
+            { id: "add-product", icon: PackagePlus, title: "Thêm sản phẩm mới", desc: "Từng ô cần điền, ảnh, lưu" },
+            { id: "edit-product", icon: PencilLine, title: "Tìm, sửa & xoá", desc: "Lọc, sửa nhanh, hoàn tác" },
+            { id: "settings", icon: Settings2, title: "Thông tin chung", desc: "Hotline, địa chỉ, SEO" },
+          ].map((g) => (
+            <li key={g.id} className="border-b border-hub-line last:border-b-0 sm:border-b-0">
+              <GuideLauncher guide={g.id} mode="open" className="group flex w-full items-center gap-3 px-6 py-4 text-left transition-colors hover:bg-hub-ink/[0.02]">
+                <g.icon className="size-5 shrink-0 text-hub-ink/60" strokeWidth={1.8} aria-hidden />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14.5px] font-medium text-hub-ink">{g.title}</span>
+                  <span className="block text-[13px] text-hub-ink/50">{g.desc}</span>
+                </span>
+                <ArrowUpRight className="size-4 text-hub-ink/30 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-hub-blue" aria-hidden />
+              </GuideLauncher>
             </li>
           ))}
         </ul>

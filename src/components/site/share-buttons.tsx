@@ -1,12 +1,13 @@
 "use client";
 
 import { Link2 } from "lucide-react";
-import { toast } from "sonner";
+import { useNotify } from "@/hooks/use-notify";
 
 const btn =
   "grid size-9 place-items-center rounded-full bg-white text-brand-800 transition-shadow hover:shadow-soft focus-visible:ring-2 focus-visible:ring-brand-500";
 
 export function ShareButtons({ title }: { title: string }) {
+  const n = useNotify();
   const share = () => {
     const url = window.location.href;
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank", "noopener,width=600,height=500");
@@ -14,9 +15,9 @@ export function ShareButtons({ title }: { title: string }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Đã sao chép liên kết");
+      n.success("Đã sao chép liên kết", { description: "Dán vào Zalo, Messenger… để chia sẻ bài viết." });
     } catch {
-      toast.error("Trình duyệt chặn sao chép. Hãy sao chép địa chỉ trên thanh trình duyệt.");
+      n.error("Không sao chép được", { description: "Trình duyệt chặn sao chép. Hãy sao chép địa chỉ trên thanh trình duyệt." });
     }
   };
   return (

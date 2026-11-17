@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight, Loader2, Package, Plus, Search, Trash2, X } from "lucide-react";
-import { toast } from "sonner";
 import { deleteProductAction, upsertProductAction, type FieldErrors } from "@/app/admin/actions";
+import { useNotify } from "@/hooks/use-notify";
+import { failure } from "./notify-helpers";
 import { ProductArt } from "@/components/nganh/product-art";
 import { SmartImage } from "@/components/shared/smart-image";
 import type { ArtKind } from "@/lib/data/types";
@@ -96,6 +97,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
   const [editing, setEditing] = useState<{ original: string | null; data: AdminProduct } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<AdminProduct | null>(null);
   const [deleting, startDelete] = useTransition();
+  const n = useNotify({ record: true });
 
   const catName = useMemo(() => new Map(categories.map((c) => [c.slug, c.name])), [categories]);
   const catTone = useMemo(() => new Map(categories.map((c, i) => [c.slug, TAG_TONES[i % TAG_TONES.length]])), [categories]);
@@ -116,17 +118,30 @@ export function ProductManager({ site, products, categories, brands }: { site: A
     { id: "new" as const, label: "Mới", n: products.filter((p) => p.isNew).length },
   ];
 
+  async function undo(p: AdminProduct, at: number) {
+    const res = await n.promise(upsertProductAction(site, payload(site, p), null, at), {
+      loading: { title: "Đang khôi phục sản phẩm…", description: p.name },
+      success: { title: "Đã khôi phục sản phẩm", description: `“${p.name}” đã hiện lại trên chuyên trang ${meta.title}`, link: { label: "Xem trên web", href: `${meta.path}/${p.slug}`, external: true } },
+      error: failure("Không khôi phục được sản phẩm"),
+    });
+    if (res?.ok) router.refresh();
+  }
+
   function remove() {
     if (!confirmDelete) return;
     const target = confirmDelete;
+    const at = products.findIndex((p) => p.slug === target.slug);
     startDelete(async () => {
-      const res = await deleteProductAction(site, target.slug);
-      if (res.ok) {
-        toast.success(`Đã xoá “${target.name}”`);
-        setConfirmDelete(null);
+      const res = await n.promise(deleteProductAction(site, target.slug), {
+        loading: { title: "Đang xoá sản phẩm…", description: target.name },
+        success: { title: "Đã xoá sản phẩm", description: `“${target.name}” đã gỡ khỏi chuyên trang ${meta.title}`, action: { label: "Hoàn tác", onClick: () => undo(target, at) }, duration: 10000 },
+        error: failure("Chưa xoá được sản phẩm"),
+      });
+      setConfirmDelete(null);
+      if (res?.ok) {
         setEditing(null);
         router.refresh();
-      } else toast.error(res.error);
+      }
     });
   }
 
@@ -137,7 +152,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
         title={meta.title}
         description={meta.description}
         actions={
-          <button type="button" onClick={() => setEditing({ original: null, data: blank(site) })} className={BTN_PRIMARY}>
+          <button type="button" data-tour="product-add" onClick={() => setEditing({ original: null, data: blank(site) })} className={BTN_PRIMARY}>
             <Plus /> Thêm sản phẩm
           </button>
         }
@@ -146,7 +161,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
       <div className="mx-auto max-w-5xl px-5 pb-24 sm:px-10">
         {/* thanh view + công cụ kiểu cơ sở dữ liệu Notion */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hub-line pb-2">
-          <div role="tablist" aria-label="Chế độ xem" className="flex gap-1">
+          <div role="tablist" aria-label="Chế độ xem" data-tour="db-views" className="flex gap-1">
             {views.map((v) => (
               <button
                 key={v.id}
@@ -161,12 +176,12 @@ export function ProductManager({ site, products, categories, brands }: { site: A
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <label className="relative">
+            <label className="relative" data-tour="db-search">
               <span className="sr-only">Tìm sản phẩm</span>
               <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-hub-ink/40" aria-hidden />
               <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tìm tên, mã, thông số…" className="h-8 w-56 rounded-md bg-hub-canvas pl-8 pr-2 text-sm outline-none placeholder:text-hub-ink/40 focus:bg-hub-paper focus:shadow-[0_0_0_1px_var(--color-hub-blue),0_0_0_4px_var(--color-hub-blue-tint)]" />
             </label>
-            <select value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Lọc theo danh mục" className="h-8 rounded-md bg-hub-canvas px-2 text-sm text-hub-ink/80 outline-none focus:shadow-[0_0_0_1px_var(--color-hub-blue)]">
+            <select value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Lọc theo danh mục" data-tour="db-filter" className="h-8 rounded-md bg-hub-canvas px-2 text-sm text-hub-ink/80 outline-none focus:shadow-[0_0_0_1px_var(--color-hub-blue)]">
               <option value="">Mọi danh mục</option>
               {categories.map((c) => (
                 <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -176,7 +191,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
         </div>
 
         {/* bảng */}
-        <div className="mt-2 overflow-x-auto">
+        <div className="relative mt-2 overflow-x-auto">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-hub-line text-[12px] text-hub-ink/50">
@@ -189,8 +204,8 @@ export function ProductManager({ site, products, categories, brands }: { site: A
               </tr>
             </thead>
             <tbody>
-              {rows.map((p) => (
-                <tr key={p.slug} className="group border-b border-hub-line transition-colors hover:bg-hub-ink/[0.025]">
+              {rows.map((p, i) => (
+                <tr key={p.slug} data-tour={i === 0 ? "db-row" : undefined} className="group border-b border-hub-line transition-colors hover:bg-hub-ink/[0.025]">
                   <td className="py-2 pl-1 pr-3">
                     <button type="button" onClick={() => setEditing({ original: p.slug, data: structuredClone(p) })} className="flex w-full items-center gap-3 text-left">
                       <Thumb p={p} className="size-10" />
@@ -212,7 +227,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
                     </span>
                   </td>
                   <td className="py-2 pr-1">
-                    <span className="flex justify-end gap-0.5 opacity-60 transition-opacity group-hover:opacity-100">
+                    <span data-tour={i === 0 ? "db-row-actions" : undefined} className="flex justify-end gap-0.5 opacity-60 transition-opacity group-hover:opacity-100">
                       <a href={`${meta.path}/${p.slug}`} target="_blank" rel="noopener" aria-label={`Xem ${p.name} trên website`} className="grid size-8 place-items-center rounded-md text-hub-ink/60 hover:bg-hub-ink/5 hover:text-hub-ink">
                         <ArrowUpRight className="size-4" />
                       </a>
@@ -281,9 +296,9 @@ export function ProductManager({ site, products, categories, brands }: { site: A
 
 /* ---------------- Side-peek: sửa / thêm sản phẩm ---------------- */
 
-function PropRow({ label, children, error }: { label: string; children: React.ReactNode; error?: string }) {
+function PropRow({ label, children, error, tour }: { label: string; children: React.ReactNode; error?: string; tour?: string }) {
   return (
-    <div className="grid grid-cols-[120px_1fr] items-start gap-3 sm:grid-cols-[150px_1fr]">
+    <div data-tour={tour} className="grid grid-cols-[120px_1fr] items-start gap-3 sm:grid-cols-[150px_1fr]">
       <span className="pt-2 text-[13px] text-hub-ink/50">{label}</span>
       <div>
         {children}
@@ -301,6 +316,8 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
   const [serverErrors, setServerErrors] = useState<FieldErrors>({});
   const [pending, start] = useTransition();
   const titleRef = useRef<HTMLTextAreaElement>(null);
+  const n = useNotify({ record: true });
+  const meta = META[site];
   const dirty = JSON.stringify(p) !== JSON.stringify(initial);
   const errors = showErrors ? { ...validate(site, p), ...serverErrors } : {};
 
@@ -323,6 +340,33 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
     onClose();
   }
 
+
+  function save() {
+    const local = validate(site, p);
+    const count = Object.keys(local).length;
+    if (count) {
+      setShowErrors(true);
+      n.warning("Thiếu hoặc sai thông tin", { description: `Kiểm tra ${count} ô được viền đỏ rồi lưu lại.`, record: false });
+      return;
+    }
+    start(async () => {
+      const res = await n.promise(upsertProductAction(site, payload(site, p), original), {
+        loading: { title: original ? "Đang lưu thay đổi…" : "Đang thêm sản phẩm…", description: p.name },
+        success: {
+          title: original ? "Đã lưu thay đổi" : "Đã thêm sản phẩm mới",
+          description: `“${p.name}” đã cập nhật trên chuyên trang ${meta.title}`,
+          link: { label: "Xem trên web", href: `${meta.path}/${p.slug}`, external: true },
+        },
+        error: failure(original ? "Chưa lưu được thay đổi" : "Chưa thêm được sản phẩm"),
+      });
+      if (res?.ok) onSaved();
+      else if (res) {
+        setShowErrors(true);
+        setServerErrors(res.fieldErrors ?? {});
+      }
+    });
+  }
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
@@ -335,38 +379,17 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  function save() {
-    const local = validate(site, p);
-    if (Object.keys(local).length) {
-      setShowErrors(true);
-      toast.error("Vui lòng kiểm tra các ô được đánh dấu đỏ");
-      return;
-    }
-    start(async () => {
-      const res = await upsertProductAction(site, payload(site, p), original);
-      if (res.ok) {
-        toast.success(original ? "Đã lưu thay đổi" : "Đã thêm sản phẩm – đã hiện trên website");
-        onSaved();
-      } else {
-        setShowErrors(true);
-        setServerErrors(res.fieldErrors ?? {});
-        toast.error(res.error);
-      }
-    });
-  }
-
-  const meta = META[site];
   const err = (k: string) => errors[k];
   const isCatalog = site !== "phanbon";
 
   return (
     <div className="fixed inset-0 z-50">
       <button type="button" aria-label="Đóng" onClick={close} className="absolute inset-0 animate-fade bg-black/20" />
-      <aside role="dialog" aria-modal="true" aria-label={original ? `Sửa ${initial.name}` : "Thêm sản phẩm"} className="absolute inset-y-0 right-0 flex w-full max-w-[680px] animate-[peek_.24s_cubic-bezier(.2,.8,.2,1)] flex-col border-l border-hub-line bg-hub-paper shadow-[-8px_0_32px_rgb(0_0_0/0.08)]">
+      <aside data-tour="peek" data-mode={original ? "edit" : "new"} role="dialog" aria-modal="true" aria-label={original ? `Sửa ${initial.name}` : "Thêm sản phẩm"} className="absolute inset-y-0 right-0 flex w-full max-w-[680px] animate-[peek_.24s_cubic-bezier(.2,.8,.2,1)] flex-col border-l border-hub-line bg-hub-paper shadow-[-8px_0_32px_rgb(0_0_0/0.08)]">
         {/* thanh đầu */}
-        <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-hub-line px-3">
+        <div data-tour="peek-head" className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-hub-line px-3">
           <div className="flex min-w-0 items-center gap-1.5 text-sm text-hub-ink/55">
-            <button type="button" onClick={close} aria-label="Đóng" className="grid size-8 place-items-center rounded-md hover:bg-hub-ink/5">
+            <button type="button" data-tour="peek-close" onClick={close} aria-label="Đóng" className="grid size-8 place-items-center rounded-md hover:bg-hub-ink/5">
               <X className="size-4" />
             </button>
             <span aria-hidden className={cn("size-1.5 rounded-full", meta.dot)} />
@@ -386,6 +409,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
           <label className="sr-only" htmlFor="peek-title">Tên sản phẩm</label>
           <textarea
             id="peek-title"
+            data-tour="peek-title"
             ref={titleRef}
             rows={1}
             value={p.name}
@@ -402,7 +426,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
 
           {/* thuộc tính */}
           <div className="mt-5 space-y-1 border-b border-hub-line pb-5">
-            <PropRow label="Đường dẫn" error={err("slug")}>
+            <PropRow label="Đường dẫn" error={err("slug")} tour="peek-slug">
               <div className="flex items-center rounded-md">
                 <span className="shrink-0 whitespace-nowrap pl-2 text-[13px] text-hub-ink/35">{meta.path}/</span>
                 <input
@@ -417,6 +441,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
                 />
               </div>
             </PropRow>
+            <div data-tour="peek-props" className="space-y-1">
             <PropRow label="Danh mục" error={err("categorySlug")}>
               <select value={p.categorySlug} aria-label="Danh mục" aria-invalid={err("categorySlug") ? true : undefined} onChange={(e) => set("categorySlug")(e.target.value)} className={PROP_INPUT}>
                 <option value="">Chọn danh mục…</option>
@@ -443,18 +468,21 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
                 <input value={p.origin ?? ""} aria-label="Xuất xứ" onChange={(e) => set("origin")(e.target.value)} placeholder="VD: Việt Nam" className={PROP_INPUT} />
               </PropRow>
             )}
+            </div>
           </div>
 
           <div className="mt-6 space-y-6">
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div data-tour="peek-flags" className="grid gap-2 sm:grid-cols-2">
               <Toggle label="Bán chạy" hint="Lên khối nổi bật" checked={!!p.featured} onChange={set("featured")} />
               <Toggle label="Hàng mới" hint="Gắn nhãn “Mới”" checked={!!p.isNew} onChange={set("isNew")} />
             </div>
 
-            <TextField label="Mô tả ngắn" required multiline value={p.shortDescription} onChange={set("shortDescription")} error={err("shortDescription")} hint="1–2 câu hiện trên thẻ sản phẩm" />
+            <div data-tour="peek-short">
+              <TextField label="Mô tả ngắn" required multiline value={p.shortDescription} onChange={set("shortDescription")} error={err("shortDescription")} hint="1–2 câu hiện trên thẻ sản phẩm" />
+            </div>
 
             {isCatalog && (
-              <fieldset>
+              <fieldset data-tour="peek-art">
                 <legend className="mb-1.5 text-[13px] font-medium text-hub-ink/75">Hình minh hoạ (dùng khi chưa có ảnh chụp)</legend>
                 <div className="grid grid-cols-5 gap-2">
                   {ART_KINDS.map((k) => (
@@ -467,16 +495,22 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
               </fieldset>
             )}
 
+            <div data-tour="peek-images">
             <ImagesField label={site === "phanbon" ? "Ảnh sản phẩm *" : "Ảnh chụp thật (tuỳ chọn)"} value={p.images ?? []} onChange={set("images")} error={err("images")} />
+            </div>
 
             {isCatalog ? (
               <>
+                <div data-tour="peek-details">
                 <PairsField label="Bảng thông số kỹ thuật" value={p.specs ?? []} onChange={set("specs")} namePlaceholder="Thông số" valuePlaceholder="Giá trị" error={Object.entries(errors).find(([k]) => k.startsWith("specs"))?.[1]} />
+                </div>
                 <LinesField label="Điểm nổi bật" value={p.highlights ?? []} onChange={set("highlights")} />
               </>
             ) : (
               <>
+                <div data-tour="peek-details">
                 <PairsField label="Thành phần" value={p.ingredients ?? []} onChange={set("ingredients")} namePlaceholder="Chất" valuePlaceholder="Hàm lượng" error={Object.entries(errors).find(([k]) => k.startsWith("ingredients"))?.[1]} />
+                </div>
                 <LinesField label="Quy cách đóng gói" value={p.packing ?? []} onChange={set("packing")} placeholder={"Bao 25kg\nBao 50kg"} />
                 <LinesField label="Công dụng" value={p.uses ?? []} onChange={set("uses")} />
                 <LinesField label="Hướng dẫn sử dụng" value={p.usage ?? []} onChange={set("usage")} />
@@ -490,13 +524,13 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
         {/* thanh dưới */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-hub-line px-4 py-3">
           {original ? (
-            <button type="button" onClick={() => onDelete(initial)} className={BTN_DANGER}>
+            <button type="button" data-tour="peek-delete" onClick={() => onDelete(initial)} className={BTN_DANGER}>
               <Trash2 /> Xoá
             </button>
           ) : (
             <span className="text-[12px] text-hub-ink/40">Ctrl/⌘ + S để lưu</span>
           )}
-          <div className="flex gap-2">
+          <div data-tour="peek-save" className="flex gap-2">
             <button type="button" onClick={close} className={BTN_TEXT}>Huỷ</button>
             <button type="button" onClick={save} disabled={pending} className={BTN_PRIMARY}>
               {pending && <Loader2 className="animate-spin" />} {original ? "Lưu thay đổi" : "Thêm sản phẩm"}

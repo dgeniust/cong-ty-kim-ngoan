@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, Package, RotateCcw, Save, Sparkles, Sprout } from "lucide-react";
-import { toast } from "sonner";
+import { useNotify } from "@/hooks/use-notify";
+import { failure } from "./notify-helpers";
 import { resetContentAction, saveContentAction } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +14,7 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
   const [content, setContent] = useState(initial);
   const [saved, setSaved] = useState(JSON.stringify(initial));
   const [pending, startTransition] = useTransition();
+  const n = useNotify({ record: true });
   const dirty = JSON.stringify(content) !== saved;
 
   const set = <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => setContent((c) => ({ ...c, [key]: value }));
@@ -21,20 +23,24 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
 
   function save() {
     startTransition(async () => {
-      const res = await saveContentAction(content);
-      if (res.ok) {
-        setSaved(JSON.stringify(content));
-        toast.success("Đã lưu & cập nhật trang chủ");
-      } else toast.error(res.error);
+      const res = await n.promise(saveContentAction(content), {
+        loading: "Đang lưu nội dung trang phân bón…",
+        success: { title: "Đã lưu nội dung trang phân bón", description: "Trang /phanbon đã được cập nhật.", link: { label: "Xem trang", href: "/phanbon", external: true } },
+        error: failure("Chưa lưu được nội dung"),
+      });
+      if (res?.ok) setSaved(JSON.stringify(content));
     });
   }
 
   function reset() {
     if (!confirm("Khôi phục toàn bộ nội dung mặc định? Thao tác này không thể hoàn tác.")) return;
     startTransition(async () => {
-      const res = await resetContentAction();
-      if (res.ok) window.location.reload();
-      else toast.error(res.error);
+      const res = await n.promise(resetContentAction(), {
+        loading: "Đang khôi phục nội dung mặc định…",
+        success: { title: "Đã khôi phục nội dung mặc định", description: "Trang sẽ tải lại để hiện nội dung mới." },
+        error: failure("Không khôi phục được nội dung"),
+      });
+      if (res?.ok) setTimeout(() => window.location.reload(), 1200);
     });
   }
 
@@ -55,12 +61,12 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
           </div>
           <div className="flex items-center gap-2">
             {dirty && <span className="hidden text-xs text-amber-600 sm:inline">● Chưa lưu</span>}
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild data-tour="content-preview">
               <a href="/phanbon" target="_blank">
                 <ExternalLink /> <span className="hidden sm:inline">Xem trang</span>
               </a>
             </Button>
-            <Button size="sm" onClick={save} disabled={pending || !dirty}>
+            <Button size="sm" data-tour="content-save" onClick={save} disabled={pending || !dirty}>
               {pending ? <Loader2 className="animate-spin" /> : <Save />} Lưu
             </Button>
           </div>
@@ -69,7 +75,7 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
 
       <main className="mx-auto max-w-6xl px-4 py-6">
         <Tabs defaultValue="site">
-          <TabsList>
+          <TabsList data-tour="content-tabs">
             <TabsTrigger value="site"><Info /> Thông tin chung</TabsTrigger>
             <TabsTrigger value="hero"><ImageIcon /> Banner</TabsTrigger>
             <TabsTrigger value="features"><Sparkles /> Ưu điểm</TabsTrigger>

@@ -2,10 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { RotateCcw, Settings2 } from "lucide-react";
-import { toast } from "sonner";
+import { useNotify } from "@/hooks/use-notify";
 import { resetSettingsAction, saveSettingsAction, type FieldErrors } from "@/app/admin/actions";
 import { settingsSchema, type SiteSettings } from "@/lib/settings/schema";
 import { cn } from "@/lib/utils";
+import { failure } from "./notify-helpers";
 import { BTN_TEXT, Card, Grid, PageHeader, SaveBar, TextField } from "./notion-ui";
 
 type VId = keyof SiteSettings["verticals"];
@@ -42,6 +43,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
   const [showErrors, setShowErrors] = useState(false);
   const [serverErrors, setServerErrors] = useState<FieldErrors>({});
   const [pending, start] = useTransition();
+  const n = useNotify({ record: true });
   const dirty = JSON.stringify(data) !== saved;
   const errors = showErrors ? { ...errorsOf(data), ...serverErrors } : {};
 
@@ -58,20 +60,23 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
       setShowErrors(true);
       const firstBadTab = VERTICAL_TABS.find((t) => Object.keys(local).some((k) => k.startsWith(`verticals.${t.id}.`)));
       if (firstBadTab && !Object.keys(local).some((k) => k.startsWith("company."))) setTab(firstBadTab.id);
-      toast.error("Vui lòng kiểm tra các ô được đánh dấu đỏ");
+      const count = Object.keys(local).length;
+      n.warning("Thiếu hoặc sai thông tin", { description: `Kiểm tra ${count} ô được viền đỏ${firstBadTab ? ` (tab ${firstBadTab.label})` : ""} rồi lưu lại.`, record: false });
       return;
     }
     start(async () => {
-      const res = await saveSettingsAction(data);
-      if (res.ok) {
+      const res = await n.promise(saveSettingsAction(data), {
+        loading: "Đang lưu thông tin chung…",
+        success: { title: "Đã lưu thông tin chung", description: "Header, footer, nút gọi và trang liên hệ đã cập nhật trên website.", link: { label: "Xem website", href: "/", external: true } },
+        error: failure("Chưa lưu được thông tin chung"),
+      });
+      if (res?.ok) {
         setSaved(JSON.stringify(data));
         setShowErrors(false);
         setServerErrors({});
-        toast.success("Đã lưu – website đã được cập nhật");
-      } else {
+      } else if (res) {
         setShowErrors(true);
         setServerErrors(res.fieldErrors ?? {});
-        toast.error(res.error);
       }
     });
   }
@@ -79,9 +84,16 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
   function reset() {
     if (!confirm("Khôi phục toàn bộ thông tin chung về mặc định ban đầu? Không thể hoàn tác.")) return;
     start(async () => {
-      const res = await resetSettingsAction();
-      if (res.ok) window.location.reload();
-      else toast.error(res.error);
+      const res = await n.promise(resetSettingsAction(), {
+        loading: "Đang khôi phục mặc định…",
+        success: { title: "Đã khôi phục thông tin mặc định", description: "Toàn bộ thông tin chung đã trở về như lúc bàn giao." },
+        error: failure("Không khôi phục được"),
+      });
+      if (res?.ok && res.settings) {
+        setData(res.settings);
+        setSaved(JSON.stringify(res.settings));
+        setShowErrors(false);
+      }
     });
   }
 
@@ -92,14 +104,14 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
         title="Thông tin chung"
         description="Thông tin dùng chung cho landing tổng và 3 chuyên trang: header, footer, nút gọi, trang liên hệ, dữ liệu SEO."
         actions={
-          <button type="button" onClick={reset} disabled={pending} className={BTN_TEXT}>
+          <button type="button" data-tour="settings-reset" onClick={reset} disabled={pending} className={BTN_TEXT}>
             <RotateCcw /> Khôi phục mặc định
           </button>
         }
       />
 
       <div className="mx-auto max-w-5xl space-y-4 px-5 pb-32 sm:px-10">
-        <Card title="Thương hiệu" description="Hiện ở logo, header, footer và thẻ tiêu đề trình duyệt.">
+        <Card tour="settings-brand" title="Thương hiệu" description="Hiện ở logo, header, footer và thẻ tiêu đề trình duyệt.">
           <Grid cols={3}>
             <TextField label="Dòng trên logo" value={c.prefix} onChange={setC("prefix")} error={errors["company.prefix"]} />
             <TextField label="Tên ngắn" required value={c.name} onChange={setC("name")} error={errors["company.name"]} />
@@ -111,7 +123,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
           </Grid>
         </Card>
 
-        <Card title="Liên hệ" description="Hotline chung hiện ở landing tổng; mỗi chuyên trang có số riêng ở thẻ bên dưới.">
+        <Card tour="settings-contact" title="Liên hệ" description="Hotline chung hiện ở landing tổng; mỗi chuyên trang có số riêng ở thẻ bên dưới.">
           <Grid>
             <TextField label="Hotline chung" required type="tel" value={c.hotline} onChange={setC("hotline")} error={errors["company.hotline"]} placeholder="0909 123 456" />
             <TextField label="Email" type="email" value={c.email} onChange={setC("email")} error={errors["company.email"]} />
@@ -123,7 +135,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
           </Grid>
         </Card>
 
-        <Card title="Mạng xã hội">
+        <Card tour="settings-social" title="Mạng xã hội">
           <Grid>
             <TextField label="Link Zalo" value={c.zalo} onChange={setC("zalo")} error={errors["company.zalo"]} placeholder="https://zalo.me/..." />
             <TextField label="Link Facebook" value={c.facebook} onChange={setC("facebook")} error={errors["company.facebook"]} placeholder="https://facebook.com/..." />
@@ -131,10 +143,11 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
         </Card>
 
         <Card
+          tour="settings-vertical"
           title="Chuyên trang"
           description="Tên, số điện thoại, nội dung giới thiệu và SEO riêng của từng ngành."
           aside={
-            <div role="tablist" aria-label="Chọn chuyên trang" className="flex gap-1 rounded-lg bg-hub-canvas p-1">
+            <div role="tablist" aria-label="Chọn chuyên trang" data-tour="settings-tabs" className="flex gap-1 rounded-lg bg-hub-canvas p-1">
               {VERTICAL_TABS.map((t) => (
                 <button
                   key={t.id}
@@ -162,7 +175,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
               <TextField label="Nhãn liên hệ" value={v.contactLabel} onChange={setV("contactLabel")} error={vErr("contactLabel")} hint="VD: Liên hệ về lốp xe ô tô" />
             </Grid>
             <TextField label="Mô tả ngắn" multiline value={v.description} onChange={setV("description")} error={vErr("description")} hint="Hiện ở thẻ chuyên trang trên landing tổng và footer" />
-            <div className="grid gap-4 border-t border-hub-line pt-4 lg:grid-cols-[1fr_1fr]">
+            <div data-tour="settings-seo" className="grid gap-4 border-t border-hub-line pt-4 lg:grid-cols-[1fr_1fr]">
               <div className="space-y-4">
                 <TextField label="Tiêu đề SEO" value={v.seoTitle} onChange={setV("seoTitle")} error={vErr("seoTitle")} recommended={70} hint="Nên ≤ 70 ký tự để Google hiện đủ" />
                 <TextField label="Mô tả SEO" multiline value={v.seoDescription} onChange={setV("seoDescription")} error={vErr("seoDescription")} recommended={160} hint="Nên ≤ 160 ký tự" />

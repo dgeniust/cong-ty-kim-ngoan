@@ -2,7 +2,7 @@
 
 import { useId, useRef, useState } from "react";
 import { ImageUp, Loader2, Plus, Trash2, X } from "lucide-react";
-import { toast } from "sonner";
+import { useNotify } from "@/hooks/use-notify";
 import { SmartImage } from "@/components/shared/smart-image";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,7 @@ const INPUT =
 /** Đầu trang kiểu tài liệu Notion: biểu tượng lớn · tiêu đề · mô tả · thao tác. */
 export function PageHeader({ icon, title, description, actions, children }: { icon: React.ReactNode; title: string; description?: React.ReactNode; actions?: React.ReactNode; children?: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-5xl px-5 pb-6 pt-10 sm:px-10 lg:pt-16">
+    <div data-tour="page-header" className="mx-auto max-w-5xl px-5 pb-6 pt-10 sm:px-10 lg:pt-16">
       <div className="grid size-14 place-items-center rounded-xl bg-hub-canvas text-hub-ink [&_svg]:size-7">{icon}</div>
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
@@ -33,9 +33,9 @@ export function PageHeader({ icon, title, description, actions, children }: { ic
   );
 }
 
-export function Card({ title, description, children, className, aside }: { title?: string; description?: string; children: React.ReactNode; className?: string; aside?: React.ReactNode }) {
+export function Card({ title, description, children, className, aside, tour }: { title?: string; description?: string; children: React.ReactNode; className?: string; aside?: React.ReactNode; tour?: string }) {
   return (
-    <section className={cn("rounded-xl border border-hub-line bg-hub-paper", className)}>
+    <section data-tour={tour} className={cn("rounded-xl border border-hub-line bg-hub-paper", className)}>
       {title && (
         <header className="flex flex-wrap items-start justify-between gap-3 border-b border-hub-line px-5 py-4 sm:px-6">
           <div>
@@ -167,6 +167,7 @@ export function ImagesField({ label, value, onChange, error, max = 6 }: { label:
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [draft, setDraft] = useState("");
+  const n = useNotify();
 
   async function upload(file: File) {
     setUploading(true);
@@ -177,9 +178,9 @@ export function ImagesField({ label, value, onChange, error, max = 6 }: { label:
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Tải ảnh thất bại");
       onChange([...value, json.url]);
-      toast.success("Đã tải ảnh lên");
+      n.success("Đã tải ảnh lên", { description: `${file.name} – nhớ bấm Lưu để áp dụng` });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Tải ảnh thất bại");
+      n.error("Tải ảnh thất bại", { description: e instanceof Error ? e.message : "Kiểm tra định dạng (JPG, PNG, WEBP) và dung lượng ≤ 5MB" });
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = "";

@@ -2,20 +2,9 @@
 
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
+/** Vùng hiển thị thông báo. Giao diện thẻ nằm ở components/shared/notify-toast – gọi qua hook `useNotify`. */
 const Toaster = (props: ToasterProps) => (
-  <Sonner
-    className="toaster group"
-    position="top-right"
-    richColors
-    style={
-      {
-        "--normal-bg": "var(--popover)",
-        "--normal-text": "var(--popover-foreground)",
-        "--normal-border": "var(--border)",
-      } as React.CSSProperties
-    }
-    {...props}
-  />
+  <Sonner position="top-right" offset={16} mobileOffset={12} gap={10} visibleToasts={4} containerAriaLabel="Thông báo" {...props} />
 );
 
 export { Toaster };

@@ -2,7 +2,7 @@
 
 import { createElement, useId, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, ImageUp, Loader2, Plus, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { notify } from "@/hooks/use-notify";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -101,9 +101,9 @@ export function ImageField({ label, value, onChange }: { label: string; value: s
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Upload thất bại");
       onChange(json.url);
-      toast.success("Đã tải ảnh lên");
+      notify.success("Đã tải ảnh lên", { description: "Nhớ bấm Lưu để áp dụng" });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Upload thất bại");
+      notify.error("Tải ảnh thất bại", { description: e instanceof Error ? e.message : "Kiểm tra định dạng và dung lượng ảnh" });
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = "";
