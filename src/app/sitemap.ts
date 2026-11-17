@@ -3,7 +3,7 @@ import { getCategories, getProducts } from "@/lib/data/catalog";
 import { getNews } from "@/lib/data/news";
 import { articles } from "@/lib/mock/articles";
 import { categories } from "@/lib/mock/categories";
-import { products } from "@/lib/mock/products";
+import { getFertilizerProducts } from "@/lib/products/server";
 import { absoluteUrl } from "@/lib/site";
 import { CATALOG_SITES, VERTICALS } from "@/lib/verticals";
 
@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry(`${pb}/gioi-thieu`, 0.5, "yearly"),
     entry(`${pb}/lien-he`, 0.6, "yearly"),
     ...categories.map((c) => entry(`${pb}/danh-muc/${c.slug}`, c.parent ? 0.7 : 0.8, "weekly")),
-    ...products.map((p) => entry(`${pb}/san-pham/${p.slug}`, 0.8, "monthly")),
+    ...(await getFertilizerProducts()).map((p) => entry(`${pb}/san-pham/${p.slug}`, 0.8, "monthly")),
     ...articles.map((a) => entry(`${pb}/${a.section}/${a.slug}`, 0.6, "monthly", new Date(a.date))),
   ];
 
@@ -41,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           entry(`${base}/tin-tuc`, 0.7, "weekly"),
           entry(`${base}/lien-he`, 0.6, "yearly"),
           ...getCategories(site).map((c) => entry(`${base}/san-pham?nhom=${c.slug}`, 0.7, "weekly")),
-          ...getProducts(site).map((p) => entry(`${base}/san-pham/${p.slug}`, 0.8, "monthly")),
+          ...(await getProducts(site)).map((p) => entry(`${base}/san-pham/${p.slug}`, 0.8, "monthly")),
           ...(await getNews({ site })).map((n) => entry(n.href, 0.6, "monthly", new Date(n.date))),
         ];
       }),

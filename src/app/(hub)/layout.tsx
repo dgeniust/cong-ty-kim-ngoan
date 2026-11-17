@@ -4,12 +4,14 @@ import { HubFloating } from "@/components/hub/hub-floating";
 import { HubHeader } from "@/components/hub/hub-header";
 import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
-import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
+import { telHref } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 export const viewport: Viewport = { themeColor: "#f6f5f4" };
 
 /** Landing tổng của công ty – điều hướng về 3 chuyên trang. */
-export default function HubLayout({ children }: { children: React.ReactNode }) {
+export default async function HubLayout({ children }: { children: React.ReactNode }) {
+  const { COMPANY, VERTICAL_LIST } = await getSettings();
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -29,7 +31,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="theme-hub min-h-screen bg-hub-canvas text-hub-ink">
       <JsonLd data={[organization, website]} />
-      <HubHeader />
+      <HubHeader company={{ prefix: COMPANY.prefix, name: COMPANY.name, slogan: COMPANY.slogan, legalName: COMPANY.legalName, hotline: COMPANY.hotline }} />
       <main id="noi-dung" tabIndex={-1} className="outline-none">{children}</main>
       <HubFooter />
       <HubFloating phone={COMPANY.hotline} phoneHref={telHref(COMPANY.hotline)} zalo={COMPANY.zalo} />

@@ -1,8 +1,10 @@
 import { MessageCircle, Phone } from "lucide-react";
-import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
+import { telHref, type Vertical } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 /** Thanh hành động cố định trên di động: gọi & Zalo luôn trong tầm ngón cái. */
-export function VMobileBar({ vertical }: { vertical: Vertical }) {
+export async function VMobileBar({ vertical }: { vertical: Vertical }) {
+  const { COMPANY } = await getSettings();
   return (
     <div className="pb-safe fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-v-line bg-v-bg/95 p-2 backdrop-blur-md lg:hidden">
       <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-12 items-center justify-center gap-2 rounded-lg bg-v-tint text-sm font-medium text-v-on-tint">

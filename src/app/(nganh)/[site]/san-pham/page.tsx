@@ -7,12 +7,14 @@ import { VContainer } from "@/components/nganh/v-section";
 import { Reveal } from "@/components/shared/reveal";
 import { getBrands, getCategories, getCategory, getProducts } from "@/lib/data/catalog";
 import { resolveSite } from "@/lib/site-params";
-import { VERTICALS, isCatalogSite } from "@/lib/verticals";
+import { isCatalogSite } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ nhom?: string; hang?: string; q?: string }> };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { VERTICALS } = await getSettings();
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
@@ -44,14 +46,14 @@ function FilterLink({ href, active, children }: { href: string; active: boolean;
 }
 
 export default async function ProductListing({ params, searchParams }: Props) {
-  const { site, vertical } = resolveSite((await params).site);
+  const { site, vertical } = await resolveSite((await params).site);
   const { nhom, hang, q: rawQ } = await searchParams;
   const q = rawQ?.trim().slice(0, 60) || undefined;
   const categories = getCategories(site);
-  const brands = getBrands(site);
+  const brands = await getBrands(site);
   const category = nhom ? getCategory(site, nhom) : undefined;
   const brand = hang && brands.includes(hang) ? hang : undefined;
-  const items = getProducts(site, { category: category?.slug, brand, q });
+  const items = await getProducts(site, { category: category?.slug, brand, q });
   const base = `${vertical.base}/san-pham`;
   const url = (q: { nhom?: string; hang?: string }) => {
     const sp = new URLSearchParams();

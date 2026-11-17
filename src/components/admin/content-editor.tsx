@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, LogOut, Package, RotateCcw, Save, Sparkles, Sprout } from "lucide-react";
+import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, Package, RotateCcw, Save, Sparkles, Sprout } from "lucide-react";
 import { toast } from "sonner";
-import { logoutAction, resetContentAction, saveContentAction } from "@/app/admin/actions";
+import { resetContentAction, saveContentAction } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { SiteContent } from "@/lib/content/schema";
@@ -42,12 +42,12 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
+      <header className="sticky top-12 z-20 border-b border-hub-line bg-hub-paper/95 backdrop-blur lg:top-0">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
           <div className="flex items-center gap-2">
             <Leaf className="size-6 fill-brand-400 text-brand-600" />
             <div className="leading-tight">
-              <p className="font-bold text-brand-800">Quản trị nội dung</p>
+              <p className="font-semibold text-hub-ink">Nội dung trang phân bón</p>
               <p className="text-xs text-muted-foreground">
                 {user} · <span className="font-semibold text-brand-600">ADMIN</span>
               </p>
@@ -56,18 +56,13 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
           <div className="flex items-center gap-2">
             {dirty && <span className="hidden text-xs text-amber-600 sm:inline">● Chưa lưu</span>}
             <Button variant="ghost" size="sm" asChild>
-              <a href="/" target="_blank">
+              <a href="/phanbon" target="_blank">
                 <ExternalLink /> <span className="hidden sm:inline">Xem trang</span>
               </a>
             </Button>
             <Button size="sm" onClick={save} disabled={pending || !dirty}>
               {pending ? <Loader2 className="animate-spin" /> : <Save />} Lưu
             </Button>
-            <form action={logoutAction}>
-              <Button variant="ghost" size="icon" className="size-8" aria-label="Đăng xuất">
-                <LogOut />
-              </Button>
-            </form>
           </div>
         </div>
       </header>

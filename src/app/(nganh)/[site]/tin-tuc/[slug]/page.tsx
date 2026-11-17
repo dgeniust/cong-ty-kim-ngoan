@@ -11,7 +11,8 @@ import { formatDate } from "@/lib/format";
 import type { ArticleBlock } from "@/lib/mock/types";
 import { absoluteUrl } from "@/lib/site";
 import { resolveSite } from "@/lib/site-params";
-import { CATALOG_SITES, COMPANY, isCatalogSite } from "@/lib/verticals";
+import { CATALOG_SITES, isCatalogSite } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string; slug: string }>;
 
@@ -69,8 +70,9 @@ function Block({ block }: { block: ArticleBlock }) {
 }
 
 export default async function NewsDetail({ params }: { params: Params }) {
+  const { COMPANY } = await getSettings();
   const { site: rawSite, slug } = await params;
-  const { site, vertical } = resolveSite(rawSite);
+  const { site, vertical } = await resolveSite(rawSite);
   const item = await getNewsItem(site, slug);
   if (!item) notFound();
   const others = (await getNews({ site })).filter((n) => n.slug !== slug).slice(0, 3);

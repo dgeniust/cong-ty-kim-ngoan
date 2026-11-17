@@ -3,7 +3,8 @@ import Link from "next/link";
 import { HubNewsCard } from "@/components/hub/hub-news-card";
 import { Reveal } from "@/components/shared/reveal";
 import { getNews } from "@/lib/data/news";
-import { VERTICALS, VERTICAL_LIST, type VerticalId } from "@/lib/verticals";
+import { type VerticalId } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HubNews({ searchParams }: { searchParams: Promise<{ nganh?: string }> }) {
+  const { VERTICALS, VERTICAL_LIST } = await getSettings();
   const { nganh } = await searchParams;
   const site = nganh && nganh in VERTICALS ? (nganh as VerticalId) : undefined;
   const news = await getNews({ site });

@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, X } from "lucide-react";
-import { COMPANY, telHref } from "@/lib/verticals";
+import { telHref } from "@/lib/verticals";
+
+export type HeaderCompany = { prefix: string; name: string; slogan: string; legalName: string; hotline: string };
 import { cn } from "@/lib/utils";
 
 /** `spy` = id của khối trên trang chủ; mục menu sáng lên khi cuộn tới khối đó. */
@@ -36,7 +38,7 @@ export function HubMark({ className }: { className?: string }) {
   );
 }
 
-export function HubHeader() {
+export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
   const pathname = usePathname();
   const onHome = pathname === "/";
   const [open, setOpen] = useState(false);

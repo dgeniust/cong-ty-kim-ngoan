@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
+import { telHref } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
-export function HubFooter() {
+export async function HubFooter() {
+  const { COMPANY, VERTICAL_LIST } = await getSettings();
   return (
     <footer className="border-t border-hub-line bg-hub-paper text-hub-ink-soft">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-10">

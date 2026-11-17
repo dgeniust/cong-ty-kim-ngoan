@@ -5,11 +5,13 @@ import { VContainer } from "@/components/nganh/v-section";
 import { Reveal } from "@/components/shared/reveal";
 import { getNews } from "@/lib/data/news";
 import { resolveSite } from "@/lib/site-params";
-import { VERTICALS, isCatalogSite } from "@/lib/verticals";
+import { isCatalogSite } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { VERTICALS } = await getSettings();
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
@@ -21,7 +23,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function NewsList({ params }: { params: Params }) {
-  const { site, vertical } = resolveSite((await params).site);
+  const { site, vertical } = await resolveSite((await params).site);
   const [first, ...rest] = await getNews({ site });
   return (
     <>

@@ -3,7 +3,8 @@ import { ArrowRight, ArrowUpRight, CheckSquare, ClipboardCheck, FileText, Phone,
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
-import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
+import { telHref, type Vertical } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { ProductArt } from "./product-art";
 import { CategoryExplorer, WeightCalculator, type ExplorerGroup } from "./steel-tools";
@@ -19,7 +20,7 @@ import { VContainer, VHeading, VPill, VTag } from "./v-section";
 
 const USP_ICONS = [ClipboardCheck, Scale, Ruler, Truck];
 
-export function SatThepHome({
+export async function SatThepHome({
   vertical,
   categories,
   content,
@@ -36,6 +37,7 @@ export function SatThepHome({
   brands: string[];
   news: NewsItem[];
 }) {
+  const { COMPANY } = await getSettings();
   const { hero } = content;
   const base = vertical.base;
   const groups: ExplorerGroup[] = categories.map((c) => ({

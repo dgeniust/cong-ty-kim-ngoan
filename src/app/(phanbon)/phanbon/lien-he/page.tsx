@@ -4,7 +4,7 @@ import { Container } from "@/components/shared/container";
 import { ContactForm } from "@/components/site/contact-form";
 import { PageHero } from "@/components/site/page-hero";
 import { getContent } from "@/lib/content/store";
-import { getProduct } from "@/lib/mock/products";
+import { getFertilizerProduct } from "@/lib/products/server";
 
 export const metadata: Metadata = {
   title: "Liên hệ",
@@ -17,7 +17,7 @@ const WORKING_HOURS = "Thứ 2 – Chủ nhật, 7:00 – 18:00";
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ "san-pham"?: string }> }) {
   const [{ site }, sp] = await Promise.all([getContent(), searchParams]);
-  const product = sp["san-pham"] ? getProduct(sp["san-pham"]) : undefined;
+  const product = sp["san-pham"] ? await getFertilizerProduct(sp["san-pham"]) : undefined;
   const companyName = `${site.companyPrefix} ${site.companyName}`.trim();
 
   const info = [

@@ -11,12 +11,13 @@ import { ArticleCard } from "@/components/site/article-card";
 import { ProductCard } from "@/components/site/product-card";
 import { getContent } from "@/lib/content/store";
 import { getArticles } from "@/lib/mock/articles";
-import { products } from "@/lib/mock/products";
+import { getFertilizerProducts } from "@/lib/products/server";
 
 /** Landing page – "Vườn Xanh" v1. Section order & rationale: design.md §5. */
 export default async function HomePage() {
   const content = await getContent();
   const { site } = content;
+  const products = await getFertilizerProducts();
   const featured = [...products].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 4);
   const news = getArticles("tin-tuc").slice(0, 3);
 

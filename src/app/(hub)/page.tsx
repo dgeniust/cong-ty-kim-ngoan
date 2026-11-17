@@ -12,8 +12,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { getBrands, getCategories, getFeatured, getProducts } from "@/lib/data/catalog";
 import { getNews } from "@/lib/data/news";
 import { categories as pbCategories, categoryGroups as pbGroups, getCategory as getPbCategory } from "@/lib/mock/categories";
-import { products as pbProducts } from "@/lib/mock/products";
-import { CATALOG_SITES, COMPANY, VERTICALS, VERTICAL_LIST, telHref, type VerticalId } from "@/lib/verticals";
+import type { Product } from "@/lib/mock/types";
+import { getFertilizerProducts } from "@/lib/products/server";
+import { getSettings, type Settings } from "@/lib/settings/server";
+import { CATALOG_SITES, telHref, type VerticalId } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
 /**
@@ -47,7 +49,7 @@ type SectorData = {
   products: { name: string; meta: string; href: string }[];
 };
 
-function sectorData(): SectorData[] {
+async function sectorData(pbProducts: Product[]): Promise<SectorData[]> {
   const pbTop = [...pbProducts].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 3);
   const phanbon: SectorData = {
     id: "phanbon",
@@ -55,30 +57,34 @@ function sectorData(): SectorData[] {
     groups: pbGroups.flatMap((g) => g.children.slice(0, 2)).map((c) => ({ name: c.name, href: `/phanbon/danh-muc/${c.slug}` })),
     products: pbTop.map((p) => ({ name: p.name, meta: p.packing.join(" / "), href: `/phanbon/san-pham/${p.slug}` })),
   };
-  const catalogs = CATALOG_SITES.map<SectorData>((site) => {
-    const base = VERTICALS[site].base;
-    return {
-      id: site,
-      count: getProducts(site).length,
-      groups: getCategories(site).slice(0, 4).map((c) => ({ name: c.name, href: `${base}/san-pham?nhom=${c.slug}` })),
-      products: getFeatured(site, 3).map((p) => ({ name: p.name, meta: p.keySpec, href: `${base}/san-pham/${p.slug}` })),
-    };
-  });
+  const catalogs = await Promise.all(
+    CATALOG_SITES.map(async (site): Promise<SectorData> => {
+      const base = `/${site}`;
+      return {
+        id: site,
+        count: (await getProducts(site)).length,
+        groups: getCategories(site).slice(0, 4).map((c) => ({ name: c.name, href: `${base}/san-pham?nhom=${c.slug}` })),
+        products: (await getFeatured(site, 3)).map((p) => ({ name: p.name, meta: p.keySpec, href: `${base}/san-pham/${p.slug}` })),
+      };
+    }),
+  );
   return [phanbon, ...catalogs];
 }
 
-function browserTabs(): BrowserTab[] {
+async function browserTabs(pbProducts: Product[], VERTICALS: Settings["VERTICALS"]): Promise<BrowserTab[]> {
   const groups = pbCategories.filter((c) => c.parent && pbProducts.some((p) => p.categorySlug === c.slug));
   const phanbon: BrowserTab = {
     id: "phanbon", label: VERTICALS.phanbon.short, href: "/phanbon", dot: DOT.phanbon,
     groupLabel: "Nhóm sản phẩm", groups: groups.map((c) => c.name),
     items: pbProducts.map((p) => ({ name: p.name, href: `/phanbon/san-pham/${p.slug}`, group: getPbCategory(p.categorySlug)?.name ?? "", meta: p.packing.join(" / "), image: p.images[0] })),
   };
-  const catalogs = CATALOG_SITES.map<BrowserTab>((site) => ({
-    id: site, label: VERTICALS[site].short, href: VERTICALS[site].base, dot: DOT[site],
-    groupLabel: "Thương hiệu", groups: getBrands(site),
-    items: getProducts(site).map((p) => ({ name: p.name, href: `${VERTICALS[site].base}/san-pham/${p.slug}`, group: p.brand, meta: p.keySpec, image: p.images?.[0], art: p.art })),
-  }));
+  const catalogs = await Promise.all(
+    CATALOG_SITES.map(async (site): Promise<BrowserTab> => ({
+      id: site, label: VERTICALS[site].short, href: VERTICALS[site].base, dot: DOT[site],
+      groupLabel: "Thương hiệu", groups: await getBrands(site),
+      items: (await getProducts(site)).map((p) => ({ name: p.name, href: `${VERTICALS[site].base}/san-pham/${p.slug}`, group: p.brand, meta: p.keySpec, image: p.images?.[0], art: p.art })),
+    })),
+  );
   return [phanbon, ...catalogs];
 }
 
@@ -106,9 +112,12 @@ function Pill({ children, tone }: { children: React.ReactNode; tone: string }) {
 }
 
 export default async function HubHome() {
+  const { COMPANY, VERTICALS, VERTICAL_LIST } = await getSettings();
+  const pbProducts = await getFertilizerProducts();
   const news = await getNews({ limit: 5 }); // landing tổng: tất cả chuyên trang, không lọc
-  const data = sectorData();
-  const brands = [...PHANBON_BRANDS, ...CATALOG_SITES.flatMap((s) => getBrands(s))].filter((b, i, a) => a.indexOf(b) === i);
+  const data = await sectorData(pbProducts);
+  const tabs = await browserTabs(pbProducts, VERTICALS);
+  const brands = [...PHANBON_BRANDS, ...(await Promise.all(CATALOG_SITES.map((s) => getBrands(s)))).flat()].filter((b, i, a) => a.indexOf(b) === i);
   const productCount = data.reduce((n, c) => n + c.count, 0);
   const years = new Date().getFullYear() - Number(COMPANY.founded);
 
@@ -358,7 +367,7 @@ export default async function HubHome() {
             }
             lead="Lọc theo nhóm hàng hoặc thương hiệu, bấm vào sản phẩm để xem thông số và liên hệ báo giá."
           />
-          <ProductBrowser tabs={browserTabs()} />
+          <ProductBrowser tabs={tabs} />
         </div>
       </section>
 

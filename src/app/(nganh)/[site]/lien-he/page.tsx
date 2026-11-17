@@ -5,11 +5,13 @@ import { VPageHead } from "@/components/nganh/v-page-head";
 import { VContainer } from "@/components/nganh/v-section";
 import { getProduct } from "@/lib/data/catalog";
 import { resolveSite } from "@/lib/site-params";
-import { COMPANY, VERTICALS, isCatalogSite, telHref } from "@/lib/verticals";
+import { isCatalogSite, telHref } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ "san-pham"?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { COMPANY, VERTICALS } = await getSettings();
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
@@ -21,9 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Contact({ params, searchParams }: Props) {
-  const { site, vertical } = resolveSite((await params).site);
+  const { COMPANY } = await getSettings();
+  const { site, vertical } = await resolveSite((await params).site);
   const slug = (await searchParams)["san-pham"];
-  const product = slug ? getProduct(site, slug) : undefined;
+  const product = slug ? await getProduct(site, slug) : undefined;
 
   const rows = [
     { icon: Phone, label: "Điện thoại", value: vertical.phone, href: telHref(vertical.phone) },

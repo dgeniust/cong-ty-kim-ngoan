@@ -3,12 +3,13 @@ import Link from "next/link";
 import { ProductArt } from "@/components/nganh/product-art";
 import type { NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
-import { VERTICALS } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
 const DOT = { phanbon: "bg-sector-phanbon", lopxe: "bg-sector-lopxe", satthep: "bg-sector-satthep" } as const;
 
-export function HubNewsCard({ item, large, headingLevel: Heading = "h3" }: { item: NewsItem; large?: boolean; headingLevel?: "h2" | "h3" }) {
+export async function HubNewsCard({ item, large, headingLevel: Heading = "h3" }: { item: NewsItem; large?: boolean; headingLevel?: "h2" | "h3" }) {
+  const { VERTICALS } = await getSettings();
   return (
     <article className={cn("group relative flex w-full flex-col overflow-hidden rounded-xl border border-hub-line bg-hub-paper transition-colors duration-200 hover:border-hub-ink/20", large && "lg:row-span-2")}>
       <div className={cn("relative m-1.5 mb-0 overflow-hidden rounded-lg", item.site === "lopxe" ? "bg-lopxe-ink" : item.site === "satthep" ? "bg-satthep-soft" : "bg-hub-mint-soft", large ? "aspect-[16/10] lg:aspect-auto lg:flex-1" : "aspect-[16/10]")}>

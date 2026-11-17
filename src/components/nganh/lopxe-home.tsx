@@ -3,7 +3,8 @@ import { ArrowRight, ArrowUpRight, BadgeCheck, Bus, CalendarClock, Car, CarFront
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
-import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
+import { telHref, type Vertical } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { AutoCarousel } from "./auto-carousel";
 import { ProductArt } from "./product-art";
@@ -30,7 +31,7 @@ function Sparkle({ className }: { className?: string }) {
   );
 }
 
-export function LopXeHome({
+export async function LopXeHome({
   vertical,
   categories,
   content,
@@ -45,6 +46,7 @@ export function LopXeHome({
   allProducts: CatalogProduct[];
   news: NewsItem[];
 }) {
+  const { COMPANY } = await getSettings();
   const { hero } = content;
   const base = vertical.base;
   const spot = featured[0];

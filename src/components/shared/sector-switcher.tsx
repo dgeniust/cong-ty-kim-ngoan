@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { COMPANY, VERTICAL_LIST, type VerticalId } from "@/lib/verticals";
+import { type VerticalId } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
 /**
  * Dải mỏng trên cùng mỗi chuyên trang: quay về landing tổng + chuyển nhanh giữa 3 ngành.
  * `tone` chỉ đổi màu nền/chữ để hợp với theme của chuyên trang.
  */
-export function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
+export async function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
+  const { COMPANY, VERTICAL_LIST } = await getSettings();
   const tones = {
     green: "bg-brand-950 text-white/70 [--on:#fff] [--brand:#ffffff] [--sep:rgb(255_255_255/0.25)]",
     dark: "border-b border-white/10 bg-black text-white/55 [--on:#ff6b1a] [--brand:#ffffff] [--sep:rgb(255_255_255/0.25)]",

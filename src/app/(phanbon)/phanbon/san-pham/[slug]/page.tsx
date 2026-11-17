@@ -14,17 +14,17 @@ import { ProductCard } from "@/components/site/product-card";
 import { ProductGallery } from "@/components/site/product-gallery";
 import { getContent } from "@/lib/content/store";
 import { getCategory } from "@/lib/mock/categories";
-import { getProduct, products } from "@/lib/mock/products";
+import { getFertilizerProduct as getProduct, getFertilizerProducts } from "@/lib/products/server";
 import { absoluteUrl } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getFertilizerProducts()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const p = getProduct((await params).slug);
+  const p = await getProduct((await params).slug);
   if (!p) return {};
   const url = `/phanbon/san-pham/${p.slug}`;
   return {
@@ -70,7 +70,7 @@ function DetailBlock({ id, title, children }: { id: string; title: string; child
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProduct(slug);
   if (!product) notFound();
   const { site } = await getContent();
 
@@ -81,7 +81,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
   if (category) crumbs.push({ label: category.name, href: `/phanbon/danh-muc/${category.slug}` });
   crumbs.push({ label: product.name });
 
-  const related = products
+  const related = (await getFertilizerProducts())
     .filter((p) => p.slug !== product.slug)
     .sort((a, b) => Number(b.categorySlug === product.categorySlug) - Number(a.categorySlug === product.categorySlug))
     .filter((p) => getCategory(p.categorySlug)?.parent === category?.parent)

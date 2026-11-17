@@ -15,14 +15,16 @@ import "@fontsource/dancing-script/latin-600.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_URL } from "@/lib/site";
-import { COMPANY } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 const TITLE = "Công ty TNHH Kim Ngoan – Phân bón, lốp xe ô tô, tôn sắt thép";
 const DESCRIPTION =
   "Kim Ngoan kinh doanh phân bón & thuốc BVTV, lốp xe ô tô và tôn – sắt thép tại Chơn Thành. Hàng chính hãng, giá minh bạch, giao tận nơi.";
 
 /** Metadata gốc (landing tổng). Mỗi chuyên trang ghi đè title/description trong layout riêng. */
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const { COMPANY } = await getSettings();
+  return {
   metadataBase: new URL(SITE_URL),
   title: { default: TITLE, template: "%s | Kim Ngoan" },
   description: DESCRIPTION,
@@ -33,7 +35,8 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
   // Sau khi xác minh Search Console: verification: { google: "..." },
-};
+  };
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

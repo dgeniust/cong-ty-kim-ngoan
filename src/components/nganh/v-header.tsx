@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
-import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
+import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
 /**
@@ -32,7 +32,7 @@ function VMark({ site }: { site: string }) {
   );
 }
 
-export function VHeader({ vertical }: { vertical: Vertical }) {
+export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; company: { prefix: string; name: string; legalName: string } }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

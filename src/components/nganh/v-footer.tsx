@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import type { CatalogCategory } from "@/lib/data/types";
-import { COMPANY, VERTICAL_LIST, telHref, type Vertical } from "@/lib/verticals";
+import { telHref, type Vertical } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
-export function VFooter({ vertical, categories }: { vertical: Vertical; categories: CatalogCategory[] }) {
+export async function VFooter({ vertical, categories }: { vertical: Vertical; categories: CatalogCategory[] }) {
+  const { COMPANY, VERTICAL_LIST } = await getSettings();
   const link = "text-v-fg/65 transition-colors duration-200 hover:text-v-fg";
   return (
     <footer className="border-t border-v-line bg-v-sunk pb-24 lg:pb-0">

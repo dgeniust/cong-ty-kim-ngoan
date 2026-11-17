@@ -12,18 +12,21 @@ import { Reveal } from "@/components/shared/reveal";
 import { getCategory, getProduct, getProducts } from "@/lib/data/catalog";
 import { absoluteUrl } from "@/lib/site";
 import { resolveSite } from "@/lib/site-params";
-import { CATALOG_SITES, COMPANY, VERTICALS, isCatalogSite, telHref } from "@/lib/verticals";
+import { CATALOG_SITES, isCatalogSite, telHref } from "@/lib/verticals";
+import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string; slug: string }>;
 
-export function generateStaticParams() {
-  return CATALOG_SITES.flatMap((site) => getProducts(site).map((p) => ({ site, slug: p.slug })));
+export async function generateStaticParams() {
+  const all = await Promise.all(CATALOG_SITES.map(async (site) => (await getProducts(site)).map((p) => ({ site, slug: p.slug }))));
+  return all.flat();
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { VERTICALS } = await getSettings();
   const { site, slug } = await params;
   if (!isCatalogSite(site)) return {};
-  const p = getProduct(site, slug);
+  const p = await getProduct(site, slug);
   if (!p) return {};
   const url = `${VERTICALS[site].base}/san-pham/${p.slug}`;
   const title = `${p.name} – ${p.keySpec}`;
@@ -36,12 +39,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function ProductDetail({ params }: { params: Params }) {
+  const { COMPANY } = await getSettings();
   const { site: rawSite, slug } = await params;
-  const { site, vertical } = resolveSite(rawSite);
-  const product = getProduct(site, slug);
+  const { site, vertical } = await resolveSite(rawSite);
+  const product = await getProduct(site, slug);
   if (!product) notFound();
   const category = getCategory(site, product.categorySlug);
-  const related = getProducts(site, { category: product.categorySlug }).filter((p) => p.slug !== slug).slice(0, 4);
+  const related = (await getProducts(site, { category: product.categorySlug })).filter((p) => p.slug !== slug).slice(0, 4);
   const url = `${vertical.base}/san-pham/${product.slug}`;
 
   const structured = {

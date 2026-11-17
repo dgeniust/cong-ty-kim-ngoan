@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dữ liệu admin lưu lúc chạy (settings, sản phẩm, ảnh tải lên) – sao lưu riêng, không commit
+/data/

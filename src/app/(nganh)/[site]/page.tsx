@@ -9,15 +9,15 @@ import { resolveSite } from "@/lib/site-params";
  * (lốp xe xoay quanh việc tra cỡ lốp; sắt thép mang chất tài liệu báo giá & công cụ tính thép).
  */
 export default async function VerticalHomePage({ params }: { params: Promise<{ site: string }> }) {
-  const { site, vertical } = resolveSite((await params).site);
+  const { site, vertical } = await resolveSite((await params).site);
   const { categories, content } = getCatalog(site);
   const props = {
     vertical,
     categories,
     content,
-    featured: getFeatured(site, 4),
-    allProducts: getProducts(site),
-    brands: getBrands(site),
+    featured: await getFeatured(site, 4),
+    allProducts: await getProducts(site),
+    brands: await getBrands(site),
     news: await getNews({ site, limit: 3 }), // tin tức lọc theo chuyên trang
   };
   return site === "lopxe" ? <LopXeHome {...props} /> : <SatThepHome {...props} />;

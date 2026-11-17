@@ -4,7 +4,7 @@ import { Container } from "@/components/shared/container";
 import { JsonLd } from "@/components/shared/json-ld";
 import { getContent } from "@/lib/content/store";
 import { categories, categoryScope } from "@/lib/mock/categories";
-import { products } from "@/lib/mock/products";
+import { getFertilizerProducts } from "@/lib/products/server";
 import type { Product } from "@/lib/mock/types";
 import { absoluteUrl } from "@/lib/site";
 import type { Crumb } from "./breadcrumbs";
@@ -31,7 +31,7 @@ function sortProducts(items: Product[], sort: string) {
   }
 }
 
-function countByCategory() {
+function countByCategory(products: Product[]) {
   const counts: Record<string, number> = { __all: products.length };
   for (const c of categories) {
     const scope = categoryScope(c.slug);
@@ -50,6 +50,7 @@ type Props = {
 };
 
 export async function ProductListing({ title, description, crumbs, basePath, categorySlug, searchParams }: Props) {
+  const products = await getFertilizerProducts();
   const { site } = await getContent();
   const sort = searchParams["sap-xep"] ?? "noi-bat";
   const scope = categorySlug ? categoryScope(categorySlug) : null;
@@ -74,7 +75,7 @@ export async function ProductListing({ title, description, crumbs, basePath, cat
       <PageHero title={title} description={description} crumbs={crumbs} />
       <Container className="grid gap-12 py-12 md:py-16 lg:grid-cols-[272px_1fr]">
         <div className="hidden lg:block">
-          <CategorySidebar active={categorySlug} counts={countByCategory()} phone={site.phone} />
+          <CategorySidebar active={categorySlug} counts={countByCategory(products)} phone={site.phone} />
         </div>
         <div className="min-w-0">
           <CategoryChips active={categorySlug} />
