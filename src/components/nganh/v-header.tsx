@@ -3,10 +3,34 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, Search, X } from "lucide-react";
 import { COMPANY, telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
-import { VButton } from "./v-button";
+
+/**
+ * Header chuyên trang lốp xe / sắt thép – CÙNG CẤU TRÚC với header phân bón
+ * (components/landing/site-header.tsx) để 3 chuyên trang có điểm chung:
+ * thanh nổi bo tròn · logo "CÔNG TY TNHH / KIM NGOAN" · menu dạng viên · tìm kiếm · nút gọi.
+ * Màu lấy từ token theme của từng chuyên trang.
+ */
+
+/** Dấu logo: ô bo góc màu nhấn của ngành + biểu tượng ngành (lốp / thép chữ I). */
+function VMark({ site }: { site: string }) {
+  return (
+    <svg viewBox="0 0 40 40" aria-hidden className="size-9 shrink-0">
+      <rect width="40" height="40" rx="10" fill="var(--v-accent)" />
+      {site === "lopxe" ? (
+        <g fill="none" stroke="var(--v-on-accent)" strokeWidth="3">
+          <circle cx="20" cy="20" r="11" />
+          <circle cx="20" cy="20" r="4.5" />
+          <path d="M20 9v6.5M20 24.5V31M9 20h6.5M24.5 20H31" strokeLinecap="round" />
+        </g>
+      ) : (
+        <path d="M11 11h18v4.5h-6.5v9H29V29H11v-4.5h6.5v-9H11Z" fill="var(--v-on-accent)" />
+      )}
+    </svg>
+  );
+}
 
 export function VHeader({ vertical }: { vertical: Vertical }) {
   const pathname = usePathname();
@@ -21,12 +45,23 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
   const isActive = (href: string) => (href === vertical.base ? pathname === href : pathname.startsWith(href));
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      setScrolled((prev) => (prev ? window.scrollY > 4 : window.scrollY > 16));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
+  // Khoá cuộn trang khi mở menu di động; Esc để đóng.
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -40,82 +75,94 @@ export function VHeader({ vertical }: { vertical: Vertical }) {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-[background-color,box-shadow] duration-200",
-        scrolled || open ? "bg-v-bg/90 shadow-[0_1px_0_var(--v-line),0_3px_9px_rgb(0_0_0/0.04)] backdrop-blur-md" : "bg-v-bg",
-      )}
-    >
-      <a href="#noi-dung" className="sr-only z-[60] rounded-lg bg-v-accent px-5 py-3 text-sm font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+    <>
+      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-v-accent px-5 py-3 text-sm font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
-        <Link href={vertical.base} aria-label={`${COMPANY.legalName} – ${vertical.name}`} className="flex items-center gap-2.5">
-          <span className="text-[22px] font-semibold tracking-[-0.03em] text-v-fg">{COMPANY.name}</span>
-          <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-[12px] font-medium text-v-on-pill">{vertical.short}</span>
-        </Link>
-
-        <nav aria-label="Điều hướng chính" className="hidden items-center gap-1 lg:flex">
-          {nav.map((item) => {
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors duration-200",
-                  active ? "bg-v-raise text-v-fg" : "text-v-fg/55 hover:text-v-fg",
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <VButton asChild size="sm" className="hidden sm:inline-flex">
-            <a href={telHref(vertical.phone)} aria-label={`Gọi ${vertical.phone}`}>
-              <Phone /> <span className="tabular-nums">{vertical.phone}</span>
-            </a>
-          </VButton>
-          <button
-            type="button"
-            className="grid size-11 place-items-center text-v-fg lg:hidden"
-            aria-label={open ? "Đóng menu" : "Mở menu"}
-            aria-expanded={open}
-            aria-controls="menu-nganh"
-            onClick={() => setOpen((v) => !v)}
+      <header className="sticky top-0 z-50 pt-3">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div
+            className={cn(
+              "flex h-16 items-center justify-between gap-4 rounded-full border border-v-line bg-v-card/95 pl-4 pr-2 backdrop-blur-md transition-shadow duration-200 md:h-[68px] md:pl-5",
+              scrolled ? "shadow-[0_4px_12px_rgb(0_0_0/0.12)]" : "shadow-[0_0.7px_1.5px_rgb(0_0_0/0.015),0_3px_9px_rgb(0_0_0/0.03)]",
+            )}
           >
-            {open ? <X className="size-6" /> : <Menu className="size-6" />}
-          </button>
-        </div>
-      </div>
+            <Link href={vertical.base} aria-label={`${COMPANY.legalName} – ${vertical.name}`} className="flex shrink-0 items-center gap-2.5 rounded-lg">
+              <VMark site={vertical.id} />
+              <span className="leading-none">
+                <span className="block text-[10px] font-semibold tracking-[0.18em] text-v-mute">{COMPANY.prefix}</span>
+                <span className="mt-1 flex items-center gap-2">
+                  <span className="text-[20px] font-bold tracking-tight text-v-fg">{COMPANY.name}</span>
+                  <span className="hidden rounded-full bg-v-pill px-2 py-0.5 text-[11px] font-medium text-v-on-pill sm:inline">{vertical.short}</span>
+                </span>
+              </span>
+            </Link>
 
-      {open && (
-        <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-v-bg lg:hidden">
-          <nav aria-label="Điều hướng di động" className="flex flex-col px-4 py-6 sm:px-6">
-            {nav.map((item, i) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                style={{ animationDelay: `${i * 60}ms` }}
-                className={cn("animate-rise rounded-lg px-3 py-3 text-3xl font-semibold tracking-[-0.03em]", isActive(item.href) ? "bg-v-raise text-v-fg" : "text-v-fg/70")}
-              >
-                {item.label}
+            <nav aria-label="Điều hướng chính" className="hidden items-center gap-0.5 lg:flex">
+              {nav.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn("rounded-full px-4 py-2 text-[15px] font-medium transition-colors duration-200", active ? "bg-v-tint text-v-on-tint" : "text-v-fg/60 hover:text-v-fg")}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="flex items-center gap-1.5">
+              <Link href={`${vertical.base}/san-pham#tim-kiem`} aria-label="Tìm sản phẩm" className="grid size-10 place-items-center rounded-full text-v-fg transition-colors duration-200 hover:bg-v-raise">
+                <Search className="size-5" />
               </Link>
-            ))}
-            <VButton asChild size="lg" className="mt-8 self-start">
-              <a href={telHref(vertical.phone)}>
-                <Phone /> Gọi {vertical.phone}
+              <a
+                href={telHref(vertical.phone)}
+                aria-label={`Gọi ${vertical.phone}`}
+                className="hidden h-11 items-center gap-2 rounded-full bg-v-accent px-5 text-[15px] font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover lg:inline-flex"
+              >
+                <Phone className="size-4" /> <span className="tabular-nums">{vertical.phone}</span>
               </a>
-            </VButton>
-          </nav>
+              <button
+                type="button"
+                className="grid size-10 place-items-center rounded-full text-v-fg transition-colors hover:bg-v-raise lg:hidden"
+                aria-label={open ? "Đóng menu" : "Mở menu"}
+                aria-expanded={open}
+                aria-controls="menu-nganh"
+                onClick={() => setOpen((v) => !v)}
+              >
+                {open ? <X className="size-5" /> : <Menu className="size-5" />}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-    </header>
+
+        {open && (
+          <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-[84px] overflow-y-auto bg-v-bg lg:hidden">
+            <nav aria-label="Điều hướng di động" className="mx-auto flex max-w-7xl flex-col px-4 py-6 sm:px-6">
+              {nav.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={cn("rounded-xl px-4 py-4 text-lg font-medium transition-colors", active ? "bg-v-card text-v-fg" : "text-v-fg/80 hover:bg-v-card")}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+              <a href={telHref(vertical.phone)} className="mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-v-accent font-medium text-v-on-accent">
+                <Phone className="size-4" /> Gọi {vertical.phone}
+              </a>
+            </nav>
+          </div>
+        )}
+      </header>
+    </>
   );
 }

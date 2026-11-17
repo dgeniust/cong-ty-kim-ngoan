@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { VPageHead } from "@/components/nganh/v-page-head";
 import { VProductCard } from "@/components/nganh/v-product-card";
 import { VContainer } from "@/components/nganh/v-section";
@@ -67,7 +68,26 @@ export default async function ProductListing({ params, searchParams }: Props) {
         crumbs={category ? [{ label: "Sản phẩm", href: base }, { label: category.name }] : [{ label: "Sản phẩm" }]}
         title={category?.name ?? "Tất cả sản phẩm"}
         lead={category?.description ?? vertical.description}
-      />
+      >
+        <form id="tim-kiem" action={base} role="search" className="mt-7 flex max-w-xl scroll-mt-28 gap-2">
+          {category && <input type="hidden" name="nhom" value={category.slug} />}
+          <label htmlFor="q" className="sr-only">Tìm sản phẩm</label>
+          <div className="relative flex-1">
+            <Search aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-v-mute" />
+            <input
+              id="q"
+              name="q"
+              type="search"
+              defaultValue={q ?? ""}
+              placeholder={site === "lopxe" ? "Tìm cỡ lốp hoặc hãng, VD: 205/55R16" : "Tìm quy cách hoặc hãng, VD: D16, Hòa Phát"}
+              className="h-11 w-full rounded-lg border border-v-line bg-v-card pl-10 pr-3 text-[15px] text-v-fg outline-none placeholder:text-v-mute/70 focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)]"
+            />
+          </div>
+          <button type="submit" className="h-11 rounded-lg bg-v-accent px-5 text-[15px] font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover">
+            Tìm
+          </button>
+        </form>
+      </VPageHead>
       <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-[250px_1fr] lg:gap-14">
         {/* Bộ lọc: nhóm hàng + thương hiệu (theo phác thảo của khách) */}
         <aside aria-label="Bộ lọc sản phẩm" className="lg:sticky lg:top-28 lg:self-start">
