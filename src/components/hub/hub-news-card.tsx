@@ -11,7 +11,7 @@ const DOT = { phanbon: "bg-sector-phanbon", lopxe: "bg-sector-lopxe", satthep: "
 export function HubNewsCard({ item, large, headingLevel: Heading = "h3" }: { item: NewsItem; large?: boolean; headingLevel?: "h2" | "h3" }) {
   return (
     <article className={cn("group relative flex flex-col", large && "lg:row-span-2")}>
-      <div className={cn("relative overflow-hidden rounded-[20px]", item.site === "lopxe" ? "bg-[#100904]" : item.site === "satthep" ? "bg-[#0f1011]" : "bg-hub-sand", large ? "aspect-[16/10] lg:aspect-auto lg:flex-1" : "aspect-[16/10]")}>
+      <div className={cn("relative overflow-hidden rounded-[20px]", item.site === "lopxe" ? "bg-hub-marigold-soft" : item.site === "satthep" ? "bg-hub-peri-soft" : "bg-hub-mint-soft", large ? "aspect-[16/10] lg:aspect-auto lg:flex-1" : "aspect-[16/10]")}>
         {item.cover ? (
           <Image src={item.cover} alt="" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105" />
         ) : (

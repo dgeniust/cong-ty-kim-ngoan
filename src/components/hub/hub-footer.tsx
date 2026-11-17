@@ -6,7 +6,14 @@ export function HubFooter() {
     <footer className="bg-hub-sand text-hub-ink-soft">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-10">
         <div>
-          <p className="text-2xl font-semibold tracking-tight text-hub-ink">{COMPANY.name}</p>
+          <p className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-hub-ink">
+            {COMPANY.name}
+            <span aria-hidden className="flex gap-1">
+              <span className="size-2 rounded-full bg-hub-mint" />
+              <span className="size-2 rounded-full bg-hub-marigold" />
+              <span className="size-2 rounded-full bg-hub-peri" />
+            </span>
+          </p>
           <p className="mt-3 max-w-sm text-[15px] leading-relaxed">
             {COMPANY.legalName}. Phân bón, lốp xe ô tô, tôn sắt thép tại {COMPANY.address}.
           </p>

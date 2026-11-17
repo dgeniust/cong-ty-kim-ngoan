@@ -34,7 +34,7 @@ export function ProductBrowser({ tabs }: { tabs: BrowserTab[] }) {
           <TabsTrigger
             key={t.id}
             value={t.id}
-            className="h-11 rounded-full bg-hub-paper px-5 text-sm font-medium text-hub-ink-soft shadow-[inset_0_0_0_1px_var(--color-hub-stone)] transition-colors duration-300 after:hidden hover:text-hub-ink focus-visible:ring-hub-ink data-[state=active]:bg-hub-ink data-[state=active]:font-medium data-[state=active]:text-white data-[state=active]:shadow-none"
+            className="h-11 rounded-full bg-hub-paper px-5 text-sm font-medium text-hub-ink-soft shadow-[inset_0_0_0_1px_var(--color-hub-stone)] transition-colors duration-300 after:hidden hover:text-hub-ink focus-visible:ring-hub-ink data-[state=active]:bg-hub-marigold data-[state=active]:font-medium data-[state=active]:text-hub-ink data-[state=active]:shadow-[var(--shadow-craft)]"
           >
             <span aria-hidden className={cn("size-2 rounded-full", t.dot)} />
             {t.label}
@@ -59,7 +59,7 @@ export function ProductBrowser({ tabs }: { tabs: BrowserTab[] }) {
                       onClick={() => pick(g)}
                       className={cn(
                         "w-full whitespace-nowrap rounded-full px-4 py-2 text-left text-[15px] transition-colors duration-200",
-                        current === g ? "bg-hub-sand font-medium text-hub-ink" : "text-hub-ink-soft hover:text-hub-ink",
+                        current === g ? "bg-hub-mint-soft font-medium text-hub-ink" : "text-hub-ink-soft hover:bg-hub-sand hover:text-hub-ink",
                       )}
                     >
                       {g ?? "Tất cả"}
@@ -74,8 +74,8 @@ export function ProductBrowser({ tabs }: { tabs: BrowserTab[] }) {
 
             <ul className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {items.map((it) => (
-                <li key={it.href} className="group relative flex flex-col overflow-hidden rounded-[20px] bg-hub-sand transition-transform duration-500 ease-soft hover:-translate-y-1">
-                  <div className={cn("relative aspect-square overflow-hidden", t.id === "lopxe" ? "bg-[#100904]" : t.id === "satthep" ? "bg-[#0f1011]" : "bg-hub-stone")}>
+                <li key={it.href} className="group relative flex flex-col overflow-hidden rounded-[20px] bg-hub-paper shadow-[var(--shadow-craft)] transition-[transform,box-shadow] duration-500 ease-soft hover:-translate-y-1 hover:shadow-[var(--shadow-craft-hover)]">
+                  <div className={cn("relative aspect-square overflow-hidden", t.id === "lopxe" ? "bg-hub-marigold-soft" : t.id === "satthep" ? "bg-hub-peri-soft" : "bg-hub-mint-soft")}>
                     {it.image ? (
                       <Image src={it.image} alt={it.name} fill sizes="(min-width: 1280px) 18vw, (min-width: 768px) 28vw, 45vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105" />
                     ) : (
@@ -94,7 +94,7 @@ export function ProductBrowser({ tabs }: { tabs: BrowserTab[] }) {
                 </li>
               ))}
               <li className="col-span-2 md:col-span-3 xl:col-span-4">
-                <Link href={`${t.href}/san-pham`} className="group flex items-center justify-between rounded-full bg-hub-ink px-7 py-4 text-white">
+                <Link href={`${t.href}/san-pham`} className="group flex items-center justify-between rounded-full bg-hub-sky-soft px-7 py-4 text-hub-ink transition-colors duration-300 hover:bg-hub-sky">
                   <span className="text-sm font-medium">Xem toàn bộ sản phẩm {t.label.toLowerCase()}</span>
                   <ArrowRight className="size-5 transition-transform duration-300 ease-soft group-hover:translate-x-1.5" aria-hidden />
                 </Link>

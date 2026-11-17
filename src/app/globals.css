@@ -43,17 +43,28 @@
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
 
-  /* Landing tổng (hub) – giấy kem ấm + mực đen; màu chỉ xuất hiện ở hình sản phẩm */
-  --color-hub-ink: #000000;
-  --color-hub-graphite: #44403b;
-  --color-hub-ink-soft: #6f6961;
-  --color-hub-paper: #fdfcfc;
-  --color-hub-sand: #f5f3f1;
-  --color-hub-stone: #ebe8e4;
-  --color-hub-gold: #6f6961;
-  --color-sector-phanbon: #2e7d32;
-  --color-sector-lopxe: #dc5000;
-  --color-sector-satthep: #23252a;
+  /* Landing tổng (hub) – nền trắng, mực đen dịu + bộ pastel tươi (mint, vàng, lam, trời) */
+  --color-hub-ink: #030302;
+  --color-hub-graphite: #41413f;
+  --color-hub-ink-soft: #5f5b56;
+  --color-hub-muted: #a8a19a;
+  --color-hub-paper: #ffffff;
+  --color-hub-sand: #fff6ec; /* canvas kem ấm cho các dải nền */
+  --color-hub-stone: #efe4d7; /* kẻ / viền ấm */
+  --color-hub-mint: #9bd8a9;
+  --color-hub-mint-soft: #e5f5e9;
+  --color-hub-marigold: #fde99b;
+  --color-hub-marigold-soft: #fff7d6;
+  --color-hub-peri: #b8caf5;
+  --color-hub-peri-soft: #ebf0fd;
+  --color-hub-sky: #9ed4ef;
+  --color-hub-sky-soft: #e4f4fb;
+  --color-hub-papaya: #ff5a1f;
+  --color-sector-phanbon: #2e9e4f;
+  --color-sector-lopxe: #f2610c;
+  --color-sector-satthep: #5b7fe0;
+  --shadow-craft: 0 50px 40px rgb(0 0 0 / 0.01), 0 50px 40px rgb(0 0 0 / 0.02), 0 20px 40px rgb(0 0 0 / 0.05), 0 3px 10px rgb(0 0 0 / 0.08);
+  --shadow-craft-hover: 0 12px 12px 2px rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.06);
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-rise: rise 0.9s var(--ease-soft) both;
@@ -297,9 +308,9 @@
 }
 .theme-hub {
   --heading: var(--color-hub-ink);
-  --focus: var(--color-hub-ink);
-  --selection-bg: var(--color-hub-ink);
-  --selection-fg: #ffffff;
+  --focus: var(--color-sector-satthep);
+  --selection-bg: var(--color-hub-marigold);
+  --selection-fg: var(--color-hub-ink);
 }
 
 @layer utilities {
@@ -356,6 +367,17 @@
     transform: var(--v-zoom);
   }
 
+  /* Nền giấy kẻ chấm & mảnh giấy xé (phong cách cắt dán) – chỉ dùng ở landing tổng */
+  .hub-dots {
+    background-image: radial-gradient(rgb(3 3 2 / 0.09) 1.2px, transparent 1.3px);
+    background-size: 22px 22px;
+  }
+  .hub-torn {
+    clip-path: polygon(0 6%, 9% 0, 21% 5%, 34% 1%, 47% 6%, 61% 0, 74% 4%, 88% 0, 100% 5%, 98% 22%, 100% 41%, 97% 60%, 100% 79%, 98% 95%, 86% 100%, 72% 96%, 58% 100%, 43% 95%, 29% 100%, 15% 96%, 0 100%, 2% 81%, 0 62%, 3% 43%, 0 24%);
+  }
+  .hub-sky {
+    background: linear-gradient(in oklab 160deg, #9ed4ef 0%, #d1eef9 100%);
+  }
   .marquee-mask {
     mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   }

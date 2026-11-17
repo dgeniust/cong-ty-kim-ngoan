@@ -28,7 +28,7 @@ export default async function HubNews({ searchParams }: { searchParams: Promise<
             key={c.label}
             href={c.id ? `/tin-tuc?nganh=${c.id}` : "/tin-tuc"}
             aria-current={site === c.id ? "true" : undefined}
-            className={cn("inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-colors duration-200", site === c.id ? "bg-hub-ink text-white" : "bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-stone)] hover:bg-hub-stone")}
+            className={cn("inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-colors duration-200", site === c.id ? "bg-hub-marigold text-hub-ink" : "bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-stone)] hover:bg-hub-stone")}
           >
             {c.label}
           </Link>

@@ -31,7 +31,7 @@ export function HubMark({ className }: { className?: string }) {
       <path d="M14 12v24M14 24l12-12M14 24l12 12" stroke="#fff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       <circle cx="34" cy="14" r="4" className="fill-sector-phanbon" />
       <circle cx="34" cy="24" r="4" className="fill-sector-lopxe" />
-      <circle cx="34" cy="34" r="4" fill="#e4f222" />
+      <circle cx="34" cy="34" r="4" className="fill-sector-satthep" />
     </svg>
   );
 }
@@ -91,8 +91,8 @@ export function HubHeader() {
   const isActive = (m: (typeof MAIN)[number]) => (onHome ? spy === m.spy : m.href !== "/" && !m.href.includes("#") && pathname.startsWith(m.href));
 
   return (
-    <header className={cn("sticky top-0 z-50 bg-hub-paper/90 backdrop-blur-md transition-shadow duration-300", (scrolled || open) && "shadow-[0_1px_0_var(--color-hub-stone)]")}>
-      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-hub-ink px-5 py-3 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+    <header className={cn("sticky top-0 z-50 bg-hub-paper/90 backdrop-blur-md transition-shadow duration-300", (scrolled || open) && "shadow-[0_1px_3px_rgb(0_0_0/0.08),0_1px_2px_-1px_rgb(0_0_0/0.06)]")}>
+      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-hub-marigold px-5 py-3 text-sm font-medium text-hub-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
       <div className={cn("mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-4 transition-[padding] duration-300 sm:px-6 lg:px-10", scrolled ? "py-2" : "py-3")}>
@@ -115,14 +115,14 @@ export function HubHeader() {
                     key={m.href}
                     href={m.href}
                     aria-current={active ? (onHome ? "location" : "page") : undefined}
-                    className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300", active ? "bg-hub-sand text-hub-ink" : "text-hub-ink-soft hover:text-hub-ink")}
+                    className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300", active ? "bg-hub-marigold-soft text-hub-ink" : "text-hub-ink-soft hover:bg-hub-sand hover:text-hub-ink")}
                   >
                     {m.label}
                   </Link>
                 );
               })}
             </nav>
-            <a href={telHref(COMPANY.hotline)} className="group ml-2 inline-flex h-10 items-center gap-2 rounded-full bg-hub-ink px-5 text-sm font-medium text-white">
+            <a href={telHref(COMPANY.hotline)} className="group ml-2 inline-flex h-10 items-center gap-2 rounded-full bg-hub-marigold px-5 text-sm font-medium text-hub-ink transition-shadow duration-300 hover:shadow-[var(--shadow-craft-hover)]">
               <Phone className="size-4 transition-transform duration-300 group-hover:rotate-12" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
             </a>
           </div>
@@ -142,13 +142,13 @@ export function HubHeader() {
       </div>
 
       {/* tiến trình đọc trang */}
-      <span ref={progress} aria-hidden className="absolute inset-x-0 bottom-0 block h-0.5 origin-left scale-x-0 bg-hub-ink" />
+      <span ref={progress} aria-hidden className="absolute inset-x-0 bottom-0 block h-[3px] origin-left scale-x-0 bg-gradient-to-r from-hub-mint via-hub-marigold to-hub-peri" />
 
       {open && (
         <div id="menu-hub" className="fixed inset-x-0 bottom-0 top-[64px] overflow-y-auto bg-hub-paper px-4 py-6 sm:px-6 lg:hidden">
           <nav aria-label="Lĩnh vực kinh doanh" className="grid gap-2">
             {SECTORS.map((s, i) => (
-              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-[20px] bg-hub-sand px-5 py-4 text-lg font-medium text-hub-ink">
+              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-[20px] bg-hub-sand px-5 py-4 text-lg font-medium text-hub-ink shadow-[var(--shadow-craft)]">
                 <span aria-hidden className={cn("size-2.5 rounded-full", s.dot)} /> {s.label}
               </Link>
             ))}
@@ -160,7 +160,7 @@ export function HubHeader() {
               </Link>
             ))}
           </nav>
-          <a href={telHref(COMPANY.hotline)} className="mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-hub-ink font-medium text-white">
+          <a href={telHref(COMPANY.hotline)} className="mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-hub-marigold font-medium text-hub-ink">
             <Phone className="size-4" aria-hidden /> Hotline {COMPANY.hotline}
           </a>
         </div>

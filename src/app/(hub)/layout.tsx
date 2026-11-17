@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
 import { COMPANY, VERTICAL_LIST, telHref } from "@/lib/verticals";
 
-export const viewport: Viewport = { themeColor: "#fdfcfc" };
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 /** Landing tổng của công ty – điều hướng về 3 chuyên trang. */
 export default function HubLayout({ children }: { children: React.ReactNode }) {
