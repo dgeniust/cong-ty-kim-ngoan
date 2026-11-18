@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-/** Số đếm tăng dần khi cuộn tới. HTML gốc luôn chứa giá trị thật (tốt cho SEO / không JS). */
+/**
+ * Số đếm tăng dần khi cuộn tới. HTML gốc luôn chứa giá trị thật (tốt cho SEO / không JS).
+ * Cập nhật thẳng vào DOM trong rAF – không setState mỗi khung hình (tránh render lại React ~60 lần/giây).
+ */
 export function CountUp({ value, suffix = "" }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [n, setN] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
@@ -19,7 +21,7 @@ export function CountUp({ value, suffix = "" }: { value: number; suffix?: string
         const duration = 1100;
         const tick = (now: number) => {
           const p = Math.min((now - start) / duration, 1);
-          setN(Math.round(value * (1 - Math.pow(1 - p, 3))));
+          el.textContent = `${Math.round(value * (1 - Math.pow(1 - p, 3)))}${suffix}`;
           if (p < 1) raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
@@ -31,11 +33,11 @@ export function CountUp({ value, suffix = "" }: { value: number; suffix?: string
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [value]);
+  }, [value, suffix]);
 
   return (
     <span ref={ref} className="tabular-nums">
-      {n}
+      {value}
       {suffix}
     </span>
   );

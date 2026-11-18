@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { MessageCircle, Phone, Search } from "lucide-react";
+import { telHref } from "@/lib/verticals";
 
 /** Always-visible actions on phones & tablets (design.md §5.11). */
 export function MobileActionBar({ phone }: { phone: string }) {
   const item =
-    "flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl py-2 text-[12px] font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500";
+    "flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl py-2 text-micro font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500";
   return (
     <>
       {/* Spacer so the bar never covers the end of the page */}
@@ -19,7 +20,7 @@ export function MobileActionBar({ phone }: { phone: string }) {
             <MessageCircle className="size-5" aria-hidden />
             Nhận tư vấn
           </Link>
-          <a href={`tel:${phone}`} className={`${item} flex-[1.3] bg-sun-300 text-brand-950 hover:bg-sun-400`}>
+          <a href={telHref(phone)} className={`${item} flex-[1.3] bg-sun-300 text-brand-950 hover:bg-sun-400`}>
             <Phone className="size-5" aria-hidden />
             Gọi ngay
           </a>

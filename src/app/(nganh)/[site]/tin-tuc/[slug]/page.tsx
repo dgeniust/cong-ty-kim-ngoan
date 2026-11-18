@@ -1,3 +1,4 @@
+import { fitTitle, metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductArt } from "@/components/nganh/product-art";
@@ -16,6 +17,9 @@ import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string; slug: string }>;
 
+/** Sản phẩm / bài mới thêm từ admin (chưa có lúc build) vẫn mở được. */
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const all = await Promise.all(CATALOG_SITES.map((site) => getNews({ site })));
   return all.flat().map((n) => ({ site: n.site, slug: n.slug }));
@@ -24,11 +28,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { site, slug } = await params;
   if (!isCatalogSite(site)) return {};
+  const { VERTICALS, COMPANY } = await getSettings();
   const n = await getNewsItem(site, slug);
   if (!n) return {};
   return {
-    title: n.title,
-    description: n.excerpt,
+    title: fitTitle(n.title, `${VERTICALS[site].name} Kim Ngoan`),
+    description: metaDescription([n.excerpt, `${VERTICALS[site].name} Kim Ngoan – ${COMPANY.area}`]),
     alternates: { canonical: n.href },
     openGraph: { type: "article", url: n.href, title: n.title, description: n.excerpt, publishedTime: n.date, authors: [n.author], ...(n.cover ? { images: [n.cover] } : {}) },
   };
@@ -37,7 +42,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 function Block({ block }: { block: ArticleBlock }) {
   switch (block.type) {
     case "h2":
-      return <h2 className="v-display mt-12 text-3xl text-v-fg md:text-4xl">{block.text}</h2>;
+      return <h2 className="text-h2 v-display mt-12 text-v-fg">{block.text}</h2>;
     case "p":
       return <p className="mt-5">{block.text}</p>;
     case "ul":
@@ -54,7 +59,7 @@ function Block({ block }: { block: ArticleBlock }) {
     case "quote":
       return (
         <blockquote className="my-10 rounded-xl bg-v-island px-7 py-8 text-v-on-island md:px-10">
-          <p className="v-display text-2xl md:text-3xl">{block.text}</p>
+          <p className="v-display text-h3">{block.text}</p>
         </blockquote>
       );
     case "img":
@@ -63,7 +68,7 @@ function Block({ block }: { block: ArticleBlock }) {
           <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-v-raise">
             <SmartImage src={block.src} alt={block.caption ?? ""} fill sizes="(min-width: 1024px) 720px, 100vw" className="object-cover" />
           </div>
-          {block.caption && <figcaption className="mt-3 text-sm text-v-mute">{block.caption}</figcaption>}
+          {block.caption && <figcaption className="mt-3 text-small text-v-mute">{block.caption}</figcaption>}
         </figure>
       );
   }
@@ -92,7 +97,7 @@ export default async function NewsDetail({ params }: { params: Params }) {
         }}
       />
       <VPageHead vertical={vertical} crumbs={[{ label: "Tin tức", href: `${vertical.base}/tin-tuc` }, { label: item.title }]} title={item.title}>
-        <p className="mt-6 flex flex-wrap gap-x-3 text-[13px] text-v-mute">
+        <p className="mt-6 flex flex-wrap gap-x-3 text-caption text-v-mute">
           <time dateTime={item.date}>{formatDate(item.date)}</time>
           <span aria-hidden className="text-v-mark">/</span>
           <span>{item.author}</span>
@@ -110,13 +115,13 @@ export default async function NewsDetail({ params }: { params: Params }) {
               item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto size-[70%]" />
             )}
           </div>
-          <p className="text-xl font-medium leading-relaxed text-v-fg">{item.excerpt}</p>
-          <div className="text-[1.0625rem] leading-[1.8] text-v-mute [&_li]:text-v-fg/90">
+          <p className="text-h4 font-medium leading-relaxed text-v-fg">{item.excerpt}</p>
+          <div className="text-lead leading-[1.8] text-v-mute [&_li]:text-v-fg/90">
             {item.content.map((b, i) => <Block key={i} block={b} />)}
           </div>
           <ul className="mt-10 flex flex-wrap gap-2">
             {item.tags.map((t) => (
-              <li key={t} className="rounded-full bg-v-chip px-3 py-1 text-[13px] text-v-fg">{t}</li>
+              <li key={t} className="rounded-full bg-v-chip px-3 py-1 text-caption text-v-fg">{t}</li>
             ))}
           </ul>
         </div>

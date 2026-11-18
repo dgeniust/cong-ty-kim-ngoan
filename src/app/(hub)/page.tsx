@@ -1,3 +1,5 @@
+import { BUTTON_SIZES } from "@/lib/ui";
+import { SITE_HOST } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Clock, Handshake, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Truck, Users } from "lucide-react";
@@ -28,9 +30,9 @@ import { cn } from "@/lib/utils";
  */
 
 const WRAP = "mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10"; // khớp lề với header
-const H2 = "mt-3 max-w-3xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-hub-ink";
+const H2 = "mt-3 max-w-3xl text-h2 font-semibold text-hub-ink";
 const CARD = "rounded-xl border border-hub-line bg-hub-paper";
-const BTN = "inline-flex h-11 items-center gap-2 rounded-lg px-5 text-[15px] font-medium transition-colors duration-200";
+const BTN = `inline-flex items-center gap-2 rounded-lg font-medium transition-colors duration-200 ${BUTTON_SIZES.md}`;
 const BTN_PRIMARY = `${BTN} group bg-hub-blue text-white hover:bg-hub-blue-hover`;
 const BTN_GHOST = `${BTN} bg-hub-blue-tint text-hub-blue hover:bg-[#d4eafd]`;
 const BTN_TEXT = `${BTN} text-hub-ink/90 hover:bg-hub-ink/5`;
@@ -90,7 +92,7 @@ async function browserTabs(pbProducts: Product[], VERTICALS: Settings["VERTICALS
 
 /** Nhãn đầu khối: viên màu nhỏ (kiểu tag Notion). */
 function Tag({ children, tone = "bg-hub-marigold-soft" }: { children: React.ReactNode; tone?: string }) {
-  return <p className={cn("inline-flex items-center rounded-full px-3 py-1 text-[13px] font-medium text-hub-ink", tone)}>{children}</p>;
+  return <p className={cn("inline-flex items-center rounded-full px-3 py-1 text-caption font-medium text-hub-ink", tone)}>{children}</p>;
 }
 
 function SectionHead({ id, tag, tone, title, lead, action, center }: { id: string; tag: string; tone?: string; title: React.ReactNode; lead?: string; action?: React.ReactNode; center?: boolean }) {
@@ -99,7 +101,7 @@ function SectionHead({ id, tag, tone, title, lead, action, center }: { id: strin
       <div className={cn(center && "flex flex-col items-center")}>
         <Tag tone={tone}>{tag}</Tag>
         <h2 id={id} className={H2}>{title}</h2>
-        {lead && <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-hub-ink-soft">{lead}</p>}
+        {lead && <p className="mt-4 max-w-xl text-lead leading-relaxed text-hub-ink-soft">{lead}</p>}
       </div>
       {action}
     </Reveal>
@@ -139,7 +141,7 @@ export default async function HubHome() {
       tagline: v.tagline,
       description: v.description,
       href: v.base,
-      url: `kimngoan.com${v.base}`,
+      url: `${SITE_HOST}${v.base}`,
       phone: v.phone,
       image: image,
       art: v.id === "phanbon" ? undefined : ART[v.id],
@@ -159,7 +161,7 @@ export default async function HubHome() {
   const reasons = [
     { icon: ShieldCheck, title: "Hàng chính hãng", text: "Nguồn gốc rõ ràng, có tem bảo hành và chứng chỉ theo từng ngành hàng. Không bán hàng trôi nổi, không bán hàng tồn kho lâu năm.", tone: "bg-hub-marigold text-hub-ink", span: "lg:col-span-2", art: "rebar" as const },
     { icon: Handshake, title: "Giá minh bạch", text: "Báo giá rõ ràng theo ngày và theo số lượng, trước khi giao hàng.", tone: "bg-hub-sky text-hub-ink" },
-    { icon: Truck, title: "Giao tận nơi", text: "Tận vườn, tận xe, tận công trình trong khu vực Chơn Thành.", tone: "bg-hub-peach text-hub-ink" },
+    { icon: Truck, title: "Giao tận nơi", text: `Tận vườn, tận xe, tận công trình trong khu vực ${COMPANY.area}.`, tone: "bg-hub-peach text-hub-ink" },
     { icon: Users, title: "Tư vấn đúng nhu cầu", text: "Mỗi ngành một bộ phận chuyên trách và một số điện thoại riêng — gọi đúng người, được trả lời đúng chuyên môn.", tone: "bg-hub-midnight text-white", span: "lg:col-span-2", art: "tyre" as const },
   ];
 
@@ -216,7 +218,7 @@ export default async function HubHome() {
         <HubHero
           sectors={heroSectors}
           lead={
-            <p className="text-[clamp(1.05rem,1.6vw,1.25rem)] leading-relaxed text-hub-ink-soft">
+            <p className="text-lead text-hub-ink-soft">
               {COMPANY.legalName} kinh doanh <strong className="font-medium text-hub-ink">phân bón & thuốc BVTV</strong>, <strong className="font-medium text-hub-ink">lốp xe ô tô</strong> và{" "}
               <strong className="font-medium text-hub-ink">tôn – sắt thép</strong> tại {COMPANY.address}. Hàng chính hãng, giá minh bạch, giao tận nơi.
             </p>
@@ -240,11 +242,11 @@ export default async function HubHome() {
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 70} className={cn(CARD, "p-6 sm:p-7")}>
               <dt className="sr-only">{s.label}</dt>
-              <dd className="text-[clamp(2.5rem,4.4vw,3.75rem)] font-semibold leading-none tracking-[-0.04em] text-hub-ink">
+              <dd className="text-h2 font-semibold tabular-nums text-hub-ink">
                 <CountUp value={s.value} suffix={s.suffix} />
               </dd>
               <dd className="mt-4">
-                <span className={cn("inline-block rounded-full px-2.5 py-1 text-[13px] font-medium text-hub-ink", s.tone)}>{s.label}</span>
+                <span className={cn("inline-block rounded-full px-2.5 py-1 text-caption font-medium text-hub-ink", s.tone)}>{s.label}</span>
               </dd>
             </Reveal>
           ))}
@@ -282,30 +284,30 @@ export default async function HubHome() {
                         {/* <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-500 ease-soft group-hover:-rotate-6 group-hover:scale-105" /> */}
                       </>
                     )}
-                    <p className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-md bg-hub-paper px-2.5 py-1 text-[12px] text-hub-ink">
-                      <span aria-hidden className={cn("size-2 rounded-full", DOT[c.id])} /> kimngoan.com{v.base}
+                    <p className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-md bg-hub-paper px-2.5 py-1 text-micro text-hub-ink">
+                      <span aria-hidden className={cn("size-2 rounded-full", DOT[c.id])} /> {SITE_HOST}{v.base}
                     </p>
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <p className="text-[13px] tabular-nums text-hub-ink/50">0{i + 1} · {c.count} sản phẩm</p>
-                    <h3 className="mt-1.5 text-[22px] font-semibold tracking-[-0.02em] text-hub-ink">
+                    <p className="text-caption tabular-nums text-hub-ink/60">0{i + 1} · {c.count} sản phẩm</p>
+                    <h3 className="text-h3 mt-1.5 font-semibold text-hub-ink">
                       <Link href={v.base} className="after:absolute after:inset-0 after:content-['']">{v.name}</Link>
                     </h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-hub-ink-soft">{v.description}</p>
+                    <p className="mt-2 text-body leading-relaxed text-hub-ink-soft">{v.description}</p>
                     <ul className="relative z-10 mb-6 mt-5 flex flex-wrap gap-1.5">
                       {c.groups.map((g) => (
                         <li key={g.href}>
-                          <Link href={g.href} className="inline-flex h-7 items-center rounded-md bg-hub-canvas px-2.5 text-[13px] text-hub-ink/80 transition-colors duration-200 hover:bg-hub-stone hover:text-hub-ink">
+                          <Link href={g.href} className="inline-flex h-8 items-center rounded-full bg-hub-canvas px-3 text-caption text-hub-ink/80 transition-colors duration-200 hover:bg-hub-stone hover:text-hub-ink">
                             {g.name}
                           </Link>
                         </li>
                       ))}
                     </ul>
                     <div className="relative z-10 mt-auto flex items-center justify-between gap-4 border-t border-hub-line pt-4">
-                      <a href={telHref(v.phone)} className="flex items-center gap-2 text-[15px] font-medium tabular-nums text-hub-ink hover:text-hub-blue">
+                      <a href={telHref(v.phone)} className="flex items-center gap-2 text-body font-medium tabular-nums text-hub-ink hover:text-hub-blue">
                         <Phone className="size-4" aria-hidden /> {v.phone}
                       </a>
-                      <span className="inline-flex items-center gap-1 text-sm font-medium text-hub-blue">
+                      <span className="inline-flex items-center gap-1 text-small font-medium text-hub-blue">
                         Vào chuyên trang <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                       </span>
                     </div>
@@ -320,10 +322,10 @@ export default async function HubHome() {
       {/* 4. Thương hiệu – "tường logo" chữ xám, nền trắng hết chiều ngang */}
       <section aria-labelledby="thuong-hieu-title" className="border-y border-hub-line bg-hub-paper py-12">
         <div className={WRAP}>
-          <p id="thuong-hieu-title" className="text-center text-sm text-hub-ink/55">Phân phối chính hãng các thương hiệu</p>
+          <p id="thuong-hieu-title" className="text-center text-small text-hub-ink/55">Phân phối chính hãng các thương hiệu</p>
           <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
             {brands.map((b, i) => (
-              <Reveal as="li" key={b} delay={i * 40} className="text-[22px] font-semibold tracking-[-0.03em] text-hub-ink/45 transition-colors duration-200 hover:text-hub-ink">
+              <Reveal as="li" key={b} delay={i * 40} className="text-h3 font-semibold tracking-[-0.03em] text-hub-ink/60 transition-colors duration-200 hover:text-hub-ink">
                 {b}
               </Reveal>
             ))}
@@ -349,8 +351,8 @@ export default async function HubHome() {
             <Reveal as="li" key={r.title} delay={i * 80} className={cn("h-full", r.span)}>
               <div className={cn("group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-xl p-7 sm:p-8", r.tone)}>
                 <r.icon className="size-8 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-12 group-hover:scale-110" strokeWidth={1.75} aria-hidden />
-                <h3 className="mt-auto pt-10 text-[clamp(1.4rem,2vw,1.75rem)] font-semibold tracking-[-0.025em] !text-current">{r.title}</h3>
-                <p className={cn("mt-2 max-w-md text-[15px] leading-relaxed", r.tone.includes("text-white") ? "text-white/75" : "text-hub-ink/75")}>{r.text}</p>
+                <h3 className="text-h3 mt-auto pt-10 font-semibold !text-current">{r.title}</h3>
+                <p className={cn("mt-2 max-w-md text-body leading-relaxed", r.tone.includes("text-white") ? "text-white/75" : "text-hub-ink/75")}>{r.text}</p>
                 {r.art && <ProductArt kind={r.art} className="absolute -bottom-8 -right-6 hidden !size-48 opacity-90 transition-transform duration-500 ease-soft group-hover:-rotate-12 sm:block" />}
               </div>
             </Reveal>
@@ -384,14 +386,14 @@ export default async function HubHome() {
             <h2 id="gioi-thieu-title" className={H2}>
               Từ đại lý vật tư nông nghiệp đến <Pill tone="bg-hub-peach">ba ngành hàng</Pill>
             </h2>
-            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-hub-ink-soft">
+            <p className="mt-6 max-w-xl text-lead leading-relaxed text-hub-ink-soft">
               Khởi đầu là đại lý vật tư nông nghiệp, Kim Ngoan mở rộng sang lốp xe ô tô và tôn – sắt thép để phục vụ trọn nhu cầu sản xuất, vận tải và xây dựng của bà con trong vùng.
             </p>
             <dl className={cn(CARD, "mt-8 divide-y divide-hub-line")}>
               {facts.map((f) => (
                 <div key={f.label} className="grid grid-cols-[7.5rem_1fr] gap-4 px-5 py-3.5">
-                  <dt className="text-sm text-hub-ink/55">{f.label}</dt>
-                  <dd className="text-[15px] font-medium text-hub-ink">{f.value}</dd>
+                  <dt className="text-small text-hub-ink/55">{f.label}</dt>
+                  <dd className="text-body font-medium text-hub-ink">{f.value}</dd>
                 </div>
               ))}
             </dl>
@@ -401,8 +403,8 @@ export default async function HubHome() {
               <Image src="/garden.jpg" alt="Vườn cây của bà con trong vùng" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
             </div>
             <div className="absolute -bottom-5 left-6 rounded-lg border border-hub-line bg-hub-paper px-5 py-4 shadow-[var(--shadow-hub-ui)] sm:left-10">
-              <p className="text-4xl font-semibold leading-none tracking-[-0.04em] text-hub-ink">{COMPANY.founded}</p>
-              <p className="mt-1.5 text-[13px] text-hub-ink-soft">Năm thành lập · {COMPANY.address}</p>
+              <p className="text-h2 font-semibold tabular-nums text-hub-ink">{COMPANY.founded}</p>
+              <p className="mt-1.5 text-caption text-hub-ink-soft">Năm thành lập · {COMPANY.address}</p>
             </div>
           </Reveal>
         </div>
@@ -412,11 +414,11 @@ export default async function HubHome() {
           <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <Reveal as="li" key={s.title} delay={i * 90} className={cn(CARD, "group p-6")}>
-                <span className={cn("grid size-11 place-items-center rounded-full border-2 bg-hub-paper text-sm font-semibold tabular-nums text-hub-ink transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110", s.ring)}>
+                <span className={cn("grid size-11 place-items-center rounded-full border-2 bg-hub-paper text-small font-semibold tabular-nums text-hub-ink transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110", s.ring)}>
                   {i + 1}
                 </span>
-                <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-hub-ink">{s.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-hub-ink-soft">{s.text}</p>
+                <h3 className="text-title mt-6 font-semibold text-hub-ink">{s.title}</h3>
+                <p className="mt-2 text-body leading-relaxed text-hub-ink-soft">{s.text}</p>
               </Reveal>
             ))}
           </ol>
@@ -456,7 +458,7 @@ export default async function HubHome() {
           <h2 id="hoi-dap-title" className={H2}>
             Những điều khách <Pill tone="bg-hub-mint-soft">thường hỏi</Pill>
           </h2>
-          <p className="mt-4 max-w-sm text-[17px] leading-relaxed text-hub-ink-soft">Chưa thấy câu trả lời bạn cần? Gọi hotline, chúng tôi trả lời ngay.</p>
+          <p className="mt-4 max-w-sm text-lead leading-relaxed text-hub-ink-soft">Chưa thấy câu trả lời bạn cần? Gọi hotline, chúng tôi trả lời ngay.</p>
           <a href={telHref(COMPANY.hotline)} className={cn(BTN_GHOST, "mt-6")}>
             <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
           </a>
@@ -478,7 +480,7 @@ export default async function HubHome() {
         <div className="grid gap-10 overflow-hidden rounded-xl bg-hub-midnight p-6 text-white sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:p-14">
           <Reveal>
             <Tag tone="bg-hub-marigold">Liên hệ</Tag>
-            <h2 id="lien-he-title" className="mt-3 text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] !text-white">
+            <h2 id="lien-he-title" className="text-h2 mt-3 font-semibold !text-white">
               Gọi đúng bộ phận, được tư vấn ngay.
             </h2>
             <ul className="mt-8 space-y-2">
@@ -488,8 +490,8 @@ export default async function HubHome() {
                     <span className="flex min-w-0 items-center gap-3">
                       <span aria-hidden className={cn("size-2.5 shrink-0 rounded-full", v.id === "satthep" ? "bg-white" : DOT[v.id])} />
                       <span className="min-w-0">
-                        <span className="block truncate text-[13px] text-white/60">{v.contactLabel}</span>
-                        <span className="block text-xl font-semibold tabular-nums tracking-[-0.02em]">{v.phone}</span>
+                        <span className="block truncate text-caption text-white/60">{v.contactLabel}</span>
+                        <span className="block text-h4 font-semibold tabular-nums tracking-[-0.02em]">{v.phone}</span>
                       </span>
                     </span>
                     <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-hub-blue transition-transform duration-200 group-hover:scale-105">
@@ -499,7 +501,7 @@ export default async function HubHome() {
                 </li>
               ))}
             </ul>
-            <ul className="mt-6 grid gap-3 text-[15px] text-white/70 sm:grid-cols-2">
+            <ul className="mt-6 grid gap-3 text-body text-white/70 sm:grid-cols-2">
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 size-[18px] shrink-0 text-hub-marigold" aria-hidden />
                 <address className="not-italic">{COMPANY.address}</address>
@@ -510,7 +512,7 @@ export default async function HubHome() {
             </ul>
             <div className="mt-7 flex flex-wrap gap-2">
               {socials.map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className={cn(BTN, "h-10 bg-white/[0.07] text-white hover:bg-white/[0.13]")}>
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className={cn(BTN, "bg-white/[0.07] text-white hover:bg-white/[0.13]")}>
                   <s.icon className="size-4" aria-hidden /> {s.label}
                 </a>
               ))}

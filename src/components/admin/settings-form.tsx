@@ -128,7 +128,10 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
             <TextField label="Hotline chung" required type="tel" value={c.hotline} onChange={setC("hotline")} error={errors["company.hotline"]} placeholder="0909 123 456" />
             <TextField label="Email" type="email" value={c.email} onChange={setC("email")} error={errors["company.email"]} />
           </Grid>
-          <TextField label="Địa chỉ" required value={c.address} onChange={setC("address")} error={errors["company.address"]} />
+          <Grid>
+            <TextField label="Địa chỉ" required value={c.address} onChange={setC("address")} error={errors["company.address"]} />
+            <TextField label="Khu vực phục vụ" required value={c.area} onChange={setC("area")} error={errors["company.area"]} hint="Dùng trong câu “giao tận nơi khu vực …” và mô tả SEO" />
+          </Grid>
           <Grid>
             <TextField label="Từ khoá bản đồ Google" value={c.mapQuery} onChange={setC("mapQuery")} hint="Địa chỉ hoặc toạ độ để nhúng Google Maps" />
             <TextField label="Giờ mở cửa (định dạng schema.org)" value={c.openingHours} onChange={setC("openingHours")} hint="VD: Mo-Su 07:00-18:00" />

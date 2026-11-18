@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,7 +20,7 @@ const vButton = cva(
         /** giữ tương thích tên cũ */
         solid: "bg-v-tint text-v-on-tint hover:brightness-110",
       },
-      size: { sm: "h-9 px-3.5 text-sm", md: "h-11 px-5 text-[15px]", lg: "h-12 px-6 text-base" },
+      size: BUTTON_SIZES,
     },
     defaultVariants: { variant: "accent", size: "md" },
   },

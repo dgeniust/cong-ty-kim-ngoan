@@ -1,5 +1,6 @@
 "use client";
 
+import { telHref } from "@/lib/verticals";
 import { useId, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -27,7 +28,7 @@ function LineField({
   const id = useId();
   return (
     <div>
-      <label htmlFor={id} className="text-[13px] font-medium text-ink-muted">
+      <label htmlFor={id} className="text-caption font-medium text-ink-muted">
         {label}
         {required && <span className="text-destructive"> *</span>}
       </label>
@@ -36,11 +37,11 @@ function LineField({
         aria-invalid={!!error || undefined}
         aria-describedby={error ? `${id}-err` : undefined}
         aria-required={required || undefined}
-        className="mt-1 h-12 w-full border-0 border-b-2 border-brand-900/25 bg-transparent px-0 text-base text-brand-900 outline-none transition-colors placeholder:text-ink-subtle hover:border-brand-900/50 focus:border-brand-600 aria-invalid:border-destructive"
+        className="mt-1 h-11 w-full border-0 border-b-2 border-brand-900/25 bg-transparent px-0 text-body text-brand-900 outline-none transition-colors placeholder:text-ink-subtle hover:border-brand-900/50 focus:border-brand-600 aria-invalid:border-destructive"
         {...props}
       />
       {error && (
-        <p id={`${id}-err`} className="mt-1.5 text-[13px] text-destructive">
+        <p id={`${id}-err`} className="mt-1.5 text-caption text-destructive">
           {error}
         </p>
       )}
@@ -82,12 +83,12 @@ export function QuickConsult({ phone }: { phone: string }) {
     <section aria-labelledby="tu-van-title" className="py-20 md:py-28">
       <Container className="grid gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-20">
         <div>
-          <h2 id="tu-van-title" className="display text-[2rem] md:text-[2.75rem]">
+          <h2 id="tu-van-title" className="text-h2 display">
             Để lại số, kỹ thuật viên gọi lại cho bạn
           </h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-ink-muted">
+          <p className="mt-5 max-w-md text-body leading-relaxed text-ink-muted">
             Miễn phí, trong vòng 24 giờ. Cần gấp? Gọi ngay{" "}
-            <a href={`tel:${phone}`} className="font-semibold text-brand-900 underline decoration-sun-400 underline-offset-4">
+            <a href={telHref(phone)} className="font-semibold text-brand-900 underline decoration-sun-400 underline-offset-4">
               {phone}
             </a>
             .
@@ -98,8 +99,8 @@ export function QuickConsult({ phone }: { phone: string }) {
           <div role="status" className="flex items-start gap-4 rounded-[2rem] bg-white p-8 shadow-soft">
             <CheckCircle2 className="size-8 shrink-0 text-brand-600" aria-hidden />
             <div>
-              <p className="text-xl font-medium text-brand-900">Đã nhận yêu cầu của {values.name}</p>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
+              <p className="text-h4 font-medium text-brand-900">Đã nhận yêu cầu của {values.name}</p>
+              <p className="mt-2 text-body leading-relaxed text-ink-muted">
                 Kỹ thuật viên sẽ gọi tới số {values.phone} trong vòng 24 giờ.
               </p>
             </div>

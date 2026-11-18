@@ -1,3 +1,5 @@
+import { getSettings } from "@/lib/settings/server";
+import { fitTitle, metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductListing } from "@/components/site/product-listing";
@@ -13,7 +15,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const category = getCategory((await params).slug);
   if (!category) return { title: "Danh mục" };
-  return { title: category.name, description: category.description, alternates: { canonical: `/phanbon/danh-muc/${category.slug}` } };
+  const { COMPANY } = await getSettings();
+  return {
+    title: fitTitle(category.name, "Kim Ngoan"),
+    description: metaDescription([category.description, `${category.name} chính hãng tại đại lý Kim Ngoan – ${COMPANY.area}`, "Báo giá theo số lượng, tư vấn kỹ thuật miễn phí, giao tận vườn"]),
+    alternates: { canonical: `/phanbon/danh-muc/${category.slug}` },
+  };
 }
 
 export default async function CategoryPage({

@@ -1,3 +1,4 @@
+import { metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { VContactForm } from "@/components/nganh/v-contact-form";
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const v = VERTICALS[site];
   return {
     title: `Liên hệ báo giá ${v.short.toLowerCase()}`,
-    description: `${v.contactLabel}: ${v.phone}. Địa chỉ: ${COMPANY.address}.`,
+    description: metaDescription([`${v.contactLabel}: ${v.phone}`, `Địa chỉ: ${COMPANY.address}`, "Báo giá nhanh qua điện thoại hoặc Zalo, phản hồi trong giờ làm việc"]),
     alternates: { canonical: `${v.base}/lien-he` },
   };
 }
@@ -41,17 +42,17 @@ export default async function Contact({ params, searchParams }: Props) {
       <VPageHead vertical={vertical} crumbs={[{ label: "Liên hệ" }]} title="Liên hệ báo giá" lead={`${vertical.contactLabel}. Gửi quy cách và số lượng, chúng tôi sẽ gọi lại.`} />
       <VContainer className="grid gap-12 py-12 md:py-20 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
         <address className="not-italic">
-          <a href={telHref(vertical.phone)} className="v-display block whitespace-nowrap text-[clamp(2.25rem,4.4vw,3.5rem)] tabular-nums text-v-fg transition-colors hover:text-v-accent">{vertical.phone}</a>
+          <a href={telHref(vertical.phone)} className="v-display block whitespace-nowrap text-h2 tabular-nums text-v-fg transition-colors hover:text-v-accent">{vertical.phone}</a>
           <ul className="mt-10 space-y-6">
             {rows.map((r) => (
               <li key={r.label} className="flex gap-4">
                 <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-v-tint text-v-on-tint"><r.icon className="size-5" aria-hidden /></span>
                 <div>
-                  <p className="text-[13px] text-v-mute">{r.label}</p>
+                  <p className="text-caption text-v-mute">{r.label}</p>
                   {r.href ? (
-                    <a href={r.href} className="mt-0.5 block text-[17px] font-semibold text-v-fg underline-offset-4 hover:underline">{r.value}</a>
+                    <a href={r.href} className="mt-0.5 block text-lead font-semibold text-v-fg underline-offset-4 hover:underline">{r.value}</a>
                   ) : (
-                    <p className="mt-0.5 text-[17px] font-semibold text-v-fg">{r.value}</p>
+                    <p className="mt-0.5 text-lead font-semibold text-v-fg">{r.value}</p>
                   )}
                 </div>
               </li>
@@ -59,7 +60,7 @@ export default async function Contact({ params, searchParams }: Props) {
           </ul>
         </address>
         <div className="rounded-xl border border-v-line bg-v-card p-6 md:p-10">
-          <h2 className="v-display mb-7 text-3xl text-v-fg md:text-4xl">Gửi yêu cầu</h2>
+          <h2 className="text-h2 v-display mb-7 text-v-fg">Gửi yêu cầu</h2>
           <VContactForm defaultMessage={product ? `Tôi cần báo giá: ${product.name} (${product.keySpec}). Số lượng: ` : ""} />
         </div>
       </VContainer>

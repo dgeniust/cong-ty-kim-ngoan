@@ -20,18 +20,18 @@ export async function HubNewsCard({ item, large, headingLevel: Heading = "h3" }:
         )}
       </div>
       <div className="p-5">
-        <p className="flex flex-wrap items-center gap-x-2.5 text-[13px] text-hub-ink-soft">
+        <p className="flex flex-wrap items-center gap-x-2.5 text-caption text-hub-ink-soft">
           <span className="inline-flex items-center gap-1.5 font-medium text-hub-ink">
             <span aria-hidden className={cn("size-2 rounded-full", DOT[item.site])} /> {VERTICALS[item.site].short}
           </span>
           <time dateTime={item.date}>{formatDate(item.date)}</time>
         </p>
-        <Heading className={cn("mt-2 leading-snug text-hub-ink", large ? "text-2xl font-semibold tracking-[-0.03em] md:text-[1.75rem]" : "text-lg font-semibold tracking-[-0.01em]")}>
+        <Heading className={cn("mt-2 leading-snug text-hub-ink", large ? "text-h3 font-semibold" : "text-title font-semibold tracking-[-0.01em]")}>
           <Link href={item.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-hub-blue">
             {item.title}
           </Link>
         </Heading>
-        <p className="mt-2 line-clamp-2 text-[15px] leading-relaxed text-hub-ink-soft">{item.excerpt}</p>
+        <p className="mt-2 line-clamp-2 text-body leading-relaxed text-hub-ink-soft">{item.excerpt}</p>
       </div>
     </article>
   );

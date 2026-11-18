@@ -34,13 +34,13 @@ export function Logo({ prefix, name, slogan, logo, inverted, compact, className 
       )}
       <div className="leading-none">
         {prefix && (
-          <div className={cn("text-[11px] font-semibold tracking-[0.18em]", inverted ? "text-white/70" : "text-brand-700")}>
+          <div className={cn("logo-prefix", inverted ? "text-white/70" : "text-brand-700")}>
             {prefix}
           </div>
         )}
-        <div className={cn("mt-1 text-[22px] font-bold tracking-tight", inverted ? "text-white" : "text-brand-900")}>{name}</div>
+        <div className={cn("mt-1 logo-name font-bold", inverted ? "text-white" : "text-brand-900")}>{name}</div>
         {slogan && (
-          <div className={cn("mt-1.5 text-[11px]", compact && "hidden sm:block", inverted ? "text-white/60" : "text-ink-subtle")}>
+          <div className={cn("mt-1.5 text-micro", compact && "hidden sm:block", inverted ? "text-white/60" : "text-ink-subtle")}>
             {slogan}
           </div>
         )}

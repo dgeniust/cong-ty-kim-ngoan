@@ -1,6 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { timingSafeEqual } from "crypto";
+import { authEnv } from "@/lib/env";
 import { SESSION_COOKIE, verifySession, type Role, type Session } from "./session";
 
 type UserRecord = { email: string; password: string; role: Role };
@@ -10,9 +11,8 @@ type UserRecord = { email: string; password: string; role: Role };
  * everything else only relies on the Session { sub, role } shape.
  */
 function getUsers(): UserRecord[] {
-  const email = process.env.ADMIN_EMAIL ?? (process.env.NODE_ENV !== "production" ? "admin@kimngoan.vn" : "");
-  const password = process.env.ADMIN_PASSWORD ?? (process.env.NODE_ENV !== "production" ? "1" : "");
-  return email && password ? [{ email, password, role: "ADMIN" }] : [];
+  const { ADMIN_EMAIL, ADMIN_PASSWORD } = authEnv();
+  return [{ email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: "ADMIN" }];
 }
 
 function safeEqual(a: string, b: string) {

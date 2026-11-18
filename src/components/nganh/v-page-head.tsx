@@ -20,7 +20,7 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
       />
       <VContainer className="py-10 md:py-16">
         <nav aria-label="Đường dẫn">
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-v-mute">
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-caption text-v-mute">
             {trail.map((c, i) => (
               <li key={i} className="flex items-center gap-2.5">
                 {i > 0 && <span aria-hidden className="opacity-50">/</span>}
@@ -33,8 +33,8 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
             ))}
           </ol>
         </nav>
-        <h1 className="v-display animate-rise mt-5 max-w-5xl text-[clamp(2.25rem,5vw,4rem)] text-v-fg">{title}</h1>
-        {lead && <p className="animate-rise mt-5 max-w-2xl text-lg leading-relaxed text-v-mute" style={{ animationDelay: "120ms" }}>{lead}</p>}
+        <h1 className="text-display v-display animate-rise mt-5 max-w-5xl text-v-fg">{title}</h1>
+        {lead && <p className="animate-rise mt-5 max-w-2xl text-title leading-relaxed text-v-mute" style={{ animationDelay: "120ms" }}>{lead}</p>}
         {children}
       </VContainer>
     </div>

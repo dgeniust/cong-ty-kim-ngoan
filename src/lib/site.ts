@@ -1,5 +1,10 @@
-/** Public site URL – set NEXT_PUBLIC_SITE_URL in production (e.g. https://kimngoan.com). */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+/** Tên miền mặc định khi production chưa đặt NEXT_PUBLIC_SITE_URL (không bao giờ để lộ localhost lên Google). */
+const PRODUCTION_FALLBACK = "https://kimngoan.com";
+
+/** URL public của website – đặt NEXT_PUBLIC_SITE_URL (xem .env.example). */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === "production" ? PRODUCTION_FALLBACK : "http://localhost:3000")).replace(/\/$/, "");
+/** Tên miền hiển thị, VD: kimngoan.com */
+export const SITE_HOST = new URL(SITE_URL).host.replace(/^www\./, "");
 
 export const absoluteUrl = (path = "/") =>
   /^https?:\/\//.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`;

@@ -76,7 +76,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
 
   return (
     <>
-      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-v-accent px-5 py-3 text-sm font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-v-accent px-5 py-3 text-small font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
       <header className="sticky top-0 z-50 pt-3">
@@ -87,13 +87,13 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
               scrolled ? "shadow-[0_4px_12px_rgb(0_0_0/0.12)]" : "shadow-[0_0.7px_1.5px_rgb(0_0_0/0.015),0_3px_9px_rgb(0_0_0/0.03)]",
             )}
           >
-            <Link href={vertical.base} aria-label={`${COMPANY.legalName} – ${vertical.name}`} className="flex shrink-0 items-center gap-2.5 rounded-lg">
+            <Link href={vertical.base} className="flex shrink-0 items-center gap-2.5 rounded-lg">
               <VMark site={vertical.id} />
               <span className="leading-none">
-                <span className="block text-[10px] font-semibold tracking-[0.18em] text-v-mute">{COMPANY.prefix}</span>
+                <span className="block logo-prefix text-v-mute">{COMPANY.prefix}</span>
                 <span className="mt-1 flex items-center gap-2">
-                  <span className="text-[20px] font-bold tracking-tight text-v-fg">{COMPANY.name}</span>
-                  <span className="hidden rounded-full bg-v-pill px-2 py-0.5 text-[11px] font-medium text-v-on-pill sm:inline">{vertical.short}</span>
+                  <span className="logo-name font-bold text-v-fg">{COMPANY.name}</span>
+                  <span className="hidden rounded-full bg-v-pill px-2 py-0.5 text-micro font-medium text-v-on-pill sm:inline">{vertical.short}</span>
                 </span>
               </span>
             </Link>
@@ -106,7 +106,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={cn("rounded-full px-4 py-2 text-[15px] font-medium transition-colors duration-200", active ? "bg-v-tint text-v-on-tint" : "text-v-fg/60 hover:text-v-fg")}
+                    className={cn("rounded-full px-4 py-2 text-body font-medium transition-colors duration-200", active ? "bg-v-tint text-v-on-tint" : "text-v-fg/60 hover:text-v-fg")}
                   >
                     {item.label}
                   </Link>
@@ -115,19 +115,19 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
             </nav>
 
             <div className="flex items-center gap-1.5">
-              <Link href={`${vertical.base}/san-pham#tim-kiem`} aria-label="Tìm sản phẩm" className="grid size-10 place-items-center rounded-full text-v-fg transition-colors duration-200 hover:bg-v-raise">
+              <Link href={`${vertical.base}/san-pham#tim-kiem`} aria-label="Tìm sản phẩm" className="grid size-11 place-items-center rounded-full text-v-fg transition-colors duration-200 hover:bg-v-raise">
                 <Search className="size-5" />
               </Link>
               <a
                 href={telHref(vertical.phone)}
                 aria-label={`Gọi ${vertical.phone}`}
-                className="hidden h-11 items-center gap-2 rounded-full bg-v-accent px-5 text-[15px] font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover lg:inline-flex"
+                className="hidden h-11 items-center gap-2 rounded-full bg-v-accent px-5 text-body font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover lg:inline-flex"
               >
                 <Phone className="size-4" /> <span className="tabular-nums">{vertical.phone}</span>
               </a>
               <button
                 type="button"
-                className="grid size-10 place-items-center rounded-full text-v-fg transition-colors hover:bg-v-raise lg:hidden"
+                className="grid size-11 place-items-center rounded-full text-v-fg transition-colors hover:bg-v-raise lg:hidden"
                 aria-label={open ? "Đóng menu" : "Mở menu"}
                 aria-expanded={open}
                 aria-controls="menu-nganh"
@@ -150,13 +150,13 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
                     href={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
-                    className={cn("rounded-xl px-4 py-4 text-lg font-medium transition-colors", active ? "bg-v-card text-v-fg" : "text-v-fg/80 hover:bg-v-card")}
+                    className={cn("rounded-xl px-4 py-4 text-title font-medium transition-colors", active ? "bg-v-card text-v-fg" : "text-v-fg/80 hover:bg-v-card")}
                   >
                     {item.label}
                   </Link>
                 );
               })}
-              <a href={telHref(vertical.phone)} className="mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-v-accent font-medium text-v-on-accent">
+              <a href={telHref(vertical.phone)} className="mt-6 flex h-13 items-center justify-center gap-2 rounded-full bg-v-accent text-body font-medium text-v-on-accent">
                 <Phone className="size-4" /> Gọi {vertical.phone}
               </a>
             </nav>

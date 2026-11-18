@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import "@fontsource/be-vietnam-pro/vietnamese-300.css";
-import "@fontsource/be-vietnam-pro/latin-300.css";
 import "@fontsource/be-vietnam-pro/vietnamese-400.css";
 import "@fontsource/be-vietnam-pro/vietnamese-500.css";
 import "@fontsource/be-vietnam-pro/vietnamese-600.css";
@@ -9,21 +7,17 @@ import "@fontsource/be-vietnam-pro/latin-400.css";
 import "@fontsource/be-vietnam-pro/latin-500.css";
 import "@fontsource/be-vietnam-pro/latin-600.css";
 import "@fontsource/be-vietnam-pro/latin-700.css";
-// Phân bón: chữ viết tay cho trích dẫn
-import "@fontsource/dancing-script/vietnamese-600.css";
-import "@fontsource/dancing-script/latin-600.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_URL } from "@/lib/site";
 import { getSettings } from "@/lib/settings/server";
 
-const TITLE = "Công ty TNHH Kim Ngoan – Phân bón, lốp xe ô tô, tôn sắt thép";
-const DESCRIPTION =
-  "Kim Ngoan kinh doanh phân bón & thuốc BVTV, lốp xe ô tô và tôn – sắt thép tại Chơn Thành. Hàng chính hãng, giá minh bạch, giao tận nơi.";
 
 /** Metadata gốc (landing tổng). Mỗi chuyên trang ghi đè title/description trong layout riêng. */
 export async function generateMetadata(): Promise<Metadata> {
   const { COMPANY } = await getSettings();
+  const TITLE = `${COMPANY.legalName} – Phân bón, lốp xe ô tô, tôn sắt thép`;
+  const DESCRIPTION = `${COMPANY.legalName} kinh doanh phân bón & thuốc BVTV, lốp xe ô tô và tôn – sắt thép tại ${COMPANY.area}. Hàng chính hãng, giá minh bạch, giao tận nơi.`;
   return {
   metadataBase: new URL(SITE_URL),
   title: { default: TITLE, template: "%s | Kim Ngoan" },

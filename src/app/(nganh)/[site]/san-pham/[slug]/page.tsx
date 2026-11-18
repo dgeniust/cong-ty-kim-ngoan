@@ -1,3 +1,5 @@
+import { realImage } from "@/lib/og";
+import { fitTitle, metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,24 +19,29 @@ import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string; slug: string }>;
 
+/** Sản phẩm / bài mới thêm từ admin (chưa có lúc build) vẫn mở được. */
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const all = await Promise.all(CATALOG_SITES.map(async (site) => (await getProducts(site)).map((p) => ({ site, slug: p.slug }))));
   return all.flat();
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { VERTICALS } = await getSettings();
+  const { VERTICALS, COMPANY } = await getSettings();
   const { site, slug } = await params;
   if (!isCatalogSite(site)) return {};
   const p = await getProduct(site, slug);
   if (!p) return {};
-  const url = `${VERTICALS[site].base}/san-pham/${p.slug}`;
+  const v = VERTICALS[site];
+  const url = `${v.base}/san-pham/${p.slug}`;
   const title = `${p.name} – ${p.keySpec}`;
+  const description = metaDescription([p.shortDescription, `${p.brand} ${p.keySpec} chính hãng tại Kim Ngoan – ${COMPANY.area}`, site === "lopxe" ? "Báo giá nhanh, thay lắp và cân bằng động tại chỗ" : "Báo giá theo ngày, cắt theo quy cách, giao tận công trình"]);
   return {
-    title: p.name,
-    description: p.shortDescription,
+    title: fitTitle(p.name, `${v.name} Kim Ngoan`),
+    description,
     alternates: { canonical: url },
-    openGraph: { url, title, description: p.shortDescription, ...(p.images?.length ? { images: [p.images[0]] } : {}) },
+    openGraph: { url, title, description, ...(realImage(p.images?.[0]) ? { images: [p.images![0]] } : {}) },
   };
 }
 
@@ -80,15 +87,15 @@ export default async function ProductDetail({ params }: { params: Params }) {
         </div>
 
         <div>
-          <p className="text-sm text-v-mute">
+          <p className="text-small text-v-mute">
             {product.brand} <span className="text-v-mark">/</span> {product.sku}
           </p>
-          <p className="mt-3"><span className="inline-block rounded-full bg-v-pill px-4 py-1 text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tabular-nums tracking-[-0.03em] text-v-on-pill">{product.keySpec}</span></p>
-          <p className="mt-5 text-lg leading-relaxed text-v-mute">{product.shortDescription}</p>
+          <p className="mt-3"><span className="inline-block rounded-full bg-v-pill px-4 py-1 text-h2 font-semibold tabular-nums text-v-on-pill">{product.keySpec}</span></p>
+          <p className="mt-5 text-title leading-relaxed text-v-mute">{product.shortDescription}</p>
 
           <ul className="mt-8 space-y-3">
             {product.highlights.map((h) => (
-              <li key={h} className="flex gap-3 text-[17px] text-v-fg">
+              <li key={h} className="flex gap-3 text-lead text-v-fg">
                 <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-v-accent text-v-on-accent"><Check className="size-3.5" strokeWidth={3} aria-hidden /></span>
                 {h}
               </li>
@@ -96,9 +103,9 @@ export default async function ProductDetail({ params }: { params: Params }) {
           </ul>
 
           <div className="mt-9 rounded-xl border border-v-line bg-v-card p-6 md:p-8">
-            <p className="text-[13px] font-medium text-v-mute">Giá</p>
-            <p className="v-display mt-1 text-3xl text-v-fg">Liên hệ báo giá</p>
-            <p className="mt-2 text-sm text-v-mute">Giá thay đổi theo ngày và số lượng. Gọi hoặc nhắn Zalo để nhận giá tốt nhất hôm nay.</p>
+            <p className="text-caption font-medium text-v-mute">Giá</p>
+            <p className="v-display mt-1 text-h3 text-v-fg">Liên hệ báo giá</p>
+            <p className="mt-2 text-small text-v-mute">Giá thay đổi theo ngày và số lượng. Gọi hoặc nhắn Zalo để nhận giá tốt nhất hôm nay.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <VButton asChild size="lg">
                 <a href={telHref(vertical.phone)}><Phone /> <span className="tabular-nums">{vertical.phone}</span></a>
@@ -113,10 +120,10 @@ export default async function ProductDetail({ params }: { params: Params }) {
           </div>
 
           <section aria-labelledby="thong-so-title" className="mt-14">
-            <h2 id="thong-so-title" className="v-display text-3xl text-v-fg">Thông số kỹ thuật</h2>
+            <h2 id="thong-so-title" className="text-h2 v-display text-v-fg">Thông số kỹ thuật</h2>
             <dl className="mt-5 overflow-hidden rounded-xl border border-v-line bg-v-card">
               {product.specs.map((s, i) => (
-                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-[15px] ${i > 0 ? "border-t border-v-line" : ""}`}>
+                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-body ${i > 0 ? "border-t border-v-line" : ""}`}>
                   <dt className="text-v-mute">{s.name}</dt>
                   <dd className="font-semibold text-v-fg">{s.value}</dd>
                 </div>
@@ -125,9 +132,9 @@ export default async function ProductDetail({ params }: { params: Params }) {
           </section>
 
           <section aria-labelledby="mo-ta-title" className="mt-14">
-            <h2 id="mo-ta-title" className="v-display text-3xl text-v-fg">Mô tả</h2>
+            <h2 id="mo-ta-title" className="text-h2 v-display text-v-fg">Mô tả</h2>
             {product.description.map((t) => (
-              <p key={t} className="mt-4 text-[17px] leading-[1.75] text-v-mute">{t}</p>
+              <p key={t} className="mt-4 text-lead leading-[1.75] text-v-mute">{t}</p>
             ))}
           </section>
         </div>

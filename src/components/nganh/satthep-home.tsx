@@ -63,10 +63,10 @@ export async function SatThepHome({
             <VTag className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">
               <FileText className="size-3.5" aria-hidden /> {hero.eyebrow}
             </VTag>
-            <h1 className="v-display mt-5 text-[length:var(--v-hero-size)] leading-[1.1] text-v-fg">
+            <h1 className="text-display v-display mt-5 text-v-fg">
               <Headline h={hero} pillClassName={card} />
             </h1>
-            <p className="mt-6 max-w-xl text-[clamp(1.05rem,1.5vw,1.2rem)] leading-relaxed text-v-mute">{hero.description}</p>
+            <p className="mt-6 max-w-xl text-lead text-v-mute">{hero.description}</p>
             <div className="mt-8 flex flex-wrap gap-2.5">
               <VButton asChild size="lg">
                 <a href={telHref(vertical.phone)}>
@@ -79,25 +79,25 @@ export async function SatThepHome({
                 </Link>
               </VButton>
             </div>
-            <p className="mt-8 text-sm text-v-mute">
+            <p className="mt-8 text-small text-v-mute">
               Phân phối: <span className="font-medium text-v-fg">{brands.join(" · ")}</span>
             </p>
           </div>
 
           {/* trang tài liệu kiểu Notion */}
           <div className="rounded-xl border border-v-line bg-v-card shadow-[0_4px_12px_rgb(0_0_0/0.1)]">
-            <div className="flex items-center gap-2 border-b border-v-line px-5 py-3 text-[13px] text-v-mute">
+            <div className="flex items-center gap-2 border-b border-v-line px-5 py-3 text-caption text-v-mute">
               <span>Kim Ngoan</span> <span aria-hidden>/</span> <span>Sắt thép</span> <span aria-hidden>/</span> <span className="text-v-fg">Báo giá</span>
             </div>
             <div className="p-6 sm:p-8">
               <span aria-hidden className="grid size-12 place-items-center rounded-lg bg-v-raise">
                 <ProductArt kind="ibeam" className="!size-9" />
               </span>
-              <p className="mt-4 text-[clamp(1.5rem,2.4vw,2rem)] font-semibold tracking-[-0.03em] text-v-fg">{quote?.title}</p>
-              <dl className="mt-4 grid grid-cols-[7.5rem_1fr] gap-y-2 text-sm">
+              <p className="mt-4 text-h3 font-semibold text-v-fg">{quote?.title}</p>
+              <dl className="mt-4 grid grid-cols-[7.5rem_1fr] gap-y-2 text-small">
                 <dt className="text-v-mute">Trạng thái</dt>
                 <dd>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-v-pill px-2.5 py-0.5 text-[13px] font-medium text-v-on-pill">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-v-pill px-2.5 py-0.5 text-caption font-medium text-v-on-pill">
                     <span aria-hidden className="size-1.5 rounded-full bg-v-fg" /> {quote?.status}
                   </span>
                 </dd>
@@ -106,8 +106,8 @@ export async function SatThepHome({
                 <dt className="text-v-mute">Chứng từ</dt>
                 <dd className="text-v-fg">{quote?.documents}</dd>
               </dl>
-              <table className="mt-6 w-full text-left text-sm">
-                <thead className="text-[13px] text-v-mute">
+              <table className="mt-6 w-full text-left text-small">
+                <thead className="text-caption text-v-mute">
                   <tr className="[&>th]:pb-2 [&>th]:font-normal">
                     <th scope="col">Vật tư</th>
                     <th scope="col" className="hidden sm:table-cell">Quy cách</th>
@@ -126,7 +126,7 @@ export async function SatThepHome({
                   ))}
                 </tbody>
               </table>
-              <ul className="mt-5 space-y-1.5 text-sm text-v-fg">
+              <ul className="mt-5 space-y-1.5 text-small text-v-fg">
                 {(quote?.notes ?? []).map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <CheckSquare className="size-4 text-v-fg" aria-hidden /> {t}
@@ -145,8 +145,8 @@ export async function SatThepHome({
             {hero.stats.map((s) => (
               <div key={s.label} className="py-8 sm:px-8 sm:first:pl-0">
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-[clamp(2.25rem,4vw,3rem)] font-semibold leading-none tracking-[-0.04em] text-v-fg">{s.value}</dd>
-                <dd className="mt-3 text-[15px] text-v-mute">{s.label}</dd>
+                <dd className="text-h2 font-semibold tabular-nums text-v-fg">{s.value}</dd>
+                <dd className="mt-3 text-body text-v-mute">{s.label}</dd>
               </div>
             ))}
           </dl>
@@ -166,10 +166,10 @@ export async function SatThepHome({
         <VContainer className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
           <Reveal>
             <VTag>Công cụ</VTag>
-            <h2 id="tinh-thep-title" className="v-display mt-3 text-[clamp(2rem,4vw,3.25rem)] text-v-fg">
+            <h2 id="tinh-thep-title" className="text-h2 v-display mt-3 text-v-fg">
               <Headline h={sec.tool} />
             </h2>
-            <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-v-mute">
+            <p className="mt-5 max-w-lg text-lead leading-relaxed text-v-mute">
               {sec.tool?.subtitle}
             </p>
             <VButton asChild variant="tint" className="mt-7">
@@ -196,8 +196,8 @@ export async function SatThepHome({
                   <span className="grid size-11 place-items-center rounded-full border-2 border-v-fg/80 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110">
                     <Icon className="size-5 text-v-fg" strokeWidth={1.75} aria-hidden />
                   </span>
-                  <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-v-fg">{u.title}</h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-v-mute">{u.description}</p>
+                  <h3 className="text-title mt-6 font-semibold text-v-fg">{u.title}</h3>
+                  <p className="mt-2 text-body leading-relaxed text-v-mute">{u.description}</p>
                 </li>
               );
             })}
@@ -216,9 +216,9 @@ export async function SatThepHome({
                   <ProductArt kind={(["rebar", "roofing", "plate"] as const)[i % 3]} className="absolute inset-0 m-auto !size-[58%]" />
                 </div>
                 <div className="p-4 md:p-8">
-                  <span className="text-[13px] font-medium tabular-nums text-v-mute">0{i + 1}</span>
-                  <h3 className="mt-2 text-[clamp(1.4rem,2.2vw,1.9rem)] font-semibold tracking-[-0.03em] text-v-fg">{s.title}</h3>
-                  <p className="mt-2 max-w-md text-[16px] leading-relaxed text-v-mute">{s.description}</p>
+                  <span className="text-caption font-medium tabular-nums text-v-mute">0{i + 1}</span>
+                  <h3 className="text-h3 mt-2 font-semibold text-v-fg">{s.title}</h3>
+                  <p className="mt-2 max-w-md text-body leading-relaxed text-v-mute">{s.description}</p>
                 </div>
               </Reveal>
             ))}
@@ -232,10 +232,10 @@ export async function SatThepHome({
           <VContainer className="grid gap-10 lg:grid-cols-[1fr_1.6fr]">
             <div>
               <VTag className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">Tin tức</VTag>
-              <h2 id="tin-tuc-title" className="v-display mt-3 text-[clamp(2rem,4vw,3.25rem)] text-v-fg">
+              <h2 id="tin-tuc-title" className="text-h2 v-display mt-3 text-v-fg">
                 <Headline h={sec.news} />
               </h2>
-              {sec.news?.subtitle && <p className="mt-4 max-w-sm text-[16px] leading-relaxed text-v-mute">{sec.news.subtitle}</p>}
+              {sec.news?.subtitle && <p className="mt-4 max-w-sm text-body leading-relaxed text-v-mute">{sec.news.subtitle}</p>}
               <VButton asChild variant="quiet" size="sm" className="mt-6">
                 <Link href={`${base}/tin-tuc`}>
                   Tất cả bài viết <ArrowRight className="arrow" />
@@ -250,9 +250,9 @@ export async function SatThepHome({
                       {n.art && <ProductArt kind={n.art} className="absolute inset-0 m-auto !size-[80%]" />}
                     </span>
                     <span className="min-w-0">
-                      <span className="text-[13px] text-v-mute">{formatDate(n.date)} · {n.readingMinutes} phút đọc</span>
-                      <span className="mt-1 block text-lg font-semibold leading-snug tracking-[-0.01em] text-v-fg">{n.title}</span>
-                      <span className="mt-1 line-clamp-1 text-sm text-v-mute">{n.excerpt}</span>
+                      <span className="text-caption text-v-mute">{formatDate(n.date)} · {n.readingMinutes} phút đọc</span>
+                      <span className="mt-1 block text-title font-semibold leading-snug tracking-[-0.01em] text-v-fg">{n.title}</span>
+                      <span className="mt-1 line-clamp-1 text-small text-v-mute">{n.excerpt}</span>
                     </span>
                     <ArrowUpRight className="size-5 text-v-mute transition-colors group-hover:text-v-fg" aria-hidden />
                   </Link>
@@ -268,17 +268,17 @@ export async function SatThepHome({
         <VContainer>
           <div className="grid items-center gap-8 rounded-xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-[1.4fr_1fr]">
             <div>
-              <h2 id="cta-title" className="v-display text-[clamp(2rem,4.4vw,3.5rem)] !text-current">
+              <h2 id="cta-title" className="text-h2 v-display !text-current">
                 {content.cta.title}
               </h2>
-              <p className="mt-4 max-w-lg text-[17px] leading-relaxed opacity-70">{content.cta.description} {vertical.contactLabel}.</p>
+              <p className="mt-4 max-w-lg text-lead leading-relaxed opacity-70">{content.cta.description} {vertical.contactLabel}.</p>
             </div>
             <div className="flex flex-col gap-2">
               <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-lg bg-v-on-island px-5 py-4 text-v-island transition-opacity hover:opacity-90">
-                <span className="text-2xl font-semibold tabular-nums tracking-[-0.02em]">{vertical.phone}</span>
+                <span className="text-h3 font-semibold tabular-nums tracking-[-0.02em]">{vertical.phone}</span>
                 <Phone className="size-5" aria-hidden />
               </a>
-              <Link href={`${base}/lien-he`} className="flex items-center justify-between gap-3 rounded-lg border border-white/15 px-5 py-3.5 font-medium transition-colors hover:bg-white/10">
+              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-lg border border-white/15 px-5 text-body font-medium transition-colors hover:bg-white/10">
                 Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
               </Link>
             </div>

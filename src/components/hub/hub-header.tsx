@@ -113,16 +113,16 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
         scrolled || open ? "bg-hub-canvas/90 shadow-[var(--shadow-hub-nav)]" : "bg-hub-canvas/0 shadow-[0_0_0_rgb(0_0_0/0)]",
       )}
     >
-      <a href="#noi-dung" className="sr-only z-[60] rounded-lg bg-hub-blue px-5 py-3 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+      <a href="#noi-dung" className="sr-only z-[60] rounded-lg bg-hub-blue px-5 py-3 text-small font-medium text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
       <div className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between gap-6 px-4 sm:px-6 lg:h-[84px] lg:px-10">
-        <Link href="/" aria-label={`${COMPANY.legalName} – Trang chủ`} className="group flex items-center gap-3">
+        <Link href="/" className="group flex items-center gap-3">
           <HubMark className="size-11 shrink-0 transition-transform duration-500 ease-soft group-hover:rotate-[-8deg]" />
           <span className="leading-none">
-            <span className="block text-[10px] font-semibold tracking-[0.2em] text-hub-ink-soft">{COMPANY.prefix}</span>
-            <span className="mt-1 block text-[22px] font-semibold tracking-tight text-hub-ink">{COMPANY.name}</span>
-            <span className="mt-1 hidden text-[11px] text-hub-ink-soft sm:block">{COMPANY.slogan}</span>
+            <span className="block logo-prefix text-hub-ink-soft">{COMPANY.prefix}</span>
+            <span className="mt-1 block logo-name font-semibold text-hub-ink">{COMPANY.name}</span>
+            <span className="mt-1 hidden text-micro text-hub-ink-soft sm:block">{COMPANY.slogan}</span>
           </span>
         </Link>
 
@@ -136,20 +136,20 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
                     key={m.href}
                     href={m.href}
                     aria-current={active ? (onHome ? "location" : "page") : undefined}
-                    className={cn("rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors duration-200", active ? "bg-hub-ink/[0.05] text-hub-ink" : "text-hub-ink/55 hover:text-hub-ink")}
+                    className={cn("rounded-lg px-3.5 py-2 text-body font-medium transition-colors duration-200", active ? "bg-hub-ink/[0.05] text-hub-ink" : "text-hub-ink/55 hover:text-hub-ink")}
                   >
                     {m.label}
                   </Link>
                 );
               })}
             </nav>
-            <a href={telHref(COMPANY.hotline)} className="group ml-3 inline-flex h-10 items-center gap-2 rounded-lg bg-hub-blue px-4 text-sm font-medium text-white transition-colors duration-200 hover:bg-hub-blue-hover">
+            <a href={telHref(COMPANY.hotline)} className="group ml-3 inline-flex h-11 items-center gap-2 rounded-lg bg-hub-blue px-5 text-body font-medium text-white transition-colors duration-200 hover:bg-hub-blue-hover">
               <Phone className="size-4 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-12 group-hover:scale-110" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
             </a>
           </div>
           <nav aria-label="Lĩnh vực kinh doanh" className="flex items-center gap-5 pr-1">
             {SECTORS.map((s) => (
-              <Link key={s.label} href={s.href} className="group flex items-center gap-2 text-[13px] font-medium text-hub-ink/55 transition-colors duration-200 hover:text-hub-ink">
+              <Link key={s.label} href={s.href} className="group flex items-center gap-2 text-caption font-medium text-hub-ink/55 transition-colors duration-200 hover:text-hub-ink">
                 <span aria-hidden className={cn("size-2 rounded-full transition-transform duration-300 group-hover:scale-150", s.dot)} />
                 {s.label}
               </Link>
@@ -169,19 +169,19 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
         <div id="menu-hub" className="fixed inset-x-0 bottom-0 top-[68px] overflow-y-auto bg-hub-canvas px-4 py-6 sm:px-6 lg:hidden">
           <nav aria-label="Lĩnh vực kinh doanh" className="grid gap-2">
             {SECTORS.map((s, i) => (
-              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-xl border border-hub-line bg-hub-paper px-5 py-4 text-lg font-medium text-hub-ink">
+              <Link key={s.label} href={s.href} onClick={() => setOpen(false)} style={{ animationDelay: `${i * 50}ms` }} className="animate-rise flex items-center gap-3 rounded-xl border border-hub-line bg-hub-paper px-5 py-4 text-title font-medium text-hub-ink">
                 <span aria-hidden className={cn("size-2.5 rounded-full", s.dot)} /> {s.label}
               </Link>
             ))}
           </nav>
           <nav aria-label="Điều hướng di động" className="mt-6 flex flex-col">
             {MAIN.map((m) => (
-              <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className="px-5 py-3 text-base font-medium text-hub-ink-soft">
+              <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className="px-5 py-3 text-body font-medium text-hub-ink-soft">
                 {m.label}
               </Link>
             ))}
           </nav>
-          <a href={telHref(COMPANY.hotline)} className="mt-6 flex h-12 items-center justify-center gap-2 rounded-lg bg-hub-blue font-medium text-white">
+          <a href={telHref(COMPANY.hotline)} className="mt-6 flex h-13 items-center justify-center gap-2 rounded-lg bg-hub-blue text-body font-medium text-white">
             <Phone className="size-4" aria-hidden /> Hotline {COMPANY.hotline}
           </a>
         </div>

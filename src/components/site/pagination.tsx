@@ -21,7 +21,7 @@ export function Pagination({
     const qs = sp.toString();
     return qs ? `${basePath}?${qs}` : basePath;
   };
-  const item = "grid size-11 place-items-center rounded-full text-[15px] font-medium transition-colors";
+  const item = "grid size-11 place-items-center rounded-full text-body font-medium transition-colors";
   const edge = (disabled: boolean) => cn(item, "text-ink hover:bg-surface", disabled && "pointer-events-none opacity-30");
 
   return (

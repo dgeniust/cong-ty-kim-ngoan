@@ -2,10 +2,11 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
@@ -20,10 +21,10 @@ const buttonVariants = cva(
         link: "h-auto px-0 text-brand-700 underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-11 px-6 has-[>svg]:px-5",
-        sm: "h-9 px-4 text-[13px] has-[>svg]:px-3.5",
-        lg: "h-12 px-7 text-[15px] has-[>svg]:px-6",
-        icon: "size-10",
+        default: BUTTON_SIZES.md,
+        sm: BUTTON_SIZES.sm,
+        lg: BUTTON_SIZES.lg,
+        icon: BUTTON_SIZES.icon,
       },
     },
     defaultVariants: { variant: "default", size: "default" },

@@ -1,3 +1,4 @@
+import { metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { VNewsCard } from "@/components/nganh/v-news-card";
 import { VPageHead } from "@/components/nganh/v-page-head";
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const v = VERTICALS[site];
   return {
     title: `Tin tức & kiến thức ${v.short.toLowerCase()}`,
-    description: `Bài viết, kinh nghiệm chọn mua và sử dụng ${v.name.toLowerCase()} từ Kim Ngoan.`,
+    description: metaDescription([`Bài viết, kinh nghiệm chọn mua và sử dụng ${v.name.toLowerCase()} từ đội ngũ Kim Ngoan`, v.description]),
     alternates: { canonical: `${v.base}/tin-tuc` },
   };
 }

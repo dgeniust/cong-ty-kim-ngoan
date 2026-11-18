@@ -40,15 +40,38 @@ Nguyên tắc: không viền card – tách khối bằng mảng màu và khoả
 Lốp xe và sắt thép đang dùng **hình minh hoạ vector** (`components/nganh/product-art.tsx`).
 Khi có ảnh chụp thật: đặt vào `/public`, điền `images: ["/ten-anh.jpg"]` cho sản phẩm – ảnh sẽ tự thay hình minh hoạ.
 
+## Cấu hình môi trường
+Mọi biến môi trường được khai báo + giải thích trong **`.env.example`** và chỉ được đọc tại `src/lib/env.ts` / `src/lib/site.ts`.
+Khi server khởi động, cấu hình sai/thiếu được báo ngay trong log (`src/instrumentation.ts`).
+
+| Biến | Bắt buộc (prod) | Ghi chú |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | ✓ | Tên miền thật, không có `/` cuối. Thiếu → dùng `https://kimngoan.com` |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | ✓ | Tài khoản `/admin`, mật khẩu ≥ 8 ký tự |
+| `AUTH_SECRET` | ✓ | ≥ 32 ký tự – `openssl rand -base64 48` |
+| `DATA_DIR` | | Thư mục dữ liệu admin, mặc định `data/` – cần ổ ghi được & sao lưu |
+
+## Nguồn thông tin duy nhất
+- **Tên công ty, hotline, email, địa chỉ, khu vực phục vụ, Zalo/Facebook, SĐT + SEO từng ngành**: admin → *Thông tin chung* (`data/settings.json`, mặc định ở `src/lib/verticals.ts`). Trang phân bón cũng đọc từ đây.
+- **Chữ trên trang chủ từng ngành**: admin → *Nội dung chuyên trang*.
+- **Sản phẩm**: admin → *Cơ sở dữ liệu sản phẩm*.
+
+## Hệ thống thiết kế
+- **Thang chữ** (`src/app/globals.css`): `text-display` (hero) · `text-h1` · `text-h2` (tiêu đề khối) · `text-h3` · `text-h4` · `text-title` · `text-lead` · `text-body` · `text-small` · `text-caption` · `text-micro`. Không dùng `text-[..px]` / `text-sm`… trong giao diện công khai.
+- **Nút** (`src/lib/ui.ts`): `sm` 36px · `md` 44px (mặc định) · `lg` 52px · `icon` 44px · chip `TAG_SIZE` 32px. Dùng qua `VButton`, `Button` hoặc `BUTTON_SIZES`.
+- `cn()` (`src/lib/utils.ts`) đã khai báo thang chữ – nếu thêm cỡ chữ mới phải thêm vào đó, nếu không class màu chữ đi kèm sẽ bị xoá.
+- Màu chữ phụ đạt tương phản ≥ 4.5:1 (WCAG AA).
+
 ## SEO
-- `metadataBase`, title template, canonical cho mọi trang; Open Graph theo từng chuyên trang.
+- `metadataBase`, title template (tự bỏ hậu tố khi > 60 ký tự), mô tả 120–155 ký tự (`src/lib/seo.ts`), canonical cho mọi trang.
+- Ảnh chia sẻ (Open Graph 1200×630) sinh tự động cho landing, từng chuyên trang, từng sản phẩm và bài viết (`src/lib/og.tsx`).
 - `sitemap.xml`, `robots.txt` sinh tự động.
 - JSON-LD: `Organization` + `WebSite` (landing tổng), `Store`/`TireShop`/`HardwareStore`, `Product`, `Article`, `BreadcrumbList`.
 - Trang sản phẩm/tin tức được prerender tĩnh (SSG).
 
 ## Trước khi go-live
-1. `NEXT_PUBLIC_SITE_URL=https://kimngoan.com`
-2. Sửa SĐT, địa chỉ, Zalo, Facebook, năm thành lập, `mapQuery` trong `src/lib/verticals.ts` (đang là số mẫu).
+1. Đặt biến môi trường theo `.env.example`.
+2. Vào admin → *Thông tin chung*: sửa SĐT, địa chỉ, khu vực, Zalo, Facebook, năm thành lập, `mapQuery` (đang là số mẫu).
 3. Thay dữ liệu mẫu sản phẩm/tin tức, thêm ảnh thật.
 4. Thêm mã xác minh Google Search Console vào `metadata.verification` (`src/app/layout.tsx`) và submit sitemap.
 

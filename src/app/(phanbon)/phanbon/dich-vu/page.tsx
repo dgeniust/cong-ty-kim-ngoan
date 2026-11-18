@@ -3,7 +3,7 @@ import { ArticleListPage } from "@/components/site/article-list-page";
 
 export const metadata: Metadata = {
   title: "Dịch vụ",
-  description: "Tư vấn kỹ thuật tại vườn và giao hàng tận nơi khu vực Đồng Nai – Bình Phước.",
+  description: "Tư vấn kỹ thuật tại vườn và giao hàng tận nơi khu vực Chơn Thành – Đồng Nai.",
   alternates: { canonical: "/phanbon/dich-vu" },
 };
 

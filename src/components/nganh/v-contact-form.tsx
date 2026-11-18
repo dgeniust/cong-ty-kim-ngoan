@@ -15,7 +15,7 @@ type Values = z.infer<typeof schema>;
 type Errors = Partial<Record<keyof Values, string>>;
 
 const fieldClass =
-  "w-full rounded-lg border border-v-line bg-v-bg px-4 py-3 text-base text-v-fg placeholder:text-v-mute/60 outline-none transition-[border-color,box-shadow] duration-200 focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)] aria-[invalid=true]:border-[#e5484d]";
+  "min-h-11 w-full rounded-lg border border-v-line bg-v-bg px-4 py-2.5 text-body text-v-fg placeholder:text-v-mute/70 outline-none transition-[border-color,box-shadow] duration-200 focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)] aria-[invalid=true]:border-[#e5484d]";
 
 /** Chỉ giao diện: kiểm tra dữ liệu phía client và giả lập gửi. Nối `onSubmit` với API/server action khi có backend. */
 export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string }) {
@@ -50,7 +50,7 @@ export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string 
     return (
       <div role="status" className="animate-rise py-10">
         <CheckCircle2 className="size-12 text-v-mark" aria-hidden />
-        <p className="v-display mt-4 text-4xl text-v-fg">Đã nhận yêu cầu</p>
+        <p className="v-display mt-4 text-h3 text-v-fg">Đã nhận yêu cầu</p>
         <p className="mt-3 max-w-md text-v-mute">Cảm ơn {values.name}. Kim Ngoan sẽ gọi lại số {values.phone} trong thời gian sớm nhất.</p>
       </div>
     );
@@ -65,8 +65,8 @@ export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string 
     "aria-describedby": errors[k] ? `f-${k}-err` : undefined,
     required: true,
   });
-  const err = (k: keyof Values) => errors[k] && <p id={`f-${k}-err`} className="mt-1.5 text-sm text-[#e5484d]">{errors[k]}</p>;
-  const label = "mb-1.5 block text-[13px] font-medium text-v-mute";
+  const err = (k: keyof Values) => errors[k] && <p id={`f-${k}-err`} className="mt-1.5 text-small text-[#e5484d]">{errors[k]}</p>;
+  const label = "mb-1.5 block text-caption font-medium text-v-mute";
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-5">

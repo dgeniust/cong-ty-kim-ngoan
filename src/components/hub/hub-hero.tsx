@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { telHref } from "@/lib/verticals";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Sprout } from "lucide-react";
 import { ProductArt } from "@/components/nganh/product-art";
@@ -107,7 +108,7 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
         <Squiggle className="absolute -left-2 top-2 hidden w-14 -rotate-12 text-hub-coral md:block lg:-left-10" />
         <Sparkle className="absolute -right-1 -top-3 hidden size-7 text-hub-marigold md:block lg:-right-8" />
         <Sparkle className="absolute -bottom-4 right-[18%] hidden size-4 text-hub-sky md:block" />
-        <h1 id="hero-title" className="text-[clamp(2.4rem,6vw,4.5rem)] font-semibold leading-[1.12] tracking-[-0.035em] text-hub-ink">
+        <h1 id="hero-title" className="text-display font-semibold text-hub-ink">
           Một địa chỉ tin cậy,
           <br />
           đồng hành cùng{" "}
@@ -139,7 +140,7 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
                   setAuto(false);
                 }}
                 className={cn(
-                  "relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-lg px-4 text-sm font-medium transition-colors duration-200",
+                  "relative inline-flex h-9 items-center gap-2 overflow-hidden rounded-lg px-4 text-small font-medium transition-colors duration-200",
                   active ? "bg-hub-paper text-hub-ink shadow-[inset_0_0_0_1px_var(--color-hub-line)]" : "text-hub-ink/55 hover:text-hub-ink",
                 )}
               >
@@ -161,7 +162,7 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
               <span className="size-3 rounded-full bg-hub-marigold" />
               <span className="size-3 rounded-full bg-sector-phanbon" />
             </span>
-            <span className="mx-auto flex h-7 min-w-0 max-w-sm flex-1 items-center justify-center rounded-md bg-hub-canvas px-3 text-[13px] text-hub-ink-soft">
+            <span className="mx-auto flex h-7 min-w-0 max-w-sm flex-1 items-center justify-center rounded-md bg-hub-canvas px-3 text-caption text-hub-ink-soft">
               <span className="truncate">{s.url}</span>
             </span>
             <span aria-hidden className="w-[46px]" />
@@ -169,16 +170,16 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
 
           <div key={s.id} className="grid animate-fade md:grid-cols-[1fr_1.1fr]">
             <div className="flex flex-col p-6 sm:p-9">
-              <span className={cn("inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[13px] font-medium text-hub-ink", tone.tag)}>
+              <span className={cn("inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-caption font-medium text-hub-ink", tone.tag)}>
                 <span aria-hidden className={cn("size-1.5 rounded-full", tone.dot)} /> {s.tagline}
               </span>
-              <h2 className="mt-4 text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.03em] text-hub-ink">{s.name}</h2>
-              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-hub-ink-soft">{s.description}</p>
+              <h2 className="text-h2 mt-4 font-semibold text-hub-ink">{s.name}</h2>
+              <p className="mt-3 max-w-md text-body leading-relaxed text-hub-ink-soft">{s.description}</p>
 
               <ul className="mt-6 flex flex-wrap gap-1.5">
                 {s.groups.map((g) => (
                   <li key={g.href}>
-                    <Link href={g.href} className="inline-flex h-8 items-center rounded-full bg-hub-canvas px-3 text-[13px] text-hub-ink transition-colors duration-200 hover:bg-hub-stone">
+                    <Link href={g.href} className="inline-flex h-8 items-center rounded-full bg-hub-canvas px-3 text-caption text-hub-ink transition-colors duration-200 hover:bg-hub-stone">
                       {g.name}
                     </Link>
                   </li>
@@ -191,20 +192,20 @@ export function HubHero({ sectors, lead, actions }: { sectors: HeroSector[]; lea
                   <li key={p.href}>
                     <Link href={p.href} className="group flex items-center justify-between gap-3 rounded-lg border border-hub-line bg-hub-paper px-3 py-2.5 transition-colors duration-200 hover:bg-hub-canvas">
                       <span className="min-w-0">
-                        <span className="block truncate text-sm font-medium text-hub-ink">{p.name}</span>
-                        <span className="block text-[12px] tabular-nums text-hub-ink-soft">{p.meta}</span>
+                        <span className="block truncate text-small font-medium text-hub-ink">{p.name}</span>
+                        <span className="block text-micro tabular-nums text-hub-ink-soft">{p.meta}</span>
                       </span>
-                      <ArrowUpRight className="size-4 shrink-0 text-hub-ink/40 transition-colors group-hover:text-hub-blue" aria-hidden />
+                      <ArrowUpRight className="size-4 shrink-0 text-hub-ink/60 transition-colors group-hover:text-hub-blue" aria-hidden />
                     </Link>
                   </li>
                 ))}
               </ul>
 
               <div className="mt-auto flex flex-wrap items-center gap-2 pt-7">
-                <Link href={s.href} className="group inline-flex h-10 items-center gap-2 rounded-lg bg-hub-blue-tint px-4 text-sm font-medium text-hub-blue transition-colors duration-200 hover:bg-[#d4eafd]">
+                <Link href={s.href} className="group inline-flex h-11 items-center gap-2 rounded-lg bg-hub-blue-tint px-5 text-body font-medium text-hub-blue transition-colors duration-200 hover:bg-[#d4eafd]">
                   Vào chuyên trang <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </Link>
-                <a href={`tel:${s.phone.replace(/\s/g, "")}`} className="inline-flex h-10 items-center rounded-lg px-4 text-sm font-medium tabular-nums text-hub-ink/80 transition-colors hover:bg-hub-canvas">
+                <a href={telHref(s.phone)} className="inline-flex h-11 items-center rounded-lg px-5 text-body font-medium tabular-nums text-hub-ink/80 transition-colors hover:bg-hub-canvas">
                   {s.phone}
                 </a>
               </div>

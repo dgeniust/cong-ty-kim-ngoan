@@ -8,11 +8,11 @@ export const defaultContent: SiteContent = {
     logo: "",
     phone: "123456789",
     email: "kimngoan@example.com",
-    address: "Chơn Thành - Đồng Nai",
+    address: "Chơn Thành – Đồng Nai",
     facebook: "https://facebook.com",
     seoTitle: "Công ty TNHH Kim Ngoan – Đại lý phân bón & thuốc BVTV",
     seoDescription:
-      "Đại lý phân bón uy tín tại Chơn Thành - Đồng Nai. Cung cấp phân bón, thuốc bảo vệ thực vật chất lượng cao cho nhà nông.",
+      "Đại lý phân bón uy tín tại Chơn Thành – Đồng Nai. Cung cấp phân bón, thuốc bảo vệ thực vật chất lượng cao cho nhà nông.",
   },
   nav: [
     { label: "Trang chủ", href: "/phanbon" },

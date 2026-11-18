@@ -26,7 +26,7 @@ export function ArticleListPage({ section, page: pageParam }: { section: Article
               href={`/phanbon/${s}`}
               aria-current={s === section ? "page" : undefined}
               className={cn(
-                "inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-colors",
+                "inline-flex h-9 items-center rounded-full px-4 text-small font-medium transition-colors",
                 s === section ? "bg-brand-800 text-white" : "bg-white text-ink hover:text-brand-900 hover:shadow-soft"
               )}
             >

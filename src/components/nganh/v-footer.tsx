@@ -13,14 +13,14 @@ export async function VFooter({ vertical, categories }: { vertical: Vertical; ca
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
             <p className="flex items-center gap-2.5">
-              <span className="text-2xl font-semibold tracking-[-0.03em] text-v-fg">{COMPANY.name}</span>
-              <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-[12px] font-medium text-v-on-pill">{vertical.short}</span>
+              <span className="logo-name font-semibold text-v-fg">{COMPANY.name}</span>
+              <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-micro font-medium text-v-on-pill">{vertical.short}</span>
             </p>
-            <p className="mt-3 max-w-xs text-[15px] leading-relaxed text-v-mute">{vertical.description}</p>
+            <p className="mt-3 max-w-xs text-body leading-relaxed text-v-mute">{vertical.description}</p>
           </div>
           <nav aria-label="Danh mục sản phẩm">
-            <p className="text-sm font-semibold text-v-fg">Sản phẩm</p>
-            <ul className="mt-3 space-y-2 text-[15px]">
+            <p className="text-small font-semibold text-v-fg">Sản phẩm</p>
+            <ul className="mt-3 space-y-2 text-body">
               {categories.map((c) => (
                 <li key={c.slug}>
                   <Link href={`${vertical.base}/san-pham?nhom=${c.slug}`} className={link}>{c.name}</Link>
@@ -29,8 +29,8 @@ export async function VFooter({ vertical, categories }: { vertical: Vertical; ca
             </ul>
           </nav>
           <nav aria-label="Lĩnh vực khác của Kim Ngoan">
-            <p className="text-sm font-semibold text-v-fg">Kim Ngoan</p>
-            <ul className="mt-3 space-y-2 text-[15px]">
+            <p className="text-small font-semibold text-v-fg">Kim Ngoan</p>
+            <ul className="mt-3 space-y-2 text-body">
               <li><Link href="/" className={link}>Trang chủ công ty</Link></li>
               {VERTICAL_LIST.filter((v) => v.id !== vertical.id).map((v) => (
                 <li key={v.id}><Link href={v.base} className={link}>{v.name}</Link></li>
@@ -39,15 +39,15 @@ export async function VFooter({ vertical, categories }: { vertical: Vertical; ca
             </ul>
           </nav>
           <address className="not-italic">
-            <p className="text-sm font-semibold text-v-fg">Liên hệ</p>
-            <ul className="mt-3 space-y-2.5 text-[15px]">
+            <p className="text-small font-semibold text-v-fg">Liên hệ</p>
+            <ul className="mt-3 space-y-2.5 text-body">
               <li className="flex gap-2.5"><Phone className="mt-1 size-4 shrink-0 text-v-accent" aria-hidden /><a href={telHref(vertical.phone)} className="font-semibold tabular-nums text-v-fg hover:text-v-accent">{vertical.phone}</a></li>
               <li className="flex gap-2.5"><Mail className="mt-1 size-4 shrink-0 text-v-mute" aria-hidden /><a href={`mailto:${COMPANY.email}`} className={link}>{COMPANY.email}</a></li>
               <li className="flex gap-2.5"><MapPin className="mt-1 size-4 shrink-0 text-v-mute" aria-hidden /><span className="text-v-fg/65">{COMPANY.address}</span></li>
             </ul>
           </address>
         </div>
-        <p className="mt-12 border-t border-v-line pt-6 text-[13px] text-v-mute">© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
+        <p className="mt-12 border-t border-v-line pt-6 text-caption text-v-mute">© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
       </div>
     </footer>
   );

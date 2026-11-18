@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { COMPANY } from "@/lib/verticals";
 
 const text = z.string().trim();
 const phone = text.regex(/^[\d\s+().-]{6,20}$/, "Số điện thoại không hợp lệ");
@@ -12,6 +13,8 @@ export const companySchema = z.object({
   hotline: phone,
   email: text.email("Email không hợp lệ").or(z.literal("")),
   address: text.min(1, "Bắt buộc"),
+  // .default: settings.json lưu trước khi có trường này vẫn hợp lệ
+  area: text.min(2, "Bắt buộc").default(COMPANY.area),
   mapQuery: text,
   openingHours: text,
   founded: text.regex(/^\d{4}$/, "Năm gồm 4 chữ số"),

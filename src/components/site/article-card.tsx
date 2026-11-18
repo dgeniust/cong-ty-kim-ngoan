@@ -33,7 +33,7 @@ export function ArticleCard({
         />
       </div>
       <div className={cn("flex flex-1 flex-col pt-5", featured && "md:pt-0")}>
-        <p className="flex flex-wrap items-center gap-x-3 text-[13px] text-ink-subtle">
+        <p className="flex flex-wrap items-center gap-x-3 text-caption text-ink-subtle">
           <span className="font-medium text-brand-600">{articleSections[article.section].title}</span>
           <time dateTime={article.date}>{formatDate(article.date)}</time>
           <span>{article.readingMinutes} phút đọc</span>
@@ -41,7 +41,7 @@ export function ArticleCard({
         <Heading
           className={cn(
             "mt-2 font-semibold leading-snug text-brand-900",
-            featured ? "text-2xl md:text-[2rem] md:leading-tight" : "text-lg"
+            featured ? "text-h3 md:leading-tight" : "text-title"
           )}
         >
           <Link
@@ -51,10 +51,10 @@ export function ArticleCard({
             {article.title}
           </Link>
         </Heading>
-        <p className={cn("mt-3 text-[15px] leading-relaxed text-ink-muted", featured ? "md:text-base" : "line-clamp-2")}>
+        <p className={cn("mt-3 text-body leading-relaxed text-ink-muted", featured ? "md:text-body" : "line-clamp-2")}>
           {article.excerpt}
         </p>
-        {featured && <p className="mt-6 text-[15px] font-semibold text-brand-800 underline decoration-sun-400 underline-offset-[6px]">Đọc bài viết</p>}
+        {featured && <p className="mt-6 text-body font-semibold text-brand-800 underline decoration-sun-400 underline-offset-[6px]">Đọc bài viết</p>}
       </div>
     </article>
   );

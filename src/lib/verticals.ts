@@ -29,7 +29,9 @@ export const COMPANY = {
   // TODO(khách hàng): thay bằng thông tin thật
   hotline: "0123 456 789",
   email: "kimngoan@example.com",
-  address: "Chơn Thành - Đồng Nai",
+  address: "Chơn Thành – Đồng Nai",
+  /** Khu vực phục vụ – dùng trong các câu “giao tận nơi khu vực …”, mô tả SEO */
+  area: "Chơn Thành – Đồng Nai",
   zalo: "https://zalo.me/0123456789",
   facebook: "https://facebook.com",
   /** Truy vấn dùng cho Google Maps embed – thay bằng địa chỉ/toạ độ chính xác. */
@@ -49,7 +51,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     contactLabel: "Liên hệ về phân bón & thuốc BVTV",
     phone: "0123 456 781",
     seoTitle: "Phân bón & thuốc BVTV Kim Ngoan – Đại lý tại Chơn Thành",
-    seoDescription: "Đại lý phân bón, thuốc bảo vệ thực vật chính hãng tại Chơn Thành. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
+    seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Đồng Nai. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
     themeColor: "#143f1b",
   },
   lopxe: {
@@ -61,7 +63,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách từ các thương hiệu lớn. Thay lắp, cân bằng động tại chỗ.",
     contactLabel: "Liên hệ về lốp xe ô tô",
     phone: "0123 456 782",
-    seoTitle: "Lốp xe ô tô Kim Ngoan – Lốp chính hãng, thay lắp tại Chơn Thành",
+    seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Thay lắp tại Chơn Thành",
     seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Báo giá nhanh, thay lắp và cân bằng động tại chỗ.",
     themeColor: "#100904",
   },
@@ -74,8 +76,8 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     description: "Thép xây dựng, thép hình, thép ống – hộp, tôn lợp và thép tấm cho công trình dân dụng, nhà xưởng.",
     contactLabel: "Liên hệ về tôn – sắt thép",
     phone: "0123 456 783",
-    seoTitle: "Tôn sắt thép Kim Ngoan – Thép xây dựng, thép hình, tôn lợp tại Chơn Thành",
-    seoDescription: "Cung cấp thép xây dựng, thép hình, thép ống hộp, tôn lợp chính phẩm tại Chơn Thành. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
+    seoTitle: "Tôn, sắt thép Kim Ngoan – Thép xây dựng, tôn lợp Chơn Thành",
+    seoDescription: "Thép xây dựng, thép hình, ống hộp, tôn lợp chính phẩm tại Chơn Thành. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
     themeColor: "#08090a",
   },
 };

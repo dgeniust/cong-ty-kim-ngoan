@@ -24,8 +24,8 @@ export function SectionHeading({ title, subtitle, align = "left", as: Tag = "h2"
       )}
     >
       <div className={cn("max-w-2xl", centered && "mx-auto")}>
-        <Tag id={id} className="display text-[2rem] md:text-[2.75rem]">{title}</Tag>
-        {subtitle && <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">{subtitle}</p>}
+        <Tag id={id} className="display text-h2">{title}</Tag>
+        {subtitle && <p className="mt-4 text-lead text-ink-muted">{subtitle}</p>}
       </div>
       {action}
     </div>

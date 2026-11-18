@@ -16,17 +16,17 @@ export function VNewsCard({ item, large, headingLevel: Heading = "h3" }: { item:
         )}
       </div>
       <div className={cn("flex flex-col p-5", large && "md:justify-center md:p-9")}>
-        <p className="flex gap-2 text-[13px] text-v-mute">
+        <p className="flex gap-2 text-caption text-v-mute">
           <time dateTime={item.date}>{formatDate(item.date)}</time>
           <span aria-hidden>·</span>
           <span>{item.readingMinutes} phút đọc</span>
         </p>
-        <Heading className={cn("mt-2 font-semibold leading-snug tracking-[-0.02em] text-v-fg transition-colors duration-200 group-hover:text-v-accent", large ? "text-2xl md:text-[2rem]" : "text-lg")}>
+        <Heading className={cn("mt-2 font-semibold leading-snug tracking-[-0.02em] text-v-fg transition-colors duration-200 group-hover:text-v-accent", large ? "text-h3" : "text-title")}>
           <Link href={item.href} className="after:absolute after:inset-0 after:content-['']">
             {item.title}
           </Link>
         </Heading>
-        <p className={cn("mt-2.5 text-[15px] leading-relaxed text-v-mute", !large && "line-clamp-2")}>{item.excerpt}</p>
+        <p className={cn("mt-2.5 text-body leading-relaxed text-v-mute", !large && "line-clamp-2")}>{item.excerpt}</p>
       </div>
     </article>
   );

@@ -12,7 +12,8 @@ import { getSettings } from "@/lib/settings/server";
 
 type Params = Promise<{ site: string }>;
 
-// Không khoá dynamicParams: sản phẩm/bài mới thêm từ admin phải mở được ngay; site lạ đã bị resolveSite() trả 404.
+// KHÔNG đặt dynamicParams = false ở đây: cấu hình layout áp cho cả trang con → sản phẩm/bài mới thêm từ admin sẽ 404.
+// Site lạ (VD: /abc) do resolveSite() trả 404 (mã 404 chuẩn, nội dung 404 hiển thị phía trình duyệt).
 export const generateStaticParams = siteStaticParams;
 
 export async function generateViewport({ params }: { params: Params }): Promise<Viewport> {

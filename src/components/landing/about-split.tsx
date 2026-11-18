@@ -13,11 +13,11 @@ export function AboutSplit({ about }: { about: SiteContent["about"] }) {
       {/* Left column aligns with the 80rem container; right column runs to the viewport edge. */}
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="relative px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:pr-0">
-          <h2 id="gioi-thieu-title" className="display max-w-xl text-[2rem] md:text-[2.75rem]">
+          <h2 id="gioi-thieu-title" className="text-h2 display max-w-xl">
             {about.title}
           </h2>
-          {about.quote && <p className="mt-5 whitespace-pre-line text-xl font-medium leading-snug text-brand-600">{about.quote}</p>}
-          <div className="mt-6 max-w-lg space-y-4 text-base leading-relaxed text-ink-muted">
+          {about.quote && <p className="mt-5 whitespace-pre-line text-h4 font-medium leading-snug text-brand-600">{about.quote}</p>}
+          <div className="mt-6 max-w-lg space-y-4 text-body leading-relaxed text-ink-muted">
             {about.paragraphs.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -28,7 +28,7 @@ export function AboutSplit({ about }: { about: SiteContent["about"] }) {
               {about.highlights.map((h, i) => {
                 const Icon = getIcon(h.icon);
                 return (
-                  <li key={i} className="flex items-center gap-3 text-[15px] font-medium text-brand-900">
+                  <li key={i} className="flex items-center gap-3 text-body font-medium text-brand-900">
                     <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-100 text-brand-700">
                       <Icon className="size-[18px]" strokeWidth={1.75} aria-hidden />
                     </span>

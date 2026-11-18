@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, Package, RotateCcw, Save, Sparkles, Sprout } from "lucide-react";
 import { useNotify } from "@/hooks/use-notify";
@@ -87,25 +88,16 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
 
           {/* ---------- Site ---------- */}
           <TabsContent value="site" className="space-y-4">
-            <Section title="Thương hiệu" description="Hiển thị ở header, footer và trang đăng nhập.">
-              <Grid cols={3}>
-                <Field label="Dòng trên logo" value={site.companyPrefix} onChange={(v) => patch("site", { companyPrefix: v })} />
-                <Field label="Tên công ty" value={site.companyName} onChange={(v) => patch("site", { companyName: v })} />
-                <Field label="Slogan" value={site.slogan} onChange={(v) => patch("site", { slogan: v })} />
-              </Grid>
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hub-line bg-hub-blue-tint/60 px-5 py-4 text-sm text-hub-ink">
+              <p className="max-w-xl leading-relaxed">
+                Tên công ty, số điện thoại, email, địa chỉ, Facebook và SEO của trang phân bón được quản lý tập trung ở <strong>Thông tin chung</strong> – sửa một lần, cập nhật cho cả 3 chuyên trang.
+              </p>
+              <Link href="/admin/thong-tin-chung" className="inline-flex h-9 items-center rounded-lg bg-hub-blue px-3.5 font-medium text-white hover:bg-hub-blue-hover">
+                Mở Thông tin chung
+              </Link>
+            </div>
+            <Section title="Logo" description="Hiển thị ở header và footer trang phân bón.">
               <ImageField label="Logo (để trống = logo lá mặc định)" value={site.logo} onChange={(v) => patch("site", { logo: v })} />
-            </Section>
-            <Section title="Liên hệ">
-              <Grid>
-                <Field label="Số điện thoại" value={site.phone} onChange={(v) => patch("site", { phone: v })} />
-                <Field label="Email" value={site.email} onChange={(v) => patch("site", { email: v })} />
-                <Field label="Địa chỉ" value={site.address} onChange={(v) => patch("site", { address: v })} />
-                <Field label="Link Facebook" value={site.facebook} onChange={(v) => patch("site", { facebook: v })} />
-              </Grid>
-            </Section>
-            <Section title="SEO">
-              <Field label="Tiêu đề trang" value={site.seoTitle} onChange={(v) => patch("site", { seoTitle: v })} />
-              <Field label="Mô tả" multiline value={site.seoDescription} onChange={(v) => patch("site", { seoDescription: v })} />
             </Section>
             <Section title="Menu điều hướng" description="Href dạng #san-pham để cuộn tới section, hoặc URL đầy đủ.">
               <ListEditor

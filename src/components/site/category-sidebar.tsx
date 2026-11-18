@@ -1,3 +1,4 @@
+import { telHref } from "@/lib/verticals";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,11 +7,11 @@ import { cn } from "@/lib/utils";
 
 const linkCls = (on: boolean) =>
   cn(
-    "flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-[15px] transition-colors",
+    "flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-body transition-colors",
     on ? "bg-white font-semibold text-brand-900 shadow-soft" : "text-ink-muted hover:bg-white/70 hover:text-brand-900"
   );
 
-const Count = ({ n }: { n?: number }) => <span className="text-[13px] tabular-nums text-ink-subtle">{n ?? 0}</span>;
+const Count = ({ n }: { n?: number }) => <span className="text-caption tabular-nums text-ink-subtle">{n ?? 0}</span>;
 
 export function CategorySidebar({ active, counts, phone }: { active?: string; counts: Record<string, number>; phone: string }) {
   return (
@@ -42,10 +43,10 @@ export function CategorySidebar({ active, counts, phone }: { active?: string; co
       </nav>
 
       <div className="rounded-3xl bg-brand-900 p-6 text-white">
-        <p className="text-lg font-semibold">Chưa chắc nên chọn loại nào?</p>
-        <p className="mt-2 text-sm leading-relaxed text-white/70">Kỹ thuật viên tư vấn miễn phí theo loại cây, tuổi cây và tình trạng đất của vườn bạn.</p>
+        <p className="text-title font-semibold">Chưa chắc nên chọn loại nào?</p>
+        <p className="mt-2 text-small leading-relaxed text-white/70">Kỹ thuật viên tư vấn miễn phí theo loại cây, tuổi cây và tình trạng đất của vườn bạn.</p>
         <Button asChild variant="sun" className="mt-5 w-full">
-          <a href={`tel:${phone}`}>
+          <a href={telHref(phone)}>
             <Phone /> {phone}
           </a>
         </Button>
@@ -68,7 +69,7 @@ export function CategoryChips({ active }: { active?: string }) {
                 href={c.slug ? `/phanbon/danh-muc/${c.slug}` : "/phanbon/san-pham"}
                 aria-current={on ? "page" : undefined}
                 className={cn(
-                  "inline-flex h-10 items-center rounded-full px-4 text-sm font-medium whitespace-nowrap transition-colors",
+                  "inline-flex h-9 items-center rounded-full px-4 text-small font-medium whitespace-nowrap transition-colors",
                   on ? "bg-brand-800 text-white" : "bg-surface text-ink hover:bg-surface-strong"
                 )}
               >

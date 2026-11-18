@@ -23,8 +23,8 @@ export function NotifyToast({ status, title, description, action, link, onDismis
         <span className="sr-only">{tone.label}: </span>
       </span>
       <div className="min-w-0 flex-1 pt-0.5">
-        <p className="text-[14px] font-semibold leading-snug tracking-[-0.01em]">{title}</p>
-        {description && <p className="mt-0.5 text-[13px] leading-snug text-black/60">{description}</p>}
+        <p className="text-small font-semibold leading-snug tracking-[-0.01em]">{title}</p>
+        {description && <p className="mt-0.5 text-caption leading-snug text-black/60">{description}</p>}
         {(action || link) && (
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
             {action && (
@@ -34,13 +34,13 @@ export function NotifyToast({ status, title, description, action, link, onDismis
                   onDismiss();
                   void action.onClick();
                 }}
-                className="text-[13px] font-semibold text-[#0075de] underline-offset-2 hover:underline"
+                className="text-caption font-semibold text-[#0075de] underline-offset-2 hover:underline"
               >
                 {action.label}
               </button>
             )}
             {link && (
-              <a href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noopener" : undefined} className="inline-flex items-center gap-0.5 text-[13px] font-semibold text-[#0075de] underline-offset-2 hover:underline">
+              <a href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noopener" : undefined} className="inline-flex items-center gap-0.5 text-caption font-semibold text-[#0075de] underline-offset-2 hover:underline">
                 {link.label} {link.external && <ArrowUpRight className="size-3.5" aria-hidden />}
               </a>
             )}

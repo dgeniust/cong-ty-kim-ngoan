@@ -1,13 +1,15 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
+import { DATA_DIR_SETTING } from "@/lib/env";
 
 /**
  * Kho dữ liệu dạng file JSON trong thư mục data/ (giống lib/content/store.ts).
  * Khi triển khai lên host không ghi được file (serverless), thay module này bằng DB
  * – phần còn lại của ứng dụng chỉ phụ thuộc readJson / writeJson.
  */
-export const DATA_DIR = path.join(process.cwd(), "data");
+// turbopackIgnore: thư mục dữ liệu do biến môi trường quyết định lúc chạy – không đưa vào gói build
+export const DATA_DIR = path.resolve(/* turbopackIgnore: true */ process.cwd(), DATA_DIR_SETTING);
 
 export async function readJson(file: string): Promise<unknown | undefined> {
   try {

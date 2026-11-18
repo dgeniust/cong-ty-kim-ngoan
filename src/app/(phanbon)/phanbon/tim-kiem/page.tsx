@@ -50,7 +50,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
             defaultValue={query}
             placeholder="Tìm sản phẩm, bài viết…"
             aria-label="Từ khoá tìm kiếm"
-            className="h-14 rounded-full border-transparent bg-white pl-12 pr-32 text-base shadow-soft hover:border-transparent"
+            className="h-13 rounded-full border-transparent bg-white pl-12 pr-32 text-body shadow-soft hover:border-transparent"
           />
           <Button type="submit" variant="sun" className="absolute right-2 top-1/2 -translate-y-1/2">
             Tìm kiếm
@@ -59,10 +59,10 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
 
         {!query ? (
           <div className="mt-10">
-            <p className="text-[15px] text-ink-muted">Bà con hay tìm</p>
+            <p className="text-body text-ink-muted">Bà con hay tìm</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {SUGGESTIONS.map((s) => (
-                <Link key={s} href={`/phanbon/tim-kiem?q=${encodeURIComponent(s)}`} className="inline-flex h-10 items-center rounded-full bg-surface px-4 text-sm font-medium text-ink transition-colors hover:bg-surface-strong hover:text-brand-900">
+                <Link key={s} href={`/phanbon/tim-kiem?q=${encodeURIComponent(s)}`} className="inline-flex h-9 items-center rounded-full bg-surface px-4 text-small font-medium text-ink transition-colors hover:bg-surface-strong hover:text-brand-900">
                   {s}
                 </Link>
               ))}
@@ -71,7 +71,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
         ) : (
           <>
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
-              <p className="text-[15px] text-ink-muted" aria-live="polite">
+              <p className="text-body text-ink-muted" aria-live="polite">
                 Tìm thấy <span className="font-semibold text-brand-900">{counts["tat-ca"]}</span> kết quả cho{" "}
                 <span className="font-semibold text-brand-700">“{query}”</span>
               </p>
@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
                     href={`/phanbon/tim-kiem?q=${encodeURIComponent(query)}&loai=${t.value}`}
                     aria-current={loai === t.value ? "page" : undefined}
                     className={cn(
-                      "inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors",
+                      "inline-flex h-9 items-center rounded-full px-4 text-small font-medium transition-colors",
                       loai === t.value ? "bg-white text-brand-900 shadow-soft" : "text-ink-muted hover:text-brand-900"
                     )}
                   >
@@ -107,7 +107,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
 
             {showProducts && (
               <section className="mt-10">
-                <h2 className="mb-6 text-xl font-semibold text-brand-900">Sản phẩm ({results.products.length})</h2>
+                <h2 className="text-h4 mb-6 font-semibold text-brand-900">Sản phẩm ({results.products.length})</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4">
                   {results.products.map((p) => (
                     <ProductCard key={p.slug} product={p} />
@@ -118,7 +118,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
 
             {showArticles && (
               <section className="mt-16">
-                <h2 className="mb-6 text-xl font-semibold text-brand-900">Bài viết ({results.articles.length})</h2>
+                <h2 className="text-h4 mb-6 font-semibold text-brand-900">Bài viết ({results.articles.length})</h2>
                 <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
                   {results.articles.map((a) => (
                     <ArticleCard key={a.slug} article={a} />

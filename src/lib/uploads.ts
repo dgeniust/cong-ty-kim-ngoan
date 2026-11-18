@@ -1,6 +1,7 @@
 import path from "path";
+import { DATA_DIR } from "@/lib/store/json-file";
 
-export const UPLOAD_DIR = path.join(process.cwd(), "data", "uploads");
+export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 export const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",

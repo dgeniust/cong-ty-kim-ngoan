@@ -57,8 +57,8 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
         <span className="grid size-16 place-items-center rounded-2xl bg-white text-brand-600 shadow-soft">
           <CheckCircle2 className="size-9" aria-hidden />
         </span>
-        <h3 className="mt-5 text-xl font-semibold text-brand-900">Đã gửi lời nhắn</h3>
-        <p className="mt-2 max-w-sm text-sm text-ink-muted">
+        <h3 className="text-h4 mt-5 font-semibold text-brand-900">Đã gửi lời nhắn</h3>
+        <p className="mt-2 max-w-sm text-small text-ink-muted">
           Cảm ơn {values.name}. Kim Ngoan sẽ liên hệ lại với bạn qua số {values.phone} trong thời gian sớm nhất.
         </p>
         <Button
@@ -85,7 +85,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
   });
   const err = (k: keyof Values) =>
     errors[k] ? (
-      <p id={`contact-${k}-error`} className="text-[13px] text-destructive">
+      <p id={`contact-${k}-error`} className="text-caption text-destructive">
         {errors[k]}
       </p>
     ) : null;

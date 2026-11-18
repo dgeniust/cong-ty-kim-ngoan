@@ -18,11 +18,11 @@ export function HeroSearch() {
           type="search"
           autoComplete="off"
           placeholder="Tìm phân bón, cây trồng…"
-          className="h-14 w-full rounded-full bg-white pl-13 pr-24 text-[15px] text-ink shadow-soft outline-none placeholder:text-ink-subtle focus-visible:ring-2 focus-visible:ring-brand-500"
+          className="h-13 w-full rounded-full bg-white pl-13 pr-24 text-body text-ink shadow-soft outline-none placeholder:text-ink-subtle focus-visible:ring-2 focus-visible:ring-brand-500"
         />
         <button
           type="submit"
-          className="absolute right-1.5 top-1/2 h-11 -translate-y-1/2 rounded-full bg-brand-900 px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+          className="absolute right-1.5 top-1/2 h-11 -translate-y-1/2 rounded-full bg-brand-900 px-6 text-small font-semibold text-white transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
         >
           Tìm
         </button>
@@ -32,7 +32,7 @@ export function HeroSearch() {
           <li key={q}>
             <Link
               href={`/phanbon/tim-kiem?q=${encodeURIComponent(q)}`}
-              className="inline-flex h-9 items-center rounded-full bg-white/70 px-3.5 text-[13px] font-medium text-brand-800 transition-colors hover:bg-white"
+              className="inline-flex h-8 items-center rounded-full bg-white/70 px-3 text-caption font-medium text-brand-800 transition-colors hover:bg-white"
             >
               {q}
             </Link>

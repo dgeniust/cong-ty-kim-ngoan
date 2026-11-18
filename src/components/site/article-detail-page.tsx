@@ -1,3 +1,4 @@
+import { telHref } from "@/lib/verticals";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Phone } from "lucide-react";
@@ -18,7 +19,7 @@ import { ShareButtons } from "./share-buttons";
 function Block({ block }: { block: ArticleBlock }) {
   switch (block.type) {
     case "h2":
-      return <h2 className="mt-12 text-2xl font-bold leading-snug tracking-tight text-brand-900 md:text-[1.75rem]">{block.text}</h2>;
+      return <h2 className="text-h3 mt-12 font-bold text-brand-900">{block.text}</h2>;
     case "p":
       return <p className="mt-5">{block.text}</p>;
     case "ul":
@@ -35,7 +36,7 @@ function Block({ block }: { block: ArticleBlock }) {
     case "quote":
       return (
         <blockquote className="my-10 rounded-2xl bg-surface px-7 py-6 md:px-9 md:py-8">
-          <p className="font-script text-[1.75rem] leading-snug text-brand-800 md:text-[2rem]">{block.text}</p>
+          <p className="font-script text-h3 text-brand-800">{block.text}</p>
         </blockquote>
       );
     case "img":
@@ -44,7 +45,7 @@ function Block({ block }: { block: ArticleBlock }) {
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-surface">
             <SmartImage src={block.src} alt={block.caption ?? ""} fill sizes="(min-width: 1024px) 720px, 100vw" className="object-cover" />
           </div>
-          {block.caption && <figcaption className="mt-3 text-center text-sm text-ink-subtle">{block.caption}</figcaption>}
+          {block.caption && <figcaption className="mt-3 text-center text-small text-ink-subtle">{block.caption}</figcaption>}
         </figure>
       );
   }
@@ -82,12 +83,12 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
           <Container className="max-w-6xl">
             <Breadcrumbs items={[{ label: meta.title, href: `/phanbon/${section}` }, { label: article.title }]} />
             <div className="mt-10 max-w-3xl">
-              <Link href={`/phanbon/${section}`} className="text-sm font-medium text-brand-600 hover:text-brand-800">
+              <Link href={`/phanbon/${section}`} className="text-small font-medium text-brand-600 hover:text-brand-800">
                 {meta.title}
               </Link>
-              <h1 className="mt-3 text-[2rem] font-bold leading-[1.15] tracking-tight text-brand-900 md:text-[2.75rem]">{article.title}</h1>
-              <p className="mt-5 text-lg leading-relaxed text-ink-muted md:text-xl">{article.excerpt}</p>
-              <p className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-subtle">
+              <h1 className="text-h1 mt-3 font-bold text-brand-900">{article.title}</h1>
+              <p className="mt-5 text-lead text-ink-muted">{article.excerpt}</p>
+              <p className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-small text-ink-subtle">
                 <span className="font-medium text-ink-muted">{article.author}</span>
                 <time dateTime={article.date}>{formatDate(article.date)}</time>
                 <span>{article.readingMinutes} phút đọc</span>
@@ -115,7 +116,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
                     <li key={t}>
                       <Link
                         href={`/phanbon/tim-kiem?q=${encodeURIComponent(t)}`}
-                        className="inline-flex h-8 items-center rounded-full bg-white px-3.5 text-[13px] font-medium text-brand-800 transition-shadow hover:shadow-soft"
+                        className="inline-flex h-8 items-center rounded-full bg-white px-3.5 text-caption font-medium text-brand-800 transition-shadow hover:shadow-soft"
                       >
                         {t}
                       </Link>
@@ -129,10 +130,10 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
 
           <aside className="space-y-8 lg:sticky lg:top-28 lg:self-start" aria-label="Thông tin thêm">
             <div className="rounded-3xl bg-brand-900 p-6 text-white">
-              <p className="text-lg font-semibold">Cần kỹ thuật viên hỗ trợ?</p>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">Gọi để được tư vấn miễn phí cho vườn của bạn.</p>
+              <p className="text-title font-semibold">Cần kỹ thuật viên hỗ trợ?</p>
+              <p className="mt-2 text-small leading-relaxed text-white/70">Gọi để được tư vấn miễn phí cho vườn của bạn.</p>
               <Button asChild variant="sun" className="mt-5 w-full">
-                <a href={`tel:${site.phone}`}>
+                <a href={telHref(site.phone)}>
                   <Phone /> {site.phone}
                 </a>
               </Button>
@@ -140,7 +141,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
 
             {latest.length > 0 && (
               <div>
-                <h2 className="text-base font-semibold text-brand-900">Bài viết mới</h2>
+                <h2 className="text-h4 font-semibold text-brand-900">Bài viết mới</h2>
                 <ul className="mt-5 space-y-5">
                   {latest.map((a) => (
                     <li key={a.slug}>
@@ -149,8 +150,8 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
                           <SmartImage src={a.cover} alt="" fill sizes="72px" className="object-cover" />
                         </div>
                         <div className="min-w-0">
-                          <p className="line-clamp-2 text-[15px] font-medium leading-snug text-brand-900 group-hover:text-brand-700">{a.title}</p>
-                          <time dateTime={a.date} className="mt-1.5 block text-[13px] text-ink-subtle">
+                          <p className="line-clamp-2 text-body font-medium leading-snug text-brand-900 group-hover:text-brand-700">{a.title}</p>
+                          <time dateTime={a.date} className="mt-1.5 block text-caption text-ink-subtle">
                             {formatDate(a.date)}
                           </time>
                         </div>

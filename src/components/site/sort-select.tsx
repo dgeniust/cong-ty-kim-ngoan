@@ -18,7 +18,7 @@ export function SortSelect({ value }: { value: string }) {
   const params = useSearchParams();
   return (
     <div className="flex items-center gap-3">
-      <label htmlFor={id} className="text-sm text-ink-muted">
+      <label htmlFor={id} className="text-small text-ink-muted">
         Sắp xếp theo
       </label>
       <div className="relative">
@@ -31,7 +31,7 @@ export function SortSelect({ value }: { value: string }) {
             sp.delete("page");
             router.push(`${pathname}?${sp}`, { scroll: false });
           }}
-          className="h-10 appearance-none rounded-full bg-surface pl-4 pr-10 text-sm font-medium text-brand-900 outline-none transition-colors hover:bg-surface-strong focus-visible:ring-2 focus-visible:ring-brand-500"
+          className="h-9 appearance-none rounded-full bg-surface pl-4 pr-10 text-small font-medium text-brand-900 outline-none transition-colors hover:bg-surface-strong focus-visible:ring-2 focus-visible:ring-brand-500"
         >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>

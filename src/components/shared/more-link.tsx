@@ -8,7 +8,7 @@ export function MoreLink({ href, children, className, inverted }: { href: string
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-2 text-[15px] font-semibold underline-offset-[6px] hover:underline",
+        "group inline-flex items-center gap-2 text-body font-semibold underline-offset-[6px] hover:underline",
         inverted ? "text-white decoration-sun-300" : "text-brand-800 decoration-sun-400",
         className
       )}

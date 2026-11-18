@@ -1,3 +1,7 @@
+import { realImage } from "@/lib/og";
+import { telHref } from "@/lib/verticals";
+import { fitTitle, metaDescription } from "@/lib/seo";
+import { getSettings } from "@/lib/settings/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -19,6 +23,9 @@ import { absoluteUrl } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
+/** Sản phẩm / bài mới thêm từ admin (chưa có lúc build) vẫn mở được. */
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   return (await getFertilizerProducts()).map((p) => ({ slug: p.slug }));
 }
@@ -26,18 +33,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const p = await getProduct((await params).slug);
   if (!p) return {};
+  const { COMPANY } = await getSettings();
   const url = `/phanbon/san-pham/${p.slug}`;
+  const description = metaDescription([p.shortDescription, `${getCategory(p.categorySlug)?.name ?? "Sản phẩm"} chính hãng tại Kim Ngoan – ${COMPANY.area}`, "Tư vấn kỹ thuật miễn phí, giao tận vườn"]);
   return {
-    title: p.name,
-    description: p.shortDescription,
+    title: fitTitle(p.name, "Kim Ngoan"),
+    description,
     alternates: { canonical: url },
-    openGraph: { url, title: p.name, description: p.shortDescription, images: [p.images[0]] },
+    openGraph: { url, title: p.name, description, ...(realImage(p.images[0]) ? { images: [p.images[0]] } : {}) },
   };
 }
 
 const TRUST = [
   { icon: ShieldCheck, label: "Hàng chính hãng, có nguồn gốc rõ ràng" },
-  { icon: Truck, label: "Giao tận vườn khu vực Đồng Nai – Bình Phước" },
+  { icon: Truck, label: "Giao tận vườn khu vực {area}" },
   { icon: Sprout, label: "Kỹ thuật viên tư vấn miễn phí" },
 ];
 
@@ -51,8 +60,8 @@ const SECTIONS = [
 function Spec({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[120px_1fr] items-start gap-4 py-3.5 sm:grid-cols-[140px_1fr]">
-      <dt className="text-[15px] text-ink-muted">{label}</dt>
-      <dd className="text-[15px] font-medium text-brand-900">{children}</dd>
+      <dt className="text-body text-ink-muted">{label}</dt>
+      <dd className="text-body font-medium text-brand-900">{children}</dd>
     </div>
   );
 }
@@ -60,7 +69,7 @@ function Spec({ label, children }: { label: string; children: React.ReactNode })
 function DetailBlock({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28">
-      <h2 id={`${id}-title`} className="text-2xl font-bold tracking-tight text-brand-900">
+      <h2 id={`${id}-title`} className="text-h3 font-bold text-brand-900">
         {title}
       </h2>
       <div className="mt-5">{children}</div>
@@ -72,7 +81,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
-  const { site } = await getContent();
+  const [{ site }, { COMPANY }] = await Promise.all([getContent(), getSettings()]);
 
   const category = getCategory(product.categorySlug);
   const parent = category?.parent ? getCategory(category.parent) : undefined;
@@ -114,15 +123,15 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
           <div className="lg:pt-2">
             <div className="flex flex-wrap items-center gap-2">
               {category && (
-                <Link href={`/phanbon/danh-muc/${category.slug}`} className="text-sm font-medium text-brand-600 hover:text-brand-800">
+                <Link href={`/phanbon/danh-muc/${category.slug}`} className="text-small font-medium text-brand-600 hover:text-brand-800">
                   {category.name}
                 </Link>
               )}
               {product.isNew && <Badge variant="sun">Mới</Badge>}
               {product.featured && <Badge>Bán chạy</Badge>}
             </div>
-            <h1 className="display mt-3 text-[2rem] md:text-[2.75rem]">{product.name}</h1>
-            <p className="mt-4 text-lg leading-relaxed text-ink-muted">{product.shortDescription}</p>
+            <h1 className="text-h1 display mt-3">{product.name}</h1>
+            <p className="mt-4 text-title leading-relaxed text-ink-muted">{product.shortDescription}</p>
 
             <dl className="mt-8 rounded-2xl bg-white px-5 py-2 sm:px-6">
               <Spec label="Mã sản phẩm">
@@ -138,7 +147,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="sun" size="lg" className="sm:flex-1">
-                <a href={`tel:${site.phone}`}>
+                <a href={telHref(site.phone)}>
                   <Phone /> Gọi đặt hàng <span className="tabular-nums">{site.phone}</span>
                 </a>
               </Button>
@@ -150,8 +159,8 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             </div>
 
             <ul className="mt-8 space-y-3">
-              {TRUST.map(({ icon: Icon, label }) => (
-                <li key={label} className="flex items-center gap-3 text-[15px] text-ink-muted">
+              {TRUST.map(({ icon: Icon, label: rawLabel }) => ({ Icon, label: rawLabel.replace("{area}", COMPANY.area) })).map(({ Icon, label }) => (
+                <li key={label} className="flex items-center gap-3 text-body text-ink-muted">
                   <Icon className="size-5 shrink-0 text-brand-600" strokeWidth={1.75} aria-hidden />
                   {label}
                 </li>
@@ -170,7 +179,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
                 <li key={s.id}>
                   <a
                     href={`#${s.id}`}
-                    className="block rounded-xl px-4 py-2.5 text-[15px] text-ink-muted transition-colors hover:bg-white hover:text-brand-900"
+                    className="block rounded-xl px-4 py-2.5 text-body text-ink-muted transition-colors hover:bg-white hover:text-brand-900"
                   >
                     {s.label}
                   </a>
@@ -202,8 +211,8 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
                   <TableBody>
                     {product.ingredients.map((r) => (
                       <TableRow key={r.name} className="odd:bg-white even:bg-surface">
-                        <TableCell className="text-[15px]">{r.name}</TableCell>
-                        <TableCell className="text-right text-[15px] font-semibold tabular-nums text-brand-800">{r.value}</TableCell>
+                        <TableCell className="text-body">{r.name}</TableCell>
+                        <TableCell className="text-right text-body font-semibold tabular-nums text-brand-800">{r.value}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -214,7 +223,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             <DetailBlock id="cong-dung" title="Công dụng">
               <ul className="space-y-3.5">
                 {product.uses.map((u, i) => (
-                  <li key={i} className="flex gap-3 text-base leading-relaxed text-ink">
+                  <li key={i} className="flex gap-3 text-body leading-relaxed text-ink">
                     <Check className="mt-1 size-[18px] shrink-0 text-brand-500" strokeWidth={2.5} aria-hidden />
                     {u}
                   </li>
@@ -225,7 +234,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             <DetailBlock id="huong-dan" title="Hướng dẫn sử dụng">
               <ul className="space-y-3.5">
                 {product.usage.map((u, i) => (
-                  <li key={i} className="flex gap-3 text-base leading-relaxed text-ink">
+                  <li key={i} className="flex gap-3 text-body leading-relaxed text-ink">
                     <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-sun-500" aria-hidden />
                     {u}
                   </li>

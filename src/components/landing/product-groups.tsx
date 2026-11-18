@@ -23,10 +23,10 @@ export function ProductGroups({ products }: { products: SiteContent["products"] 
     <section id="san-pham" aria-labelledby="san-pham-title" className="bg-white py-20 md:py-28">
       <Container>
         <div className="max-w-2xl">
-          <h2 id="san-pham-title" className="display text-[2rem] md:text-[2.75rem]">
+          <h2 id="san-pham-title" className="text-h2 display">
             {products.title}
           </h2>
-          {products.subtitle && <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">{products.subtitle}</p>}
+          {products.subtitle && <p className="mt-4 text-lead text-ink-muted">{products.subtitle}</p>}
         </div>
 
         <div className="mt-14 space-y-16 md:mt-20 md:space-y-24">
@@ -52,15 +52,15 @@ export function ProductGroups({ products }: { products: SiteContent["products"] 
                 </Link>
 
                 <div className="relative">
-                  <h3 className="display text-[1.75rem] md:text-[2.25rem]">{p.title}</h3>
-                  {group?.description && <p className="mt-4 max-w-md text-base leading-relaxed text-ink-muted">{group.description}</p>}
+                  <h3 className="text-h3 display">{p.title}</h3>
+                  {group?.description && <p className="mt-4 max-w-md text-body leading-relaxed text-ink-muted">{group.description}</p>}
                   {p.bullets.length > 0 && (
                     <ul className="mt-7 max-w-md">
                       {p.bullets.map((b, j) => (
                         <li key={j}>
                           <Link
                             href={categoryHref(b)}
-                            className="group flex min-h-12 items-center justify-between gap-4 rounded-xl px-1 text-[15px] font-medium text-brand-900 transition-colors hover:bg-surface hover:px-3"
+                            className="group flex min-h-12 items-center justify-between gap-4 rounded-xl px-1 text-body font-medium text-brand-900 transition-colors hover:bg-surface hover:px-3"
                           >
                             <span className="flex items-center gap-3">
                               <span className="size-1.5 rounded-full bg-brand-500" aria-hidden />

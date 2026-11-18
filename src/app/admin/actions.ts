@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { IS_PROD } from "@/lib/env";
 import { revalidatePath } from "next/cache";
 import { authenticate, requireAdmin } from "@/lib/auth/server";
 import { SESSION_COOKIE, signSession } from "@/lib/auth/session";
@@ -22,13 +23,21 @@ export async function loginAction(_prev: ActionResult | null, formData: FormData
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
   const next = String(formData.get("next") ?? "/admin");
-  const session = authenticate(email, password);
-  if (!session || session.role !== "ADMIN") return { ok: false, error: "Email hoặc mật khẩu không đúng" };
+  let session: ReturnType<typeof authenticate>;
+  let token: string;
+  try {
+    session = authenticate(email, password);
+    if (!session || session.role !== "ADMIN") return { ok: false, error: "Email hoặc mật khẩu không đúng" };
+    token = await signSession(session);
+  } catch (e) {
+    console.error(e);
+    return { ok: false, error: "Máy chủ chưa cấu hình tài khoản quản trị (ADMIN_EMAIL, ADMIN_PASSWORD, AUTH_SECRET). Liên hệ bộ phận kỹ thuật." };
+  }
 
-  (await cookies()).set(SESSION_COOKIE, await signSession(session), {
+  (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: IS_PROD,
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
   });

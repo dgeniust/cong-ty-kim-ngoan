@@ -1,5 +1,6 @@
 "use client";
 
+import { telHref } from "@/lib/verticals";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,7 +44,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
     <>
       <a
         href="#noi-dung"
-        className="sr-only z-[60] rounded-full bg-brand-900 px-5 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-[60] rounded-full bg-brand-900 px-5 py-3 text-small font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Bỏ qua đến nội dung chính
       </a>
@@ -56,7 +57,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
               scrolled ? "shadow-lift" : "shadow-soft",
             )}
           >
-            <Link href="/phanbon" aria-label={`${site.companyPrefix} ${site.companyName} – Trang chủ`} className="shrink-0 rounded-lg">
+            <Link href="/phanbon" className="shrink-0 rounded-lg">
               <Logo
                 prefix={site.companyPrefix}
                 name={site.companyName}
@@ -76,7 +77,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "rounded-full px-4 py-2 text-[15px] font-medium transition-colors",
+                      "rounded-full px-4 py-2 text-body font-medium transition-colors",
                       active ? "bg-brand-50 text-brand-900" : "text-ink-muted hover:text-brand-900",
                     )}
                   >
@@ -93,7 +94,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
                 </Link>
               </Button>
               <Button asChild variant="sun" className="hidden lg:inline-flex">
-                <a href={`tel:${site.phone}`} aria-label={`Gọi ${site.phone}`}>
+                <a href={telHref(site.phone)} aria-label={`Gọi ${site.phone}`}>
                   <Phone className="size-4" />
                   <span className="tabular-nums">{site.phone}</span>
                 </a>
@@ -126,7 +127,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "rounded-xl px-4 py-4 text-lg font-medium transition-colors",
+                        "rounded-xl px-4 py-4 text-title font-medium transition-colors",
                         active ? "bg-white text-brand-900" : "text-ink hover:bg-white",
                       )}
                     >
@@ -136,7 +137,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
                 })}
               </nav>
               <Button asChild variant="sun" size="lg" className="mt-6">
-                <a href={`tel:${site.phone}`}>
+                <a href={telHref(site.phone)}>
                   <Phone /> Gọi {site.phone}
                 </a>
               </Button>

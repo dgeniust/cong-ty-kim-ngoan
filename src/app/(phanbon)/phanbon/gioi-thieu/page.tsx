@@ -3,7 +3,7 @@ import { ArticleListPage } from "@/components/site/article-list-page";
 
 export const metadata: Metadata = {
   title: "Giới thiệu",
-  description: "Câu chuyện, sứ mệnh và đội ngũ kỹ thuật của Công ty TNHH Kim Ngoan.",
+  description: "Câu chuyện, sứ mệnh và đội ngũ kỹ thuật của Công ty TNHH Kim Ngoan – đại lý phân bón & thuốc BVTV đồng hành cùng nhà nông Chơn Thành – Đồng Nai.",
   alternates: { canonical: "/phanbon/gioi-thieu" },
 };
 

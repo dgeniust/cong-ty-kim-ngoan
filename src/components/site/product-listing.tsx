@@ -1,3 +1,4 @@
+import { telHref } from "@/lib/verticals";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/container";
@@ -80,7 +81,7 @@ export async function ProductListing({ title, description, crumbs, basePath, cat
         <div className="min-w-0">
           <CategoryChips active={categorySlug} />
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-[15px] text-ink-muted" aria-live="polite">
+            <p className="text-body text-ink-muted" aria-live="polite">
               <span className="font-semibold text-brand-900">{filtered.length}</span> sản phẩm
             </p>
             <SortSelect value={sort} />
@@ -97,7 +98,7 @@ export async function ProductListing({ title, description, crumbs, basePath, cat
                 <Link href="/phanbon/san-pham">Xem tất cả sản phẩm</Link>
               </Button>
               <Button asChild variant="outline">
-                <a href={`tel:${site.phone}`}>Gọi {site.phone}</a>
+                <a href={telHref(site.phone)}>Gọi {site.phone}</a>
               </Button>
             </EmptyState>
           )}

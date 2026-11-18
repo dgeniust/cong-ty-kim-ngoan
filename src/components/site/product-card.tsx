@@ -27,8 +27,8 @@ export function ProductCard({ product, headingLevel = "h3" }: { product: Product
         )}
       </div>
       <div className="flex flex-1 flex-col pt-4 sm:pt-5">
-        {category && <p className="text-[13px] font-medium text-brand-600">{category}</p>}
-        <Heading className="mt-1.5 text-[15px] font-semibold leading-snug text-brand-900 sm:text-[17px]">
+        {category && <p className="text-caption font-medium text-brand-600">{category}</p>}
+        <Heading className="mt-1.5 text-body font-semibold text-brand-900 sm:text-title">
           <Link
             href={href}
             className="after:absolute after:inset-0 after:rounded-2xl after:content-[''] group-hover:text-brand-700 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-brand-500 focus-visible:after:ring-offset-4"
@@ -36,8 +36,8 @@ export function ProductCard({ product, headingLevel = "h3" }: { product: Product
             {product.name}
           </Link>
         </Heading>
-        <p className="mt-2 line-clamp-2 hidden text-sm leading-relaxed text-ink-muted sm:block">{product.shortDescription}</p>
-        <p className="mt-auto pt-2 text-[13px] text-ink-subtle sm:pt-3">{product.packing.join(" / ")}</p>
+        <p className="mt-2 line-clamp-2 hidden text-small leading-relaxed text-ink-muted sm:block">{product.shortDescription}</p>
+        <p className="mt-auto pt-2 text-caption text-ink-subtle sm:pt-3">{product.packing.join(" / ")}</p>
       </div>
     </article>
   );

@@ -22,7 +22,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Đường dẫn">
       <JsonLd data={structured} />
-      <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-ink-subtle">
+      <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-caption text-ink-subtle">
         {trail.map((c, i) => (
           <li key={i} className="flex min-w-0 items-center gap-1.5">
             {i > 0 && <ChevronRight className="size-3.5 shrink-0 opacity-60" aria-hidden />}
