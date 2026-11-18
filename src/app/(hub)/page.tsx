@@ -123,6 +123,14 @@ export default async function HubHome() {
 
   const heroSectors: HeroSector[] = VERTICAL_LIST.map((v) => {
     const d = data.find((x) => x.id === v.id)!;
+    let image;
+    if(v.id === "satthep") {
+      image = "/hero-steel.png";
+    } else if(v.id === "lopxe") {
+      image = "/hero-tyre.jpg";
+    } else {
+      image = "/hero-img.jpg";
+    }
     return {
       id: v.id,
       audience: AUDIENCE[v.id],
@@ -133,7 +141,7 @@ export default async function HubHome() {
       href: v.base,
       url: `kimngoan.com${v.base}`,
       phone: v.phone,
-      image: v.id === "phanbon" ? "/hero-img.jpg" : undefined,
+      image: image,
       art: v.id === "phanbon" ? undefined : ART[v.id],
       groups: d.groups,
       products: d.products,
@@ -268,13 +276,10 @@ export default async function HubHome() {
                     ) : (
                       <>
                         {c.id === "satthep" && (
-                          <>
-                            <div aria-hidden className="hub-dots absolute inset-0 opacity-60" />
-                            <div aria-hidden className="absolute right-[14%] top-[14%] h-[42%] w-[40%] rotate-6 rounded-xl bg-satthep-ink" />
-                          </>
+                          <Image src="/item-steel.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />
                         )}
-                        {c.id === "lopxe" && <div aria-hidden className="absolute left-[18%] top-[10%] size-[64%] rounded-full bg-lopxe-orange" />}
-                        <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-500 ease-soft group-hover:-rotate-6 group-hover:scale-105" />
+                        {c.id === "lopxe" && <Image src="/item-tyre.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />}
+                        {/* <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-500 ease-soft group-hover:-rotate-6 group-hover:scale-105" /> */}
                       </>
                     )}
                     <p className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-md bg-hub-paper px-2.5 py-1 text-[12px] text-hub-ink">
