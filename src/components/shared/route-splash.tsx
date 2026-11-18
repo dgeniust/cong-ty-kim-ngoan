@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 /**
  * Splash nhẹ khi CHUYỂN GIỮA CÁC KHU: landing tổng ↔ phân bón ↔ lốp xe ↔ sắt thép.
@@ -13,7 +12,7 @@ import { cn } from "@/lib/utils";
 export type SplashSection = "hub" | "phanbon" | "lopxe" | "satthep";
 export type SplashBrand = { prefix: string; name: string; sections: Record<SplashSection, { title: string; tagline: string }> };
 
-const MIN_MS = 550;
+const MIN_MS = 1050; // đủ để chạy trọn chuyển động logo (~0.9s)
 const MAX_MS = 6000;
 const OUT_MS = 260;
 
@@ -106,90 +105,66 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
       role="status"
       aria-live="polite"
       data-state={leaving ? "out" : "in"}
-      className={cn("splash fixed inset-0 z-[100] grid place-items-center", T.bg)}
+      className="splash fixed inset-0 z-[100] grid place-items-center"
+      style={{ background: T.bg }}
     >
       <span className="sr-only">Đang mở {info.title}…</span>
-      <div aria-hidden className="flex flex-col items-center px-6 text-center">
-        <div className="splash-rise">{T.mark}</div>
-        <p className={cn("splash-rise mt-6 logo-prefix", T.muted)} style={{ animationDelay: "80ms" }}>
-          {brand.prefix} {brand.name}
-        </p>
-        <p className={cn("splash-rise mt-2 text-h3 font-semibold", T.fg)} style={{ animationDelay: "120ms" }}>
-          {info.title}
-        </p>
-        <p className={cn("splash-rise mt-1.5 max-w-xs text-small", T.muted)} style={{ animationDelay: "160ms" }}>
-          {info.tagline}
-        </p>
-        <span className={cn("mt-7 block h-[3px] w-40 overflow-hidden rounded-full", T.track)}>
-          <span className={cn("splash-bar block h-full w-full rounded-full", T.bar)} />
-        </span>
+      <div aria-hidden className="flex flex-col items-center px-6">
+        <Wordmark color={T.ink} />
+        {target !== "hub" && (
+          <span className="splash-tag mt-7 inline-flex h-8 items-center rounded-full px-3.5 text-caption font-semibold" style={{ background: T.tagBg, color: T.tagFg }}>
+            {info.title}
+          </span>
+        )}
       </div>
     </div>
   );
 }
 
-/* ---------- 4 dấu hiệu chuyển động, vẽ bằng SVG/CSS (không tải ảnh) ---------- */
+/* =====================================================================
+ * Logo chữ “kim ngoan” – nét đơn, đầu tròn (theo video tham khảo):
+ *  1. Cận cảnh: nét bút vẽ liền một hơi cụm “ng” (n → vòng nối → bầu g → móc đuôi)
+ *  2. Camera lùi ra; m-i-k bật vào từ trái, o-a-n từ phải, so le từ giữa ra ngoài
+ *  3. Tag tên ngành hiện dưới logo
+ * Toạ độ: đường cơ sở y=100, chiều cao chữ x = 100, nét 24.
+ * ===================================================================== */
+const STROKE = 24;
+type Glyph = { x: number; d: string; dot?: [number, number]; side: "l" | "r"; order: number };
+const GLYPHS: Glyph[] = [
+  { x: 0, d: "M12,-55 V100 M62,2 L12,64 M32,42 L64,100", side: "l", order: 2 }, // k
+  { x: 96, d: "M12,0 V100", dot: [12, -42], side: "l", order: 1 }, // i
+  { x: 138, d: "M12,100 V44 Q12,0 50,0 Q88,0 88,44 V100 M88,44 Q88,0 126,0 Q164,0 164,44 V100", side: "l", order: 0 }, // m
+  { x: 608, d: "M112,50 A50,50 0 1 1 12,50 A50,50 0 1 1 112,50", side: "r", order: 0 }, // o
+  { x: 750, d: "M112,50 A50,50 0 1 1 12,50 A50,50 0 1 1 112,50 M112,0 V100", side: "r", order: 1 }, // a
+  { x: 892, d: "M12,100 V44 Q12,0 52,0 Q92,0 92,44 V100", side: "r", order: 2 }, // n
+];
+// “ng” vẽ liền: thân n → vòm → chân phải → nối vòng lên bầu g → đi trọn vòng → thân g → móc đuôi
+const NG =
+  "M12,100 V44 Q12,0 52,0 Q92,0 92,44 V80 Q92,102 106,102 Q120,102 120,82 V50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 A50,50 0 0 1 170,100 A50,50 0 0 1 120,50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 V125 Q220,170 176,170 Q142,170 126,152";
+const NG_X = 362;
 
-const HubMarkAnimated = (
-  <svg viewBox="0 0 48 48" className="size-20">
-    <rect width="48" height="48" rx="12" fill="#000" />
-    <path d="M14 12v24M14 24l12-12M14 24l12 12" stroke="#fff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" strokeDasharray="60" style={{ ["--len" as string]: 60, animation: "splash-draw 380ms 40ms cubic-bezier(.6,0,.2,1) both" }} />
-    {(["#2e9e4f", "#ff6b1a", "#a1a1aa"] as const).map((c, i) => (
-      <circle key={c} cx="34" cy={14 + i * 10} r="4" fill={c} style={{ transformBox: "fill-box", transformOrigin: "center", animation: `splash-pop 300ms ${240 + i * 70}ms cubic-bezier(.34,1.56,.64,1) both` }} />
-    ))}
-  </svg>
-);
-
-const SproutAnimated = (
-  <svg viewBox="0 0 64 64" className="size-20" fill="none">
-    <circle cx="32" cy="32" r="31" fill="#f6e27a" opacity="0.12" />
-    <path d="M14 50h36" stroke="#c7e1ae" strokeWidth="3" strokeLinecap="round" opacity="0.6" />
-    <path d="M32 50V28" stroke="#c7e1ae" strokeWidth="3.5" strokeLinecap="round" style={{ transformBox: "fill-box", transformOrigin: "bottom", animation: "splash-grow 300ms 40ms cubic-bezier(.2,.8,.2,1) both" }} />
-    <path d="M32 34c0-8 6-13 15-13 0 9-6 14-15 13Z" fill="#6db33f" style={{ transformBox: "fill-box", transformOrigin: "0% 100%", animation: "splash-leaf 320ms 220ms cubic-bezier(.34,1.56,.64,1) both" }} />
-    <path d="M32 38c0-7-5-11-12-11 0 7 5 11 12 11Z" fill="#a3cd82" style={{ transformBox: "fill-box", transformOrigin: "100% 100%", animation: "splash-leaf 320ms 300ms cubic-bezier(.34,1.56,.64,1) both" }} />
-  </svg>
-);
-
-const TyreAnimated = (
-  <div className="relative">
-    <svg viewBox="0 0 64 64" className="size-20" style={{ animation: "splash-spin 900ms linear infinite" }}>
-      <circle cx="32" cy="32" r="29" fill="#1a1a1a" stroke="#2a2a2a" strokeWidth="2" />
-      {Array.from({ length: 16 }, (_, i) => (
-        <rect key={i} x="30.5" y="2" width="3" height="7" rx="1" fill="#3a3a3a" transform={`rotate(${i * 22.5} 32 32)`} />
-      ))}
-      <circle cx="32" cy="32" r="15" fill="none" stroke="#a1a1aa" strokeWidth="3" />
-      {Array.from({ length: 5 }, (_, i) => (
-        <path key={i} d="M32 32V18" stroke="#d4d4d8" strokeWidth="3" strokeLinecap="round" transform={`rotate(${i * 72} 32 32)`} />
-      ))}
-      <circle cx="32" cy="32" r="3.5" fill="#ff6b1a" />
-    </svg>
-    {/* vệt đường chạy */}
-    <svg viewBox="0 0 120 6" className="absolute -bottom-3 left-1/2 w-28 -translate-x-1/2 overflow-hidden">
-      <g style={{ animation: "splash-road 300ms linear infinite" }}>
-        {Array.from({ length: 8 }, (_, i) => (
-          <rect key={i} x={i * 24} y="2" width="12" height="2" rx="1" fill="#ff6b1a" opacity="0.6" />
+function Wordmark({ color }: { color: string }) {
+  return (
+    // khung zoom: bắt đầu phóng to quanh cụm “ng”, rồi lùi về kích thước thật
+    <div className="splash-zoom w-[min(520px,78vw)]" style={{ transformOrigin: "48% 47%" }}>
+      <svg viewBox="-4 -72 1004 258" className="block w-full overflow-visible" fill="none" stroke={color} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">
+        <path d={NG} transform={`translate(${NG_X} 0)`} pathLength={1} className="splash-draw" />
+        {GLYPHS.map((g, i) => (
+          <g key={i} transform={`translate(${g.x} 0)`}>
+            <g className={g.side === "l" ? "splash-letter-l" : "splash-letter-r"} style={{ animationDelay: `${430 + g.order * 55}ms` }}>
+              <path d={g.d} />
+              {g.dot && <circle cx={g.dot[0]} cy={g.dot[1]} r={14} fill={color} stroke="none" />}
+            </g>
+          </g>
         ))}
-      </g>
-    </svg>
-  </div>
-);
+      </svg>
+    </div>
+  );
+}
 
-const BeamsAnimated = (
-  <svg viewBox="0 0 64 64" className="size-20">
-    <rect x="1" y="1" width="62" height="62" rx="12" fill="#fff" stroke="rgb(0 0 0 / 0.08)" />
-    {[0, 1, 2].map((i) => (
-      <g key={i} style={{ animation: `splash-slide 320ms ${40 + i * 80}ms cubic-bezier(.2,.8,.2,1) both` }}>
-        <rect x="12" y={16 + i * 12} width="40" height="3" rx="1" fill="#111" />
-        <rect x="12" y={22 + i * 12} width="40" height="3" rx="1" fill="#111" />
-        <rect x="30.5" y={18 + i * 12} width="3" height="5" fill="#52525b" />
-      </g>
-    ))}
-  </svg>
-);
-
-const THEME: Record<SplashSection, { bg: string; fg: string; muted: string; track: string; bar: string; mark: React.ReactNode }> = {
-  hub: { bg: "bg-hub-canvas", fg: "text-hub-ink", muted: "text-hub-ink-soft", track: "bg-hub-ink/10", bar: "bg-hub-blue", mark: HubMarkAnimated },
-  phanbon: { bg: "bg-brand-900", fg: "text-white", muted: "text-brand-200", track: "bg-white/15", bar: "bg-sun-300", mark: SproutAnimated },
-  lopxe: { bg: "bg-lopxe-ink", fg: "text-white", muted: "text-white/60", track: "bg-white/10", bar: "bg-lopxe-orange", mark: TyreAnimated },
-  satthep: { bg: "bg-satthep-soft", fg: "text-satthep-ink", muted: "text-black/60", track: "bg-black/10", bar: "bg-satthep-ink", mark: BeamsAnimated },
+const THEME: Record<SplashSection, { bg: string; ink: string; tagBg: string; tagFg: string }> = {
+  hub: { bg: "#f6f5f4", ink: "#111111", tagBg: "#111111", tagFg: "#ffffff" },
+  phanbon: { bg: "#f4f7f1", ink: "#1c5424", tagBg: "#1c5424", tagFg: "#f6e27a" },
+  lopxe: { bg: "#0a0a0a", ink: "#ff6b1a", tagBg: "#ff6b1a", tagFg: "#0a0a0a" },
+  satthep: { bg: "#f1f1f2", ink: "#3f3f46", tagBg: "#111111", tagFg: "#ffffff" },
 };
