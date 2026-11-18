@@ -8,6 +8,12 @@ import { categories, getCategory } from "@/lib/mock/categories";
 
 type Params = Promise<{ slug: string }>;
 
+/**
+ * Danh mục cố định trong code. Không đặt loading.tsx cho nhánh này: trang render động (đọc ?page, ?sap-xep)
+ * nên skeleton sẽ được gửi trước khi biết slug sai → mã 200 thay vì 404.
+ */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
 }

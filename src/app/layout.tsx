@@ -8,6 +8,7 @@ import "@fontsource/be-vietnam-pro/latin-500.css";
 import "@fontsource/be-vietnam-pro/latin-600.css";
 import "@fontsource/be-vietnam-pro/latin-700.css";
 import "./globals.css";
+import { RouteSplash, type SplashBrand } from "@/components/shared/route-splash";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_URL } from "@/lib/site";
 import { getSettings } from "@/lib/settings/server";
@@ -32,7 +33,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { COMPANY, VERTICALS } = await getSettings();
+  const splash: SplashBrand = {
+    prefix: COMPANY.prefix,
+    name: COMPANY.name,
+    sections: {
+      hub: { title: "Phân bón · Lốp xe · Sắt thép", tagline: COMPANY.slogan },
+      phanbon: { title: VERTICALS.phanbon.name, tagline: VERTICALS.phanbon.tagline },
+      lopxe: { title: VERTICALS.lopxe.name, tagline: VERTICALS.lopxe.tagline },
+      satthep: { title: VERTICALS.satthep.name, tagline: VERTICALS.satthep.tagline },
+    },
+  };
   return (
     <html lang="vi">
       <body>
@@ -41,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <style>{".reveal{opacity:1!important;transform:none!important}"}</style>
         </noscript>
         {children}
+        <RouteSplash brand={splash} />
         <Toaster />
       </body>
     </html>
