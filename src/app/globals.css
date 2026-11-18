@@ -264,9 +264,14 @@
   }
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+    /* KHÔNG dùng scroll-padding-top trên <html>: router Next coi trang mới “nằm ngoài màn hình”
+       khi nội dung bắt đầu cao hơn giá trị này → tự cuộn xuống giữa trang sau khi chuyển trang. */
     -webkit-text-size-adjust: 100%;
     @apply font-sans;
+  }
+  /* Chừa chỗ cho header dính khi nhảy tới neo #… (thay cho scroll-padding-top của html) */
+  [id] {
+    scroll-margin-top: 6rem;
   }
   body {
     @apply bg-background text-ink antialiased;
