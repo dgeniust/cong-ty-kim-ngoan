@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 export type DeskCrop = { key: string; name: string; description: string; image: string };
 export type DeskArticle = { href: string; title: string; excerpt: string; date: string; tags: string[] };
 
+const getMonth = () => new Date().getMonth() + 1; // số nguyên → ổn định giữa các lần gọi
 const STORE = "kn-vuon"; // nhớ cây bà con đã chọn cho lần sau
 const KIND: Record<StageKind, string> = { bon: "Bón phân", bvtv: "Phòng sâu bệnh", thu: "Thu hoạch", cham: "Chăm sóc" };
 const DOT: Record<StageKind, string> = { bon: "bg-brand-500", bvtv: "bg-[#f0a37a]", thu: "bg-sun-300", cham: "bg-[#8cc4f0]" };
@@ -55,7 +56,7 @@ export function CropDesk({
   phone: string;
 }) {
   const stored = useSyncExternalStore(subscribe, readStore, () => null);
-  const month = useSyncExternalStore(subscribe, () => new Date().getMonth() + 1, () => serverMonth);
+  const month = useSyncExternalStore(subscribe, getMonth, () => serverMonth);
   const [picked, setPicked] = useState<string | null>(null);
   const panel = useRef<HTMLDivElement>(null);
   const valid = (k: string | null) => (k && crops.some((c) => c.key === k) ? k : null);

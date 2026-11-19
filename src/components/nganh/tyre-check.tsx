@@ -5,6 +5,10 @@ import { AlertTriangle, CalendarClock, CheckCircle2, Ruler } from "lucide-react"
 import { cn } from "@/lib/utils";
 
 const noop = () => () => {};
+// Mốc “bây giờ” phía client: lấy MỘT lần rồi giữ nguyên — getSnapshot của useSyncExternalStore
+// phải trả cùng giá trị giữa các lần gọi, trả Date.now() mới mỗi lần sẽ gây vòng render vô hạn.
+let clientNow: number | undefined;
+const getNow = () => (clientNow ??= Date.now());
 
 type Verdict = { level: 0 | 1 | 2 | 3; title: string; text: string };
 const TONE = ["text-[#7ee2a8]", "text-v-fg", "text-[#ffb47a]", "text-v-accent"];
@@ -81,7 +85,7 @@ function TreadSection({ mm }: { mm: number }) {
  * Kết quả xấu → mời đặt lịch thay (#dat-lich).
  */
 export function TyreCheck({ serverNow }: { serverNow: number }) {
-  const now = useSyncExternalStore(noop, () => Date.now(), () => serverNow);
+  const now = useSyncExternalStore(noop, getNow, () => serverNow);
   const [code, setCode] = useState("2321");
   const [mm, setMm] = useState(3.5);
   const age = ageOf(code, now);

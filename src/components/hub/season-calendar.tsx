@@ -15,6 +15,7 @@ const KIND: Record<StageKind, { label: string; bar: string; dot: string }> = {
   cham: { label: "Chăm sóc", bar: "bg-hub-sky", dot: "bg-hub-sky" },
 };
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+const getMonth = () => new Date().getMonth() + 1; // số nguyên → ổn định giữa các lần gọi
 const noop = () => () => {};
 
 /** đoạn thanh trên lưới 12 tháng; giai đoạn vắt qua năm mới tách làm 2 đoạn */
@@ -27,7 +28,7 @@ function segments(from: number, to: number): [number, number][] {
  * Tháng hiện tại được tô sáng (lấy theo đồng hồ máy người xem); bấm tháng khác để xem việc của tháng đó.
  */
 export function SeasonCalendar({ serverMonth }: { serverMonth: number }) {
-  const now = useSyncExternalStore(noop, () => new Date().getMonth() + 1, () => serverMonth);
+  const now = useSyncExternalStore(noop, getMonth, () => serverMonth);
   const [cropId, setCropId] = useState(CROPS[0].id);
   const [picked, setPicked] = useState<number | null>(null);
   const month = picked ?? now;
