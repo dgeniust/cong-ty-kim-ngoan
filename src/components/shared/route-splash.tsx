@@ -1,5 +1,6 @@
 "use client";
 
+import { Wordmark } from "@/components/shared/wordmark";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -110,7 +111,7 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
     >
       <span className="sr-only">Đang mở {info.title}…</span>
       <div aria-hidden className="flex flex-col items-center px-6">
-        <Wordmark color={T.ink} />
+        <SplashWordmark color={T.ink} />
         {target !== "hub" && (
           <span className="splash-tag mt-7 inline-flex h-8 items-center rounded-full px-3.5 text-caption font-semibold" style={{ background: T.tagBg, color: T.tagFg }}>
             {info.title}
@@ -121,43 +122,11 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
   );
 }
 
-/* =====================================================================
- * Logo chữ “kim ngoan” – nét đơn, đầu tròn (theo video tham khảo):
- *  1. Cận cảnh: nét bút vẽ liền một hơi cụm “ng” (n → vòng nối → bầu g → móc đuôi)
- *  2. Camera lùi ra; m-i-k bật vào từ trái, o-a-n từ phải, so le từ giữa ra ngoài
- *  3. Tag tên ngành hiện dưới logo
- * Toạ độ: đường cơ sở y=100, chiều cao chữ x = 100, nét 24.
- * ===================================================================== */
-const STROKE = 24;
-type Glyph = { x: number; d: string; dot?: [number, number]; side: "l" | "r"; order: number };
-const GLYPHS: Glyph[] = [
-  { x: 0, d: "M12,-55 V100 M62,2 L12,64 M32,42 L64,100", side: "l", order: 2 }, // k
-  { x: 96, d: "M12,0 V100", dot: [12, -42], side: "l", order: 1 }, // i
-  { x: 138, d: "M12,100 V44 Q12,0 50,0 Q88,0 88,44 V100 M88,44 Q88,0 126,0 Q164,0 164,44 V100", side: "l", order: 0 }, // m
-  { x: 608, d: "M112,50 A50,50 0 1 1 12,50 A50,50 0 1 1 112,50", side: "r", order: 0 }, // o
-  { x: 750, d: "M112,50 A50,50 0 1 1 12,50 A50,50 0 1 1 112,50 M112,0 V100", side: "r", order: 1 }, // a
-  { x: 892, d: "M12,100 V44 Q12,0 52,0 Q92,0 92,44 V100", side: "r", order: 2 }, // n
-];
-// “ng” vẽ liền: thân n → vòm → chân phải → nối vòng lên bầu g → đi trọn vòng → thân g → móc đuôi
-const NG =
-  "M12,100 V44 Q12,0 52,0 Q92,0 92,44 V80 Q92,102 106,102 Q120,102 120,82 V50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 A50,50 0 0 1 170,100 A50,50 0 0 1 120,50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 V125 Q220,170 176,170 Q142,170 126,152";
-const NG_X = 362;
-
-function Wordmark({ color }: { color: string }) {
+/** Khung zoom: bắt đầu phóng to quanh cụm “ng”, rồi lùi về kích thước thật. */
+function SplashWordmark({ color }: { color: string }) {
   return (
-    // khung zoom: bắt đầu phóng to quanh cụm “ng”, rồi lùi về kích thước thật
-    <div className="splash-zoom w-[min(520px,78vw)]" style={{ transformOrigin: "48% 47%" }}>
-      <svg viewBox="-4 -72 1004 258" className="block w-full overflow-visible" fill="none" stroke={color} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">
-        <path d={NG} transform={`translate(${NG_X} 0)`} pathLength={1} className="splash-draw" />
-        {GLYPHS.map((g, i) => (
-          <g key={i} transform={`translate(${g.x} 0)`}>
-            <g className={g.side === "l" ? "splash-letter-l" : "splash-letter-r"} style={{ animationDelay: `${430 + g.order * 55}ms` }}>
-              <path d={g.d} />
-              {g.dot && <circle cx={g.dot[0]} cy={g.dot[1]} r={14} fill={color} stroke="none" />}
-            </g>
-          </g>
-        ))}
-      </svg>
+    <div className="splash-zoom w-[min(520px,78vw)]" style={{ transformOrigin: "48% 47%", color }}>
+      <Wordmark animate className="w-full" />
     </div>
   );
 }

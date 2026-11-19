@@ -213,3 +213,36 @@ Chạy song song `fe/uiux` và `fe/vuon-xanh-v1`, cho 3–5 người mua thật 
 3. Gửi yêu cầu tư vấn.
 
 Style được giữ lại nếu cả 3 việc xong < 30 giây mà không cần hướng dẫn.
+
+---
+
+## 11. Landing tổng `/` – bố cục v1.1 (kiểu tạp chí)
+
+Nhánh `fe/notion-style-v1.1`. **Giữ nguyên theme Notion của landing tổng** (nền giấy `hub-canvas`, thẻ trắng viền 1px, bo 12px, không gradient, một màu xanh `hub-blue` cho hành động chính, mảng màu phẳng marigold / sky / peach / midnight). Chỉ đổi bố cục để bớt cảm giác “template”.
+
+### Nguyên tắc
+1. **Không tô nền chữ trong tiêu đề**, không nhãn viên màu đầu mỗi khối.
+2. Mỗi khối mở bằng **đường kẻ đậm + số thứ tự + tên mục** (`Kicker`), tiêu đề lớn căn trái (7/12 cột), lời dẫn bên phải (4/12 cột).
+3. Logo chữ **“kim ngoan”** (`components/shared/wordmark.tsx`) dùng chung cho splash, header, masthead, footer.
+4. Câu chữ cụ thể, có tên đất, tên cây; số liệu viết thành câu thay cho hàng ô số.
+
+### Thứ tự khối
+| # | Khối | File | Ghi chú |
+|---|---|---|---|
+| – | Masthead | `app/(hub)/page.tsx` | dòng thông tin như đầu tờ báo → logo chữ hết chiều ngang (vẽ nét khi tải) → H1 + lời dẫn + 2 nút |
+| – | Ba cánh cửa | `components/hub/hub-doors.tsx` | 3 ảnh dọc; rê chuột/tab tới cửa nào cửa đó nở rộng, hiện nhóm hàng; di động xếp 3 dải |
+| – | Số liệu thành câu + thương hiệu | page | |
+| 01 | Sản phẩm | `product-browser.tsx` | giữ nguyên |
+| 02 | Lịch mùa vụ | `components/hub/season-calendar.tsx` | chọn cây → biểu đồ 12 tháng; tháng hiện tại tô sáng, bấm tháng khác để xem; khung xanh đêm liệt kê việc của tháng + link danh mục phân/thuốc |
+| 03 | Giao hàng | `components/hub/delivery-map.tsx` | 3 vòng giao hàng quanh Chơn Thành, QL13/QL14, địa danh; + 4 bước mua hàng dạng dòng kẻ |
+| 04 | Về Kim Ngoan | page | ảnh lớn có chú thích (dính khi cuộn) · câu chuyện · thông tin · 3 cam kết |
+| 05 | Tin tức | page | bài chính lớn + mục lục bài khác |
+| 06 | Hỏi đáp | page | |
+| 07 | Liên hệ | page | “đảo tối” xanh đêm duy nhất, thêm nút Chỉ đường |
+
+Số thứ tự tự đánh lại khi một khối bị ẩn (ví dụ chưa có tin tức).
+
+### Nội dung cần xác nhận
+Dữ liệu lịch mùa vụ và vùng giao hàng nằm ở `src/lib/content/hub-extras.ts`:
+- lịch mùa vụ là **lịch tham khảo** vùng Đông Nam Bộ – nhờ kỹ thuật viên duyệt lại;
+- thời gian giao theo vòng (trong ngày / 1–2 ngày / theo hẹn) là **đề xuất** – sửa đúng cam kết thật trước khi chạy chính thức.

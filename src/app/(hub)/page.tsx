@@ -2,16 +2,18 @@ import { BUTTON_SIZES } from "@/lib/ui";
 import { SITE_HOST } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Clock, Handshake, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Truck, Users } from "lucide-react";
-import { CountUp } from "@/components/hub/count-up";
-import { HubHero, type HeroSector } from "@/components/hub/hub-hero";
+import { ArrowRight, ArrowUpRight, Clock, MapPin, MessageCircle, Phone, Share2 } from "lucide-react";
+import { DeliveryMap } from "@/components/hub/delivery-map";
+import { HubDoors, type Door } from "@/components/hub/hub-doors";
 import { HubNewsCard } from "@/components/hub/hub-news-card";
 import { ProductBrowser, type BrowserTab } from "@/components/hub/product-browser";
-import { ProductArt } from "@/components/nganh/product-art";
+import { SeasonCalendar } from "@/components/hub/season-calendar";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
+import { Wordmark } from "@/components/shared/wordmark";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { getBrands, getCategories, getFeatured, getProducts } from "@/lib/data/catalog";
+import { getBrands, getCategories, getProducts } from "@/lib/data/catalog";
+import { formatDate } from "@/lib/format";
 import { getNews } from "@/lib/data/news";
 import { categories as pbCategories, categoryGroups as pbGroups, getCategory as getPbCategory } from "@/lib/mock/categories";
 import type { Product } from "@/lib/mock/types";
@@ -26,19 +28,19 @@ import { cn } from "@/lib/utils";
  *  - một màu xanh #0075de duy nhất cho hành động chính, hành động phụ dùng nền xanh nhạt;
  *  - màu sắc nằm ở các mảng phẳng (vàng, xanh trời, đào, xanh đêm) như giấy note;
  *  - chuyển động 200ms, riêng các dấu trang trí được nhún/bật cho sinh động.
+ * Bố cục v1.1 – kiểu tạp chí: masthead logo chữ lớn → “ba cánh cửa” vào 3 chuyên trang → các khối
+ * mở đầu bằng đường kẻ + số thứ tự (không dùng nhãn viên màu, không tô nền chữ trong tiêu đề).
  * Màu ngành giữ khớp chuyên trang: phân bón = xanh lá, lốp xe = đen + cam, sắt thép = trắng + xám + chữ đen.
  */
 
 const WRAP = "mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10"; // khớp lề với header
-const H2 = "mt-3 max-w-3xl text-h2 font-semibold text-hub-ink";
 const CARD = "rounded-xl border border-hub-line bg-hub-paper";
 const BTN = `inline-flex items-center gap-2 rounded-lg font-medium transition-colors duration-200 ${BUTTON_SIZES.md}`;
 const BTN_PRIMARY = `${BTN} group bg-hub-blue text-white hover:bg-hub-blue-hover`;
 const BTN_GHOST = `${BTN} bg-hub-blue-tint text-hub-blue hover:bg-[#d4eafd]`;
 const BTN_TEXT = `${BTN} text-hub-ink/90 hover:bg-hub-ink/5`;
 const DOT: Record<VerticalId, string> = { phanbon: "bg-sector-phanbon", lopxe: "bg-sector-lopxe", satthep: "bg-sector-satthep" };
-const STAGE: Record<VerticalId, string> = { phanbon: "bg-brand-900", lopxe: "bg-lopxe-ink", satthep: "bg-satthep-soft" };
-const ART = { lopxe: "tyre-at", satthep: "ibeam" } as const;
+const DOOR_IMAGE: Record<VerticalId, string> = { phanbon: "/hero-img.jpg", lopxe: "/hero-tyre.jpg", satthep: "/hero-steel.png" };
 const AUDIENCE: Record<VerticalId, string> = { phanbon: "nhà nông", lopxe: "chủ xe", satthep: "nhà thầu" };
 
 /** Thương hiệu phân bón lấy từ phác thảo của khách; lốp xe & sắt thép lấy từ dữ liệu sản phẩm. */
@@ -48,16 +50,13 @@ type SectorData = {
   id: VerticalId;
   count: number;
   groups: { name: string; href: string }[];
-  products: { name: string; meta: string; href: string }[];
 };
 
 async function sectorData(pbProducts: Product[]): Promise<SectorData[]> {
-  const pbTop = [...pbProducts].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 3);
   const phanbon: SectorData = {
     id: "phanbon",
     count: pbProducts.length,
     groups: pbGroups.flatMap((g) => g.children.slice(0, 2)).map((c) => ({ name: c.name, href: `/phanbon/danh-muc/${c.slug}` })),
-    products: pbTop.map((p) => ({ name: p.name, meta: p.packing.join(" / "), href: `/phanbon/san-pham/${p.slug}` })),
   };
   const catalogs = await Promise.all(
     CATALOG_SITES.map(async (site): Promise<SectorData> => {
@@ -66,7 +65,6 @@ async function sectorData(pbProducts: Product[]): Promise<SectorData[]> {
         id: site,
         count: (await getProducts(site)).length,
         groups: getCategories(site).slice(0, 4).map((c) => ({ name: c.name, href: `${base}/san-pham?nhom=${c.slug}` })),
-        products: (await getFeatured(site, 3)).map((p) => ({ name: p.name, meta: p.keySpec, href: `${base}/san-pham/${p.slug}` })),
       };
     }),
   );
@@ -90,27 +88,31 @@ async function browserTabs(pbProducts: Product[], VERTICALS: Settings["VERTICALS
   return [phanbon, ...catalogs];
 }
 
-/** Nhãn đầu khối: viên màu nhỏ (kiểu tag Notion). */
-function Tag({ children, tone = "bg-hub-marigold-soft" }: { children: React.ReactNode; tone?: string }) {
-  return <p className={cn("inline-flex items-center rounded-full px-3 py-1 text-caption font-medium text-hub-ink", tone)}>{children}</p>;
-}
-
-function SectionHead({ id, tag, tone, title, lead, action, center }: { id: string; tag: string; tone?: string; title: React.ReactNode; lead?: string; action?: React.ReactNode; center?: boolean }) {
+/** Đầu khối kiểu tạp chí: đường kẻ đậm + số thứ tự + tên mục, rồi tiêu đề lớn (trái) và lời dẫn (phải). */
+function Kicker({ no, children, tone = "text-hub-ink" }: { no: string; children: React.ReactNode; tone?: string }) {
   return (
-    <Reveal className={cn("mb-10 flex flex-wrap items-end gap-6 md:mb-14", center ? "flex-col items-center text-center" : "justify-between")}>
-      <div className={cn(center && "flex flex-col items-center")}>
-        <Tag tone={tone}>{tag}</Tag>
-        <h2 id={id} className={H2}>{title}</h2>
-        {lead && <p className="mt-4 max-w-xl text-lead leading-relaxed text-hub-ink-soft">{lead}</p>}
-      </div>
-      {action}
-    </Reveal>
+    <p className={cn("flex items-center justify-between gap-4 border-t border-current pt-3 text-caption", tone)}>
+      <span className="font-semibold tabular-nums">{no}</span>
+      <span className="opacity-70">{children}</span>
+    </p>
   );
 }
 
-/** Từ được bọc trong viên màu – dấu hiệu chữ ký của phong cách Notion. */
-function Pill({ children, tone }: { children: React.ReactNode; tone: string }) {
-  return <span className={cn("inline-block rounded-full px-[0.35em] leading-[1.15]", tone)}>{children}</span>;
+function SectionHead({ id, no, kicker, title, lead, action }: { id: string; no: string; kicker: string; title: React.ReactNode; lead?: React.ReactNode; action?: React.ReactNode }) {
+  return (
+    <Reveal className="mb-10 md:mb-14">
+      <Kicker no={no}>{kicker}</Kicker>
+      <div className="mt-7 grid gap-5 lg:mt-9 lg:grid-cols-12 lg:items-end lg:gap-8">
+        <h2 id={id} className="text-h1 font-semibold text-hub-ink lg:col-span-7">{title}</h2>
+        {(lead || action) && (
+          <div className="lg:col-span-4 lg:col-start-9">
+            {lead && <p className="text-lead leading-relaxed text-hub-ink-soft">{lead}</p>}
+            {action && <div className={cn(lead && "mt-5")}>{action}</div>}
+          </div>
+        )}
+      </div>
+    </Reveal>
+  );
 }
 
 export default async function HubHome() {
@@ -121,62 +123,35 @@ export default async function HubHome() {
   const tabs = await browserTabs(pbProducts, VERTICALS);
   const brands = [...PHANBON_BRANDS, ...(await Promise.all(CATALOG_SITES.map((s) => getBrands(s)))).flat()].filter((b, i, a) => a.indexOf(b) === i);
   const productCount = data.reduce((n, c) => n + c.count, 0);
-  const years = new Date().getFullYear() - Number(COMPANY.founded);
+  const month = Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()));
 
-  const heroSectors: HeroSector[] = VERTICAL_LIST.map((v) => {
+  const doors: Door[] = VERTICAL_LIST.map((v) => {
     const d = data.find((x) => x.id === v.id)!;
-    let image;
-    if(v.id === "satthep") {
-      image = "/hero-steel.png";
-    } else if(v.id === "lopxe") {
-      image = "/hero-tyre.jpg";
-    } else {
-      image = "/hero-img.jpg";
-    }
-    return {
-      id: v.id,
-      audience: AUDIENCE[v.id],
-      short: v.short,
-      name: v.name,
-      tagline: v.tagline,
-      description: v.description,
-      href: v.base,
-      url: `${SITE_HOST}${v.base}`,
-      phone: v.phone,
-      image: image,
-      art: v.id === "phanbon" ? undefined : ART[v.id],
-      groups: d.groups,
-      products: d.products,
-    };
+    return { id: v.id, name: v.name, audience: AUDIENCE[v.id], description: v.description, href: v.base, host: `${SITE_HOST}${v.base}`, phone: v.phone, image: DOOR_IMAGE[v.id], count: d.count, groups: d.groups };
   });
 
-  const stats = [
-    { value: VERTICAL_LIST.length, suffix: "", label: "Ngành hàng thiết yếu", tone: "bg-hub-mint-soft" },
-    { value: productCount, suffix: "+", label: "Sản phẩm trên website", tone: "bg-hub-marigold-soft" },
-    { value: brands.length, suffix: "", label: "Thương hiệu phân phối", tone: "bg-hub-sky-soft" },
-    { value: years, suffix: "+", label: `Năm đồng hành, từ ${COMPANY.founded}`, tone: "bg-hub-coral-soft" },
-  ];
-
-  /** Bento 2 hàng: ô rộng – ô hẹp / ô hẹp – ô rộng; mỗi ô một mảng màu phẳng. */
-  const reasons = [
-    { icon: ShieldCheck, title: "Hàng chính hãng", text: "Nguồn gốc rõ ràng, có tem bảo hành và chứng chỉ theo từng ngành hàng. Không bán hàng trôi nổi, không bán hàng tồn kho lâu năm.", tone: "bg-hub-marigold text-hub-ink", span: "lg:col-span-2", art: "rebar" as const },
-    { icon: Handshake, title: "Giá minh bạch", text: "Báo giá rõ ràng theo ngày và theo số lượng, trước khi giao hàng.", tone: "bg-hub-sky text-hub-ink" },
-    { icon: Truck, title: "Giao tận nơi", text: `Tận vườn, tận xe, tận công trình trong khu vực ${COMPANY.area}.`, tone: "bg-hub-peach text-hub-ink" },
-    { icon: Users, title: "Tư vấn đúng nhu cầu", text: "Mỗi ngành một bộ phận chuyên trách và một số điện thoại riêng — gọi đúng người, được trả lời đúng chuyên môn.", tone: "bg-hub-midnight text-white", span: "lg:col-span-2", art: "tyre" as const },
-  ];
+  /** số thứ tự các khối – tự đánh lại khi một khối bị ẩn (ví dụ chưa có tin tức) */
+  let n = 0;
+  const no = () => String(++n).padStart(2, "0");
 
   const steps = [
-    { title: "Gọi hoặc nhắn Zalo", text: "Chọn đúng số của ngành hàng bạn cần, gửi nhu cầu hoặc quy cách.", ring: "border-hub-signal" },
-    { title: "Nhận tư vấn và báo giá", text: "Nhân viên tư vấn loại hàng phù hợp và báo giá theo ngày.", ring: "border-hub-coral" },
-    { title: "Giao hàng tận nơi", text: "Giao tận vườn, tận xe, tận công trình trong khu vực.", ring: "border-hub-marigold" },
-    { title: "Đồng hành sau bán", text: "Hỗ trợ kỹ thuật và bảo hành theo chính sách của từng hãng.", ring: "border-sector-phanbon" },
+    { title: "Gọi hoặc nhắn Zalo", text: "Chọn đúng số của ngành hàng bạn cần, gửi nhu cầu hoặc quy cách." },
+    { title: "Nhận tư vấn, báo giá", text: "Nhân viên tư vấn loại hàng phù hợp và báo giá theo ngày, theo số lượng." },
+    { title: "Giao tận nơi", text: "Xếp xe theo vòng giao hàng ở trên, báo trước giờ đến." },
+    { title: "Đồng hành sau bán", text: "Hỗ trợ kỹ thuật và bảo hành theo chính sách của từng hãng." },
+  ];
+
+  const promises = [
+    { title: "Hàng chính hãng", text: "Nguồn gốc rõ ràng, có tem bảo hành và chứng chỉ theo từng ngành hàng. Không bán hàng trôi nổi." },
+    { title: "Giá minh bạch", text: "Báo giá rõ ràng theo ngày và theo số lượng, trước khi giao hàng." },
+    { title: "Gọi đúng người", text: "Mỗi ngành một bộ phận chuyên trách và một số điện thoại riêng, trả lời đúng chuyên môn." },
   ];
 
   const facts = [
     { label: "Thành lập", value: COMPANY.founded },
-    { label: "Lĩnh vực", value: "Phân bón & thuốc BVTV, lốp xe ô tô, tôn – sắt thép" },
     { label: "Địa bàn", value: COMPANY.address },
-    { label: "Khách hàng", value: "Nhà nông, chủ xe, đội xe vận tải, nhà thầu và chủ công trình" },
+    { label: "Ngành hàng", value: "Phân bón & thuốc BVTV, lốp xe ô tô, tôn – sắt thép" },
+    { label: "Khách hàng", value: "Nhà nông, chủ xe, đội xe vận tải, nhà thầu" },
   ];
 
   const faqs = [
@@ -203,6 +178,9 @@ export default async function HubHome() {
     { icon: Share2, label: "Facebook", href: COMPANY.facebook },
   ];
 
+  const [lead, ...rest] = news;
+  const B = "font-semibold text-hub-ink"; // chữ nhấn trong câu số liệu
+
   return (
     <>
       <JsonLd
@@ -213,257 +191,212 @@ export default async function HubHome() {
         }}
       />
 
-      {/* 1. Hero – căn giữa: dấu tròn → tiêu đề có viên màu → 2 nút → cửa sổ xem trước chuyên trang */}
-      <section id="top" aria-labelledby="hero-title" className={cn(WRAP, "pb-16 pt-12 md:pb-24 md:pt-16")}>
-        <HubHero
-          sectors={heroSectors}
-          lead={
-            <p className="text-lead text-hub-ink-soft">
-              {COMPANY.legalName} kinh doanh <strong className="font-medium text-hub-ink">phân bón & thuốc BVTV</strong>, <strong className="font-medium text-hub-ink">lốp xe ô tô</strong> và{" "}
-              <strong className="font-medium text-hub-ink">tôn – sắt thép</strong> tại {COMPANY.address}. Hàng chính hãng, giá minh bạch, giao tận nơi.
+      {/* 1. Masthead: dòng thông tin như đầu tờ báo → logo chữ cỡ lớn → tiêu đề + lời dẫn */}
+      <section id="top" aria-labelledby="hero-title" className={cn(WRAP, "pt-4 md:pt-6")}>
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-hub-ink pb-3 text-caption text-hub-ink">
+          <span className="font-semibold">{COMPANY.legalName}</span>
+          <span className="hidden text-hub-ink-soft sm:inline">{COMPANY.area} · Từ năm {COMPANY.founded}</span>
+          <a href={telHref(COMPANY.hotline)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-hub-blue">
+            <Phone className="size-3.5" aria-hidden /> {COMPANY.hotline}
+          </a>
+        </div>
+        <Wordmark animate delay={120} className="mt-6 h-auto w-full text-hub-ink md:mt-10" />
+        <div className="mt-8 grid gap-6 border-t border-hub-line pt-6 md:mt-12 lg:grid-cols-12 lg:items-end lg:gap-8 lg:pt-8">
+          <h1 id="hero-title" className="text-display font-semibold text-hub-ink lg:col-span-8">
+            <span className="sr-only">{COMPANY.legalName}: </span>
+            Phân bón cho rẫy, lốp cho xe, thép cho công trình.
+          </h1>
+          <div className="lg:col-span-4">
+            <p className="text-lead leading-relaxed text-hub-ink-soft">
+              Ba ngành hàng thiết yếu của bà con {COMPANY.area}, chung một địa chỉ. Hàng chính hãng, báo giá theo ngày, giao tận nơi.
             </p>
-          }
-          actions={
-            <>
+            <div className="mt-5 flex flex-wrap gap-2">
               <Link href="#san-pham" className={BTN_PRIMARY}>
                 Xem sản phẩm <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
               </Link>
               <a href={telHref(COMPANY.hotline)} className={BTN_GHOST}>
-                <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
+                <Phone className="size-4" aria-hidden /> Gọi hotline
               </a>
-            </>
-          }
-        />
-      </section>
-
-      {/* 2. Số liệu */}
-      <section aria-label="Kim Ngoan qua các con số" className={WRAP}>
-        <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <Reveal key={s.label} delay={i * 70} className={cn(CARD, "p-6 sm:p-7")}>
-              <dt className="sr-only">{s.label}</dt>
-              <dd className="text-h2 font-semibold tabular-nums text-hub-ink">
-                <CountUp value={s.value} suffix={s.suffix} />
-              </dd>
-              <dd className="mt-4">
-                <span className={cn("inline-block rounded-full px-2.5 py-1 text-caption font-medium text-hub-ink", s.tone)}>{s.label}</span>
-              </dd>
-            </Reveal>
-          ))}
-        </dl>
-      </section>
-
-      {/* 3. Ba chuyên trang */}
-      <section id="linh-vuc" aria-labelledby="linh-vuc-title" className={cn(WRAP, "scroll-mt-24 py-20 md:py-28")}>
-        <SectionHead
-          id="linh-vuc-title"
-          tag="Lĩnh vực kinh doanh"
-          tone="bg-hub-mint-soft"
-          title={
-            <>
-              Ba chuyên trang, <Pill tone="bg-hub-peach">một</Pill> Kim Ngoan
-            </>
-          }
-          lead="Mỗi ngành có website, đội ngũ và số điện thoại riêng để bạn được phục vụ đúng chuyên môn."
-        />
-        <ul className="grid gap-4 lg:grid-cols-3">
-          {data.map((c, i) => {
-            const v = VERTICALS[c.id];
-            return (
-              <Reveal as="li" key={c.id} delay={i * 90} className="h-full">
-                <article className={cn(CARD, "group relative flex h-full flex-col overflow-hidden transition-colors duration-200 hover:border-hub-ink/20")}>
-                  <div className={cn("relative m-2 mb-0 aspect-[16/10] overflow-hidden rounded-lg", STAGE[c.id])}>
-                    {c.id === "phanbon" ? (
-                      <Image src="/fertilize-img.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />
-                    ) : (
-                      <>
-                        {c.id === "satthep" && (
-                          <Image src="/item-steel.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />
-                        )}
-                        {c.id === "lopxe" && <Image src="/item-tyre.jpg" alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-soft group-hover:scale-[1.03]" />}
-                        {/* <ProductArt kind={ART[c.id]} className="absolute inset-0 m-auto !size-[70%] transition-transform duration-500 ease-soft group-hover:-rotate-6 group-hover:scale-105" /> */}
-                      </>
-                    )}
-                    <p className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-md bg-hub-paper px-2.5 py-1 text-micro text-hub-ink">
-                      <span aria-hidden className={cn("size-2 rounded-full", DOT[c.id])} /> {SITE_HOST}{v.base}
-                    </p>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <p className="text-caption tabular-nums text-hub-ink/60">0{i + 1} · {c.count} sản phẩm</p>
-                    <h3 className="text-h3 mt-1.5 font-semibold text-hub-ink">
-                      <Link href={v.base} className="after:absolute after:inset-0 after:content-['']">{v.name}</Link>
-                    </h3>
-                    <p className="mt-2 text-body leading-relaxed text-hub-ink-soft">{v.description}</p>
-                    <ul className="relative z-10 mb-6 mt-5 flex flex-wrap gap-1.5">
-                      {c.groups.map((g) => (
-                        <li key={g.href}>
-                          <Link href={g.href} className="inline-flex h-8 items-center rounded-full bg-hub-canvas px-3 text-caption text-hub-ink/80 transition-colors duration-200 hover:bg-hub-stone hover:text-hub-ink">
-                            {g.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="relative z-10 mt-auto flex items-center justify-between gap-4 border-t border-hub-line pt-4">
-                      <a href={telHref(v.phone)} className="flex items-center gap-2 text-body font-medium tabular-nums text-hub-ink hover:text-hub-blue">
-                        <Phone className="size-4" aria-hidden /> {v.phone}
-                      </a>
-                      <span className="inline-flex items-center gap-1 text-small font-medium text-hub-blue">
-                        Vào chuyên trang <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            );
-          })}
-        </ul>
-      </section>
-
-      {/* 4. Thương hiệu – "tường logo" chữ xám, nền trắng hết chiều ngang */}
-      <section aria-labelledby="thuong-hieu-title" className="border-y border-hub-line bg-hub-paper py-12">
-        <div className={WRAP}>
-          <p id="thuong-hieu-title" className="text-center text-small text-hub-ink/55">Phân phối chính hãng các thương hiệu</p>
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
-            {brands.map((b, i) => (
-              <Reveal as="li" key={b} delay={i * 40} className="text-h3 font-semibold tracking-[-0.03em] text-hub-ink/60 transition-colors duration-200 hover:text-hub-ink">
-                {b}
-              </Reveal>
-            ))}
-          </ul>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 5. Lý do chọn – bento mảng màu phẳng */}
-      <section aria-labelledby="ly-do-title" className={cn(WRAP, "py-20 md:py-28")}>
-        <SectionHead
-          id="ly-do-title"
-          tag="Vì sao chọn Kim Ngoan"
-          tone="bg-hub-sky-soft"
-          center
-          title={
-            <>
-              Mua một lần, <Pill tone="bg-hub-marigold">yên tâm</Pill> lâu dài
-            </>
-          }
-        />
-        <ul className="grid gap-4 lg:grid-cols-3">
-          {reasons.map((r, i) => (
-            <Reveal as="li" key={r.title} delay={i * 80} className={cn("h-full", r.span)}>
-              <div className={cn("group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-xl p-7 sm:p-8", r.tone)}>
-                <r.icon className="size-8 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-12 group-hover:scale-110" strokeWidth={1.75} aria-hidden />
-                <h3 className="text-h3 mt-auto pt-10 font-semibold !text-current">{r.title}</h3>
-                <p className={cn("mt-2 max-w-md text-body leading-relaxed", r.tone.includes("text-white") ? "text-white/75" : "text-hub-ink/75")}>{r.text}</p>
-                {r.art && <ProductArt kind={r.art} className="absolute -bottom-8 -right-6 hidden !size-48 opacity-90 transition-transform duration-500 ease-soft group-hover:-rotate-12 sm:block" />}
-              </div>
-            </Reveal>
-          ))}
-        </ul>
+      {/* 2. Ba cánh cửa vào 3 chuyên trang */}
+      <section id="linh-vuc" aria-label="Ba chuyên trang của Kim Ngoan" className={cn(WRAP, "scroll-mt-24 pt-8 md:pt-12")}>
+        <HubDoors doors={doors} />
       </section>
 
-      {/* 6. Sản phẩm: chọn ngành → hãng/nhóm → sản phẩm */}
+      {/* 3. Số liệu viết thành câu + thương hiệu */}
+      <section aria-label="Kim Ngoan qua các con số" className={cn(WRAP, "py-20 md:py-28")}>
+        <Reveal>
+          <p className="max-w-4xl text-h2 font-medium text-hub-ink/45">
+            Từ <span className={cn(B, "tabular-nums")}>{COMPANY.founded}</span>, Kim Ngoan phân phối <span className={cn(B, "tabular-nums")}>{productCount}+ sản phẩm</span> của{" "}
+            <span className={cn(B, "tabular-nums")}>{brands.length} thương hiệu</span> trong <span className={B}>{VERTICAL_LIST.length} ngành hàng</span>, giao tận vườn, tận xe, tận công trình quanh{" "}
+            <span className={B}>{COMPANY.area}</span>.
+          </p>
+        </Reveal>
+        <Reveal delay={100} className="mt-10 grid gap-3 border-t border-hub-line pt-5 md:grid-cols-[12rem_1fr] md:gap-8">
+          <p className="text-caption text-hub-ink-soft">Phân phối chính hãng</p>
+          <ul className="flex flex-wrap gap-x-2 gap-y-1 text-title font-semibold text-hub-ink/70">
+            {brands.map((b, i) => (
+              <li key={b} className="after:ml-2 after:text-hub-ink/25 after:content-['·'] last:after:content-none">
+                <span className={cn("transition-colors duration-200 hover:text-hub-ink", i < 3 && "text-hub-ink")}>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </section>
+
+      {/* 4. Sản phẩm: chọn ngành → hãng/nhóm → sản phẩm */}
       <section id="san-pham" aria-labelledby="san-pham-title" className="scroll-mt-24 border-y border-hub-line bg-hub-paper py-20 md:py-28">
         <div className={WRAP}>
-          <SectionHead
-            id="san-pham-title"
-            tag="Sản phẩm"
-            tone="bg-hub-marigold-soft"
-            title={
-              <>
-                Chọn ngành hàng, <Pill tone="bg-hub-sky-soft">xem ngay</Pill> sản phẩm
-              </>
-            }
-            lead="Lọc theo nhóm hàng hoặc thương hiệu, bấm vào sản phẩm để xem thông số và liên hệ báo giá."
-          />
+          <SectionHead id="san-pham-title" no={no()} kicker="Sản phẩm" title="Tìm đúng hàng, theo ngành và thương hiệu" lead="Lọc theo nhóm hàng hoặc thương hiệu, bấm vào sản phẩm để xem thông số và liên hệ báo giá." />
           <ProductBrowser tabs={tabs} />
         </div>
       </section>
 
-      {/* 7. Giới thiệu (chữ trái – mảng màu chứa ảnh phải) + quy trình */}
-      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className={cn(WRAP, "scroll-mt-24 py-20 md:py-28")}>
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <Reveal>
-            <Tag tone="bg-hub-coral-soft">Về chúng tôi</Tag>
-            <h2 id="gioi-thieu-title" className={H2}>
-              Từ đại lý vật tư nông nghiệp đến <Pill tone="bg-hub-peach">ba ngành hàng</Pill>
-            </h2>
-            <p className="mt-6 max-w-xl text-lead leading-relaxed text-hub-ink-soft">
-              Khởi đầu là đại lý vật tư nông nghiệp, Kim Ngoan mở rộng sang lốp xe ô tô và tôn – sắt thép để phục vụ trọn nhu cầu sản xuất, vận tải và xây dựng của bà con trong vùng.
-            </p>
-            <dl className={cn(CARD, "mt-8 divide-y divide-hub-line")}>
-              {facts.map((f) => (
-                <div key={f.label} className="grid grid-cols-[7.5rem_1fr] gap-4 px-5 py-3.5">
-                  <dt className="text-small text-hub-ink/55">{f.label}</dt>
-                  <dd className="text-body font-medium text-hub-ink">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-          <Reveal delay={100} className="relative rounded-xl bg-hub-marigold p-6 sm:p-10">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg shadow-[var(--shadow-hub-ui)]">
-              <Image src="/garden.jpg" alt="Vườn cây của bà con trong vùng" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-            </div>
-            <div className="absolute -bottom-5 left-6 rounded-lg border border-hub-line bg-hub-paper px-5 py-4 shadow-[var(--shadow-hub-ui)] sm:left-10">
-              <p className="text-h2 font-semibold tabular-nums text-hub-ink">{COMPANY.founded}</p>
-              <p className="mt-1.5 text-caption text-hub-ink-soft">Năm thành lập · {COMPANY.address}</p>
-            </div>
-          </Reveal>
-        </div>
+      {/* 5. Lịch mùa vụ */}
+      <section id="mua-vu" aria-labelledby="mua-vu-title" className={cn(WRAP, "scroll-mt-24 py-20 md:py-28")}>
+        <SectionHead
+          id="mua-vu-title"
+          no={no()}
+          kicker="Lịch mùa vụ"
+          title="Tháng này, vườn của bạn cần gì?"
+          lead="Chọn cây trồng để xem lịch bón phân, phòng bệnh và thu hoạch cả năm, kèm loại phân, thuốc phù hợp cho từng việc."
+        />
+        <Reveal>
+          <SeasonCalendar serverMonth={month} />
+        </Reveal>
+      </section>
 
-        <div className="mt-24 md:mt-28">
-          <SectionHead id="quy-trinh-title" tag="Quy trình mua hàng" tone="bg-hub-mint-soft" title="Bốn bước, từ cuộc gọi đến khi nhận hàng" />
-          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 6. Vùng giao hàng + quy trình */}
+      <section id="giao-hang" aria-labelledby="giao-hang-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28")}>
+        <SectionHead
+          id="giao-hang-title"
+          no={no()}
+          kicker="Giao hàng"
+          title="Giao tận vườn, tận xe, tận công trình"
+          lead={`Ba vòng giao hàng tính từ cửa hàng ở ${COMPANY.area}. Chọn từng vòng để xem khu vực và thời gian nhận hàng.`}
+        />
+        <Reveal>
+          <DeliveryMap storeLabel={COMPANY.area} />
+        </Reveal>
+        <div className="mt-16 md:mt-20">
+          <h3 className="text-h4 font-semibold text-hub-ink">Mua hàng trong bốn bước</h3>
+          <ol className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
-              <Reveal as="li" key={s.title} delay={i * 90} className={cn(CARD, "group p-6")}>
-                <span className={cn("grid size-11 place-items-center rounded-full border-2 bg-hub-paper text-small font-semibold tabular-nums text-hub-ink transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110", s.ring)}>
-                  {i + 1}
-                </span>
-                <h3 className="text-title mt-6 font-semibold text-hub-ink">{s.title}</h3>
-                <p className="mt-2 text-body leading-relaxed text-hub-ink-soft">{s.text}</p>
+              <Reveal as="li" key={s.title} delay={i * 80} className="border-t-2 border-hub-ink pt-4">
+                <p className="text-caption font-semibold tabular-nums text-hub-ink-soft">Bước {i + 1}</p>
+                <p className="text-title mt-2 font-semibold text-hub-ink">{s.title}</p>
+                <p className="mt-1.5 text-body leading-relaxed text-hub-ink-soft">{s.text}</p>
               </Reveal>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* 8. Tin tức mới nhất của cả 3 chuyên trang */}
-      {news.length > 0 && (
-        <section id="tin-tuc" aria-labelledby="tin-tuc-title" className="scroll-mt-24 border-y border-hub-line bg-hub-paper py-20 md:py-28">
-          <div className={WRAP}>
-            <SectionHead
-              id="tin-tuc-title"
-              tag="Tin tức"
-              tone="bg-hub-sky-soft"
-              title="Mới nhất từ Kim Ngoan"
-              action={
-                <Link href="/tin-tuc" className={cn(BTN_TEXT, "group border border-hub-line")}>
-                  Tất cả tin tức <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-                </Link>
-              }
-            />
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
-              {news.map((n, i) => (
-                <Reveal key={n.href} delay={i * 60} className={cn("flex", i === 0 && "md:col-span-2 lg:col-span-1 lg:row-span-2")}>
-                  <HubNewsCard item={n} large={i === 0} />
+      {/* 7. Về Kim Ngoan: ảnh lớn có chú thích – câu chuyện, thông tin, cam kết */}
+      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 border-y border-hub-line bg-hub-paper py-20 md:py-28">
+        <div className={cn(WRAP, "grid gap-12 lg:grid-cols-12 lg:gap-8")}>
+          <Reveal className="lg:col-span-6">
+            <figure className="lg:sticky lg:top-28">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-hub-stone lg:aspect-[5/6]">
+                <Image src="/garden.jpg" alt="Vườn cây trong vùng Chơn Thành" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+              </div>
+              <figcaption className="mt-3 flex justify-between gap-4 text-caption text-hub-ink-soft">
+                <span>Vườn cây trong vùng {COMPANY.area}</span>
+                <span className="tabular-nums">Từ {COMPANY.founded}</span>
+              </figcaption>
+            </figure>
+          </Reveal>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <Reveal>
+              <Kicker no={no()}>Về Kim Ngoan</Kicker>
+              <h2 id="gioi-thieu-title" className="mt-7 text-h1 font-semibold text-hub-ink">Từ đại lý vật tư nông nghiệp đến ba ngành hàng</h2>
+              <p className="mt-6 text-lead leading-relaxed text-hub-ink-soft">
+                Khởi đầu là đại lý vật tư nông nghiệp, Kim Ngoan mở rộng sang lốp xe ô tô và tôn – sắt thép để phục vụ trọn nhu cầu sản xuất, vận tải và xây dựng của bà con trong vùng.
+              </p>
+              <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-hub-line pt-6">
+                {facts.map((f) => (
+                  <div key={f.label}>
+                    <dt className="text-caption text-hub-ink-soft">{f.label}</dt>
+                    <dd className="mt-1 text-body font-medium text-hub-ink">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+            <h3 className="mt-14 text-h4 font-semibold text-hub-ink">Ba điều Kim Ngoan giữ</h3>
+            <ol className="mt-4">
+              {promises.map((p, i) => (
+                <Reveal as="li" key={p.title} delay={i * 80} className="grid grid-cols-[2.5rem_1fr] gap-3 border-t border-hub-line py-5">
+                  <span className="text-caption font-semibold tabular-nums text-hub-ink-soft">0{i + 1}</span>
+                  <span>
+                    <span className="text-title block font-semibold text-hub-ink">{p.title}</span>
+                    <span className="mt-1 block text-body leading-relaxed text-hub-ink-soft">{p.text}</span>
+                  </span>
                 </Reveal>
               ))}
-            </div>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Tin tức: bài chính lớn bên trái, các bài khác dạng mục lục bên phải */}
+      {lead && (
+        <section id="tin-tuc" aria-labelledby="tin-tuc-title" className={cn(WRAP, "scroll-mt-24 py-20 md:py-28")}>
+          <SectionHead
+            id="tin-tuc-title"
+            no={no()}
+            kicker="Tin tức"
+            title="Mới nhất từ Kim Ngoan"
+            action={
+              <Link href="/tin-tuc" className={cn(BTN_TEXT, "group border border-hub-line")}>
+                Tất cả tin tức <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+              </Link>
+            }
+          />
+          <div className="grid gap-8 lg:grid-cols-12">
+            <Reveal className="flex lg:col-span-7">
+              <HubNewsCard item={lead} large />
+            </Reveal>
+            <ol className="lg:col-span-5">
+              {rest.map((item, i) => (
+                <Reveal as="li" key={item.href} delay={i * 60} className="group relative border-t border-hub-line py-5 first:border-t-hub-ink first:pt-4 lg:first:pt-0 lg:first:border-t-0">
+                  <p className="flex items-center gap-2.5 text-caption text-hub-ink-soft">
+                    <span className="inline-flex items-center gap-1.5 font-medium text-hub-ink">
+                      <span aria-hidden className={cn("size-2 rounded-full", DOT[item.site])} /> {VERTICALS[item.site].short}
+                    </span>
+                    <time dateTime={item.date}>{formatDate(item.date)}</time>
+                  </p>
+                  <h3 className="text-title mt-1.5 font-semibold leading-snug text-hub-ink">
+                    <Link href={item.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-hub-blue">
+                      {item.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-small leading-relaxed text-hub-ink-soft">{item.excerpt}</p>
+                </Reveal>
+              ))}
+            </ol>
           </div>
         </section>
       )}
 
       {/* 9. Hỏi đáp */}
-      <section aria-labelledby="hoi-dap-title" className={cn(WRAP, "grid gap-10 py-20 md:py-28 lg:grid-cols-[1fr_1.4fr] lg:gap-16")}>
-        <Reveal>
-          <Tag tone="bg-hub-marigold-soft">Hỏi đáp</Tag>
-          <h2 id="hoi-dap-title" className={H2}>
-            Những điều khách <Pill tone="bg-hub-mint-soft">thường hỏi</Pill>
-          </h2>
-          <p className="mt-4 max-w-sm text-lead leading-relaxed text-hub-ink-soft">Chưa thấy câu trả lời bạn cần? Gọi hotline, chúng tôi trả lời ngay.</p>
-          <a href={telHref(COMPANY.hotline)} className={cn(BTN_GHOST, "mt-6")}>
-            <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
-          </a>
-        </Reveal>
-        <Reveal delay={100} className={cn(CARD, "px-6 sm:px-8")}>
+      <section aria-labelledby="hoi-dap-title" className={cn(WRAP, lead ? "pb-20 md:pb-28" : "py-20 md:py-28")}>
+        <SectionHead
+          id="hoi-dap-title"
+          no={no()}
+          kicker="Hỏi đáp"
+          title="Những điều khách thường hỏi"
+          lead="Chưa thấy câu trả lời bạn cần? Gọi hotline, chúng tôi trả lời ngay."
+          action={
+            <a href={telHref(COMPANY.hotline)} className={BTN_GHOST}>
+              <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
+            </a>
+          }
+        />
+        <Reveal className={cn(CARD, "px-6 sm:px-8 lg:ml-auto lg:w-[calc(100%*8/12)]")}>
           <Accordion type="single" collapsible defaultValue="faq-0">
             {faqs.map((f, i) => (
               <AccordionItem key={f.q} value={`faq-${i}`} className="last:border-b-0">
@@ -475,14 +408,12 @@ export default async function HubHome() {
         </Reveal>
       </section>
 
-      {/* 10. Liên hệ – "đảo tối" xanh đêm duy nhất của trang */}
+      {/* 10. Liên hệ – “đảo tối” xanh đêm duy nhất của trang */}
       <section id="lien-he" aria-labelledby="lien-he-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28")}>
         <div className="grid gap-10 overflow-hidden rounded-xl bg-hub-midnight p-6 text-white sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:p-14">
           <Reveal>
-            <Tag tone="bg-hub-marigold">Liên hệ</Tag>
-            <h2 id="lien-he-title" className="text-h2 mt-3 font-semibold !text-white">
-              Gọi đúng bộ phận, được tư vấn ngay.
-            </h2>
+            <Kicker no={no()} tone="text-white">Liên hệ</Kicker>
+            <h2 id="lien-he-title" className="text-h1 mt-7 font-semibold !text-white">Gọi đúng bộ phận, được tư vấn ngay.</h2>
             <ul className="mt-8 space-y-2">
               {VERTICAL_LIST.map((v) => (
                 <li key={v.id}>
@@ -516,6 +447,9 @@ export default async function HubHome() {
                   <s.icon className="size-4" aria-hidden /> {s.label}
                 </a>
               ))}
+              <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(COMPANY.mapQuery)}`} target="_blank" rel="noopener noreferrer" className={cn(BTN, "group bg-white/[0.07] text-white hover:bg-white/[0.13]")}>
+                Chỉ đường <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+              </a>
             </div>
           </Reveal>
           <Reveal delay={120} className="min-h-[360px] overflow-hidden rounded-lg bg-white/10">

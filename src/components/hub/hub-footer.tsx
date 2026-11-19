@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { telHref } from "@/lib/verticals";
+import { Wordmark } from "@/components/shared/wordmark";
 import { getSettings } from "@/lib/settings/server";
 
 export async function HubFooter() {
@@ -8,8 +9,8 @@ export async function HubFooter() {
     <footer className="border-t border-hub-line bg-hub-paper text-hub-ink-soft">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-10">
         <div>
-          <p className="flex items-center gap-2 logo-name font-semibold text-hub-ink">
-            {COMPANY.name}
+          <p className="flex items-center gap-3 text-hub-ink">
+            <Wordmark label={COMPANY.legalName} className="h-7 w-auto" />
             <span aria-hidden className="flex gap-1">
               <span className="size-2 rounded-full bg-sector-phanbon" />
               <span className="size-2 rounded-full bg-sector-lopxe" />

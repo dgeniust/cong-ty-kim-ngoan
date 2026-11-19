@@ -5,15 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, X } from "lucide-react";
 import { telHref } from "@/lib/verticals";
+import { Wordmark } from "@/components/shared/wordmark";
 
 export type HeaderCompany = { prefix: string; name: string; slogan: string; legalName: string; hotline: string };
 import { cn } from "@/lib/utils";
 
 /** `spy` = id của khối trên trang chủ; mục menu sáng lên khi cuộn tới khối đó. */
 const MAIN = [
-  { label: "Trang chủ", href: "/", spy: "top" },
-  { label: "Lĩnh vực", href: "/#linh-vuc", spy: "linh-vuc" },
   { label: "Sản phẩm", href: "/#san-pham", spy: "san-pham" },
+  { label: "Mùa vụ", href: "/#mua-vu", spy: "mua-vu" },
+  { label: "Giao hàng", href: "/#giao-hang", spy: "giao-hang" },
   { label: "Giới thiệu", href: "/#gioi-thieu", spy: "gioi-thieu" },
   { label: "Tin tức", href: "/tin-tuc", spy: "tin-tuc" },
   { label: "Liên hệ", href: "/#lien-he", spy: "lien-he" },
@@ -43,7 +44,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
   const onHome = pathname === "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [spy, setSpy] = useState("top");
+  const [spy, setSpy] = useState("");
   const progress = useRef<HTMLSpanElement>(null);
 
   // Bóng đổ khi cuộn + thanh tiến trình đọc trang.
@@ -75,7 +76,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
   // Scrollspy trên trang chủ
   useEffect(() => {
     if (!onHome) return;
-    const ids = MAIN.map((m) => m.spy).filter((id) => id !== "top");
+    const ids = MAIN.map((m) => m.spy);
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
     const io = new IntersectionObserver(
       (entries) => {
@@ -84,7 +85,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
       { rootMargin: "-45% 0px -50% 0px" },
     );
     els.forEach((el) => io.observe(el));
-    const onTop = () => window.scrollY < 300 && setSpy("top");
+    const onTop = () => window.scrollY < 300 && setSpy("");
     window.addEventListener("scroll", onTop, { passive: true });
     return () => {
       io.disconnect();
@@ -117,13 +118,9 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
         Bỏ qua đến nội dung chính
       </a>
       <div className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between gap-6 px-4 sm:px-6 lg:h-[84px] lg:px-10">
-        <Link href="/" className="group flex items-center gap-3">
-          <HubMark className="size-11 shrink-0 transition-transform duration-500 ease-soft group-hover:rotate-[-8deg]" />
-          <span className="leading-none">
-            <span className="block logo-prefix text-hub-ink-soft">{COMPANY.prefix}</span>
-            <span className="mt-1 block logo-name font-semibold text-hub-ink">{COMPANY.name}</span>
-            <span className="mt-1 hidden text-micro text-hub-ink-soft sm:block">{COMPANY.slogan}</span>
-          </span>
+        <Link href="/" aria-label={`${COMPANY.legalName} – trang chủ`} className="group flex flex-col gap-1.5 rounded-lg text-hub-ink">
+          <span className="block logo-prefix text-hub-ink-soft">{COMPANY.prefix}</span>
+          <Wordmark className="h-6 w-auto transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:h-7" />
         </Link>
 
         <div className="hidden flex-col items-end gap-1.5 lg:flex">
