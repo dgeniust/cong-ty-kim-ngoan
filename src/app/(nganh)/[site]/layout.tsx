@@ -1,3 +1,4 @@
+import { BackToTop } from "@/components/shared/back-to-top";
 import type { Metadata, Viewport } from "next";
 import { VFooter } from "@/components/nganh/v-footer";
 import { VHeader } from "@/components/nganh/v-header";
@@ -63,6 +64,7 @@ export default async function VerticalLayout({ children, params }: { children: R
       </main>
       <VFooter vertical={vertical} categories={getCategories(site)} />
       <VMobileBar vertical={vertical} />
+      <BackToTop className="border border-v-line bg-v-card text-v-fg shadow-[0_4px_12px_rgb(0_0_0/0.12)]" />
     </div>
   );
 }

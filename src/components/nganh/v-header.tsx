@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import { useHideOnScroll } from "@/hooks/use-hide-on-scroll";
 
 /**
  * Header chuyên trang lốp xe / sắt thép – CÙNG CẤU TRÚC với header phân bón
@@ -74,12 +75,15 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
     };
   }, [open]);
 
+  // Cuộn xuống: header trượt lên biến mất · cuộn lên: trượt xuống hiện lại (luôn hiện khi mở menu)
+  const hidden = useHideOnScroll({ lock: open });
+
   return (
     <>
       <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-v-accent px-5 py-3 text-small font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
-      <header className="sticky top-0 z-50 pt-3">
+      <header data-hidden={hidden || undefined} className={cn("sticky top-0 z-50 pt-3", "transition-[translate,background-color] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none", hidden && "-translate-y-[calc(100%+1rem)]")}>
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
             className={cn(

@@ -1,4 +1,5 @@
 // Phân bón: chữ viết tay cho trích dẫn (chỉ tải ở chuyên trang này)
+import { BackToTop } from "@/components/shared/back-to-top";
 import "@fontsource/dancing-script/vietnamese-600.css";
 import "@fontsource/dancing-script/latin-600.css";
 import { getSettings } from "@/lib/settings/server";
@@ -59,6 +60,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       </main>
       <SiteFooter site={site} footer={content.footer} />
       <MobileActionBar phone={site.phone} />
+      <BackToTop className="border border-brand-900/10 bg-white text-brand-900 shadow-lift" />
     </>
   );
 }

@@ -11,6 +11,7 @@ import { Logo } from "@/components/shared/logo";
 import type { SiteContent } from "@/lib/content/schema";
 import { resolveHref } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { useHideOnScroll } from "@/hooks/use-hide-on-scroll";
 
 export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
   const pathname = usePathname();
@@ -40,6 +41,9 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
   const links = nav.map((item) => ({ ...item, href: resolveHref(item.href) }));
   const isActive = (href: string) => (href === "/phanbon" ? pathname === "/phanbon" : !href.includes("#") && pathname.startsWith(href));
 
+  // Cuộn xuống: header trượt lên biến mất · cuộn lên: trượt xuống hiện lại (luôn hiện khi mở menu)
+  const hidden = useHideOnScroll({ lock: open });
+
   return (
     <>
       <a
@@ -49,7 +53,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
         Bỏ qua đến nội dung chính
       </a>
       {/* Floating pill bar (design.md §5.1) */}
-      <header className={cn("sticky top-0 z-50 pt-3 transition-colors duration-300", scrolled ? "bg-transparent" : "bg-paper")}>
+      <header data-hidden={hidden || undefined} className={cn("sticky top-0 z-50 pt-3", "transition-[translate,background-color] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none", hidden && "-translate-y-[calc(100%+1rem)]", scrolled ? "bg-transparent" : "bg-paper")}>
         <Container>
           <div
             className={cn(
