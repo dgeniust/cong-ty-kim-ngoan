@@ -1,42 +1,32 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BadgeCheck, Bus, CalendarClock, Car, CarFront, Check, MessageCircle, Phone, Truck, Wrench } from "lucide-react";
+import { ArrowRight, ArrowUpRight, MessageCircle, Phone } from "lucide-react";
+import { Kicker } from "@/components/shared/kicker";
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
+import { TYRE_TIERS } from "@/lib/data/vertical-extras";
 import { formatDate } from "@/lib/format";
-import { Headline } from "./headline";
-import { telHref, type Vertical } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
-import { cn } from "@/lib/utils";
+import { telHref, type Vertical } from "@/lib/verticals";
 import { AutoCarousel } from "./auto-carousel";
-import { ProductArt } from "./product-art";
-import { TyreFinder } from "./tyre-finder";
+import { Headline } from "./headline";
+import { TyreBooking } from "./tyre-booking";
+import { TyreCheck } from "./tyre-check";
+import { TyreHero } from "./tyre-hero";
+import { TyreLabel, TyreTiers } from "./tyre-parts";
 import { VButton } from "./v-button";
-import { VProductCard } from "./v-product-card";
-import { VContainer, VHeading, VTag } from "./v-section";
+import { VContainer } from "./v-section";
+import { VSectionHead } from "./v-section-head";
 
 /**
- * Trang chủ LỐP XE – phong cách Notion, nền đen · chữ trắng · nhấn cam.
- * Bố cục riêng (khác landing tổng và sắt thép), xoay quanh việc "tìm đúng cỡ lốp":
- * hero chia đôi lệch trái → công cụ tra cỡ lốp → chọn theo loại xe → sản phẩm cuộn ngang
- * → quy trình thay lốp → lý do chọn (1 ô lớn + 3 ô) → tin tức (1 lớn + danh sách) → liên hệ chia đôi.
+ * Trang chủ LỐP XE – bố cục v1.1 (design.md §13). Giữ theme đen · trắng · cam.
+ * Đánh vào tâm lý người mua lốp: an toàn → chọn dễ → làm nhanh.
+ *  banner hông lốp khổng lồ (tra cỡ) → 01 lốp còn an toàn? → 02 ba mức lốp → 03 loại xe
+ *  → 04 nhãn thông số bán chạy → 05 thay trong 30 phút + đặt lịch → 06 cam kết → 07 tin tức → gọi ngay.
  */
-
-const VEHICLE_ICONS = [Car, CarFront, Truck, Bus];
-const USP_ICONS = [BadgeCheck, CalendarClock, Wrench, MessageCircle];
-
-function Sparkle({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className={className}>
-      <path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z" fill="currentColor" />
-    </svg>
-  );
-}
-
 export async function LopXeHome({
   vertical,
   categories,
   content,
-  featured,
   allProducts,
   news,
 }: {
@@ -50,229 +40,256 @@ export async function LopXeHome({
   const { COMPANY } = await getSettings();
   const { hero, sections: sec } = content;
   const base = vertical.base;
-  const spot = featured[0];
   const popular = [...new Set(allProducts.map((p) => p.keySpec).filter((k) => /^\d{3}\/\d{2}R\d{2}$/.test(k)))].slice(0, 5);
   const countBy = (slug: string) => allProducts.filter((p) => p.categorySlug === slug).length;
   const [lead, ...restNews] = news;
+  const serverNow = new Date().getTime(); // mốc thời gian cho công cụ đọc tuổi lốp khi render trên server
+  const ordered = [...allProducts].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
   return (
     <>
-      {/* 1. Hero chia đôi: chữ trái – lốp & thẻ thông số phải */}
-      <section className="overflow-hidden">
-        <VContainer className="grid items-center gap-12 pb-16 pt-10 md:pb-24 md:pt-14 lg:grid-cols-[1.05fr_1fr]">
-          <div>
-            <VTag>
-              <span aria-hidden className="size-1.5 rounded-full bg-v-accent" /> {hero.eyebrow}
-            </VTag>
-            <h1 className="text-display v-display mt-5 text-v-fg">
+      {/* BANNER: dòng thông tin → tiêu đề + lời dẫn → hông lốp khổng lồ (tra cỡ) → số liệu */}
+      <section aria-labelledby="hero-title" className="pb-16 pt-6 md:pb-20 md:pt-10">
+        <VContainer>
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg/80 pb-3 text-caption text-v-fg">
+            <span className="font-semibold">{hero.eyebrow}</span>
+            <span className="hidden text-v-mute sm:inline">{COMPANY.address} · 07:00 – 18:00</span>
+            <a href={telHref(vertical.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-v-accent">
+              <Phone className="size-3.5" aria-hidden /> {vertical.phone}
+            </a>
+          </div>
+          <div className="mt-8 grid gap-6 md:mt-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+            <h1 id="hero-title" className="text-display v-display text-v-fg lg:col-span-8">
               <Headline h={hero} />
             </h1>
-            <p className="mt-6 max-w-xl text-lead text-v-mute">{hero.description}</p>
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              <VButton asChild size="lg">
-                <a href="#tra-co-lop">
-                  Tra cỡ lốp <ArrowRight className="arrow" />
-                </a>
-              </VButton>
-              <VButton asChild size="lg" variant="tint">
-                <a href={telHref(vertical.phone)}>
-                  <Phone /> <span className="tabular-nums">{vertical.phone}</span>
-                </a>
-              </VButton>
+            <div className="lg:col-span-4">
+              <p className="text-lead leading-relaxed text-v-mute">{hero.description}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <VButton asChild>
+                  <a href="#an-toan">
+                    Lốp còn an toàn? <ArrowRight className="arrow" />
+                  </a>
+                </VButton>
+                <VButton asChild variant="tint">
+                  <a href="#dat-lich">Đặt lịch thay</a>
+                </VButton>
+              </div>
             </div>
-            <ul className="mt-8 grid gap-2 text-body text-v-fg/80 sm:grid-cols-3">
-              {hero.stats.map((s) => (
-                <li key={s.label} className="flex items-start gap-2">
-                  <Check className="mt-1 size-4 shrink-0 text-v-accent" strokeWidth={3} aria-hidden />
-                  <span>
-                    <strong className="font-semibold text-v-fg">{s.value}</strong> {s.label.toLowerCase()}
+          </div>
+          <div id="tra-co-lop" className="mt-10 scroll-mt-28 md:mt-12">
+            <TyreHero base={base} popular={popular} label={<Headline h={sec.finder} />} sub={sec.finder?.subtitle} />
+          </div>
+          <dl className="mt-4 grid divide-y divide-v-line border-b border-v-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            {hero.stats.map((s) => (
+              <div key={s.label} className="flex items-baseline gap-3 py-5 sm:px-6 sm:first:pl-0">
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="text-h3 font-semibold tabular-nums text-v-accent">{s.value}</dd>
+                <dd className="text-body text-v-mute">{s.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </VContainer>
+      </section>
+
+      {/* 01. Lốp còn an toàn? */}
+      <section id="an-toan" aria-labelledby="an-toan-title" className="scroll-mt-24 py-16 md:py-24">
+        <VContainer>
+          <VSectionHead id="an-toan-title" no="01" kicker="Kiểm tra an toàn" title={<Headline h={sec.safety} />} lead={sec.safety?.subtitle} />
+          <TyreCheck serverNow={serverNow} />
+        </VContainer>
+      </section>
+
+      {/* 02. Ba mức lốp */}
+      <section aria-labelledby="muc-lop-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
+        <VContainer>
+          <VSectionHead id="muc-lop-title" no="02" kicker="Chọn mức lốp" title={<Headline h={sec.tiers} />} lead={sec.tiers?.subtitle} />
+          <TyreTiers tiers={TYRE_TIERS} products={ordered} base={base} phone={vertical.phone} />
+        </VContainer>
+      </section>
+
+      {/* 03. Theo loại xe – mục lục đánh số */}
+      <section aria-labelledby="loai-xe-title" className="py-16 md:py-24">
+        <VContainer>
+          <VSectionHead
+            id="loai-xe-title"
+            no="03"
+            kicker="Loại xe"
+            title={<Headline h={sec.categories} />}
+            lead={sec.categories?.subtitle}
+            action={
+              <VButton asChild variant="quiet">
+                <Link href={`${base}/san-pham`}>
+                  Tất cả lốp <ArrowRight className="arrow" />
+                </Link>
+              </VButton>
+            }
+          />
+          <ol className="grid sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
+            {categories.map((c, i) => (
+              <Reveal as="li" key={c.slug} delay={i * 70} className="border-t-2 border-v-fg">
+                <Link href={`${base}/san-pham?nhom=${c.slug}`} className="group flex h-full flex-col py-5 pr-4">
+                  <span className="flex items-baseline justify-between text-caption tabular-nums text-v-mute">
+                    <span className="font-semibold text-v-fg">0{i + 1}</span> {countBy(c.slug)} sản phẩm
                   </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="relative">
-            <Sparkle className="absolute -left-2 top-4 z-10 size-7 text-v-accent" />
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-v-accent">
-              <div aria-hidden className="hub-dots absolute inset-0 opacity-25" />
-              <ProductArt kind="tyre-at" title="Lốp ô tô" className="absolute inset-0 m-auto !size-[82%]" />
-            </div>
-            {spot && (
-              <Link
-                href={`${base}/san-pham/${spot.slug}`}
-                className="group absolute -bottom-6 left-4 w-[min(17rem,80%)] rounded-xl border border-v-line bg-v-card p-4 shadow-[0_4px_12px_rgb(0_0_0/0.25)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 sm:-left-6"
-              >
-                <span className="flex items-center justify-between">
-                  <span className="rounded-full bg-v-tint px-2 py-0.5 text-micro font-medium text-v-on-tint">Bán chạy</span>
-                  <ArrowUpRight className="size-4 text-v-mute group-hover:text-v-accent" aria-hidden />
-                </span>
-                <span className="mt-2 block text-body font-semibold leading-snug text-v-fg">{spot.name}</span>
-                <span className="mt-2 flex flex-wrap gap-1">
-                  {spot.specs.slice(1, 3).map((s) => (
-                    <span key={s.name} className="rounded-md bg-v-chip px-2 py-0.5 text-micro text-v-fg/80">
-                      {s.name}: {s.value}
-                    </span>
-                  ))}
-                </span>
-              </Link>
-            )}
-          </div>
-        </VContainer>
-      </section>
-
-      {/* 2. Công cụ tra cỡ lốp */}
-      <section id="tra-co-lop" aria-labelledby="tra-co-lop-title" className="scroll-mt-28 border-t border-v-line bg-v-sunk py-20 md:py-24">
-        <VContainer>
-          <VHeading id="tra-co-lop-title" index="Công cụ" title={<Headline h={sec.finder} />} subtitle={sec.finder?.subtitle} />
-          <TyreFinder base={base} popular={popular} />
-        </VContainer>
-      </section>
-
-      {/* 3. Chọn theo loại xe */}
-      <section aria-labelledby="loai-xe-title" className="border-t border-v-line py-20 md:py-24">
-        <VContainer>
-          <VHeading id="loai-xe-title" index="Loại xe" title={<Headline h={sec.categories} />} subtitle={sec.categories?.subtitle} href={`${base}/san-pham`} hrefLabel="Tất cả lốp" />
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((c, i) => {
-              const Icon = VEHICLE_ICONS[i % VEHICLE_ICONS.length];
-              return (
-                <Reveal as="li" key={c.slug} delay={i * 70} className="h-full">
-                  <Link href={`${base}/san-pham?nhom=${c.slug}`} className="group flex h-full flex-col rounded-xl border border-v-line bg-v-card p-6 transition-colors duration-200 hover:border-v-accent">
-                    <span className={cn("grid size-12 place-items-center rounded-full border-2 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-6 group-hover:scale-110", i % 2 ? "border-v-fg/40 text-v-fg" : "border-v-accent text-v-accent")}>
-                      <Icon className="size-5" aria-hidden />
-                    </span>
-                    <span className="mt-8 text-caption tabular-nums text-v-mute">{countBy(c.slug)} sản phẩm</span>
-                    <span className="mt-1 text-h4 font-semibold tracking-[-0.02em] text-v-fg">{c.name}</span>
-                    <span className="mt-2 text-small leading-relaxed text-v-mute">{c.description}</span>
-                    <span className="mt-auto inline-flex items-center gap-1 pt-6 text-small font-medium text-v-accent">
-                      Xem lốp <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-                    </span>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </ul>
-        </VContainer>
-      </section>
-
-      {/* 4. Sản phẩm – dải cuộn ngang */}
-      <section aria-labelledby="noi-bat-title" className="border-t border-v-line bg-v-sunk py-20 md:py-24">
-        <VContainer>
-          <VHeading id="noi-bat-title" index="Bán chạy" title={<Headline h={sec.featured} />} subtitle={sec.featured?.subtitle} href={`${base}/san-pham`} hrefLabel="Xem tất cả" />
-        </VContainer>
-        {/* carousel tự cuộn vòng lặp – xem components/nganh/auto-carousel.tsx */}
-        <AutoCarousel label="Lốp bán chạy" itemClassName="w-[260px] sm:w-[280px]">
-          {allProducts.map((p) => (
-            <VProductCard key={p.slug} product={p} />
-          ))}
-        </AutoCarousel>
-      </section>
-
-      {/* 5. Quy trình thay lốp */}
-      <section aria-labelledby="quy-trinh-title" className="border-t border-v-line py-20 md:py-24">
-        <VContainer>
-          <VHeading id="quy-trinh-title" index="Tại cửa hàng" title={<Headline h={sec.process} />} subtitle={sec.process?.subtitle} />
-          <ol className="grid gap-3 md:grid-cols-3">
-            {content.services.map((s, i) => (
-              <Reveal as="li" key={s.title} delay={i * 90} className="relative">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-11 shrink-0 place-items-center rounded-full border-2 border-v-accent bg-v-card text-body font-semibold tabular-nums text-v-fg">{i + 1}</span>
-                  {i < content.services.length - 1 && <span aria-hidden className="hidden h-0 flex-1 border-t-2 border-dashed border-v-line md:block" />}
-                </div>
-                <h3 className="text-title mt-5 font-semibold text-v-fg">{s.title}</h3>
-                <p className="mt-1.5 max-w-sm text-body leading-relaxed text-v-mute">{s.description}</p>
+                  <span className="mt-6 text-h3 font-semibold tracking-[-0.025em] text-v-fg transition-colors group-hover:text-v-accent">{c.name}</span>
+                  <span className="mt-2 text-small leading-relaxed text-v-mute">{c.description}</span>
+                  <span className="mt-auto inline-flex items-center gap-1 pt-5 text-small font-semibold text-v-accent">
+                    Xem lốp <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                  </span>
+                </Link>
               </Reveal>
             ))}
           </ol>
         </VContainer>
       </section>
 
-      {/* 6. Lý do chọn: 1 ô cam lớn + 3 ô */}
-      <section aria-labelledby="ly-do-title" className="border-t border-v-line bg-v-sunk py-20 md:py-24">
+      {/* 04. Bán chạy – nhãn thông số tự cuộn */}
+      <section aria-labelledby="noi-bat-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
         <VContainer>
-          <VHeading id="ly-do-title" index="Cam kết" title={content.about.title} />
-          {content.usps[0] && (
-            <Reveal className="relative overflow-hidden rounded-xl bg-v-accent p-8 text-v-on-accent sm:p-10">
-              <BadgeCheck className="size-9" strokeWidth={1.75} aria-hidden />
-              <h3 className="text-h3 mt-10 max-w-lg font-semibold !text-current">{content.usps[0].title}</h3>
-              <p className="mt-3 max-w-lg text-lead leading-relaxed opacity-80">{content.usps[0].description} {content.about.paragraphs[1] ?? ""}</p>
-              <ProductArt kind="tyre" className="absolute -bottom-16 -right-10 hidden !size-80 md:block" />
-            </Reveal>
-          )}
-          <ul className="mt-3 grid gap-3 md:grid-cols-3">
-            {content.usps.slice(1).map((u, i) => {
-              const Icon = USP_ICONS[(i + 1) % USP_ICONS.length];
-              return (
-                <Reveal as="li" key={u.title} delay={i * 80} className={cn("rounded-xl p-7", i === 1 ? "bg-v-island text-v-on-island" : "border border-v-line bg-v-card text-v-fg")}>
-                  <Icon className="size-7" strokeWidth={1.75} aria-hidden />
-                  <h3 className="text-h4 mt-8 font-semibold !text-current">{u.title}</h3>
-                  <p className={cn("mt-2 text-body leading-relaxed", i === 1 ? "opacity-70" : "text-v-mute")}>{u.description}</p>
-                </Reveal>
-              );
-            })}
-          </ul>
+          <VSectionHead
+            id="noi-bat-title"
+            no="04"
+            kicker="Bán chạy"
+            title={<Headline h={sec.featured} />}
+            lead={sec.featured?.subtitle}
+            action={
+              <VButton asChild variant="quiet">
+                <Link href={`${base}/san-pham`}>
+                  Xem tất cả <ArrowRight className="arrow" />
+                </Link>
+              </VButton>
+            }
+          />
+        </VContainer>
+        <AutoCarousel label="Lốp bán chạy" itemClassName="w-[270px] sm:w-[290px]">
+          {ordered.map((p) => (
+            <TyreLabel key={p.slug} product={p} href={`${base}/san-pham/${p.slug}`} />
+          ))}
+        </AutoCarousel>
+      </section>
+
+      {/* 05. Thay trong 30 phút + đặt lịch */}
+      <section id="dat-lich" aria-labelledby="dat-lich-title" className="scroll-mt-24 py-16 md:py-24">
+        <VContainer>
+          <VSectionHead id="dat-lich-title" no="05" kicker="Tại cửa hàng" title={<Headline h={sec.process} />} lead={sec.process?.subtitle} />
+          <div className="grid gap-8 lg:grid-cols-12 lg:gap-8">
+            <div className="lg:col-span-6">
+              <p aria-hidden className="font-semibold tabular-nums leading-none tracking-[-0.06em] text-v-accent [font-size:clamp(5rem,14vw,11rem)]">
+                30:00
+              </p>
+              <p className="mt-3 text-body text-v-mute">Thời gian thay một bộ lốp tiêu chuẩn tại cửa hàng, tính từ lúc xe vào cầu nâng.</p>
+              <ol className="mt-10">
+                {content.services.map((s, i) => (
+                  <Reveal as="li" key={s.title} delay={i * 80} className="grid grid-cols-[3rem_1fr] gap-4 border-t border-v-line py-5">
+                    <span className="text-h4 font-semibold tabular-nums text-v-fg">0{i + 1}</span>
+                    <span>
+                      <span className="block text-title font-semibold text-v-fg">{s.title}</span>
+                      <span className="mt-1 block text-body leading-relaxed text-v-mute">{s.description}</span>
+                    </span>
+                  </Reveal>
+                ))}
+              </ol>
+            </div>
+            <div className="lg:col-span-5 lg:col-start-8">
+              <TyreBooking phone={vertical.phone} zalo={COMPANY.zalo} />
+            </div>
+          </div>
         </VContainer>
       </section>
 
-      {/* 7. Tin tức: 1 bài lớn + danh sách */}
+      {/* 06. Cam kết */}
+      <section aria-labelledby="cam-ket-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
+        <VContainer className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+          <Reveal className="lg:col-span-5">
+            <Kicker no="06" className="text-v-fg">Cam kết</Kicker>
+            <h2 id="cam-ket-title" className="text-h1 v-display mt-7 text-v-fg">{content.about.title}</h2>
+            <div className="mt-6 space-y-4 text-body leading-relaxed text-v-mute">
+              {content.about.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </Reveal>
+          <ol className="grid sm:grid-cols-2 sm:gap-x-6 lg:col-span-6 lg:col-start-7">
+            {content.usps.map((u, i) => (
+              <Reveal as="li" key={u.title} delay={i * 70} className="border-t border-v-line py-6">
+                <span className="text-h2 font-semibold tabular-nums text-v-accent">0{i + 1}</span>
+                <h3 className="mt-3 text-title font-semibold text-v-fg">{u.title}</h3>
+                <p className="mt-1.5 text-body leading-relaxed text-v-mute">{u.description}</p>
+              </Reveal>
+            ))}
+          </ol>
+        </VContainer>
+      </section>
+
+      {/* 07. Tin tức: bài chính + mục lục */}
       {lead && (
-        <section aria-labelledby="tin-tuc-title" className="border-t border-v-line py-20 md:py-24">
+        <section aria-labelledby="tin-tuc-title" className="py-16 md:py-24">
           <VContainer>
-            <VHeading id="tin-tuc-title" index="Tin tức" title={<Headline h={sec.news} />} subtitle={sec.news?.subtitle} href={`${base}/tin-tuc`} hrefLabel="Tất cả bài viết" />
-            <div className="grid gap-3 lg:grid-cols-[1.2fr_1fr]">
-              <Link href={lead.href} className="group relative overflow-hidden rounded-xl border border-v-line bg-v-card transition-colors hover:border-v-accent">
-                <span className="relative m-1.5 mb-0 block aspect-[16/9] overflow-hidden rounded-lg bg-v-raise">
-                  {lead.art && <ProductArt kind={lead.art} className="absolute inset-0 m-auto !size-[56%] v-hover-zoom" />}
+            <VSectionHead
+              id="tin-tuc-title"
+              no="07"
+              kicker="Tin tức"
+              title={<Headline h={sec.news} />}
+              lead={sec.news?.subtitle}
+              action={
+                <VButton asChild variant="quiet">
+                  <Link href={`${base}/tin-tuc`}>
+                    Tất cả bài viết <ArrowRight className="arrow" />
+                  </Link>
+                </VButton>
+              }
+            />
+            <div className="grid gap-8 lg:grid-cols-12">
+              <Link href={lead.href} className="group flex flex-col justify-between rounded-2xl bg-v-accent p-7 text-v-on-accent sm:p-10 lg:col-span-7">
+                <span className="text-caption font-medium">
+                  {formatDate(lead.date)} · {lead.readingMinutes} phút đọc
                 </span>
-                <span className="block p-6">
-                  <span className="text-caption text-v-mute">{formatDate(lead.date)} · {lead.readingMinutes} phút đọc</span>
-                  <span className="mt-2 block text-h3 font-semibold tracking-[-0.025em] text-v-fg group-hover:text-v-accent">{lead.title}</span>
-                  <span className="mt-2 block text-body leading-relaxed text-v-mute">{lead.excerpt}</span>
+                <span className="mt-16 block text-h2 font-semibold tracking-[-0.03em]">{lead.title}</span>
+                <span className="mt-3 block max-w-xl text-body leading-relaxed opacity-80">{lead.excerpt}</span>
+                <span className="mt-6 inline-flex items-center gap-1 text-small font-semibold">
+                  Đọc bài <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                 </span>
               </Link>
-              <ul className="flex flex-col gap-3">
+              <ol className="lg:col-span-5">
                 {restNews.map((n) => (
-                  <li key={n.slug} className="flex-1">
-                    <Link href={n.href} className="group flex h-full items-center gap-4 rounded-xl border border-v-line bg-v-card p-4 transition-colors hover:border-v-accent">
-                      <span className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-v-raise">
-                        {n.art && <ProductArt kind={n.art} className="absolute inset-0 m-auto !size-[78%]" />}
-                      </span>
-                      <span className="min-w-0">
-                        <span className="text-caption text-v-mute">{formatDate(n.date)}</span>
-                        <span className="mt-1 block font-semibold leading-snug text-v-fg group-hover:text-v-accent">{n.title}</span>
-                        <span className="mt-1 line-clamp-2 text-small text-v-mute">{n.excerpt}</span>
-                      </span>
-                    </Link>
+                  <li key={n.slug} className="group relative border-t border-v-line py-5 first:border-v-fg lg:first:pt-0 lg:first:border-t-0">
+                    <p className="text-caption text-v-mute">
+                      {formatDate(n.date)} · {n.readingMinutes} phút đọc
+                    </p>
+                    <h3 className="mt-1.5 text-title font-semibold leading-snug text-v-fg">
+                      <Link href={n.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-v-accent">
+                        {n.title}
+                      </Link>
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-small text-v-mute">{n.excerpt}</p>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </div>
           </VContainer>
         </section>
       )}
 
-      {/* 8. Liên hệ chia đôi: mảng cam trái – thẻ liên hệ phải */}
-      <section aria-labelledby="cta-title" className="border-t border-v-line py-20 md:py-24">
-        <VContainer className="grid gap-3 lg:grid-cols-[1.3fr_1fr]">
-          <div className="relative overflow-hidden rounded-xl bg-v-accent p-8 text-v-on-accent sm:p-12">
-            <h2 id="cta-title" className="text-h2 v-display !text-current">{content.cta.title}</h2>
-            <p className="mt-4 max-w-md text-lead leading-relaxed opacity-80">{content.cta.description}</p>
-            <ProductArt kind="tyre-truck" className="absolute -bottom-12 -right-8 !size-56 opacity-90" />
-          </div>
-          <div className="flex flex-col gap-2 rounded-xl border border-v-line bg-v-card p-6 sm:p-8">
-            <p className="text-small font-semibold text-v-fg">{vertical.contactLabel}</p>
-            <a href={telHref(vertical.phone)} className="mt-2 flex items-center justify-between gap-3 rounded-lg bg-v-accent px-4 py-4 text-v-on-accent transition-colors hover:bg-v-accent-hover">
-              <span className="text-h3 font-semibold tabular-nums tracking-[-0.02em]">{vertical.phone}</span>
-              <Phone className="size-5" aria-hidden />
-            </a>
-            <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-13 items-center justify-between gap-3 rounded-lg bg-v-tint px-5 text-body font-medium text-v-on-tint">
-              Nhắn Zalo báo giá <MessageCircle className="size-5" aria-hidden />
-            </a>
-            <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-lg border border-v-line px-5 text-body font-medium text-v-fg transition-colors hover:bg-v-raise">
-              Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
-            </Link>
-            <p className="mt-auto pt-4 text-small text-v-mute">{COMPANY.address} · 07:00 – 18:00 mỗi ngày</p>
+      {/* Gọi ngay */}
+      <section aria-labelledby="cta-title" className="pb-16 md:pb-24">
+        <VContainer>
+          <div className="grid gap-8 rounded-2xl border border-v-line bg-v-card p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
+            <div className="lg:col-span-6">
+              <h2 id="cta-title" className="text-h1 v-display text-v-fg">{content.cta.title}</h2>
+              <p className="mt-4 max-w-md text-lead leading-relaxed text-v-mute">{content.cta.description}</p>
+            </div>
+            <div className="flex flex-col gap-2 lg:col-span-5 lg:col-start-8">
+              <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-xl bg-v-accent px-6 py-5 text-v-on-accent transition-colors hover:bg-v-accent-hover">
+                <span className="text-h2 font-semibold tabular-nums tracking-[-0.03em]">{vertical.phone}</span>
+                <Phone className="size-6" aria-hidden />
+              </a>
+              <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-13 items-center justify-between gap-3 rounded-xl bg-v-tint px-5 text-body font-medium text-v-on-tint">
+                Gửi cỡ lốp qua Zalo <MessageCircle className="size-5" aria-hidden />
+              </a>
+              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-xl border border-v-line px-5 text-body font-medium text-v-fg transition-colors hover:bg-white/[0.04]">
+                Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
+              </Link>
+            </div>
           </div>
         </VContainer>
       </section>

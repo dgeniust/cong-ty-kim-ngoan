@@ -558,3 +558,15 @@
   .splash, .splash[data-state="out"], .splash-rise, .splash * { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
   .skel::after { display: none; }
 }
+
+/* Nền “giấy kẻ ô bản vẽ” cho trang sắt thép (ô lớn 120px + ô nhỏ 24px, nét rất mảnh) */
+.blueprint {
+  background-color: var(--v-bg);
+  background-image:
+    linear-gradient(to right, rgb(0 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgb(0 0 0 / 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.025) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+}

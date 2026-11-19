@@ -25,5 +25,14 @@ export const catalogContentSchema = z.object({
   about: z.object({ title: req(), paragraphs: z.array(req()).min(1, "Cần ít nhất 1 đoạn") }),
   sections: z.record(z.string(), sectionHeadingSchema),
   cta: z.object({ title: req(), description: req() }),
-  quote: z.object({ title: req(), status: req(), documents: req(), notes: z.array(req()).max(4, "Tối đa 4 dòng") }).optional(),
+  quote: z
+    .object({
+      title: req(),
+      status: req(),
+      documents: req(),
+      notes: z.array(req()).max(4, "Tối đa 4 dòng"),
+      prices: z.array(z.object({ slug: req(), price: text, unit: text, trend: z.enum(["up", "down", "flat"]) })).optional(),
+      updated: text.optional(),
+    })
+    .optional(),
 });

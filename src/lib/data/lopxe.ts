@@ -124,6 +124,8 @@ export const content: CatalogContent = {
   },
   sections: {
     finder: { title: "Tìm lốp theo", highlight: "đúng cỡ", after: "xe bạn", subtitle: "Không cần nhớ tên mẫu lốp — chỉ cần dãy số in trên hông lốp đang dùng." },
+    safety: { title: "Lốp của bạn còn", highlight: "an toàn", after: "không?", subtitle: "Hai phép thử 30 giây ngay tại xe: đọc tuổi lốp từ mã DOT và đo độ sâu gai." },
+    tiers: { title: "Ba mức lốp,", highlight: "một quyết định", after: "dễ dàng", subtitle: "Cùng cỡ lốp, chọn theo cách bạn dùng xe. Không chắc thì mức giữa là lựa chọn của đa số." },
     categories: { title: "Mỗi dòng xe một loại lốp" },
     featured: { title: "Lốp được chọn nhiều nhất", subtitle: "Rê chuột để dừng, kéo ngang để xem nhanh." },
     process: { title: "Thay lốp trọn bộ trong", highlight: "30 phút" },

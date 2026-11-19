@@ -26,7 +26,7 @@ export type CatalogProduct = {
   isNew?: boolean;
 };
 
-/** Tiêu đề một khối: “{title} [highlight]{after}” + mô tả phụ. `highlight` hiện dạng viên nhãn (pill). */
+/** Tiêu đề một khối: “{title} [highlight]{after}” + mô tả phụ. `highlight` hiện bằng màu nhấn của chuyên trang. */
 export type SectionHeading = { title: string; highlight?: string; after?: string; subtitle?: string };
 
 /** Nội dung chữ của trang chủ chuyên trang – sửa được trong admin (data/content-{site}.json). */
@@ -39,7 +39,16 @@ export type CatalogContent = {
   sections: Record<string, SectionHeading>;
   cta: { title: string; description: string };
   /** thẻ “trang tài liệu báo giá” ở banner sắt thép */
-  quote?: { title: string; status: string; documents: string; notes: string[] };
+  quote?: {
+    title: string;
+    status: string;
+    documents: string;
+    notes: string[];
+    /** bảng giá hôm nay (sắt thép): giá để trống → hiện “Gọi chốt giá” */
+    prices?: { slug: string; price: string; unit: string; trend: "up" | "down" | "flat" }[];
+    /** ngày giờ cập nhật bảng giá, dạng chữ (VD “19/11/2026 08:00”) */
+    updated?: string;
+  };
 };
 
 export type NewsItem = {

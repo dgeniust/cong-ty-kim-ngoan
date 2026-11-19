@@ -145,10 +145,19 @@ export const content: CatalogContent = {
   },
   sections: {
     categories: { title: "Đủ chủng loại cho", highlight: "phần thô", after: ", kết cấu và mái" },
-    tool: { title: "Tính nhanh khối lượng thép trước khi đặt hàng", subtitle: "Chọn đường kính và số cây để biết tổng số ký. Cần bóc tách theo bản vẽ, gửi cho chúng tôi — hỗ trợ tính thép theo bản vẽ để đặt đủ, không dư." },
+    genuine: { title: "Nhận biết thép", highlight: "chính phẩm", after: "tại công trình", subtitle: "Bốn điểm kiểm tra khi nhận hàng — không cần dụng cụ đặc biệt." },
+    tool: { title: "Lập danh sách vật tư, biết ngay khối lượng", subtitle: "Dự toán theo diện tích, tính theo số cây hoặc chọn từ danh mục — danh sách tự cộng khối lượng, cho biết bậc giá và gửi báo giá một lần." },
     commitments: { title: "Cân đủ, đúng quy cách,", highlight: "đúng tiến độ" },
     news: { title: "Kiến thức chọn và dùng thép" },
   },
   cta: { title: "Cần báo giá thép hôm nay?", description: "Gửi quy cách và khối lượng, nhận giá theo barem trong ngày." },
-  quote: { title: "Báo giá thép theo ngày", status: "Đang nhận đơn", documents: "CO/CQ theo từng lô", notes: ["Cắt, uốn, cán sóng theo bản vẽ", "Giao tận chân công trình"] },
+  quote: {
+    title: "Bảng giá thép hôm nay",
+    status: "Đang nhận đơn",
+    documents: "CO/CQ theo từng lô",
+    notes: ["Cắt, uốn, cán sóng theo bản vẽ", "Giao tận chân công trình"],
+    // TODO(khách hàng): nhập giá thật trong admin › Nội dung sắt thép › Bảng giá. Để trống = “Gọi chốt giá”.
+    prices: [],
+    updated: "",
+  },
 };

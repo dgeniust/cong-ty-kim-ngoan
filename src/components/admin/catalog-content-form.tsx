@@ -14,8 +14,8 @@ import { BTN_TEXT, Card, Grid, ItemsField, LinesField, PageHeader, SaveBar, Text
 type Site = "lopxe" | "satthep";
 
 const META: Record<Site, { title: string; path: string; preview: { box: string; pill: string; sub: string } }> = {
-  lopxe: { title: "Nội dung trang lốp xe", path: "/lopxe", preview: { box: "bg-lopxe-ink text-white", pill: "bg-lopxe-orange text-black", sub: "text-white/60" } },
-  satthep: { title: "Nội dung trang sắt thép", path: "/satthep", preview: { box: "bg-satthep-soft text-satthep-ink", pill: "bg-white text-satthep-ink shadow-[0_0_0_1px_rgb(0_0_0/0.1)]", sub: "text-black/55" } },
+  lopxe: { title: "Nội dung trang lốp xe", path: "/lopxe", preview: { box: "bg-lopxe-ink text-white", pill: "text-lopxe-orange", sub: "text-white/60" } },
+  satthep: { title: "Nội dung trang sắt thép", path: "/satthep", preview: { box: "bg-satthep-soft text-satthep-ink", pill: "text-black/50", sub: "text-black/55" } },
 };
 
 function errorsOf(c: CatalogContent): FieldErrors {
@@ -26,7 +26,7 @@ function errorsOf(c: CatalogContent): FieldErrors {
   return out;
 }
 
-/** Xem trước tiêu đề theo màu chuyên trang: “title [highlight] after”. */
+/** Xem trước tiêu đề theo màu chuyên trang: “title [highlight] after” – chữ nổi bật đổi màu nhấn. */
 function HeadlinePreview({ site, h, large }: { site: Site; h: Partial<SectionHeading>; large?: boolean }) {
   const p = META[site].preview;
   const after = h.after ? (/^[,.;:!?…]/.test(h.after) ? h.after : ` ${h.after}`) : "";
@@ -38,7 +38,7 @@ function HeadlinePreview({ site, h, large }: { site: Site; h: Partial<SectionHea
         {h.highlight && (
           <>
             {" "}
-            <span className={cn("inline-block rounded-full px-[0.35em]", p.pill)}>{h.highlight}</span>
+            <span className={p.pill}>{h.highlight}</span>
           </>
         )}
         {after}
@@ -50,7 +50,15 @@ function HeadlinePreview({ site, h, large }: { site: Site; h: Partial<SectionHea
 
 type Block = { id: string; label: string; render: () => React.ReactNode; errorPrefix: string[] };
 
-export function CatalogContentForm({ site, initial }: { site: Site; initial: CatalogContent }) {
+type PriceRow = NonNullable<NonNullable<CatalogContent["quote"]>["prices"]>[number];
+const UNITS = ["đ/kg", "đ/cây", "đ/m", "đ/tấm", "đ/m²", "đ/tấn"].map((u) => ({ value: u, label: u }));
+const TRENDS = [
+  { value: "flat", label: "— Giữ giá" },
+  { value: "up", label: "▲ Tăng" },
+  { value: "down", label: "▼ Giảm" },
+];
+
+export function CatalogContentForm({ site, initial, products = [] }: { site: Site; initial: CatalogContent; products?: { slug: string; name: string; spec: string }[] }) {
   const meta = META[site];
   const [data, setData] = useState(initial);
   const [saved, setSaved] = useState(JSON.stringify(initial));
@@ -71,7 +79,14 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
   const setHero = (k: keyof CatalogContent["hero"]) => (v: string) => set((d) => ({ ...d, hero: { ...d.hero, [k]: v } }));
   const setSec = (key: string, k: keyof SectionHeading) => (v: string) => set((d) => ({ ...d, sections: { ...d.sections, [key]: { ...d.sections[key], [k]: v } } }));
   const setCta = (k: keyof CatalogContent["cta"]) => (v: string) => set((d) => ({ ...d, cta: { ...d.cta, [k]: v } }));
-  const setQuote = (k: "title" | "status" | "documents") => (v: string) => set((d) => ({ ...d, quote: { ...d.quote!, [k]: v } }));
+  const setQuote = (k: "title" | "status" | "documents" | "updated") => (v: string) => set((d) => ({ ...d, quote: { ...d.quote!, [k]: v } }));
+  const priceOf = (slug: string): PriceRow => data.quote?.prices?.find((r) => r.slug === slug) ?? { slug, price: "", unit: "đ/kg", trend: "flat" };
+  const setPrice = (slug: string, patch: Partial<PriceRow>) =>
+    set((d) => {
+      const rows = d.quote?.prices ?? [];
+      const next = { ...priceOf(slug), ...patch };
+      return { ...d, quote: { ...d.quote!, prices: rows.some((r) => r.slug === slug) ? rows.map((r) => (r.slug === slug ? next : r)) : [...rows, next] } };
+    });
 
   function save() {
     const local = errorsOf(data);
@@ -122,7 +137,7 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
     label: "Banner đầu trang",
     errorPrefix: ["hero."],
     render: () => (
-      <Card title="Banner đầu trang" description="Khối 1 – phần đầu tiên khách nhìn thấy." tour="content-hero">
+      <Card title="Banner đầu trang" description="Đầu trang – phần đầu tiên khách nhìn thấy." tour="content-hero">
         <TextField label="Dòng nhãn nhỏ phía trên" required value={data.hero.eyebrow} onChange={setHero("eyebrow")} error={e("hero.eyebrow")} />
         <Grid cols={3}>
           <TextField label="Tiêu đề lớn" required value={data.hero.title} onChange={setHero("title")} error={e("hero.title")} />
@@ -153,17 +168,58 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
 
   const quoteBlock: Block = {
     id: "bao-gia",
-    label: "Thẻ báo giá (banner)",
+    label: "Bảng giá hôm nay",
     errorPrefix: ["quote."],
     render: () =>
       data.quote && (
-        <Card title="Thẻ “tài liệu báo giá” ở banner" description="Trang tài liệu bên phải banner. Bảng vật tư tự lấy từ sản phẩm gắn nhãn Bán chạy.">
+        <Card title="Bảng giá hôm nay (banner)" description="Bảng giá cỡ lớn ở đầu trang. Ô giá để trống → hiện “Gọi chốt giá”. Nhớ bấm “Ghi giờ hiện tại” mỗi lần cập nhật giá.">
           <Grid cols={3}>
-            <TextField label="Tiêu đề thẻ" required value={data.quote.title} onChange={setQuote("title")} error={e("quote.title")} />
+            <TextField label="Tiêu đề bảng" required value={data.quote.title} onChange={setQuote("title")} error={e("quote.title")} />
             <TextField label="Trạng thái" required value={data.quote.status} onChange={setQuote("status")} error={e("quote.status")} hint="VD: Đang nhận đơn" />
             <TextField label="Chứng từ" required value={data.quote.documents} onChange={setQuote("documents")} error={e("quote.documents")} />
           </Grid>
-          <LinesField key={`notes-${version}`} label="Dòng dịch vụ có dấu ✓" value={data.quote.notes} onChange={(v) => set((d) => ({ ...d, quote: { ...d.quote!, notes: v } }))} />
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="min-w-56 flex-1">
+              <TextField label="Cập nhật lúc" value={data.quote.updated ?? ""} onChange={setQuote("updated")} hint="VD: 19/11/2026 08:00" />
+            </div>
+            <button
+              type="button"
+              className={BTN_TEXT}
+              onClick={() => setQuote("updated")(new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()))}
+            >
+              Ghi giờ hiện tại
+            </button>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-hub-line">
+            <div className="hidden grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_7rem_8rem] gap-3 bg-hub-canvas px-4 py-2 text-[12px] font-medium text-hub-ink/55 sm:grid">
+              <span>Vật tư</span>
+              <span>Giá</span>
+              <span>Đơn vị</span>
+              <span>So với tuần trước</span>
+            </div>
+            {products.map((p) => {
+              const r = priceOf(p.slug);
+              return (
+                <div key={p.slug} className="grid gap-2 border-t border-hub-line px-4 py-3 first:border-t-0 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_7rem_8rem] sm:items-center sm:gap-3">
+                  <p className="min-w-0 text-[14px] font-medium text-hub-ink">
+                    {p.name} <span className="block text-[12px] font-normal text-hub-ink/50">{p.spec}</span>
+                  </p>
+                  <input aria-label={`Giá ${p.name}`} value={r.price} placeholder="Để trống = Gọi chốt giá" onChange={(ev) => setPrice(p.slug, { price: ev.target.value })} className="h-9 rounded-md border border-hub-line bg-hub-paper px-3 text-[14px] tabular-nums outline-none focus:border-hub-blue" />
+                  <select aria-label={`Đơn vị ${p.name}`} value={r.unit} onChange={(ev) => setPrice(p.slug, { unit: ev.target.value })} className="h-9 rounded-md border border-hub-line bg-hub-paper px-2 text-[14px] outline-none focus:border-hub-blue">
+                    {UNITS.map((u) => (
+                      <option key={u.value}>{u.value}</option>
+                    ))}
+                  </select>
+                  <select aria-label={`Xu hướng giá ${p.name}`} value={r.trend} onChange={(ev) => setPrice(p.slug, { trend: ev.target.value as PriceRow["trend"] })} className="h-9 rounded-md border border-hub-line bg-hub-paper px-2 text-[14px] outline-none focus:border-hub-blue">
+                    {TRENDS.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                </div>
+              );
+            })}
+          </div>
+          <LinesField key={`notes-${version}`} label="Dòng dịch vụ dưới bảng giá" value={data.quote.notes} onChange={(v) => set((d) => ({ ...d, quote: { ...d.quote!, notes: v } }))} />
         </Card>
       ),
   };
@@ -241,7 +297,7 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
     label: "Khối kêu gọi liên hệ",
     errorPrefix: ["cta."],
     render: () => (
-      <Card title="Khối kêu gọi liên hệ" description="Khối 8 – cuối trang, cạnh số điện thoại và nút Zalo (lấy từ Thông tin chung).">
+      <Card title="Khối kêu gọi liên hệ" description="Cuối trang, cạnh số điện thoại và nút Zalo (lấy từ Thông tin chung).">
         <TextField label="Tiêu đề" required value={data.cta.title} onChange={setCta("title")} error={e("cta.title")} />
         <TextField label="Mô tả" required multiline value={data.cta.description} onChange={setCta("description")} error={e("cta.description")} />
         <HeadlinePreview site={site} h={{ title: data.cta.title, subtitle: data.cta.description }} />
@@ -257,7 +313,9 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
       ? [
           heroBlock,
           hb("finder", undefined, true),
-          hb("categories", <p className="text-[13px] text-hub-ink/50">Tên và mô tả 4 thẻ loại xe lấy từ danh mục sản phẩm.</p>),
+          hb("safety", <p className="text-[13px] text-hub-ink/50">Công cụ đọc mã DOT và đo gai lốp là nội dung cố định.</p>),
+          hb("tiers", <p className="text-[13px] text-hub-ink/50">Sản phẩm trong từng mức tự lấy theo thương hiệu (lib/data/vertical-extras.ts).</p>),
+          hb("categories", <p className="text-[13px] text-hub-ink/50">Tên và mô tả 4 loại xe lấy từ danh mục sản phẩm.</p>),
           hb("featured", <p className="text-[13px] text-hub-ink/50">Dải sản phẩm tự lấy từ cơ sở dữ liệu Lốp xe.</p>),
           { ...hb("process", servicesField), errorPrefix: ["sections.process.", "services"] },
           {
@@ -265,8 +323,8 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
             label: "Cam kết",
             errorPrefix: ["about.", "usps"],
             render: () => (
-              <Card title="Cam kết" description="Khối 6 – 1 ô cam lớn + các ô nhỏ.">
-                {aboutFields("Đoạn 2 hiện nối sau mô tả của ô cam lớn.")}
+              <Card title="Cam kết" description="Khối 06 – câu chuyện + danh sách cam kết đánh số.">
+                {aboutFields("Hiện cạnh danh sách cam kết.")}
                 {uspsField}
               </Card>
             ),
@@ -277,20 +335,21 @@ export function CatalogContentForm({ site, initial }: { site: Site; initial: Cat
       : [
           heroBlock,
           quoteBlock,
-          hb("categories", undefined, true),
-          hb("tool"),
-          { ...hb("commitments", uspsField), errorPrefix: ["sections.commitments.", "usps"] },
+          hb("tool", undefined, true),
+          hb("categories"),
+          hb("genuine", <p className="text-[13px] text-hub-ink/50">Bản vẽ cây thép và 4 điểm kiểm tra là nội dung cố định.</p>),
           {
             id: "dich-vu",
-            label: "Dịch vụ",
+            label: "Dịch vụ tại kho",
             errorPrefix: ["about.", "services"],
             render: () => (
-              <Card title="Dịch vụ" description="Khối 6 – các khối xen kẽ trái/phải.">
+              <Card title="Dịch vụ tại kho" description="Khối 04 – các hạng mục dịch vụ kiểu khung tên bản vẽ.">
                 {aboutFields("Đoạn 1 là mô tả dưới tiêu đề khối Dịch vụ.")}
                 {servicesField}
               </Card>
             ),
           },
+          { ...hb("commitments", uspsField), errorPrefix: ["sections.commitments.", "usps"] },
           hb("news"),
           ctaBlock,
         ];

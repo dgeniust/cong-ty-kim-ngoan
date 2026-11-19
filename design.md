@@ -275,3 +275,38 @@ Thay ảnh sản phẩm (chưa có ảnh bao bì tách nền, §9) bằng nhãn 
 
 ### Logo
 `Logo` hiển thị tên “Kim Ngoan” bằng logo chữ dùng chung (`shared/wordmark.tsx`) cạnh dấu lá; logo tải lên trong admin vẫn thay được dấu lá.
+
+---
+
+## 13. Lốp xe `/lopxe` & sắt thép `/satthep` – bố cục v1.1
+
+Giữ nguyên theme từng chuyên trang (lốp xe: đen · trắng · cam; sắt thép: trắng · xám · đen) và cùng hệ đầu khối “đường kẻ + số thứ tự” với landing tổng / phân bón (`components/nganh/v-section-head.tsx`).
+Chữ nổi bật trong tiêu đề (`highlight` trong admin) **không còn bọc viên nhãn** – chỉ đổi màu nhấn (lốp xe: cam; sắt thép: xám).
+
+### Lốp xe – “an toàn → chọn dễ → làm nhanh”
+| # | Khối | File | Đòn bẩy tâm lý |
+|---|---|---|---|
+| – | Banner: **hông lốp khổng lồ**, dãy “205 / 55 R16” in nổi chính là 3 ô chọn cỡ lốp, chạm số nào hiện nghĩa số đó | `tyre-hero.tsx` | công cụ hữu ích ngay màn hình đầu |
+| 01 | **Lốp còn an toàn?** đọc tuổi lốp từ 4 số DOT + kéo thanh độ sâu gai (mặt cắt, vạch báo mòn 1,6 mm) → kết luận + nút đặt lịch | `tyre-check.tsx` | sợ mất an toàn, tự phát hiện nhu cầu |
+| 02 | **Ba mức lốp** Tiết kiệm / Cân bằng / Cao cấp, mức giữa nổi bật “Nhiều người chọn” | `tyre-parts.tsx` + `lib/data/vertical-extras.ts` | neo giá, giảm phân vân |
+| 03 | Loại xe – mục lục đánh số | `lopxe-home.tsx` | |
+| 04 | Bán chạy – **nhãn thông số** (cỡ lốp in to, chỉ số tải/tốc độ màu cam) thay hình bánh xe vẽ lặp | `tyre-parts.tsx` | |
+| 05 | **30:00** + các bước dịch vụ + **form đặt lịch** (lấy sẵn cỡ vừa tra, ngày, buổi, mức lốp, SĐT) | `tyre-booking.tsx` | khẩn cấp, tiện |
+| 06–07 | Cam kết đánh số · tin tức bài chính + mục lục · khối gọi ngay | `lopxe-home.tsx` | |
+
+### Sắt thép – “minh bạch giá → không thiếu, không dư → không mua nhầm”
+| # | Khối | File | Đòn bẩy tâm lý |
+|---|---|---|---|
+| – | Banner trên **nền giấy kẻ ô bản vẽ** (`.blueprint`) + **bảng giá thép hôm nay** cỡ lớn kiểu bảng điện tử, có khung tên bản vẽ, xu hướng ▲▼, nút “Khoá giá hôm nay” | `steel-board.tsx` | minh bạch giá |
+| 01 | **Danh sách vật tư**: dự toán theo diện tích sàn (hệ số sơ bộ) · tính theo số cây · chọn từ danh mục → giỏ vật tư lưu trên máy, tổng tấn, **thước bậc giá** lẻ / sỉ / dự án (“thêm x tấn để lên giá sỉ”), gửi báo giá | `steel-cart.tsx` | sợ thiếu/dư, gom đơn lên bậc giá |
+| 02 | Duyệt vật tư (giữ nguyên) | `steel-tools.tsx` | |
+| 03 | **Nhận biết thép chính phẩm**: bản vẽ cây thép có 4 chú thích + bảng barem cân thử | `rebar-anatomy.tsx` | sợ hàng kém chất lượng |
+| 04 | Dịch vụ tại kho dạng **khung tên bản vẽ** | `satthep-home.tsx` | |
+| 05–06 | Cam kết đánh số · tin tức dạng mục lục · khối đen gọi chốt giá | `satthep-home.tsx` | |
+
+### Admin
+- Nội dung sắt thép › **Bảng giá hôm nay**: nhập giá, đơn vị, xu hướng cho từng sản phẩm; nút “Ghi giờ hiện tại”. Ô trống → “Gọi chốt giá”.
+- Nội dung lốp xe thêm 2 khối tiêu đề: “Lốp còn an toàn?” (`safety`), “Ba mức lốp” (`tiers`). Sắt thép thêm “Nhận biết thép chính phẩm” (`genuine`).
+
+### Cần xác nhận
+`lib/data/vertical-extras.ts`: cách chia mức lốp theo thương hiệu, điểm so sánh, hệ số thép 35–45 kg/m² sàn, tỉ lệ chia đường kính, mốc bậc giá 1 tấn / 5 tấn. Form đặt lịch và gửi danh sách vật tư hiện chỉ có giao diện (như các form khác) – cần nối API.

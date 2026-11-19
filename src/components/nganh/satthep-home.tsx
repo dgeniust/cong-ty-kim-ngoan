@@ -1,31 +1,40 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, CheckSquare, ClipboardCheck, FileText, Phone, Ruler, Scale, Truck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
+import { Kicker } from "@/components/shared/kicker";
 import { Reveal } from "@/components/shared/reveal";
 import type { CatalogCategory, CatalogContent, CatalogProduct, NewsItem } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
-import { Headline } from "./headline";
-import { telHref, type Vertical } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
-import { ProductArt } from "./product-art";
-import { CategoryExplorer, WeightCalculator, type ExplorerGroup } from "./steel-tools";
+import { Headline } from "./headline";
+import { RebarAnatomy } from "./rebar-anatomy";
+import { SteelBoard } from "./steel-board";
+import { SteelCart, type CartProduct } from "./steel-cart";
+import { CategoryExplorer, type ExplorerGroup } from "./steel-tools";
 import { VButton } from "./v-button";
-import { VContainer, VHeading, VTag } from "./v-section";
+import { VContainer } from "./v-section";
+import { VSectionHead } from "./v-section-head";
+
+/** Đơn vị đặt hàng + khối lượng 1 đơn vị đọc từ thông số (“≈ 7,22 kg/cây”, “≈ 21,3 kg/m”). */
+function cartUnit(p: CatalogProduct): CartProduct {
+  const w = p.specs.find((s) => s.name === "Trọng lượng")?.value ?? "";
+  const m = w.match(/([\d.,]+)\s*kg\/(cây|m)/);
+  const kg = m ? Number(m[1].replace(/\./g, "").replace(",", ".")) : undefined;
+  const unit = m ? m[2] : p.categorySlug === "thep-tam-cuon" ? (p.art === "coil" ? "kg" : "tấm") : p.categorySlug === "ton-lop" ? "m²" : p.art === "coil" ? "kg" : "cây";
+  return { slug: p.slug, name: p.name, spec: p.keySpec, unit, kgPerUnit: kg ?? (unit === "kg" ? 1 : undefined) };
+}
 
 /**
- * Trang chủ SẮT THÉP – phong cách Notion, nền trắng · phối xám · chữ đen.
- * Bố cục riêng (khác landing tổng và lốp xe), mang chất "tài liệu kỹ thuật / báo giá":
- * hero lệch trái + trang tài liệu báo giá → số liệu kẻ mảnh → duyệt vật tư kiểu thanh bên
- * → công cụ tính trọng lượng → cam kết 4 cột → dịch vụ xen kẽ trái/phải → thương hiệu → tin tức dạng danh sách → khối đen.
+ * Trang chủ SẮT THÉP – bố cục v1.1 “bản vẽ kỹ thuật” (design.md §13). Giữ theme trắng · xám · đen.
+ * Đánh vào tâm lý nhà thầu / chủ nhà: minh bạch giá → không mua thiếu, không mua dư → không mua nhầm hàng kém.
+ *  banner + bảng giá hôm nay (cỡ lớn) → 01 danh sách vật tư & dự toán → 02 duyệt vật tư → 03 nhận biết thép chính phẩm
+ *  → 04 dịch vụ tại kho → 05 cam kết → 06 tin tức → gọi chốt giá.
  */
-
-const USP_ICONS = [ClipboardCheck, Scale, Ruler, Truck];
-
 export async function SatThepHome({
   vertical,
   categories,
   content,
-  featured,
   allProducts,
   brands,
   news,
@@ -40,246 +49,200 @@ export async function SatThepHome({
 }) {
   const { COMPANY } = await getSettings();
   const { hero, sections: sec, quote } = content;
-  const card = "bg-v-card shadow-[0_0_0_1px_var(--v-line)]";
   const base = vertical.base;
+  const today = new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
   const groups: ExplorerGroup[] = categories.map((c) => ({
     slug: c.slug,
     name: c.name,
     description: c.description,
     art: c.art,
     href: `${base}/san-pham?nhom=${c.slug}`,
-    products: allProducts
-      .filter((p) => p.categorySlug === c.slug)
-      .map((p) => ({ name: p.name, brand: p.brand, spec: p.keySpec, href: `${base}/san-pham/${p.slug}` })),
+    products: allProducts.filter((p) => p.categorySlug === c.slug).map((p) => ({ name: p.name, brand: p.brand, spec: p.keySpec, href: `${base}/san-pham/${p.slug}` })),
   }));
+  const order = categories.map((c) => c.slug);
+  const board = [...allProducts].sort((a, b) => order.indexOf(a.categorySlug) - order.indexOf(b.categorySlug));
 
   return (
     <>
-      {/* 1. Hero: chữ lệch trái – "trang tài liệu báo giá" bên phải */}
-      {/* kéo nền xám lên nằm dưới header nổi (cao 76px / 80px) để không hở dải trắng */}
-      <section className="-mt-[76px] border-b border-v-line bg-v-raise pt-[76px] md:-mt-20 md:pt-20">
-        <VContainer className="grid items-center gap-12 pb-16 pt-10 md:pb-20 md:pt-14 lg:grid-cols-[1fr_1.05fr]">
-          <div>
-            <VTag className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">
-              <FileText className="size-3.5" aria-hidden /> {hero.eyebrow}
-            </VTag>
-            <h1 className="text-display v-display mt-5 text-v-fg">
-              <Headline h={hero} pillClassName={card} />
+      {/* BANNER trên nền giấy kẻ ô: dòng thông tin → tiêu đề → bảng giá hôm nay cỡ lớn → số liệu */}
+      <section aria-labelledby="hero-title" className="blueprint border-b border-v-line pb-16 md:pb-20">
+        <VContainer className="pt-6 md:pt-10">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg pb-3 text-caption text-v-fg">
+            <span className="font-semibold">{hero.eyebrow}</span>
+            <span className="hidden text-v-mute sm:inline">Phân phối: {brands.join(" · ")}</span>
+            <a href={telHref(vertical.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:underline">
+              <Phone className="size-3.5" aria-hidden /> {vertical.phone}
+            </a>
+          </div>
+          <div className="mt-8 grid gap-6 md:mt-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+            <h1 id="hero-title" className="text-display v-display text-v-fg lg:col-span-8">
+              <Headline h={hero} pillClassName="text-v-mute" />
             </h1>
-            <p className="mt-6 max-w-xl text-lead text-v-mute">{hero.description}</p>
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              <VButton asChild size="lg">
-                <a href={telHref(vertical.phone)}>
-                  <Phone /> Nhận báo giá hôm nay
-                </a>
-              </VButton>
-              <VButton asChild size="lg" variant="quiet">
-                <Link href={`${base}/san-pham`}>
-                  Xem quy cách <ArrowRight className="arrow" />
-                </Link>
-              </VButton>
-            </div>
-            <p className="mt-8 text-small text-v-mute">
-              Phân phối: <span className="font-medium text-v-fg">{brands.join(" · ")}</span>
-            </p>
-          </div>
-
-          {/* trang tài liệu kiểu Notion */}
-          <div className="rounded-xl border border-v-line bg-v-card shadow-[0_4px_12px_rgb(0_0_0/0.1)]">
-            <div className="flex items-center gap-2 border-b border-v-line px-5 py-3 text-caption text-v-mute">
-              <span>Kim Ngoan</span> <span aria-hidden>/</span> <span>Sắt thép</span> <span aria-hidden>/</span> <span className="text-v-fg">Báo giá</span>
-            </div>
-            <div className="p-6 sm:p-8">
-              <span aria-hidden className="grid size-12 place-items-center rounded-lg bg-v-raise">
-                <ProductArt kind="ibeam" className="!size-9" />
-              </span>
-              <p className="mt-4 text-h3 font-semibold text-v-fg">{quote?.title}</p>
-              <dl className="mt-4 grid grid-cols-[7.5rem_1fr] gap-y-2 text-small">
-                <dt className="text-v-mute">Trạng thái</dt>
-                <dd>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-v-pill px-2.5 py-0.5 text-caption font-medium text-v-on-pill">
-                    <span aria-hidden className="size-1.5 rounded-full bg-v-fg" /> {quote?.status}
-                  </span>
-                </dd>
-                <dt className="text-v-mute">Khu vực giao</dt>
-                <dd className="text-v-fg">{COMPANY.address} và lân cận</dd>
-                <dt className="text-v-mute">Chứng từ</dt>
-                <dd className="text-v-fg">{quote?.documents}</dd>
-              </dl>
-              <table className="mt-6 w-full text-left text-small">
-                <thead className="text-caption text-v-mute">
-                  <tr className="[&>th]:pb-2 [&>th]:font-normal">
-                    <th scope="col">Vật tư</th>
-                    <th scope="col" className="hidden sm:table-cell">Quy cách</th>
-                    <th scope="col" className="text-right">Giá</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {featured.map((p) => (
-                    <tr key={p.slug} className="relative transition-colors duration-150 hover:bg-v-raise [&>td]:border-t [&>td]:border-v-line [&>td]:py-2.5">
-                      <td className="pr-3 font-medium text-v-fg">
-                        <Link href={`${base}/san-pham/${p.slug}`} className="after:absolute after:inset-0 after:content-['']">{p.name}</Link>
-                      </td>
-                      <td className="hidden pr-3 tabular-nums text-v-mute sm:table-cell">{p.keySpec}</td>
-                      <td className="text-right text-v-mute">Liên hệ</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <ul className="mt-5 space-y-1.5 text-small text-v-fg">
-                {(quote?.notes ?? []).map((t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <CheckSquare className="size-4 text-v-fg" aria-hidden /> {t}
-                  </li>
-                ))}
-              </ul>
+            <div className="lg:col-span-4">
+              <p className="text-lead leading-relaxed text-v-mute">{hero.description}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <VButton asChild>
+                  <a href="#vat-tu-cua-ban">
+                    Lập danh sách vật tư <ArrowRight className="arrow" />
+                  </a>
+                </VButton>
+                <VButton asChild variant="quiet">
+                  <a href={telHref(vertical.phone)}>Gọi chốt giá</a>
+                </VButton>
+              </div>
             </div>
           </div>
-        </VContainer>
-      </section>
-
-      {/* 2. Số liệu – một hàng kẻ mảnh, không thẻ */}
-      <section aria-label="Số liệu" className="border-b border-v-line">
-        <VContainer>
-          <dl className="grid divide-y divide-v-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {quote && (
+            <div className="mt-10 md:mt-12">
+              <SteelBoard quote={quote} products={board} base={base} phone={vertical.phone} today={today} />
+            </div>
+          )}
+          <dl className="mt-4 grid divide-y divide-v-line border-b border-v-line bg-v-bg/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {hero.stats.map((s) => (
-              <div key={s.label} className="py-8 sm:px-8 sm:first:pl-0">
+              <div key={s.label} className="flex items-baseline gap-3 py-5 sm:px-6 sm:first:pl-0">
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-h2 font-semibold tabular-nums text-v-fg">{s.value}</dd>
-                <dd className="mt-3 text-body text-v-mute">{s.label}</dd>
+                <dd className="text-h3 font-semibold tabular-nums text-v-fg">{s.value}</dd>
+                <dd className="text-body text-v-mute">{s.label}</dd>
               </div>
             ))}
           </dl>
         </VContainer>
       </section>
 
-      {/* 3. Duyệt vật tư kiểu thanh bên */}
-      <section aria-labelledby="vat-tu-title" className="py-20 md:py-24">
+      {/* 01. Danh sách vật tư & dự toán */}
+      <section id="vat-tu-cua-ban" aria-labelledby="tinh-thep-title" className="scroll-mt-24 py-16 md:py-24">
         <VContainer>
-          <VHeading id="vat-tu-title" index="Vật tư" title={<Headline h={sec.categories} />} subtitle={sec.categories?.subtitle} href={`${base}/san-pham`} hrefLabel="Toàn bộ sản phẩm" />
+          <VSectionHead id="tinh-thep-title" no="01" kicker="Danh sách vật tư" title={<Headline h={sec.tool} pillClassName="text-v-mute" />} lead={sec.tool?.subtitle} />
+          <SteelCart products={allProducts.map(cartUnit)} phone={vertical.phone} zalo={COMPANY.zalo} />
+        </VContainer>
+      </section>
+
+      {/* 02. Duyệt vật tư */}
+      <section aria-labelledby="vat-tu-title" className="border-y border-v-line bg-v-raise py-16 md:py-24">
+        <VContainer>
+          <VSectionHead
+            id="vat-tu-title"
+            no="02"
+            kicker="Vật tư"
+            title={<Headline h={sec.categories} pillClassName="text-v-mute" />}
+            lead={sec.categories?.subtitle}
+            action={
+              <VButton asChild variant="quiet">
+                <Link href={`${base}/san-pham`}>
+                  Toàn bộ sản phẩm <ArrowRight className="arrow" />
+                </Link>
+              </VButton>
+            }
+          />
           <CategoryExplorer groups={groups} />
         </VContainer>
       </section>
 
-      {/* 4. Công cụ tính trọng lượng: chữ trái – mảng xám phải */}
-      <section aria-labelledby="tinh-thep-title" className="border-t border-v-line py-20 md:py-24">
-        <VContainer className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <Reveal>
-            <VTag>Công cụ</VTag>
-            <h2 id="tinh-thep-title" className="text-h2 v-display mt-3 text-v-fg">
-              <Headline h={sec.tool} />
-            </h2>
-            <p className="mt-5 max-w-lg text-lead leading-relaxed text-v-mute">
-              {sec.tool?.subtitle}
-            </p>
-            <VButton asChild variant="tint" className="mt-7">
-              <Link href={`${base}/lien-he`}>
-                Gửi bản vẽ bóc tách <ArrowRight className="arrow" />
-              </Link>
-            </VButton>
-          </Reveal>
-          <Reveal delay={100} className="rounded-xl bg-v-raise p-4 sm:p-8">
-            <WeightCalculator />
-          </Reveal>
+      {/* 03. Nhận biết thép chính phẩm */}
+      <section aria-labelledby="chinh-pham-title" className="blueprint py-16 md:py-24">
+        <VContainer>
+          <VSectionHead id="chinh-pham-title" no="03" kicker="Kiểm tra khi nhận hàng" title={<Headline h={sec.genuine} pillClassName="text-v-mute" />} lead={sec.genuine?.subtitle} />
+          <RebarAnatomy />
         </VContainer>
       </section>
 
-      {/* 5. Cam kết – 4 cột ngăn bằng đường kẻ */}
-      <section aria-labelledby="cam-ket-title" className="border-t border-v-line bg-v-raise py-20 md:py-24">
+      {/* 04. Dịch vụ tại kho – khung tên bản vẽ */}
+      <section aria-labelledby="dich-vu-title" className="border-y border-v-line py-16 md:py-24">
         <VContainer>
-          <VHeading id="cam-ket-title" index="Cam kết" center title={<Headline h={sec.commitments} pillClassName={card} />} subtitle={sec.commitments?.subtitle} />
-          <ul className="grid overflow-hidden rounded-xl border border-v-line bg-v-card sm:grid-cols-2 lg:grid-cols-4">
-            {content.usps.map((u, i) => {
-              const Icon = USP_ICONS[i % USP_ICONS.length];
-              return (
-                <li key={u.title} className={cn("group p-7", i > 0 && "border-t border-v-line sm:border-t-0", i % 2 === 1 && "sm:border-l sm:border-v-line", i >= 2 && "sm:border-t lg:border-t-0", i > 0 && "lg:border-l lg:border-v-line")}>
-                  <span className="grid size-11 place-items-center rounded-full border-2 border-v-fg/80 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110">
-                    <Icon className="size-5 text-v-fg" strokeWidth={1.75} aria-hidden />
-                  </span>
-                  <h3 className="text-title mt-6 font-semibold text-v-fg">{u.title}</h3>
-                  <p className="mt-2 text-body leading-relaxed text-v-mute">{u.description}</p>
-                </li>
-              );
-            })}
-          </ul>
-        </VContainer>
-      </section>
-
-      {/* 6. Dịch vụ – các khối xen kẽ trái/phải */}
-      <section aria-labelledby="dich-vu-title" className="border-t border-v-line py-20 md:py-24">
-        <VContainer>
-          <VHeading id="dich-vu-title" index="Dịch vụ" title={content.about.title} subtitle={content.about.paragraphs[0]} />
-          <div className="space-y-3">
+          <VSectionHead id="dich-vu-title" no="04" kicker="Dịch vụ tại kho" title={content.about.title} lead={content.about.paragraphs[0]} />
+          <ol className="grid gap-4 md:grid-cols-3">
             {content.services.map((s, i) => (
-              <Reveal key={s.title} className={cn("grid items-center gap-6 rounded-xl border border-v-line bg-v-card p-3 md:grid-cols-2", i % 2 === 1 && "md:[&>*:first-child]:order-2")}>
-                <div className={cn("relative aspect-[16/9] overflow-hidden rounded-lg", i === 1 ? "bg-v-island" : "bg-v-raise")}>
-                  <ProductArt kind={(["rebar", "roofing", "plate"] as const)[i % 3]} className="absolute inset-0 m-auto !size-[58%]" />
+              <Reveal as="li" key={s.title} delay={i * 80} className="flex flex-col border-2 border-v-fg">
+                <div className="grid grid-cols-[1fr_auto] border-b-2 border-v-fg text-micro uppercase tracking-[0.12em]">
+                  <span className="px-4 py-2 text-v-mute">Hạng mục</span>
+                  <span className="border-l-2 border-v-fg px-4 py-2 font-semibold tabular-nums text-v-fg">0{i + 1}</span>
                 </div>
-                <div className="p-4 md:p-8">
-                  <span className="text-caption font-medium tabular-nums text-v-mute">0{i + 1}</span>
-                  <h3 className="text-h3 mt-2 font-semibold text-v-fg">{s.title}</h3>
-                  <p className="mt-2 max-w-md text-body leading-relaxed text-v-mute">{s.description}</p>
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <h3 className="text-h3 font-semibold tracking-[-0.025em] text-v-fg">{s.title}</h3>
+                  <p className="mt-2 text-body leading-relaxed text-v-mute">{s.description}</p>
                 </div>
               </Reveal>
             ))}
-          </div>
+          </ol>
+          {content.about.paragraphs[1] && <p className="mt-8 max-w-3xl text-lead leading-relaxed text-v-fg">{content.about.paragraphs[1]}</p>}
         </VContainer>
       </section>
 
-      {/* 7. Tin tức – danh sách kiểu tài liệu */}
+      {/* 05. Cam kết */}
+      <section aria-labelledby="cam-ket-title" className="py-16 md:py-24">
+        <VContainer>
+          <VSectionHead id="cam-ket-title" no="05" kicker="Cam kết" title={<Headline h={sec.commitments} pillClassName="text-v-mute" />} lead={sec.commitments?.subtitle} />
+          <ol className="grid sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
+            {content.usps.map((u, i) => (
+              <Reveal as="li" key={u.title} delay={i * 70} className="border-t-2 border-v-fg py-5 pr-4">
+                <span className="text-h2 font-semibold tabular-nums text-v-fg">0{i + 1}</span>
+                <h3 className="mt-4 text-title font-semibold text-v-fg">{u.title}</h3>
+                <p className="mt-1.5 text-body leading-relaxed text-v-mute">{u.description}</p>
+              </Reveal>
+            ))}
+          </ol>
+        </VContainer>
+      </section>
+
+      {/* 06. Tin tức – mục lục */}
       {news.length > 0 && (
-        <section aria-labelledby="tin-tuc-title" className="border-t border-v-line bg-v-raise py-20 md:py-24">
-          <VContainer className="grid gap-10 lg:grid-cols-[1fr_1.6fr]">
-            <div>
-              <VTag className="bg-v-card shadow-[0_0_0_1px_var(--v-line)]">Tin tức</VTag>
-              <h2 id="tin-tuc-title" className="text-h2 v-display mt-3 text-v-fg">
-                <Headline h={sec.news} />
-              </h2>
-              {sec.news?.subtitle && <p className="mt-4 max-w-sm text-body leading-relaxed text-v-mute">{sec.news.subtitle}</p>}
-              <VButton asChild variant="quiet" size="sm" className="mt-6">
-                <Link href={`${base}/tin-tuc`}>
-                  Tất cả bài viết <ArrowRight className="arrow" />
-                </Link>
-              </VButton>
-            </div>
-            <ul className="overflow-hidden rounded-xl border border-v-line bg-v-card">
-              {news.map((n, i) => (
-                <li key={n.slug} className={cn(i > 0 && "border-t border-v-line")}>
-                  <Link href={n.href} className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 p-5 transition-colors duration-150 hover:bg-v-raise sm:gap-6 sm:p-6">
-                    <span className="relative size-14 overflow-hidden rounded-lg bg-v-raise">
-                      {n.art && <ProductArt kind={n.art} className="absolute inset-0 m-auto !size-[80%]" />}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="text-caption text-v-mute">{formatDate(n.date)} · {n.readingMinutes} phút đọc</span>
-                      <span className="mt-1 block text-title font-semibold leading-snug tracking-[-0.01em] text-v-fg">{n.title}</span>
-                      <span className="mt-1 line-clamp-1 text-small text-v-mute">{n.excerpt}</span>
-                    </span>
-                    <ArrowUpRight className="size-5 text-v-mute transition-colors group-hover:text-v-fg" aria-hidden />
+        <section aria-labelledby="tin-tuc-title" className="border-t border-v-line bg-v-raise py-16 md:py-24">
+          <VContainer>
+            <VSectionHead
+              id="tin-tuc-title"
+              no="06"
+              kicker="Tin tức"
+              title={<Headline h={sec.news} pillClassName="text-v-mute" />}
+              lead={sec.news?.subtitle}
+              action={
+                <VButton asChild variant="quiet">
+                  <Link href={`${base}/tin-tuc`}>
+                    Tất cả bài viết <ArrowRight className="arrow" />
                   </Link>
+                </VButton>
+              }
+            />
+            <ol className="border-b border-v-line">
+              {news.map((n, i) => (
+                <li key={n.slug} className={cn("group relative grid gap-2 border-t border-v-line py-6 sm:grid-cols-[4rem_1fr_9rem_auto] sm:items-baseline sm:gap-6", i === 0 && "border-v-fg")}>
+                  <span className="text-caption font-semibold tabular-nums text-v-mute">0{i + 1}</span>
+                  <span>
+                    <Link href={n.href} className="text-h4 font-semibold tracking-[-0.02em] text-v-fg after:absolute after:inset-0 after:content-[''] group-hover:underline">
+                      {n.title}
+                    </Link>
+                    <span className="mt-1 line-clamp-1 block text-small text-v-mute">{n.excerpt}</span>
+                  </span>
+                  <span className="text-caption tabular-nums text-v-mute">
+                    {formatDate(n.date)} · {n.readingMinutes} phút
+                  </span>
+                  <ArrowUpRight className="hidden size-5 text-v-mute transition-colors group-hover:text-v-fg sm:block" aria-hidden />
                 </li>
               ))}
-            </ul>
+            </ol>
           </VContainer>
         </section>
       )}
 
-      {/* 8. Khối đen kêu gọi hành động */}
-      <section aria-labelledby="cta-title" className="py-20 md:py-24">
+      {/* Gọi chốt giá */}
+      <section aria-labelledby="cta-title" className="py-16 md:py-24">
         <VContainer>
-          <div className="grid items-center gap-8 rounded-xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-[1.4fr_1fr]">
-            <div>
-              <h2 id="cta-title" className="text-h2 v-display !text-current">
-                {content.cta.title}
-              </h2>
-              <p className="mt-4 max-w-lg text-lead leading-relaxed opacity-70">{content.cta.description} {vertical.contactLabel}.</p>
+          <div className="grid items-end gap-8 rounded-2xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-12 lg:p-14">
+            <div className="lg:col-span-7">
+              <Kicker no="—" className="text-white">
+                Liên hệ
+              </Kicker>
+              <h2 id="cta-title" className="text-h1 v-display mt-7 !text-current">{content.cta.title}</h2>
+              <p className="mt-4 max-w-lg text-lead leading-relaxed opacity-70">
+                {content.cta.description} {vertical.contactLabel}.
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-lg bg-v-on-island px-5 py-4 text-v-island transition-opacity hover:opacity-90">
-                <span className="text-h3 font-semibold tabular-nums tracking-[-0.02em]">{vertical.phone}</span>
-                <Phone className="size-5" aria-hidden />
+            <div className="flex flex-col gap-2 lg:col-span-4 lg:col-start-9">
+              <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-xl bg-v-on-island px-6 py-5 text-v-island transition-opacity hover:opacity-90">
+                <span className="text-h2 font-semibold tabular-nums tracking-[-0.03em]">{vertical.phone}</span>
+                <Phone className="size-6" aria-hidden />
               </a>
-              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-lg border border-white/15 px-5 text-body font-medium transition-colors hover:bg-white/10">
-                Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
+              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-xl border border-white/20 px-5 text-body font-medium transition-colors hover:bg-white/10">
+                Gửi bản vẽ bóc tách <ArrowRight className="size-5" aria-hidden />
               </Link>
             </div>
           </div>
