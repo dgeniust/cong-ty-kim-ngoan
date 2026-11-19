@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
 import { QuickConsult } from "@/components/landing/quick-consult";
 import { FarmBulletin } from "@/components/phanbon/farm-bulletin";
-import { GardenStory, type StoryCrop } from "@/components/phanbon/garden-story";
+import { HeroShop, type HeroCrop } from "@/components/phanbon/hero-shop";
 import { PlantDoctor } from "@/components/phanbon/plant-doctor";
 import { RealGardens } from "@/components/phanbon/real-gardens";
 import { NpkLabel, type LabelProduct } from "@/components/phanbon/npk-label";
@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Landing phân bón – bố cục v1.2 (design.md §14). Giữ theme “Vườn Xanh” (§3–4).
- *  hero “Lát cắt khu vườn” (cuộn kể chuyện, chọn cây) → 01 bảng tin nhà vườn (thời tiết + việc tháng này)
+ *  hero kiểu cửa hàng (tìm kiếm, nhóm hàng, ảnh vườn thật + gợi ý theo cây) → 01 bảng tin nhà vườn (thời tiết + việc tháng này)
  *  → 02 bác sĩ cây trồng → 03 nhãn bao → 04 vườn thật, người thật → 05 về Kim Ngoan → 06 kiến thức → form gọi lại.
  * Cây chọn ở hero dùng chung cho cả trang (lib/crop-store). Chữ lấy từ CMS khi có trường tương ứng.
  */
@@ -71,13 +71,13 @@ export default async function HomePage() {
   const month = Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()));
 
   const [{ COMPANY }, forecast] = await Promise.all([getSettings(), getForecast()]);
-  const crops: StoryCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
+  const crops: HeroCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
   const articles = news.map((a) => ({ href: `/phanbon/${a.section}/${a.slug}`, title: a.title, tags: a.tags }));
   const [lead, ...rest] = news.slice(0, 4);
 
   return (
     <div className="bg-paper">
-      {/* HERO: dòng thông tin đầu trang → “Lát cắt khu vườn” (cuộn kể chuyện) */}
+      {/* HERO kiểu cửa hàng: dòng thông tin → tiêu đề + tìm kiếm + nhóm hàng | ảnh vườn thật + gợi ý theo cây */}
       <section aria-labelledby="hero-title" className="pt-6 md:pt-8">
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
@@ -88,7 +88,7 @@ export default async function HomePage() {
             </a>
           </div>
 
-          <GardenStory crops={crops} eyebrow={<><span className="sr-only">{site.companyPrefix} {site.companyName} – </span>Phân bón & thuốc BVTV cho vườn {site.address}</>} phone={site.phone} />
+          <HeroShop crops={crops} products={products.map(toLabel)} features={content.features} phone={site.phone} srCompany={`${site.companyPrefix} ${site.companyName}`} />
 
         </Container>
       </section>
@@ -115,8 +115,8 @@ export default async function HomePage() {
             id="bac-si-title"
             no="02"
             kicker="Bác sĩ cây trồng"
-            title="Cây có dấu hiệu lạ? Chỉ chỗ bị, xem nguyên nhân"
-            lead="Ba bước: chạm vào chỗ cây đang bị, chọn dấu hiệu giống nhất, xem nguyên nhân thường gặp và cách xử lý — gửi ảnh cho kỹ thuật viên để chắc chắn."
+            title="Cây có dấu hiệu lạ? Xem nguyên nhân trong 2 bước"
+            lead="Chọn chỗ cây đang bị và dấu hiệu giống nhất để xem nguyên nhân thường gặp, cách xử lý và loại phân, thuốc phù hợp."
           />
           <PlantDoctor phone={site.phone} zalo={COMPANY.zalo} />
         </Container>

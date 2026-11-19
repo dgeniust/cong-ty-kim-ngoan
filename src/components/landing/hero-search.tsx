@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 const QUICK = ["Phân NPK", "Phân hữu cơ", "Thuốc trừ sâu", "Kích ra hoa"];
 
 /** Plain GET form → works without JavaScript and is the fastest path to a product. */
-export function HeroSearch() {
+export function HeroSearch({ quick = true }: { quick?: boolean } = {}) {
   return (
     <div>
       <form action="/phanbon/tim-kiem" role="search" className="relative max-w-lg">
@@ -27,6 +27,7 @@ export function HeroSearch() {
           Tìm
         </button>
       </form>
+      {quick && (
       <ul className="mt-4 flex flex-wrap items-center gap-2" aria-label="Tìm nhanh">
         {QUICK.map((q) => (
           <li key={q}>
@@ -39,6 +40,7 @@ export function HeroSearch() {
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 }

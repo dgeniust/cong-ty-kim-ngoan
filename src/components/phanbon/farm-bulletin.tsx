@@ -179,7 +179,7 @@ export function FarmBulletin({
                 <div>
                   <p className="text-caption text-white/60">Hôm nay · {place}</p>
                   <p className="mt-0.5 text-h2 font-semibold tabular-nums">
-                    {today.tmax}° <span className="text-h4 text-white/50">/ {today.tmin}°</span>
+                    {today.tmax}° <span className="text-h4 text-white/75">/ {today.tmin}°</span>
                   </p>
                   <p className="text-small text-white/75">{SKY_LABEL[skyOf(today.code)]}</p>
                 </div>
@@ -221,23 +221,23 @@ export function FarmBulletin({
                   const f = fertVerdict(d);
                   return (
                     <li key={d.date} className={cn("flex flex-col items-center rounded-2xl px-1 py-3 text-center", i === 0 ? "bg-white/[0.1]" : "")}>
-                      <span className="text-[11px] font-medium text-white/65 sm:text-caption">{dayName(d.date, i)}</span>
+                      <span className="text-[11px] font-medium text-white/80 sm:text-caption">{dayName(d.date, i)}</span>
                       <SkyIcon sky={skyOf(d.code)} className="mt-1.5 size-9" />
                       <span className="mt-1 text-small font-semibold tabular-nums">
-                        {d.tmax}° <span className="font-normal text-white/50">{d.tmin}°</span>
+                        {d.tmax}° <span className="font-normal text-white/75">{d.tmin}°</span>
                       </span>
                       {/* cột mưa */}
                       <span className="mt-2 flex h-10 w-2.5 items-end overflow-hidden rounded-full bg-white/10" aria-hidden>
                         <span className="w-full rounded-full bg-[#8cc4f0]" style={{ height: `${Math.min(100, (d.rain / 30) * 100)}%` }} />
                       </span>
-                      <span className="mt-1 text-[11px] tabular-nums text-white/60">{fmt(d.rain)} mm</span>
+                      <span className="mt-1 text-[11px] tabular-nums text-white/75">{fmt(d.rain)} mm</span>
                       <span className={cn("mt-2 size-2 rounded-full", f.tone === "no" ? "bg-[#f0a37a]" : f.tone === "go" ? "bg-sun-300" : "bg-white/40")} title={`Bón phân: ${f.title}`} />
                       <span className="sr-only">Bón phân: {f.title}</span>
                     </li>
                   );
                 })}
               </ol>
-              <p className="mt-4 flex flex-wrap justify-between gap-2 text-[11px] text-white/45">
+              <p className="mt-4 flex flex-wrap justify-between gap-2 text-[11px] text-white/70">
                 <span>Chấm dưới mỗi ngày: vàng = hợp bón · cam = nên hoãn · xám = bón kèm tưới</span>
                 <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline">
                   Dự báo: Open-Meteo

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Camera, Check, Phone, Stethoscope } from "lucide-react";
+import { ArrowRight, Camera, Check, Cherry, Leaf as LeafIcon, Phone, Shovel, Sprout, type LucideIcon } from "lucide-react";
 import { SYMPTOMS, ZONES, type SymptomIcon, type ZoneId } from "@/lib/content/plant-doctor";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
@@ -140,260 +140,166 @@ export function SymptomArt({ kind, className }: { kind: SymptomIcon; className?:
   );
 }
 
-/* ---------------------------------------------------------------- cây có 4 điểm bấm */
-const SPOTS: Record<ZoneId, { x: string; y: string }> = {
-  "la-non": { x: "60%", y: "11%" },
-  "la-gia": { x: "26%", y: "48%" },
-  trai: { x: "72%", y: "44%" },
-  re: { x: "50%", y: "88%" },
-};
-
-function DoctorPlant({ zone }: { zone: ZoneId | null }) {
-  const on = (z: ZoneId) => zone === null || zone === z;
-  const fade = (z: ZoneId) => cn("transition-opacity duration-500", on(z) ? "opacity-100" : "opacity-30");
-  return (
-    <svg viewBox="0 0 400 520" className="size-full" aria-hidden>
-      <rect width="400" height="400" fill="#eaf3df" />
-      <rect y="400" width="400" height="120" fill="#7a5a3c" />
-      <path d="M0 400 H 400" stroke="#4f3a26" strokeWidth="3" />
-      {/* rễ */}
-      <g className={fade("re")} stroke="#efe3cf" strokeLinecap="round" fill="none">
-        <path d="M200 400 C 202 440, 196 470, 200 510" strokeWidth="7" />
-        <path d="M200 420 C 170 430, 140 450, 115 485" strokeWidth="4" />
-        <path d="M200 428 C 232 440, 262 455, 290 492" strokeWidth="4" />
-        <path d="M200 450 C 180 470, 165 490, 160 515" strokeWidth="2.5" />
-      </g>
-      {/* thân, cành */}
-      <g stroke="#6b4a2f" strokeLinecap="round" fill="none">
-        <path d="M200 400 C 198 320, 205 200, 215 70" strokeWidth="12" />
-        <path d="M203 300 C 160 280, 120 270, 85 250" strokeWidth="6" />
-        <path d="M206 240 C 250 220, 290 215, 320 200" strokeWidth="6" />
-        <path d="M209 170 C 180 150, 160 140, 135 120" strokeWidth="5" />
-      </g>
-      {/* lá già: to, xanh đậm, phía dưới */}
-      <g className={fade("la-gia")}>
-        {[
-          [80, 245, -60],
-          [110, 262, -100],
-          [145, 280, -40],
-          [60, 230, -80],
-          [175, 305, -120],
-          [125, 300, -150],
-        ].map(([x, y, r], i) => (
-          <g key={i} transform={`translate(${x - 24} ${y - 24}) rotate(${r} 24 24) scale(0.75)`}>
-            <path d={LEAF} fill={i % 2 ? "#2e7d32" : "#22662a"} />
-            <path d={VEINS} stroke="#18501d" strokeWidth="1.4" fill="none" />
-          </g>
-        ))}
-      </g>
-      {/* lá vừa */}
-      <g>
-        {[
-          [255, 222, 40],
-          [300, 205, 70],
-          [160, 145, -50],
-          [135, 118, -80],
-          [240, 240, 120],
-        ].map(([x, y, r], i) => (
-          <g key={i} transform={`translate(${x - 20} ${y - 20}) rotate(${r} 20 20) scale(0.62)`}>
-            <path d={LEAF} fill="#3e9b37" />
-          </g>
-        ))}
-      </g>
-      {/* lá non: nhỏ, xanh nhạt, ở ngọn */}
-      <g className={fade("la-non")}>
-        {[
-          [215, 60, 0],
-          [200, 75, -40],
-          [232, 74, 40],
-          [222, 92, 70],
-          [205, 95, -70],
-        ].map(([x, y, r], i) => (
-          <g key={i} transform={`translate(${x - 12} ${y - 14}) rotate(${r} 12 14) scale(0.4)`}>
-            <path d={LEAF} fill="#9fd36a" />
-          </g>
-        ))}
-      </g>
-      {/* hoa, trái */}
-      <g className={fade("trai")}>
-        {[
-          [280, 235],
-          [300, 228],
-          [292, 252],
-          [268, 250],
-          [312, 245],
-        ].map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r="9" fill={i % 2 ? "#d9482b" : "#b3261e"} />
-        ))}
-        {[
-          [310, 192],
-          [322, 198],
-        ].map(([x, y], i) => (
-          <circle key={`h${i}`} cx={x} cy={y} r="5" fill="#ffffff" stroke="#f6e27a" strokeWidth="2" />
-        ))}
-      </g>
-    </svg>
-  );
-}
+const ZONE_ICON: Record<ZoneId, LucideIcon> = { "la-non": Sprout, "la-gia": LeafIcon, trai: Cherry, re: Shovel };
+/** dấu hiệu hay gặp nhất – bấm một lần ra kết quả */
+const COMMON = ["vang-deu", "chay-mep", "rung-trai", "thoi-re"];
 
 /**
- * “Bác sĩ cây trồng”: 1) chạm chỗ cây đang bị trên hình → 2) chọn triệu chứng giống nhất
- * → 3) nguyên nhân thường gặp, vì sao, việc nên làm, nhóm phân/thuốc, gửi ảnh cho kỹ thuật viên.
+ * “Bác sĩ cây trồng” – phiếu khám 3 cột, không hình minh hoạ cây:
+ *  1) bị ở đâu (lá non, lá già, hoa trái, rễ gốc) → 2) dấu hiệu nào (thẻ có hình nhỏ)
+ *  → 3) nguyên nhân thường gặp, việc nên làm, nhóm phân/thuốc, gửi ảnh cho kỹ thuật viên.
+ * Mở sẵn “Lá già” để thấy ngay danh sách; cột 3 lúc đầu là các dấu hiệu hay gặp + lối tắt gửi ảnh.
  */
 export function PlantDoctor({ phone, zalo }: { phone: string; zalo: string }) {
-  const [zone, setZone] = useState<ZoneId | null>(null);
+  const [zone, setZone] = useState<ZoneId>("la-gia");
   const [sid, setSid] = useState<string | null>(null);
   const result = useRef<HTMLDivElement>(null);
-  const list = SYMPTOMS.filter((s) => s.zone === zone);
+  const list = SYMPTOMS.filter((x) => x.zone === zone);
   const s = SYMPTOMS.find((x) => x.id === sid);
-  const z = ZONES.find((x) => x.id === zone);
 
-  const pickZone = (id: ZoneId) => {
-    setZone(id);
-    setSid(null);
-  };
-  const pickSymptom = (id: string) => {
+  const pick = (id: string) => {
+    const x = SYMPTOMS.find((y) => y.id === id);
+    if (x) setZone(x.zone);
     setSid(id);
     requestAnimationFrame(() => {
       const el = result.current;
-      if (el && el.getBoundingClientRect().top > window.innerHeight * 0.8) el.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+      if (el && window.innerWidth < 1024) el.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
     });
   };
-  const step = s ? 3 : zone ? 2 : 1;
 
   return (
-    <div className="grid gap-5 lg:grid-cols-12">
-      {/* cây có điểm bấm */}
-      <div className="relative overflow-hidden rounded-[28px] bg-[#eaf3df] ring-1 ring-brand-900/10 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
-        <div className="relative mx-auto aspect-[400/520] max-h-[620px]">
-          <DoctorPlant zone={zone} />
-          {ZONES.map((zz) => {
-            const on = zone === zz.id;
+    <div className="grid grid-cols-1 gap-2 rounded-[32px] bg-white p-2 ring-1 ring-brand-900/10 lg:grid-cols-[15rem_minmax(0,1fr)_minmax(0,1.15fr)] [&>*]:min-w-0">
+      {/* 1. bị ở đâu */}
+      <div className="rounded-[26px] bg-surface p-4 sm:p-5">
+        <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
+          <span className="grid size-6 place-items-center rounded-full bg-brand-900 text-[11px] text-white">1</span> Bị ở đâu?
+        </p>
+        <div role="radiogroup" aria-label="Vị trí trên cây" className="mt-3 flex gap-1.5 overflow-x-auto [scrollbar-width:none] lg:flex-col [&::-webkit-scrollbar]:hidden">
+          {ZONES.map((z) => {
+            const on = z.id === zone;
+            const Icon = ZONE_ICON[z.id];
             return (
               <button
-                key={zz.id}
+                key={z.id}
                 type="button"
-                onClick={() => pickZone(zz.id)}
-                aria-pressed={on}
-                className="group absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: SPOTS[zz.id].x, top: SPOTS[zz.id].y }}
+                role="radio"
+                aria-checked={on}
+                onClick={() => {
+                  setZone(z.id);
+                  setSid(null);
+                }}
+                className={cn("flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors lg:py-3", on ? "bg-brand-900 text-white" : "bg-white text-brand-900 hover:bg-brand-100")}
               >
-                <span aria-hidden className={cn("absolute inset-0 m-auto size-12 rounded-full", on ? "bg-sun-300/50" : "animate-ping bg-white/60 motion-reduce:animate-none")} />
-                <span className={cn("relative inline-flex h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 text-small font-semibold shadow-lift transition-colors", on ? "bg-brand-900 text-white" : "bg-white text-brand-900 group-hover:bg-sun-300")}>
-                  {on && <Check className="size-4 text-sun-300" strokeWidth={3} aria-hidden />}
-                  {zz.label}
+                <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl", on ? "bg-white/15 text-sun-300" : "bg-brand-100 text-brand-700")}>
+                  <Icon className="size-[18px]" aria-hidden />
+                </span>
+                <span>
+                  <span className="block whitespace-nowrap text-small font-semibold">{z.label}</span>
+                  <span className={cn("hidden text-caption lg:block", on ? "text-white/65" : "text-ink-muted")}>{z.hint}</span>
                 </span>
               </button>
             );
           })}
         </div>
-        <p className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-caption font-semibold text-brand-900">
-          <Stethoscope className="size-4 text-brand-600" aria-hidden /> Bước {step} / 3
-        </p>
       </div>
 
-      <div className="flex flex-col gap-4 lg:col-span-7">
-        {/* bước 1–2 */}
-        <div className="rounded-[28px] bg-white p-5 ring-1 ring-brand-900/10 sm:p-7">
-          {!zone ? (
-            <div>
-              <p className="text-caption font-semibold text-brand-600">Bước 1</p>
-              <h3 className="mt-1 text-h3 font-semibold text-brand-900">Cây đang bị ở đâu?</h3>
-              <p className="mt-2 text-body text-ink-muted">Chạm vào chỗ có dấu hiệu lạ trên hình — hoặc chọn nhanh:</p>
-              <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                {ZONES.map((zz) => (
-                  <button key={zz.id} type="button" onClick={() => pickZone(zz.id)} className="flex items-center justify-between gap-3 rounded-2xl bg-surface px-4 py-3.5 text-left transition-colors hover:bg-brand-100">
-                    <span>
-                      <span className="block text-body font-semibold text-brand-900">{zz.label}</span>
-                      <span className="block text-caption text-ink-muted">{zz.hint}</span>
-                    </span>
-                    <ArrowRight className="size-4 text-brand-600" aria-hidden />
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-caption font-semibold text-brand-600">Bước 2 · {z?.label}</p>
-                  <h3 className="mt-1 text-h3 font-semibold text-brand-900">Dấu hiệu nào giống nhất?</h3>
-                </div>
-                <button type="button" onClick={() => {
-                    setZone(null);
-                    setSid(null);
-                  }} className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-small font-medium text-brand-800 ring-1 ring-brand-900/15 hover:bg-surface">
-                  <ArrowLeft className="size-4" aria-hidden /> Chọn chỗ khác
+      {/* 2. dấu hiệu */}
+      <div className="rounded-[26px] p-4 sm:p-5">
+        <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
+          <span className="grid size-6 place-items-center rounded-full bg-brand-900 text-[11px] text-white">2</span> Dấu hiệu nào giống nhất?
+        </p>
+        <div role="radiogroup" aria-label="Dấu hiệu" className="mt-3 space-y-2">
+          {list.map((x) => {
+            const on = x.id === sid;
+            return (
+              <div key={x.id}>
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  onClick={() => pick(x.id)}
+                  className={cn("flex w-full items-center gap-3.5 rounded-2xl p-2.5 pr-4 text-left ring-1 transition-colors", on ? "bg-brand-900 text-white ring-brand-900" : "bg-white text-brand-900 ring-brand-900/10 hover:bg-surface")}
+                >
+                  <span className={cn("grid size-14 shrink-0 place-items-center rounded-xl", on ? "bg-white/10" : "bg-surface")}>
+                    <SymptomArt kind={x.icon} className="size-10" />
+                  </span>
+                  <span className="flex-1 text-small font-semibold leading-snug">{x.title}</span>
+                  <ArrowRight className={cn("size-4 shrink-0", on ? "text-sun-300" : "text-brand-600/50")} aria-hidden />
                 </button>
               </div>
-              <ul role="radiogroup" aria-label="Triệu chứng" className="mt-5 grid gap-2.5 sm:grid-cols-2">
-                {list.map((x) => {
-                  const on = x.id === sid;
-                  return (
-                    <li key={x.id}>
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={on}
-                        onClick={() => pickSymptom(x.id)}
-                        className={cn("flex h-full w-full items-center gap-3.5 rounded-2xl p-3 text-left transition-colors", on ? "bg-brand-900 text-white" : "bg-surface text-brand-900 hover:bg-brand-100")}
-                      >
-                        <span className={cn("grid size-16 shrink-0 place-items-center rounded-xl", on ? "bg-white/10" : "bg-white")}>
-                          <SymptomArt kind={x.icon} className="size-12" />
-                        </span>
-                        <span className="text-small font-semibold leading-snug">{x.title}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
+            );
+          })}
         </div>
+      </div>
 
-        {/* bước 3: kết quả */}
-        <div ref={result} aria-live="polite">
-          {s && (
-            <div key={s.id} className="kn-pop rounded-[28px] bg-brand-900 p-6 text-white sm:p-8">
-              <div className="flex flex-wrap items-start gap-5">
-                <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-white/10 sm:size-20">
-                  <SymptomArt kind={s.icon} className="size-12 sm:size-14" />
-                </span>
-                <span className="ml-auto rounded-2xl bg-sun-300 px-4 py-2 text-h4 font-semibold tabular-nums text-brand-900 sm:order-last">{s.tag}</span>
-                <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
-                  <p className="text-caption font-semibold text-sun-300">Bước 3 · Nguyên nhân thường gặp</p>
-                  <p className="mt-1 text-h3 font-semibold !text-white">{s.cause}</p>
-                </div>
-              </div>
-              <p className="mt-5 text-body leading-relaxed text-white/80">{s.why}</p>
-              <p className="mt-5 text-caption font-semibold uppercase tracking-[0.12em] text-white/50">Nên làm</p>
-              <ul className="mt-2 space-y-2">
-                {s.todo.map((t) => (
-                  <li key={t} className="flex gap-2.5 text-body">
-                    <Check className="mt-1 size-4 shrink-0 text-sun-300" strokeWidth={3} aria-hidden /> {t}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {s.links.map((l) => (
-                  <Link key={l.label} href={l.href} className="group inline-flex h-10 items-center gap-1.5 rounded-full bg-white px-4 text-small font-semibold text-brand-900 hover:bg-sun-200">
-                    {l.label} <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
-                  </Link>
-                ))}
+      {/* 3. kết quả */}
+      <div ref={result} aria-live="polite" className="scroll-mt-24">
+        {s ? (
+          <div key={s.id} className="kn-pop flex h-full flex-col rounded-[26px] bg-brand-900 p-5 text-white sm:p-7">
+            <p className="flex items-center gap-2 text-caption font-semibold text-sun-300">
+              <span className="grid size-6 place-items-center rounded-full bg-sun-300 text-[11px] text-brand-900">3</span> Nguyên nhân thường gặp
+            </p>
+            <div className="mt-4 flex items-start justify-between gap-4">
+              <p className="text-h3 font-semibold !text-white">{s.cause}</p>
+              <span className="shrink-0 rounded-2xl bg-sun-300 px-3.5 py-1.5 text-title font-semibold tabular-nums text-brand-900">{s.tag}</span>
+            </div>
+            <p className="mt-3 text-body leading-relaxed text-white/75">{s.why}</p>
+            <ul className="mt-5 space-y-2 border-t border-white/10 pt-5">
+              {s.todo.map((t) => (
+                <li key={t} className="flex gap-2.5 text-body">
+                  <Check className="mt-1 size-4 shrink-0 text-sun-300" strokeWidth={3} aria-hidden /> {t}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {s.links.map((l) => (
+                <Link key={l.label} href={l.href} className="group inline-flex h-10 items-center gap-1.5 rounded-full bg-white px-4 text-small font-semibold text-brand-900 hover:bg-sun-200">
+                  {l.label} <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </Link>
+              ))}
+            </div>
+            <div className="mt-auto pt-6">
+              <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-white/[0.07] p-3">
                 <a href={zalo} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full bg-sun-300 px-4 text-small font-semibold text-brand-900 hover:bg-sun-200">
-                  <Camera className="size-4" aria-hidden /> Gửi ảnh lá qua Zalo
+                  <Camera className="size-4" aria-hidden /> Gửi ảnh cho kỹ thuật viên
                 </a>
-                <a href={telHref(phone)} className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-small font-semibold text-white ring-1 ring-white/25 hover:bg-white/10">
+                <a href={telHref(phone)} className="inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-small font-semibold text-white hover:bg-white/10">
                   <Phone className="size-4" aria-hidden /> {phone}
                 </a>
               </div>
-              <p className="mt-6 border-t border-white/10 pt-4 text-caption leading-relaxed text-white/55">
-                Đây là gợi ý theo dấu hiệu thường gặp, chưa phải chẩn đoán. Nhiều nguyên nhân cho triệu chứng giống nhau — gửi ảnh lá, trái, gốc cho kỹ thuật viên Kim Ngoan để được xác định đúng trước khi mua thuốc.
-              </p>
+              <p className="mt-3 text-caption leading-relaxed text-white/50">Gợi ý theo dấu hiệu thường gặp, chưa phải chẩn đoán — nhiều nguyên nhân cho cùng một triệu chứng.</p>
             </div>
-          )}
-          {!s && zone && <p className="px-2 text-small text-ink-muted">Chọn một dấu hiệu để xem nguyên nhân và cách xử lý.</p>}
-        </div>
+          </div>
+        ) : (
+          <div className="flex h-full flex-col rounded-[26px] bg-surface p-5 sm:p-7">
+            <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
+              <span className="grid size-6 place-items-center rounded-full bg-brand-900/15 text-[11px] text-brand-900">3</span> Kết quả hiện ở đây
+            </p>
+            <p className="mt-4 text-h4 font-semibold text-brand-900">Hay gặp nhất — bấm để xem ngay</p>
+            <ul className="mt-3 grid grid-cols-2 gap-2">
+              {COMMON.map((id) => {
+                const x = SYMPTOMS.find((y) => y.id === id)!;
+                return (
+                  <li key={id}>
+                    <button type="button" onClick={() => pick(id)} className="flex h-full w-full flex-col items-start gap-2 rounded-2xl bg-white p-3 text-left ring-1 ring-brand-900/10 transition-colors hover:ring-brand-900/40">
+                      <SymptomArt kind={x.icon} className="size-9" />
+                      <span className="text-small font-semibold leading-snug text-brand-900">{x.title}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="mt-auto pt-6">
+              <div className="rounded-2xl bg-brand-900 p-4 text-white">
+                <p className="text-body font-semibold">Không chắc là bệnh gì?</p>
+                <p className="mt-1 text-small text-white/70">Chụp lá, trái hoặc gốc gửi Zalo — kỹ thuật viên xem ảnh và gọi lại tư vấn.</p>
+                <a href={zalo} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex h-10 items-center gap-1.5 rounded-full bg-sun-300 px-4 text-small font-semibold text-brand-900 hover:bg-sun-200">
+                  <Camera className="size-4" aria-hidden /> Gửi ảnh qua Zalo
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
