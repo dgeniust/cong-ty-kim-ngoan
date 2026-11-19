@@ -68,7 +68,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
                 slogan=""
                 logo={site.logo}
                 compact
-                className="[&_svg]:size-9 [&>div:first-child]:size-9"
+                className="[&>svg]:size-9 [&>div:first-child]:size-9"
               />
             </Link>
 

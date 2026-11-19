@@ -246,3 +246,32 @@ Số thứ tự tự đánh lại khi một khối bị ẩn (ví dụ chưa có
 Dữ liệu lịch mùa vụ và vùng giao hàng nằm ở `src/lib/content/hub-extras.ts`:
 - lịch mùa vụ là **lịch tham khảo** vùng Đông Nam Bộ – nhờ kỹ thuật viên duyệt lại;
 - thời gian giao theo vòng (trong ngày / 1–2 ngày / theo hẹn) là **đề xuất** – sửa đúng cam kết thật trước khi chạy chính thức.
+
+---
+
+## 12. Landing phân bón `/phanbon` – bố cục v1.1
+
+Giữ nguyên theme “Vườn Xanh” (§3 màu, §4 chữ, nút pill, nền `paper`, xanh rừng `brand-900`, vàng `sun-300` cho nút gọi). Chỉ đổi bố cục, đồng bộ với landing tổng (§11).
+
+### Bỏ
+Hero 3 cột kiểu ảnh mẫu (khung vòm, huy hiệu tròn), nét vẽ tay (`Doodle`), dãy ảnh tròn cây trồng, khối ảnh–chữ xen kẽ, dải 4 cam kết có icon. Các file `landing/hero`, `features-bar`, `product-groups`, `crop-circles`, `about-split`, `shared/doodle`, `shared/arch-frame` đã xoá.
+
+### Thứ tự khối
+| # | Khối | File | Ghi chú |
+|---|---|---|---|
+| – | Hero | `app/(phanbon)/phanbon/page.tsx` | dòng thông tin đầu trang → H1 “Vườn của bạn trồng gì?” + ô tìm kiếm → **5 ô ảnh cây trồng lớn** (CMS › Cây trồng) |
+| 01 | Vườn của bạn | `components/phanbon/crop-desk.tsx` | đổi theo cây đã chọn: việc tháng này (lịch mùa vụ, §11), 3 phân/thuốc hợp cây (thẻ nhãn bao), bài kỹ thuật nhắc tới cây, nút hỏi kỹ thuật viên. Cây đã chọn được nhớ trong trình duyệt (`kn-vuon`). Cây chưa có lịch → mời gọi kỹ thuật viên |
+| 02 | Sản phẩm | page + `components/phanbon/npk-label.tsx` | trái: mục lục nhóm hàng (CMS › Sản phẩm); phải: 6 **thẻ nhãn bao** |
+| 03 | Về Kim Ngoan | page | ảnh lớn có chú thích · câu trích (CMS `about.quote`) · đoạn giới thiệu · số liệu (CMS `hero.stats`) · cam kết (CMS `features`) |
+| 04 | Kiến thức canh tác | page | bài chính + mục lục |
+| – | Form gọi lại | `landing/quick-consult.tsx` | giữ nguyên (§5.9) |
+
+### Thẻ “nhãn bao”
+Thay ảnh sản phẩm (chưa có ảnh bao bì tách nền, §9) bằng nhãn thu gọn:
+- dải xanh đậm trên cùng in **công thức như trên bao** (`20-20-15 +TE`); thuốc BVTV dùng dải xanh nhạt để phân biệt;
+- 3 thanh **N (xanh lá) – P (vàng) – K (xanh rừng)** đọc từ thành phần “Đạm / Lân / Kali”, thang tối đa 30%;
+- phân không phải NPK: lấy thành phần chính có % làm tiêu đề (`≥ 55% hữu cơ`, `60% K₂O`) và liệt kê 3 thành phần;
+- dưới cùng: tên, cây phù hợp, quy cách bao, “Chi tiết”.
+
+### Logo
+`Logo` hiển thị tên “Kim Ngoan” bằng logo chữ dùng chung (`shared/wordmark.tsx`) cạnh dấu lá; logo tải lên trong admin vẫn thay được dấu lá.

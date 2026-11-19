@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import { SmartImage } from "./smart-image";
+import { Wordmark } from "./wordmark";
+import { normalize } from "@/lib/mock/search";
 
 type Props = {
   prefix: string;
@@ -38,7 +40,12 @@ export function Logo({ prefix, name, slogan, logo, inverted, compact, className 
             {prefix}
           </div>
         )}
-        <div className={cn("mt-1 logo-name font-bold", inverted ? "text-white" : "text-brand-900")}>{name}</div>
+        {/* tên “Kim Ngoan” vẽ bằng logo chữ dùng chung (khớp landing tổng); tên khác giữ dạng chữ */}
+        {normalize(name) === "kim ngoan" ? (
+          <Wordmark label={name} className={cn("mt-1.5 h-[1.1rem] w-auto", inverted ? "text-white" : "text-brand-900")} />
+        ) : (
+          <div className={cn("mt-1 logo-name font-bold", inverted ? "text-white" : "text-brand-900")}>{name}</div>
+        )}
         {slogan && (
           <div className={cn("mt-1.5 text-micro", compact && "hidden sm:block", inverted ? "text-white/60" : "text-ink-subtle")}>
             {slogan}
