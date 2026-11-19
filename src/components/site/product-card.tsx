@@ -5,7 +5,7 @@ import { getCategory } from "@/lib/mock/categories";
 import type { Product } from "@/lib/mock/types";
 
 /** Whole card is one link target (stretched link on the title) – bigger hit area, single tab stop. */
-export function ProductCard({ product, headingLevel = "h3" }: { product: Product; headingLevel?: "h2" | "h3" }) {
+export function ProductCard({ product, headingLevel = "h3", priority = false }: { product: Product; headingLevel?: "h2" | "h3"; /** ảnh nằm ở màn hình đầu → tải sớm (LCP) */ priority?: boolean }) {
   const href = `/phanbon/san-pham/${product.slug}`;
   const Heading = headingLevel;
   const category = getCategory(product.categorySlug)?.name;
@@ -16,6 +16,7 @@ export function ProductCard({ product, headingLevel = "h3" }: { product: Product
           src={product.images[0]}
           alt={product.name}
           fill
+          loading={priority ? "eager" : undefined}
           sizes="(min-width: 1280px) 22vw, (min-width: 640px) 45vw, 100vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />

@@ -53,7 +53,7 @@ export function HubDoors({ doors }: { doors: Door[] }) {
               src={d.image}
               alt=""
               fill
-              priority={i === 0}
+              loading={i === 0 ? "eager" : undefined}
               sizes="(min-width: 1024px) 55vw, 100vw"
               className={cn("object-cover transition-[transform,filter] duration-700 ease-soft", on ? "lg:scale-100" : "lg:scale-[1.06] lg:brightness-[0.72] lg:saturate-[0.85]")}
             />

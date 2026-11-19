@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
-import { HeroSearch } from "@/components/landing/hero-search";
 import { QuickConsult } from "@/components/landing/quick-consult";
-import { CropDesk, type DeskArticle, type DeskCrop } from "@/components/phanbon/crop-desk";
+import { FarmBulletin } from "@/components/phanbon/farm-bulletin";
+import { GardenStory, type StoryCrop } from "@/components/phanbon/garden-story";
+import { PlantDoctor } from "@/components/phanbon/plant-doctor";
+import { RealGardens } from "@/components/phanbon/real-gardens";
 import { NpkLabel, type LabelProduct } from "@/components/phanbon/npk-label";
 import { Container } from "@/components/shared/container";
 import { Kicker } from "@/components/shared/kicker";
@@ -18,17 +20,21 @@ import { categories } from "@/lib/mock/categories";
 import { normalize } from "@/lib/mock/search";
 import type { Product } from "@/lib/mock/types";
 import { getFertilizerProducts } from "@/lib/products/server";
+import { getSettings } from "@/lib/settings/server";
+import { getForecast, WEATHER_PLACE } from "@/lib/weather";
 import { resolveHref } from "@/lib/site";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
 /**
- * Landing phân bón – bố cục v1.1 (design.md §12). Giữ theme “Vườn Xanh” (§3–4), đổi bố cục:
- *  - hero hỏi “Vườn của bạn trồng gì?” – chọn cây → khối 01 đổi theo cây (việc tháng này, phân/thuốc hợp cây, bài kỹ thuật);
- *  - sản phẩm hiển thị bằng thẻ “nhãn bao” N–P–K thay cho ảnh;
- *  - đầu khối dạng đường kẻ + số thứ tự như landing tổng; bỏ khung vòm, nét vẽ tay, chấm tròn cây.
- * Mọi chữ lấy từ CMS (admin › Nội dung) khi có trường tương ứng.
+ * Landing phân bón – bố cục v1.2 (design.md §14). Giữ theme “Vườn Xanh” (§3–4).
+ *  hero “Lát cắt khu vườn” (cuộn kể chuyện, chọn cây) → 01 bảng tin nhà vườn (thời tiết + việc tháng này)
+ *  → 02 bác sĩ cây trồng → 03 nhãn bao → 04 vườn thật, người thật → 05 về Kim Ngoan → 06 kiến thức → form gọi lại.
+ * Cây chọn ở hero dùng chung cho cả trang (lib/crop-store). Chữ lấy từ CMS khi có trường tương ứng.
  */
+
+// dự báo thời tiết cache 30 phút → trang tự làm mới theo (ISR)
+export const revalidate = 1800;
 
 /** CMS ghi nhóm hàng dạng chữ (“Phân bón NPK”) → nối tới danh mục trùng tên, không có thì sang trang tìm kiếm. */
 const categoryHref = (label: string) => {
@@ -64,14 +70,15 @@ export default async function HomePage() {
   const news = getArticles("tin-tuc");
   const month = Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()));
 
-  const crops: DeskCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
-  const articles: DeskArticle[] = news.map((a) => ({ href: `/phanbon/${a.section}/${a.slug}`, title: a.title, excerpt: a.excerpt, date: a.date, tags: a.tags }));
+  const [{ COMPANY }, forecast] = await Promise.all([getSettings(), getForecast()]);
+  const crops: StoryCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
+  const articles = news.map((a) => ({ href: `/phanbon/${a.section}/${a.slug}`, title: a.title, tags: a.tags }));
   const [lead, ...rest] = news.slice(0, 4);
 
   return (
     <div className="bg-paper">
-      {/* HERO: dòng thông tin đầu trang → câu hỏi lớn + tìm kiếm → chọn cây → khối 01 “Vườn của bạn” */}
-      <section aria-labelledby="hero-title" className="pb-20 pt-6 md:pb-28 md:pt-10">
+      {/* HERO: dòng thông tin đầu trang → “Lát cắt khu vườn” (cuộn kể chuyện) */}
+      <section aria-labelledby="hero-title" className="pt-6 md:pt-8">
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
             <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · {site.companyName}</span>
@@ -81,31 +88,46 @@ export default async function HomePage() {
             </a>
           </div>
 
-          <div className="mt-8 grid gap-6 md:mt-12 lg:grid-cols-12 lg:items-end lg:gap-8">
-            <h1 id="hero-title" className="text-display font-semibold text-brand-900 lg:col-span-7">
-              <span className="sr-only">{site.companyPrefix} {site.companyName} – phân bón và thuốc bảo vệ thực vật. </span>
-              Vườn của bạn trồng gì?
-            </h1>
-            <div className="lg:col-span-5 lg:col-start-8">
-              <p className="mb-5 text-lead leading-relaxed text-ink-muted">
-                Chọn cây để xem việc cần làm tháng này và loại phân, thuốc phù hợp. Biết tên sản phẩm rồi thì tìm thẳng ở đây.
-              </p>
-              <HeroSearch />
-            </div>
-          </div>
+          <GardenStory crops={crops} eyebrow={<><span className="sr-only">{site.companyPrefix} {site.companyName} – </span>Phân bón & thuốc BVTV cho vườn {site.address}</>} phone={site.phone} />
 
-          <div className="mt-10 md:mt-14">
-            <CropDesk crops={crops} products={products.map(toLabel)} articles={articles} serverMonth={month} phone={site.phone} />
-          </div>
         </Container>
       </section>
 
-      {/* 02. Sản phẩm – mục lục nhóm hàng (CMS) + thẻ nhãn bao */}
+      {/* 01. Bảng tin nhà vườn hôm nay – tầng xanh rừng đậm */}
+      <section id="bang-tin" aria-labelledby="bang-tin-title" className="scroll-mt-24 bg-brand-900 py-20 md:py-28">
+        <Container>
+          <FarmBulletin
+            days={forecast?.days ?? null}
+            crops={crops.map((c) => ({ key: c.key, name: c.name }))}
+            products={products.map(toLabel)}
+            articles={articles}
+            serverMonth={month}
+            phone={site.phone}
+            place={WEATHER_PLACE.name}
+          />
+        </Container>
+      </section>
+
+      {/* 02. Bác sĩ cây trồng */}
+      <section id="bac-si-cay-trong" aria-labelledby="bac-si-title" className="scroll-mt-24 py-20 md:py-28">
+        <Container>
+          <SectionHead
+            id="bac-si-title"
+            no="02"
+            kicker="Bác sĩ cây trồng"
+            title="Cây có dấu hiệu lạ? Chỉ chỗ bị, xem nguyên nhân"
+            lead="Ba bước: chạm vào chỗ cây đang bị, chọn dấu hiệu giống nhất, xem nguyên nhân thường gặp và cách xử lý — gửi ảnh cho kỹ thuật viên để chắc chắn."
+          />
+          <PlantDoctor phone={site.phone} zalo={COMPANY.zalo} />
+        </Container>
+      </section>
+
+      {/* 03. Sản phẩm – mục lục nhóm hàng (CMS) + thẻ nhãn bao */}
       <section id="san-pham" aria-labelledby="san-pham-title" className="scroll-mt-24 bg-white py-20 md:py-28">
         <Container>
           <SectionHead
             id="san-pham-title"
-            no="02"
+            no="03"
             kicker="Sản phẩm"
             title="Đọc bao phân trước khi mua"
             lead="Mỗi thẻ là nhãn bao thu gọn: tỉ lệ đạm – lân – kali, cây phù hợp và quy cách đóng bao."
@@ -146,8 +168,15 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 03. Về Kim Ngoan – ảnh lớn có chú thích, câu chuyện, số liệu, cam kết (đều từ CMS) */}
-      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 py-20 md:py-28">
+      {/* 04. Vườn thật, người thật */}
+      <section id="vuon-that" aria-labelledby="vuon-that-title" className="scroll-mt-24 py-20 md:py-28">
+        <Container>
+          <RealGardens stories={content.stories} zalo={COMPANY.zalo} no="04" />
+        </Container>
+      </section>
+
+      {/* 05. Về Kim Ngoan – ảnh lớn có chú thích, câu chuyện, số liệu, cam kết (đều từ CMS) */}
+      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 bg-white py-20 md:py-28">
         <Container className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-6">
             <figure className="lg:sticky lg:top-28">
@@ -162,7 +191,7 @@ export default async function HomePage() {
           </Reveal>
           <div className="text-brand-900 lg:col-span-5 lg:col-start-8">
             <Reveal>
-              <Kicker no="03">{about.title}</Kicker>
+              <Kicker no="05">{about.title}</Kicker>
               <h2 id="gioi-thieu-title" className="mt-7 whitespace-pre-line text-h2 font-semibold">{about.quote || about.title}</h2>
               <div className="mt-6 space-y-4 text-body leading-relaxed text-ink-muted">
                 {about.paragraphs.map((p, i) => (
@@ -208,13 +237,13 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 04. Kiến thức canh tác – bài chính + mục lục */}
+      {/* 06. Kiến thức canh tác – bài chính + mục lục */}
       {lead && (
-        <section id="tin-tuc" aria-labelledby="tin-tuc-title" className="scroll-mt-24 bg-white py-20 md:py-28">
+        <section id="tin-tuc" aria-labelledby="tin-tuc-title" className="scroll-mt-24 py-20 md:py-28">
           <Container>
             <SectionHead
               id="tin-tuc-title"
-              no="04"
+              no="06"
               kicker="Kiến thức canh tác"
               title="Kỹ thuật từ đội ngũ Kim Ngoan"
               action={

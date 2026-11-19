@@ -21,7 +21,8 @@ const DOT = ["bg-hub-marigold", "bg-hub-sky", "bg-hub-muted"];
 function point(bearing: number, km: number) {
   const r = radius(km);
   const a = (bearing * Math.PI) / 180;
-  return { x: C + r * Math.sin(a), y: C - r * Math.cos(a) };
+  // làm tròn 0,1 để server và trình duyệt ra cùng chuỗi số (sin/cos có thể lệch ở chữ số cuối)
+  return { x: Math.round((C + r * Math.sin(a)) * 10) / 10, y: Math.round((C - r * Math.cos(a)) * 10) / 10 };
 }
 const at = (name: string) => {
   const p = PLACES.find((x) => x.name === name)!;

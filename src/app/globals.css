@@ -570,3 +570,17 @@
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   background-position: -1px -1px;
 }
+
+/* Lát cắt khu vườn (components/phanbon/garden-scene.tsx) */
+@keyframes kn-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(-150px); opacity: 0; } }
+@keyframes kn-wiggle { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes kn-spin-slow { to { stroke-dashoffset: -190; } }
+@keyframes kn-pop { from { opacity: 0; transform: translateY(6px) scale(0.96); } to { opacity: 1; transform: none; } }
+.kn-rise { transform-box: fill-box; animation: kn-rise 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite both; }
+.kn-wiggle { transform-box: fill-box; animation: kn-wiggle 1.6s ease-in-out infinite; }
+.kn-spin-slow { animation: kn-spin-slow 6s linear infinite; }
+.kn-pop { animation: kn-pop 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .kn-rise { animation: none; opacity: 1; }
+  .kn-wiggle, .kn-spin-slow, .kn-pop { animation: none; }
+}

@@ -105,6 +105,12 @@ export const defaultContent: SiteContent = {
       { icon: "HeartHandshake", title: "Luôn đồng hành cùng nhà nông" },
     ],
   },
+  stories: {
+    title: "Vườn thật, người thật",
+    subtitle: "Câu chuyện của bà con đang dùng phân, thuốc Kim Ngoan — ảnh thật, kết quả thật, được chủ vườn đồng ý đăng.",
+    // TODO(khách hàng): thêm câu chuyện thật trong admin › Nội dung phân bón › Vườn thật. Không đăng câu chuyện mẫu.
+    items: [],
+  },
   contact: {
     title: "Liên hệ ngay",
     subtitle: "Để được tư vấn và hỗ trợ tốt nhất!",

@@ -62,6 +62,25 @@ export const siteContentSchema = z.object({
     ctaHref: text,
     highlights: z.array(z.object({ icon: text, title: text })),
   }),
+  /** “Vườn thật, người thật” – CHỈ đăng câu chuyện thật, có ảnh, được chủ vườn đồng ý. Trống → khối mời gửi câu chuyện. */
+  stories: z
+    .object({
+      title: text,
+      subtitle: text,
+      items: z.array(
+        z.object({
+          name: text.min(1),
+          place: text,
+          crop: text,
+          area: text,
+          quote: text,
+          result: text,
+          image: text,
+          products: z.array(text),
+        }),
+      ),
+    })
+    .default({ title: "Vườn thật, người thật", subtitle: "", items: [] }),
   contact: z.object({ title: text, subtitle: text, addressLabel: text }),
   footer: z.object({ sloganLine1: text, sloganLine2: text, copyright: text, links: z.array(link) }),
 });

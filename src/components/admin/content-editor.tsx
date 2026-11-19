@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, Package, RotateCcw, Save, Sparkles, Sprout } from "lucide-react";
+import { ExternalLink, Image as ImageIcon, Info, LayoutTemplate, Leaf, Loader2, Package, RotateCcw, Save, Sparkles, Sprout, Trees } from "lucide-react";
 import { useNotify } from "@/hooks/use-notify";
 import { failure } from "./notify-helpers";
 import { resetContentAction, saveContentAction } from "@/app/admin/actions";
@@ -45,7 +45,7 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
     });
   }
 
-  const { site, hero, products, crops, about, contact, footer } = content;
+  const { site, hero, products, crops, about, contact, footer, stories } = content;
 
   return (
     <>
@@ -82,6 +82,7 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
             <TabsTrigger value="features"><Sparkles /> Ưu điểm</TabsTrigger>
             <TabsTrigger value="products"><Package /> Sản phẩm</TabsTrigger>
             <TabsTrigger value="crops"><Sprout /> Cây trồng</TabsTrigger>
+            <TabsTrigger value="stories"><Trees /> Vườn thật</TabsTrigger>
             <TabsTrigger value="about"><Leaf /> Về chúng tôi</TabsTrigger>
             <TabsTrigger value="footer"><LayoutTemplate /> Liên hệ & Footer</TabsTrigger>
           </TabsList>
@@ -234,6 +235,44 @@ export function ContentEditor({ initial, user }: { initial: SiteContent; user: s
                     </div>
                     <ImageField label="Ảnh" value={c.image} onChange={(v) => u({ image: v })} />
                   </Grid>
+                )}
+              />
+            </Section>
+          </TabsContent>
+
+          {/* ---------- Stories ---------- */}
+          <TabsContent value="stories" className="space-y-4">
+            <div className="rounded-xl border border-hub-line bg-hub-marigold-soft px-5 py-4 text-sm text-hub-ink">
+              Chỉ đăng câu chuyện <strong>thật</strong>: ảnh chụp tại vườn, kết quả do chủ vườn cung cấp và đã được họ đồng ý đăng. Chưa có câu chuyện nào thì trang hiện khối mời bà con gửi câu chuyện.
+            </div>
+            <Section title="Vườn thật, người thật" description="Khối 04 trên trang chủ phân bón. Câu chuyện đầu tiên hiện lớn nhất.">
+              <Grid>
+                <Field label="Tiêu đề khối" value={stories.title} onChange={(v) => patch("stories", { title: v })} />
+                <Field label="Mô tả" value={stories.subtitle} onChange={(v) => patch("stories", { subtitle: v })} />
+              </Grid>
+              <ListEditor
+                items={stories.items}
+                onChange={(v) => patch("stories", { items: v })}
+                create={() => ({ name: "", place: "", crop: "", area: "", quote: "", result: "", image: "", products: [] })}
+                itemLabel={(x) => x.name || "Câu chuyện mới"}
+                addLabel="Thêm câu chuyện"
+                renderItem={(x, u) => (
+                  <div className="space-y-4">
+                    <Grid>
+                      <div className="space-y-4">
+                        <Field label="Tên chủ vườn" value={x.name} onChange={(v) => u({ name: v })} placeholder="VD: Chú Năm Hùng" />
+                        <Field label="Xã / huyện" value={x.place} onChange={(v) => u({ place: v })} placeholder="VD: Minh Hưng, Chơn Thành" />
+                        <Grid>
+                          <Field label="Cây trồng" value={x.crop} onChange={(v) => u({ crop: v })} placeholder="VD: Sầu riêng" />
+                          <Field label="Quy mô" value={x.area} onChange={(v) => u({ area: v })} placeholder="VD: 2 ha · 300 cây" />
+                        </Grid>
+                      </div>
+                      <ImageField label="Ảnh vườn (ảnh thật)" value={x.image} onChange={(v) => u({ image: v })} />
+                    </Grid>
+                    <Field label="Câu nói của chủ vườn" multiline value={x.quote} onChange={(v) => u({ quote: v })} />
+                    <Field label="Kết quả mùa vụ" value={x.result} onChange={(v) => u({ result: v })} hint="Số liệu do chủ vườn cung cấp, VD: “Năng suất tăng từ 2,1 lên 2,8 tấn/ha”" />
+                    <StringListEditor label="Phân, thuốc đã dùng" items={x.products} onChange={(v) => u({ products: v })} />
+                  </div>
                 )}
               />
             </Section>

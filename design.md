@@ -310,3 +310,27 @@ Chữ nổi bật trong tiêu đề (`highlight` trong admin) **không còn bọ
 
 ### Cần xác nhận
 `lib/data/vertical-extras.ts`: cách chia mức lốp theo thương hiệu, điểm so sánh, hệ số thép 35–45 kg/m² sàn, tỉ lệ chia đường kính, mốc bậc giá 1 tấn / 5 tấn. Form đặt lịch và gửi danh sách vật tư hiện chỉ có giao diện (như các form khác) – cần nối API.
+
+---
+
+## 14. Landing phân bón `/phanbon` – bố cục v1.2 (“Lát cắt khu vườn”)
+
+Thay §12. Giữ theme “Vườn Xanh”; nhịp nền xen kẽ: giấy sáng → **xanh rừng đậm** (bảng tin) → giấy → trắng → giấy → trắng → giấy.
+
+| # | Khối | File | Ghi chú |
+|---|---|---|---|
+| – | **Lát cắt khu vườn** (hero cuộn kể chuyện) | `components/phanbon/garden-story.tsx`, `garden-scene.tsx` | Cảnh SVG vẽ tay: trời – cây – các lớp đất – rễ, 5 hình cây (cà phê, cao su, sầu riêng, tiêu, lúa; cây khác dùng hình chung). Cuộn qua 4 tầng: Lá (N) → Hoa trái (P, K) → Rễ & đất (hữu cơ, vi sinh, thước độ sâu) → Bảo vệ (sâu hại, vòng bảo vệ). Máy quay phóng vào phần đang đọc, phần khác mờ đi, hạt N/P/K trôi lên. Desktop: chữ trái, cảnh dính phải; di động: cảnh dính trên đầu, chữ trôi bên dưới. Thanh tiến trình bấm để nhảy tầng. Giảm chuyển động → tắt hạt trôi, chuyển cảnh tức thì. |
+| 01 | **Bảng tin nhà vườn hôm nay** | `farm-bulletin.tsx`, `lib/weather.ts` | Dự báo 5 ngày Chơn Thành (Open-Meteo, cache 30′ – trang ISR 30′), kết luận “Bón phân hôm nay?” / “Phun thuốc hôm nay?” theo lượng mưa, xác suất mưa, gió, nhiệt độ; tiêu đề khối đổi theo kết luận. Bên phải: việc tháng này của cây đã chọn, phân hợp cây, bài kỹ thuật. Không lấy được dự báo → lời khuyên theo mùa. |
+| 02 | **Bác sĩ cây trồng** | `plant-doctor.tsx`, `lib/content/plant-doctor.ts` | Chạm chỗ bị trên hình cây (lá non, lá già, hoa trái, rễ) → chọn 1 trong 14 dấu hiệu có hình minh hoạ → nguyên nhân thường gặp, vì sao, việc nên làm, nhóm phân/thuốc, gửi ảnh qua Zalo. Ghi rõ “gợi ý, chưa phải chẩn đoán”. |
+| 03 | Sản phẩm – nhãn bao | page + `npk-label.tsx` | giữ từ §12 |
+| 04 | **Vườn thật, người thật** | `real-gardens.tsx` | Nhập trong admin › Nội dung phân bón › tab **Vườn thật**. Chỉ câu chuyện thật. Trống → khối mời gửi câu chuyện (khung ảnh trống), không dùng nội dung mẫu. |
+| 05–06 | Về Kim Ngoan · Kiến thức · form gọi lại | page | giữ từ §12 |
+
+Cây chọn ở hero dùng chung cho cả trang qua `lib/crop-store.ts` (localStorage `kn-vuon` + sự kiện cùng tab).
+
+### Lưu ý kỹ thuật
+- Hình vẽ SVG dùng hàm giả ngẫu nhiên **băm số nguyên** (không dùng `Math.sin`) và làm tròn toạ độ có sin/cos: server và trình duyệt ra cùng chuỗi số, tránh lỗi hydrate.
+- `WEATHER_FIXTURE=1` chỉ để kiểm thử khi máy không ra được internet.
+
+### Cần xác nhận
+Câu chữ “Bác sĩ cây trồng” (`lib/content/plant-doctor.ts`) và các ngưỡng lời khuyên thời tiết (`farm-bulletin.tsx`: mưa ≥ 15 mm hoãn bón, 2–15 mm hợp bón; khả năng mưa ≥ 60 % hoặc gió ≥ 20 km/h không phun) – nhờ kỹ thuật viên duyệt.

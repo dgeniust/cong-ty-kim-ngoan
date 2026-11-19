@@ -144,7 +144,7 @@ export function SeasonCalendar({ serverMonth }: { serverMonth: number }) {
                   <p className="mt-1 text-small leading-relaxed text-white/70">{s.note}</p>
                   {cat && (
                     <Link href={`/phanbon/danh-muc/${cat.slug}`} className="group mt-2 inline-flex min-h-9 items-center gap-1.5 text-small font-medium text-hub-marigold hover:underline">
-                      Xem {cat.name.toLowerCase()} <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                      Xem {cat.name.charAt(0).toLowerCase() + cat.name.slice(1)} <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                     </Link>
                   )}
                 </li>
