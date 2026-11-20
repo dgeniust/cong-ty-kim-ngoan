@@ -16,7 +16,7 @@ const POINTS = [
 export function RebarAnatomy() {
   const ribs = Array.from({ length: 30 }, (_, i) => 52 + i * 22);
   return (
-    <div className="grid gap-4 lg:grid-cols-12">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
       <figure className="flex flex-col justify-center rounded-2xl border border-v-line bg-v-card p-4 sm:p-6 lg:col-span-8">
         <div className="overflow-x-auto">
         <svg viewBox="0 0 760 330" className="w-full min-w-[560px]" role="img" aria-label="Bản vẽ đoạn thép thanh vằn với 4 điểm kiểm tra: ký hiệu nhà máy, đường kính, mác thép, gân vằn">

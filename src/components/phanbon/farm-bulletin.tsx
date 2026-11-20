@@ -169,7 +169,7 @@ export function FarmBulletin({
         <p className="text-lead leading-relaxed text-white/70 lg:col-span-4 lg:col-start-9">Thời tiết {place} và việc của vườn {name.toLowerCase()} — cập nhật mỗi ngày, để không bón phí phân, phun phí thuốc.</p>
       </div>
 
-      <div className="mt-10 grid gap-4 lg:grid-cols-12">
+      <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
         {/* THỜI TIẾT */}
         <section aria-label={`Dự báo thời tiết ${place}`} className="rounded-3xl bg-white/[0.06] p-5 ring-1 ring-white/10 sm:p-7 lg:col-span-7">
           {today && fert && spray ? (

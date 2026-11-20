@@ -99,7 +99,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
   ];
 
   return (
-    <div className="grid gap-4 lg:grid-cols-12">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
       {/* trái: 3 cách lập danh sách */}
       <div className="rounded-2xl border border-v-line bg-v-card lg:col-span-7">
         <div role="tablist" aria-label="Cách lập danh sách" className="flex gap-1 overflow-x-auto border-b border-v-line p-2">
