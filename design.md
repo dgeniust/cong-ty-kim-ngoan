@@ -234,7 +234,7 @@ Nhánh `fe/notion-style-v1.1`. **Giữ nguyên theme Notion của landing tổng
 | – | Số liệu thành câu + thương hiệu | page | |
 | 01 | Sản phẩm | `product-browser.tsx` | giữ nguyên |
 | 02 | Lịch mùa vụ | `components/hub/season-calendar.tsx` | chọn cây → biểu đồ 12 tháng; tháng hiện tại tô sáng, bấm tháng khác để xem; khung xanh đêm liệt kê việc của tháng + link danh mục phân/thuốc |
-| 03 | Giao hàng | `components/hub/delivery-map.tsx` | 3 vòng giao hàng quanh Chơn Thành, QL13/QL14, địa danh; + 4 bước mua hàng dạng dòng kẻ |
+| 03 | Giao hàng | `components/hub/delivery-map.tsx` + `delivery-stage.tsx` | Danh sách 3 vòng + **sa bàn giao hàng** (CSS 3D, không WebGL): tấm bản đồ giấy nghiêng với thửa vườn, sông Bé/Sài Gòn, hồ Dầu Tiếng, QL13/QL14; xe máy chở bao phân chạy theo đường thật tới từng địa danh của vòng đang chọn, thẻ trạng thái km. Bấm tên địa danh để gọi xe tới đó; có nút tạm dừng; tôn trọng "giảm chuyển động". Sa bàn chỉ tải khi gần vào màn hình. Hình học: `lib/content/delivery-geo.ts`; + 4 bước mua hàng dạng dòng kẻ |
 | 04 | Về Kim Ngoan | page | ảnh lớn có chú thích (dính khi cuộn) · câu chuyện · thông tin · 3 cam kết |
 | 05 | Tin tức | page | bài chính lớn + mục lục bài khác |
 | 06 | Hỏi đáp | page | |
