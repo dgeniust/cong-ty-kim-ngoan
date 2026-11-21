@@ -7,7 +7,7 @@ import { absoluteUrl } from "@/lib/site";
 import { telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 
-export const viewport: Viewport = { themeColor: "#f8f9fa" };
+export const viewport: Viewport = { themeColor: "#082919" };
 
 /** Landing tổng của công ty – điều hướng về 3 chuyên trang. */
 export default async function HubLayout({ children }: { children: React.ReactNode }) {

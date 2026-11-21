@@ -10,7 +10,7 @@ import { FooterLandscape } from "./footer-landscape";
 
 const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white";
 const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
-const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white hover:text-brand-900";
+const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white hover:text-mv-night";
 
 /** Nhãn ngắn cho cột “Liên kết nhanh” (menu header dùng nhãn dài hơn). */
 const QUICK = HUB_NAV.map((m) => ({ label: m.label === "Giới thiệu" ? "Về chúng tôi" : m.label, href: m.href }));
@@ -27,7 +27,7 @@ function FacebookIcon() {
 export async function HubFooter() {
   const { COMPANY } = await getSettings();
   return (
-    <footer className="relative isolate overflow-hidden bg-brand-900 text-white/70">
+    <footer className="relative isolate overflow-hidden bg-mv-night text-white/70">
       <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.35fr_0.8fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
         {/* thương hiệu */}
         <div className="sm:col-span-2 lg:col-span-1">
@@ -94,13 +94,13 @@ export async function HubFooter() {
         {/* khối gọi – tách bằng đường kẻ dọc trên desktop */}
         <div className="sm:col-span-2 lg:col-span-1 lg:border-l lg:border-white/15 lg:pl-10">
           <a href={telHref(COMPANY.hotline)} className="group flex items-center gap-3.5 text-white">
-            <Phone className="size-8 shrink-0 transition-transform duration-300 group-hover:-rotate-12" strokeWidth={1.75} aria-hidden />
+            <Phone className="size-8 shrink-0 text-mv-gold-soft transition-transform duration-300 group-hover:-rotate-12" strokeWidth={1.75} aria-hidden />
             <span>
               <span className="block text-[1.625rem] font-bold leading-tight tabular-nums">{COMPANY.hotline}</span>
               <span className="block text-small text-white/70">Tư vấn miễn phí</span>
             </span>
           </a>
-          <Link href="/#lien-he" className="group mt-5 inline-flex h-12 items-center gap-2 rounded-full bg-[#3b7d46] px-6 text-body font-semibold text-white shadow-[0_8px_20px_-8px_rgb(0_0_0/0.5)] transition-colors duration-200 hover:bg-[#34733f]">
+          <Link href="/#lien-he" className="group mt-5 inline-flex h-12 items-center gap-2 rounded-md bg-mv-gold px-6 text-body font-bold text-mv-ink shadow-[0_8px_20px_-8px_rgb(0_0_0/0.5)] transition-colors duration-200 hover:bg-mv-gold-soft">
             Nhận báo giá <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </Link>
         </div>

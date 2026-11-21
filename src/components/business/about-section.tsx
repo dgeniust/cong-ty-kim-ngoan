@@ -3,7 +3,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { HUB_ABOUT, HUB_COMMITMENTS } from "@/lib/content/hub-home";
 import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
-import { BIZ_WRAP, Eyebrow, SectionTitle, TONE, type Tone } from "./ui";
+import { BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle, TONE, type Tone } from "./ui";
 
 const COMMIT_TONES: Tone[] = ["leaf", "sun", "sky", "ember"];
 
@@ -15,7 +15,7 @@ export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
       data-garden="1"
       id="gioi-thieu"
       aria-labelledby="gioi-thieu-title"
-      className="relative isolate scroll-mt-20 py-24 md:py-32"
+      className={cn(SECTION_BG.ivory, "scroll-mt-20 py-24 md:py-32")}
     >
       <div className={cn(BIZ_WRAP, "grid gap-12 lg:grid-cols-12 lg:gap-16")}>
         <Reveal className="lg:col-span-6">
@@ -26,7 +26,7 @@ export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
               <p key={p.slice(0, 20)}>{fill(p)}</p>
             ))}
           </div>
-          <figure className="relative mt-10 overflow-hidden rounded-md border-l-4 border-c-leaf bg-c-leaf-tint/80 py-7 pl-8 pr-7">
+          <figure className="relative mt-10 overflow-hidden rounded-md border-l-4 border-c-leaf bg-mv-mint py-7 pl-8 pr-7">
             <span
               aria-hidden
               className="pointer-events-none absolute -top-6 right-4 font-serif text-[7rem] leading-none text-c-sun/70"

@@ -3,8 +3,9 @@ import { ContactSection } from "@/components/business/contact-section";
 import { GardenBackdrop } from "@/components/business/garden-backdrop";
 import { BizHero } from "@/components/business/hero";
 import { NewsSection } from "@/components/business/news-section";
+import { QuoteBanner } from "@/components/business/quote-banner";
 import { ProductsSection } from "@/components/business/products-section";
-import { ArrowLink, SlideArrow, bizButton } from "@/components/business/ui";
+import { SlideArrow, bizButton } from "@/components/business/ui";
 import { HUB_HERO } from "@/lib/content/hub-home";
 import { getNews } from "@/lib/data/news";
 import { buildHeroSlides, buildSpotlights, buildStats, heroLead, pickHomeNews } from "@/lib/hub/home";
@@ -24,23 +25,21 @@ export default async function HubHome() {
   return (
     <>
       <BizHero slides={buildHeroSlides(VERTICALS)} stats={buildStats(COMPANY, productCount)}>
-        <p className="flex items-center gap-3 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.16em] text-hub-ink-soft">
-          <span aria-hidden className="flex gap-1">
-            <span className="size-2 rounded-full bg-c-leaf" />
-            <span className="size-2 rounded-full bg-c-ember" />
-            <span className="size-2 rounded-full bg-c-sky" />
-          </span>
+        <p className="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-3.5 py-1.5 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.14em] text-mv-mist">
+          <span aria-hidden className="size-2 rounded-full bg-mv-gold-soft" />
           {HUB_HERO.eyebrow}
         </p>
-        <h1 id="hero-title" className="mt-6 text-[clamp(2.6rem,5.2vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.03em] text-hub-ink">
-          <span className="block">{firstLine}</span> <span className="block text-biz-moss">{secondLine}</span>
+        <h1 id="hero-title" className="mt-6 text-[clamp(2.6rem,5.2vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.03em] text-white">
+          <span className="block">{firstLine}</span> <span className="block text-mv-gold-soft">{secondLine}</span>
         </h1>
-        <p className="mt-6 max-w-[34rem] text-lead leading-relaxed text-hub-ink-soft">{heroLead(COMPANY)}</p>
-        <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
+        <p className="mt-6 max-w-[34rem] text-lead leading-relaxed text-white/85">{heroLead(COMPANY)}</p>
+        <div className="mt-9 flex flex-wrap items-center gap-3">
           <a href={HUB_HERO.primaryCta.href} className={bizButton.solid}>
             {HUB_HERO.primaryCta.label} <SlideArrow />
           </a>
-          <ArrowLink href={HUB_HERO.secondaryCta.href}>{HUB_HERO.secondaryCta.label}</ArrowLink>
+          <a href={HUB_HERO.secondaryCta.href} className={bizButton.ghostDark}>
+            {HUB_HERO.secondaryCta.label}
+          </a>
         </div>
       </BizHero>
       {/* nền chung “vườn xanh”: lớp ảnh dính đứng yên sau các khối, khung lá đổi nhẹ theo khối (design.md §6) */}
@@ -48,6 +47,7 @@ export default async function HubHome() {
         <GardenBackdrop />
         <AboutSection company={COMPANY} />
         <ProductsSection spotlights={spotlights} />
+        <QuoteBanner hotline={COMPANY.hotline} />
         <NewsSection news={pickHomeNews(allNews)} verticals={VERTICALS} />
         <ContactSection company={COMPANY} verticalList={VERTICAL_LIST} />
       </div>

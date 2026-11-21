@@ -18,7 +18,7 @@ type Errors = Partial<Record<keyof Values, string>>;
 
 /** Ô nhập kiểu gạch chân: chỉ một đường kẻ đáy, đổi màu khi focus / lỗi. */
 const FIELD =
-  "peer w-full border-0 border-b border-hub-ink/20 bg-transparent px-0 pb-2.5 pt-1 text-body text-hub-ink placeholder:text-hub-ink-soft/60 outline-none transition-colors duration-200 focus:border-hub-blue aria-[invalid=true]:border-[#c4320a] [&:focus-visible]:outline-none";
+  "peer w-full border-0 border-b border-hub-ink/20 bg-transparent px-0 pb-2.5 pt-1 text-body text-hub-ink placeholder:text-hub-ink-soft/60 outline-none transition-colors duration-200 focus:border-mv-green aria-[invalid=true]:border-[#c4320a] [&:focus-visible]:outline-none";
 const LABEL = "block text-[12px] font-semibold uppercase tracking-[0.12em] text-hub-ink-soft";
 
 /**

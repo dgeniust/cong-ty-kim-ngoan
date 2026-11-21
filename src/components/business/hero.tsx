@@ -5,15 +5,10 @@ import Image from "next/image";
 import { CalendarCheck, LayoutGrid, Package, Pause, Play, Truck, type LucideIcon } from "lucide-react";
 import type { HeroSlide, Stat } from "@/lib/hub/home";
 import { cn } from "@/lib/utils";
-import { BIZ_WRAP, SECTOR_TONE, TONE, type Tone } from "./ui";
+import { BIZ_WRAP } from "./ui";
 
-/** icon + tông màu cho 4 chỉ số neo đáy (theo thứ tự buildStats) */
-const STAT_DECOR: { icon: LucideIcon; tone: Tone }[] = [
-  { icon: CalendarCheck, tone: "leaf" },
-  { icon: Package, tone: "sun" },
-  { icon: LayoutGrid, tone: "sky" },
-  { icon: Truck, tone: "ember" },
-];
+/** icon cho 4 chỉ số neo đáy (theo thứ tự buildStats) */
+const STAT_ICONS: LucideIcon[] = [CalendarCheck, Package, LayoutGrid, Truck];
 
 const AUTOPLAY = 6000;
 
@@ -89,8 +84,8 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
   };
 
   return (
-    <section id="top" aria-labelledby="hero-title" className="relative isolate -mt-16 flex flex-col overflow-hidden bg-white md:min-h-[max(660px,92svh)] md:bg-hub-stone lg:-mt-[76px] lg:min-h-[max(680px,90vh)]">
-      {/* ảnh nền (điện thoại: ảnh nằm trên, chữ bên dưới trên nền trắng) */}
+    <section id="top" aria-labelledby="hero-title" className="relative isolate -mt-16 flex flex-col overflow-hidden bg-mv-night text-white md:min-h-[max(660px,88svh)] lg:-mt-[76px] lg:min-h-[max(680px,88vh)]">
+      {/* ảnh nền (điện thoại: ảnh nằm trên, chữ bên dưới trên nền xanh rừng đêm) */}
       <div className="relative -z-10 h-[46svh] min-h-[280px] md:absolute md:inset-0 md:h-auto">
         {slides.map((s, i) => {
           const on = i === index;
@@ -108,10 +103,10 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
             </div>
           );
         })}
-        {/* scrim: điện thoại chỉ làm mờ mép dưới để ảnh liền với nền trắng; từ md phủ trái → phải, nhẹ dần để ảnh lộ rõ hơn */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_22%,rgba(255,255,255,0)_70%,rgba(255,255,255,1)_100%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.7)_40%,rgba(255,255,255,0.1)_70%,rgba(255,255,255,0)_100%)]" />
-        {/* dải sáng phía trên để menu trong suốt luôn đọc được */}
-        <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0))] md:block" />
+        {/* overlay xanh rừng đêm #082919: điện thoại phủ trên–dưới để ảnh liền với nền tối; từ md phủ trái → phải 92% → 10% */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.92)_0%,rgba(8,41,25,0.8)_34%,rgba(8,41,25,0.4)_62%,rgba(8,41,25,0.1)_100%)]" />
+        {/* dải tối phía trên để menu trong suốt (chữ trắng) luôn đọc được */}
+        <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(8,41,25,0.55),rgba(8,41,25,0))] md:block" />
       </div>
 
       {/* nội dung */}
@@ -126,46 +121,46 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
             const on = i === index;
             return (
               <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} className="group flex min-h-11 w-16 flex-col justify-center gap-2 pr-3 text-left sm:w-36">
-                <span className="relative block h-[3px] overflow-hidden rounded-full bg-hub-ink/15">
+                <span className="relative block h-[3px] overflow-hidden rounded-full bg-white/25">
                   {on && (
                     <span
                       key={lap}
                       aria-hidden
-                      className={cn("absolute inset-0 origin-left", TONE[SECTOR_TONE[s.id]].solid, autoplay ? "animate-[biz-progress_linear_forwards]" : "")}
+                      className={cn("absolute inset-0 origin-left bg-mv-gold-soft", autoplay ? "animate-[biz-progress_linear_forwards]" : "")}
                       style={{ animationDuration: `${AUTOPLAY}ms`, animationPlayState: running ? "running" : "paused" }}
                     />
                   )}
                 </span>
-                <span className={cn("text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-hub-ink" : "text-hub-ink-soft group-hover:text-hub-ink")}>
-                  <span className={cn(on && TONE[SECTOR_TONE[s.id]].ink)}>0{i + 1}</span>
+                <span className={cn("text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-white" : "text-white/70 group-hover:text-white")}>
+                  <span className={cn(on && "text-mv-gold-soft")}>0{i + 1}</span>
                   <span className="sr-only font-medium tracking-normal sm:not-sr-only sm:ml-2"> {s.label}</span>
                 </span>
               </button>
             );
           })}
           {!reduced && (
-            <button type="button" onClick={togglePause} aria-label={paused ? "Tiếp tục tự chuyển ảnh" : "Tạm dừng tự chuyển ảnh"} className="ml-1 grid size-11 place-items-center rounded-full text-hub-ink-soft transition-colors hover:bg-hub-ink/5 hover:text-hub-ink">
+            <button type="button" onClick={togglePause} aria-label={paused ? "Tiếp tục tự chuyển ảnh" : "Tạm dừng tự chuyển ảnh"} className="ml-1 grid size-11 place-items-center rounded-full text-white/75 transition-colors hover:bg-white/10 hover:text-white">
               {paused ? <Play className="size-4" aria-hidden /> : <Pause className="size-4" aria-hidden />}
             </button>
           )}
         </div>
       </div>
 
-      {/* thanh chỉ số neo đáy */}
-      <div className="border-t border-hub-ink/10 bg-white md:bg-white/80 md:backdrop-blur-[3px]">
+      {/* thanh chỉ số neo đáy: nền đặc xanh ngọc lục bảo, số vàng, mô tả xanh nhạt */}
+      <div className="bg-mv-emerald">
         <dl className={cn(BIZ_WRAP, "grid grid-cols-2 lg:grid-cols-4")}>
           {stats.map((s, i) => {
-            const { icon: Icon, tone } = STAT_DECOR[i % STAT_DECOR.length];
+            const Icon = STAT_ICONS[i % STAT_ICONS.length];
             return (
-              <div key={s.label} className={cn("py-5 lg:py-6", i % 2 === 1 && "pl-5 lg:pl-0", i > 0 && "lg:border-l lg:border-hub-ink/10 lg:pl-8", i > 1 && "border-t border-hub-ink/10 lg:border-t-0")}>
+              <div key={s.label} className={cn("py-5 lg:py-7", i % 2 === 1 && "pl-5 lg:pl-0", i > 0 && "lg:border-l lg:border-white/15 lg:pl-8", i > 1 && "border-t border-white/15 lg:border-t-0")}>
                 <dt className="sr-only">{s.label}</dt>
                 <dd className="flex items-center gap-3.5 lg:gap-4">
-                  <span aria-hidden className={cn("hidden size-11 shrink-0 place-items-center rounded-md sm:grid", TONE[tone].tint)}>
-                    <Icon className={cn("size-5", TONE[tone].ink)} strokeWidth={1.9} />
+                  <span aria-hidden className="hidden size-11 shrink-0 place-items-center rounded-md bg-white/10 sm:grid">
+                    <Icon className="size-5 text-mv-gold-soft" strokeWidth={1.9} />
                   </span>
                   <span>
-                    <span className="block text-[clamp(1.5rem,2.4vw,2rem)] font-bold leading-none tracking-[-0.02em] tabular-nums text-hub-ink">{s.value}</span>
-                    <span aria-hidden className="mt-1.5 block text-small text-hub-ink-soft">{s.label}</span>
+                    <span className="block text-[clamp(1.6rem,2.6vw,2.25rem)] font-bold leading-none tracking-[-0.02em] tabular-nums text-mv-gold-soft">{s.value}</span>
+                    <span aria-hidden className="mt-1.5 block text-small text-mv-mist">{s.label}</span>
                   </span>
                 </dd>
               </div>

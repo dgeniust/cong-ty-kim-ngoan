@@ -72,6 +72,14 @@ export const HUB_PRODUCTS = {
   ] satisfies { id: VerticalId; title: string; text: string; image: string; alt: string; caption: string }[],
 };
 
+/** Banner kêu gọi báo giá giữa trang (sau khối Sản phẩm). */
+export const HUB_CTA = {
+  eyebrow: "Báo giá trong ngày",
+  title: "Cần phân bón cho vụ mới, lốp cho xe hay thép cho công trình?",
+  text: "Gửi nhu cầu một lần – người phụ trách từng ngành gọi lại báo giá rõ ràng, giao tận nơi trong bán kính 20 km.",
+  button: { label: "Liên hệ báo giá ngay", href: "#lien-he" },
+};
+
 export const HUB_NEWS = {
   eyebrow: "Tin tức & kiến thức",
   title: "Chuyện vườn, chuyện nghề",

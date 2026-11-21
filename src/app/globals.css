@@ -113,18 +113,35 @@
   --color-biz-mist: #f4f5f7; /* nền khối tin tức */
   /* Bảng màu “mùa vụ” cho landing tổng – sặc sỡ vừa đủ: mỗi màu có bản đặc (chấm, vạch),
    * bản chữ (≥4.5:1 trên trắng và trên nền nhạt của chính nó) và bản nền nhạt. */
-  --color-c-leaf: #3a9a4f;
-  --color-c-leaf-ink: #24703a;
-  --color-c-leaf-tint: #e7f3e4;
-  --color-c-sun: #f0b429;
-  --color-c-sun-ink: #8a5a00;
-  --color-c-sun-tint: #fdf3d8;
-  --color-c-sky: #3d7fc2;
-  --color-c-sky-ink: #285f99;
-  --color-c-sky-tint: #e5eef8;
-  --color-c-ember: #e07a3f;
-  --color-c-ember-ink: #9a4a14;
-  --color-c-ember-tint: #fbeadf;
+  --color-c-leaf: #16a34a;
+  --color-c-leaf-ink: #0b5d36;
+  --color-c-leaf-tint: #dcf2e3;
+  --color-c-sun: #f59e0b;
+  --color-c-sun-ink: #92400e;
+  --color-c-sun-tint: #fef3c7;
+  --color-c-sky: #0f4c81;
+  --color-c-sky-ink: #0f4c81;
+  --color-c-sky-tint: #e1ecf6;
+  --color-c-ember: #ea580c;
+  --color-c-ember-ink: #c2410c;
+  --color-c-ember-tint: #ffedd5;
+  /* “Mùa Vàng & Đại Ngàn” – landing tổng (design.md §2.5) */
+  --color-mv-ivory: #faf9f5; /* nền khối sáng */
+  --color-mv-mint: #eff6f1; /* nền khối xen kẽ */
+  --color-mv-emerald: #0b5d36; /* thương hiệu chính, tab chọn, thanh chỉ số */
+  --color-mv-green: #16a34a; /* xanh lá tươi: vạch, chấm, mảng (không dùng làm chữ trên nền sáng) */
+  --color-mv-green-deep: #15803d; /* điểm cuối gradient banner */
+  --color-mv-gold: #f59e0b; /* vàng lúa chín: nút trên nền xanh, badge */
+  --color-mv-gold-soft: #fbbf24; /* chữ nhấn / số liệu trên nền tối */
+  --color-mv-amber: #ea580c; /* cam hổ phách: CTA (mảng lớn) */
+  --color-mv-amber-ink: #c2410c; /* cam hổ phách đậm: nền nút chữ trắng & chữ cam (≥4.5:1) */
+  --color-mv-night: #082919; /* xanh rừng đêm: overlay hero, footer */
+  --color-mv-ink: #132a1e; /* chữ chính */
+  --color-mv-ink-soft: #4b5d52; /* chữ phụ */
+  --color-mv-mist: #d1fae5; /* chữ phụ trên nền xanh */
+  --color-mv-slate: #1e293b; /* lốp xe */
+  --color-mv-steel: #0f4c81; /* sắt thép */
+  --color-mv-brick: #dc2626; /* sắt thép – nhấn */
   --color-hub-marigold: #ffb110;
   --color-hub-marigold-soft: #fff4d9;
   --color-hub-coral: #f64932;
@@ -574,10 +591,17 @@
 /* Hero landing tổng: thanh thời gian 6s của ảnh nền */
 @keyframes biz-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes biz-panel { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-/* Landing tổng: nền chung “vườn xanh” (ảnh dựng ở tools/garden-bg) – màu dự phòng khi ảnh chưa tải */
-.biz-garden { background-color: #f5f8f0; }
-.garden-light { background: #f5f8f0 url("/garden/light-m.webp") center / cover no-repeat; }
-@media (min-width: 1024px) {
-  .garden-light { background-image: url("/garden/light.webp"); }
+/* Landing tổng dùng bảng màu “Mùa Vàng & Đại Ngàn”: đổi các token hub-* trong phạm vi .theme-hub
+   (admin và chuyên trang không bị ảnh hưởng). */
+.theme-hub {
+  --color-hub-ink: #132a1e;
+  --color-hub-ink-soft: #4b5d52;
+  --color-hub-canvas: #faf9f5;
+  --color-hub-stone: #e4ebe5;
+  --color-hub-blue: #c2410c;
+  --color-hub-blue-hover: #9a3412;
+  --color-hub-blue-tint: #ffedd5;
+  --color-biz-moss: #0b5d36;
 }
+.biz-garden { background-color: #faf9f5; }
 @keyframes biz-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }

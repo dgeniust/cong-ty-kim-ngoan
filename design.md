@@ -54,20 +54,24 @@ Nguyên tắc kiểm tra nhanh: *nếu bỏ đường viền mà khối vẫn đ
 
 Mỗi trang chỉ có **một** màu hành động (nút đặc màu đồng). Màu ngành dùng cho chấm/tag: phân bón `#3a9a4f`, lốp xe `#e07a3f`, sắt thép `#3d7fc2`.
 
-### 2.4 Bảng màu “mùa vụ” – landing tổng (sặc sỡ vừa đủ)
-| Tông | Đặc (chấm, vạch) | Chữ (≥4.5:1) | Nền nhạt | Gắn với |
-|---|---|---|---|---|
-| `leaf` | `#3a9a4f` | `#24703a` | `#e7f3e4` | phân bón · khối Giới thiệu |
-| `sun` | `#f0b429` | `#8a5a00` | `#fdf3d8` | khối Sản phẩm |
-| `sky` | `#3d7fc2` | `#285f99` | `#e5eef8` | sắt thép · khối Tin tức |
-| `ember` | `#e07a3f` | `#9a4a14` | `#fbeadf` | lốp xe · khối Liên hệ |
+### 2.4 Landing tổng – “Mùa Vàng & Đại Ngàn” (token `mv-*`, color blocking)
+| Vai trò | Màu | Dùng ở |
+|---|---|---|
+| Nền sáng | Trắng ngà `#FAF9F5` | Giới thiệu, Tin tức, header khi cuộn |
+| Nền xen kẽ | Xanh bạc hà `#EFF6F1` | Sản phẩm, Liên hệ, khối trích dẫn |
+| Thương hiệu | Xanh ngọc lục bảo `#0B5D36` · xanh lá tươi `#16A34A` | tab chọn, thanh chỉ số hero, vạch trích dẫn, viền gạch chân khi focus |
+| Nhấn | Vàng lúa chín `#F59E0B` / `#FBBF24` · cam hổ phách `#EA580C` | nút trên nền xanh, số liệu, chữ nhấn hero, badge; CTA |
+| Tối & chữ | Xanh rừng đêm `#082919` · xanh than `#132A1E` (phụ `#4B5D52`) | overlay hero, footer · chữ chính |
+| Ngành – phân bón | `#16A34A` + `#F59E0B` | tab Sản phẩm, thẻ dòng SP |
+| Ngành – lốp xe | than đất `#1E293B` + cam `#EA580C` | 〃 |
+| Ngành – sắt thép | xanh thép `#0F4C81` + đỏ gạch `#DC2626` | 〃 |
 
-Dùng qua `TONE` / `SECTOR_TONE` trong `components/business/ui.tsx`. Quy tắc để không “quá”:
-- Màu chỉ xuất hiện ở **mảng nhỏ**: vạch eyebrow, ô icon nền nhạt, viên tag ngành, gạch chân tab, vạch tiến trình hero, mảng màu lệch sau ảnh, thẻ số điện thoại từng ngành. Nền khối, chữ thân bài và tiêu đề vẫn trung tính.
-- Mỗi khối một tông chủ đạo (eyebrow); trong khối Sản phẩm, tab nào thì cả bảng (tag, nút, hover, mảng sau ảnh) theo màu ngành đó.
-- Chữ màu luôn dùng bản “chữ”, không dùng bản “đặc” cho chữ.
-
----
+Tương phản (WCAG AA, chữ thường 16px):
+- Nút cam chữ trắng dùng bản đậm **`#C2410C`** (5.2:1); `#EA580C` (3.6:1 với chữ trắng) chỉ dùng cho mảng/vạch/chấm.
+- `#16A34A` chỉ làm mảng/vạch; chữ xanh dùng `#0B5D36`. Nút xanh dùng `#15803D` (5.0:1).
+- Nút vàng `#F59E0B` dùng chữ `#132A1E` (7.1:1); số vàng `#FBBF24` trên `#0B5D36` (4.8:1).
+- Badge ngành = nền nhạt + chữ đậm cùng họ màu (`#92400E`/`#FEF3C7`, `#9A3412`/`#FFEDD5`, `#B91C1C`/`#FEE2E2`).
+Các token `hub-*` được đặt lại trong `.theme-hub` (globals.css) nên admin và chuyên trang không bị ảnh hưởng.
 
 ## 3. Chữ
 
@@ -101,7 +105,7 @@ Dùng qua `TONE` / `SECTOR_TONE` trong `components/business/ui.tsx`. Quy tắc �
 - Thanh chọn ngành phía trên (`sector-switcher`) ở các chuyên trang.
 
 ### 5.2 Footer
-- Landing tổng (`hub-footer.tsx`): nền xanh rêu đậm `brand-900`; cột thương hiệu + slogan · Liên kết nhanh · Sản phẩm · Theo dõi (Facebook, Zalo, email) · đường kẻ dọc · khối gọi (hotline lớn, “Tư vấn miễn phí”, nút xanh `#3b7d46` “Nhận báo giá”).
+- Landing tổng (`hub-footer.tsx`): nền xanh rừng đêm `#082919`; cột thương hiệu + slogan · Liên kết nhanh · Sản phẩm · Theo dõi (Facebook, Zalo, email) · đường kẻ dọc · khối gọi (hotline lớn, “Tư vấn miễn phí”, nút vàng `#F59E0B` chữ `#132A1E` “Nhận báo giá”). Nút nổi góc phải: Gọi hotline (cam) + Chat Zalo.
   Chân footer là **dải đồi vườn cây** SVG (`footer-landscape.tsx`: đồi xa sáng → gần tối, hàng cây tán tròn, luống cây) + nhành lá hai góc; dòng bản quyền nằm trên đồi gần.
 - Chuyên trang: nền tối (`brand-950` / than chì), nhãn cột in hoa, slogan, thông tin liên hệ, đường kẻ phân cách mảnh.
 
@@ -122,20 +126,16 @@ Dùng qua `TONE` / `SECTOR_TONE` trong `components/business/ui.tsx`. Quy tắc �
 
 ## 6. Landing tổng `/`
 
-Thứ tự: **Hero → Về Kim Ngoan → Sản phẩm (3 ngành) → Tin tức → Liên hệ**.
+Thứ tự: **Hero → Về Kim Ngoan (ngà) → Sản phẩm (bạc hà) → Banner báo giá (xanh) → Tin tức (ngà) → Liên hệ (bạc hà) → Footer (rừng đêm)**.
 
-- **Nền chung “vườn xanh”** (`business/garden-backdrop.tsx`, ảnh trong `public/garden/`, dựng lại bằng `python3 tools/garden-bg/gen.py public/garden [--force]`):
-  - Một lớp **dính (sticky) cao 1 màn hình** đặt sau các khối Giới thiệu → Liên hệ: nền đứng yên, nội dung trôi qua, không còn đường cắt giữa các khối.
-  - `light.webp` (1920×1080): nắng sớm góc phải, mảng xanh loang hai mép, bokeh, cỏ mờ dưới hai góc, giữa sạch để đọc chữ. Dưới 1024px dùng `light-m.webp` (ảnh dọc, lá nhỏ ở góc).
-  - Khung lá `frame-{l,r}-{1,2,3}.webp` (600×1300, trong suốt): 3 lớp chiều sâu – tán lá xa nhoè, nhành chính nét có bóng đổ, lá tiền cảnh nhoè mạnh; mép trong phai dần.
-  - Mỗi khối gắn `data-garden="1|2|3"`; khi cuộn tới, khung lá đổi biến thể (mờ dần + trôi 12px, 1,4s). Mép phải luôn dùng biến thể khác mép trái.
-  - Khung tự lùi ra ngoài khi lề hẹp: `left = clamp(-16.5vh, (100vw−1280)/2 + 32px − 23vh, 0)` → lá nét không đè chữ; dưới 1440px giảm còn 80% độ đậm.
-  - Biến thể 2, 3 chỉ tải khi người xem đã cuộn tới phần nền (không tranh băng thông với hero).
-- **Hero** (`business/hero.tsx`): ảnh tràn viền + lớp phủ trắng trái→phải nhẹ (0,9 → 0,7 → 0,1 → 0) để ảnh lộ rõ, tự chuyển **6s** giữa 3 ngành, chỉ báo `01/02/03` có thanh tiến trình; dừng khi hover/focus, tab ẩn hoặc nút tạm dừng. Dải số liệu neo đáy (năm, sản phẩm, ngành hàng, bán kính giao).
-- **Về Kim Ngoan**: 2 cột chữ/ảnh, trích dẫn có gạch trái rêu 3px, 4 cam kết ngăn bằng đường kẻ.
-- **Sản phẩm**: tab 3 ngành với gạch chân trượt, mỗi ngành = ảnh lớn + 5 dòng hàng chính.
-- **Tin tức**: 60/40 – bài chính + danh sách 3 bài.
-- **Liên hệ**: 50/50 – thông tin + số điện thoại từng ngành / form báo giá gạch chân + bản đồ bấm-để-mở.
+- **Nền khối & lá** (`SECTION_BG` trong `business/ui.tsx`, `business/garden-backdrop.tsx`): mỗi khối vẽ nền bằng `::before` ở z −20; lớp khung lá sticky (z −10, ảnh `public/garden/frame-*`, dựng bằng `tools/garden-bg/gen.py`) nằm giữa nền khối và nội dung → nền đổi màu theo khối, lá vẫn ở hai mép và đổi biến thể theo `data-garden`. Khối không được `isolate`. Banner báo giá có `z-0` để nằm trên lá. Từ 1024px mới hiện lá; khung tự lùi ra mép để không đè chữ.
+- **Header**: trong suốt + chữ trắng trên hero tối; cuộn/mở menu → `#FAF9F5`/85 + `backdrop-blur-md`, chữ xanh than; nút “Nhận báo giá” cam cố định.
+- **Hero** (`business/hero.tsx`): ảnh tràn viền (~88vh), overlay `#082919` trái→phải 92% → 10% (điện thoại: ảnh trên, chữ dưới trên nền rừng đêm). Eyebrow dạng viên mờ, h1 trắng + dòng 2 vàng `#FBBF24`, 2 nút phẳng (cam + trắng mờ). Tự chuyển **6s**, thanh tiến trình vàng; dừng khi hover/focus, tab ẩn, nút tạm dừng. Thanh chỉ số neo đáy nền `#0B5D36`, số vàng, mô tả `#D1FAE5`.
+- **Về Kim Ngoan** (ngà): 2 cột không viền; trích dẫn nền bạc hà + vạch trái `#16A34A`; 4 cam kết có vạch + ô icon nhiều màu; mảng màu lệch sau ảnh.
+- **Sản phẩm** (bạc hà): thanh chuyển nhóm lớn không viền, tab chọn nền đặc `#0B5D36` chữ trắng, phân bón có nhãn “Ngành chính”. Mỗi ngành: giới thiệu + nút màu ngành + ảnh lớn, rồi **4 thẻ dòng sản phẩm** (ảnh/hình vẽ, nhãn nhóm, tên, thông số, “Dùng cho” với phân bón) – nền trắng `shadow-sm`, không viền.
+- **Banner báo giá** (`business/quote-banner.tsx`): tràn viền, gradient `#0B5D36 → #15803D`, tiêu đề trắng, nút vàng “Liên hệ báo giá ngay” chữ `#132A1E` + hotline.
+- **Tin tức** (ngà): 60/40 – bài chính (vạch màu ngành dưới ảnh) + 3 bài ngăn bằng kẻ mảnh; thẻ ngành nhiều màu.
+- **Liên hệ** (bạc hà): 50/50 – thông tin + số điện thoại từng ngành / form báo giá gạch chân + bản đồ bấm-để-mở.
 - Nội dung tĩnh: `src/lib/content/hub-home.ts`; dữ liệu dựng: `src/lib/hub/home.ts`.
 
 ## 7. Phân bón `/phanbon`

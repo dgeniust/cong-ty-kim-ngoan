@@ -48,8 +48,8 @@ export function FooterLandscape({ className }: { className?: string }) {
     <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMax slice" aria-hidden className={className}>
       <defs>
         <radialGradient id="ft-glow" cx="0.6" cy="0.8" r="0.42">
-          <stop offset="0" stopColor="#7fae6a" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#7fae6a" stopOpacity="0" />
+          <stop offset="0" stopColor="#2f8f55" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#2f8f55" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="ft-mist" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#c9e2b0" stopOpacity="0" />
@@ -59,16 +59,16 @@ export function FooterLandscape({ className }: { className?: string }) {
       </defs>
       <rect width={W} height={H} fill="url(#ft-glow)" />
       {/* đồi xa + hàng cây */}
-      <path d={ridge(118, FAR)} fill="#2a5133" />
-      <g fill="#2a5133">
+      <path d={ridge(118, FAR)} fill="#174a30" />
+      <g fill="#174a30">
         {TREES.map((t, i) => (
           <circle key={i} cx={t.x.toFixed(1)} cy={t.y.toFixed(1)} r={t.r.toFixed(1)} />
         ))}
       </g>
       <rect y="90" width={W} height="90" fill="url(#ft-mist)" />
       {/* đồi giữa + luống cây + cây lớn */}
-      <path d={ridge(160, MID)} fill="#244a2f" />
-      <g stroke="#2f5d3a" strokeOpacity="0.55" strokeWidth="2" strokeLinecap="round" fill="none">
+      <path d={ridge(160, MID)} fill="#0f3a24" />
+      <g stroke="#1d5a38" strokeOpacity="0.55" strokeWidth="2" strokeLinecap="round" fill="none">
         {Array.from({ length: 7 }, (_, i) => {
           const y0 = 176 + i * 8;
           let d = "";
@@ -76,7 +76,7 @@ export function FooterLandscape({ className }: { className?: string }) {
           return <path key={i} d={d} />;
         })}
       </g>
-      <g fill="#1d3f27">
+      <g fill="#0b2f1d">
         {BIG_TREES.map((t, i) => (
           <g key={i}>
             <rect x={t.x - 1.5} y={t.y + t.r * 0.6} width="3" height={t.r * 0.9} />
@@ -87,7 +87,7 @@ export function FooterLandscape({ className }: { className?: string }) {
         ))}
       </g>
       {/* đồi gần – nền cho dòng bản quyền */}
-      <path d={ridge(206, NEAR)} fill="#13281a" />
+      <path d={ridge(206, NEAR)} fill="#041a0f" />
     </svg>
   );
 }

@@ -2,7 +2,7 @@ import "server-only";
 import { HUB_HERO, HUB_PRODUCTS } from "@/lib/content/hub-home";
 import { ZONES } from "@/lib/content/hub-extras";
 import { getCategories, getProducts } from "@/lib/data/catalog";
-import type { NewsItem } from "@/lib/data/types";
+import type { ArtKind, NewsItem } from "@/lib/data/types";
 import { getCategory as getFertilizerCategory } from "@/lib/mock/categories";
 import type { Product } from "@/lib/mock/types";
 import type { Settings } from "@/lib/settings/server";
@@ -43,7 +43,18 @@ export function buildStats(company: Company, productCount: number): Stat[] {
 
 /* ------------------------------------------------------------------ sản phẩm: không gian trưng bày từng ngành */
 
-export type SpotlightLine = { name: string; group: string; spec?: string; href: string };
+/** Một dòng sản phẩm tiêu biểu: ảnh thật nếu có, không thì hình vẽ `art`; `use` = ứng dụng (cây trồng). */
+export type SpotlightLine = { name: string; group: string; spec?: string; use?: string; href: string; image?: string; art?: ArtKind };
+
+/** Ảnh cây trồng thật cho dòng phân bón (ảnh bao phân mẫu chưa có) – theo cây trồng đầu tiên của sản phẩm. */
+const CROP_IMAGE: Record<string, string> = {
+  "Cà phê": "/coffee.jpg",
+  "Sầu riêng": "/durian.jpg",
+  Tiêu: "/tieu.webp",
+  "Cao su": "/caosu.jpg",
+  Lúa: "/lua.jpg",
+};
+const cropImage = (crops: string[]) => crops.map((c) => CROP_IMAGE[c]).find(Boolean) ?? "/garden.jpg";
 export type Spotlight = (typeof HUB_PRODUCTS.sectors)[number] & {
   name: string;
   short: string;
@@ -54,7 +65,7 @@ export type Spotlight = (typeof HUB_PRODUCTS.sectors)[number] & {
   lines: SpotlightLine[];
 };
 
-const LINES_PER_SECTOR = 5;
+const LINES_PER_SECTOR = 4;
 
 export async function buildSpotlights(verticals: Verticals, fertilizers: Product[]) {
   const [tyres, steels] = await Promise.all([getProducts("lopxe"), getProducts("satthep")]);
@@ -64,19 +75,25 @@ export async function buildSpotlights(verticals: Verticals, fertilizers: Product
       name: p.name,
       group: getFertilizerCategory(p.categorySlug)?.name ?? "Phân bón",
       spec: p.packing[0],
+      use: p.crops.slice(0, 3).join(", "),
       href: `${verticals.phanbon.base}/san-pham/${p.slug}`,
+      image: p.images.find((src) => !PLACEHOLDER_IMAGE.test(src)) ?? cropImage(p.crops),
     })),
     lopxe: [...tyres].sort(byHighlight).map((p) => ({
       name: p.name,
       group: getCategories("lopxe").find((c) => c.slug === p.categorySlug)?.name ?? "",
       spec: p.keySpec,
       href: `${verticals.lopxe.base}/san-pham/${p.slug}`,
+      image: p.images?.[0],
+      art: p.art,
     })),
     satthep: [...steels].sort(byHighlight).map((p) => ({
       name: p.name,
       group: getCategories("satthep").find((c) => c.slug === p.categorySlug)?.name ?? "",
       spec: p.keySpec,
       href: `${verticals.satthep.base}/san-pham/${p.slug}`,
+      image: p.images?.[0],
+      art: p.art,
     })),
   };
 

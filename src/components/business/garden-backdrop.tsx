@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  *
  * - Một lớp dính (sticky) cao đúng 1 màn hình, nằm sau toàn bộ các khối từ Giới thiệu → Liên hệ:
  *   nền đứng yên, nội dung trôi qua → cảm giác một bức nền liền mạch, không bị cắt theo từng khối.
- * - Lớp ánh sáng (nắng sớm, bokeh, cỏ mờ) dùng chung; điện thoại dùng ảnh dọc riêng, lá chỉ ở góc.
+ * - Nền màu do từng khối tự vẽ (SECTION_BG, z −20); lớp này chỉ còn khung lá (z −10) nằm giữa nền khối và nội dung.
  * - Khung lá bám mép trái/phải (từ lg; dưới lg dùng ảnh dọc có lá ở góc): 3 biến thể, đổi nhẹ (mờ dần + trôi 12px) khi cuộn sang khối
  *   có `data-garden` khác. Mép trái và phải luôn dùng hai biến thể khác nhau để bố cục không đối xứng cứng.
  * - Vị trí khung tự lùi ra ngoài khi lề trang hẹp để lá nét không đè lên chữ.
@@ -48,7 +48,6 @@ export function GardenBackdrop() {
 
   return (
     <div ref={ref} aria-hidden className="pointer-events-none sticky top-0 -z-10 -mb-[100lvh] h-[100lvh] w-full overflow-hidden">
-      <div className="garden-light absolute inset-0" />
       <div className="absolute inset-0 hidden lg:block">
         {VARIANTS.map((v) => {
           const on = v === active;

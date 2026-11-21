@@ -39,7 +39,7 @@ export function HubMark({ className }: { className?: string }) {
 }
 
 const ITEM =
-  "relative inline-flex h-11 items-center gap-1 px-3.5 text-body font-medium transition-colors duration-200 after:absolute after:inset-x-3.5 after:bottom-1.5 after:h-[2px] after:origin-left after:bg-hub-blue after:transition-transform after:duration-300 after:ease-soft xl:px-4 xl:after:inset-x-4";
+  "relative inline-flex h-11 items-center gap-1 px-3.5 text-body font-medium transition-colors duration-200 after:absolute after:inset-x-3.5 after:bottom-1.5 after:h-[2px] after:origin-left after:bg-hub-blue group-data-[dark]/hd:after:bg-mv-gold-soft after:transition-transform after:duration-300 after:ease-soft xl:px-4 xl:after:inset-x-4";
 
 /** Bảng thả xuống của một mục menu (desktop). */
 function DropPanel({
@@ -273,15 +273,16 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
     );
   };
 
+  // trong suốt trên hero tối (trang chủ, chữ trắng) → cuộn/mở menu: trắng ngà mờ, chữ xanh than
+  const dark = onHome && !(scrolled || open || drop);
+
   return (
     <>
       <header
+        data-dark={dark || undefined}
         className={cn(
-          "sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ease-out",
-          // trong suốt ở đỉnh hero (trang chủ); khi cuộn / mở menu: trắng đục, không làm mờ nền quá mức
-          scrolled || open || drop || !onHome
-            ? "bg-white/92 shadow-[0_1px_0_rgb(24_24_27/0.08)] backdrop-blur-sm"
-            : "bg-transparent",
+          "group/hd sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ease-out",
+          dark ? "bg-transparent" : "bg-mv-ivory/85 shadow-[0_1px_0_rgb(19_42_30/0.08)] backdrop-blur-md",
         )}
       >
         <a
@@ -294,9 +295,9 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
           <Link
             href="/"
             aria-label={`${COMPANY.legalName} – trang chủ`}
-            className="group flex flex-col gap-1 rounded-md text-hub-ink"
+            className="group flex flex-col gap-1 rounded-md text-hub-ink transition-colors group-data-[dark]/hd:text-white"
           >
-            <span className="block logo-prefix text-hub-ink-soft">
+            <span className="block logo-prefix text-hub-ink-soft group-data-[dark]/hd:text-white/75">
               {COMPANY.prefix}
             </span>
             <Wordmark className="h-[22px] w-auto transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:h-6" />
@@ -311,8 +312,8 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
               {HUB_NAV.map((m) => {
                 const active = isActive(m);
                 const line = active
-                  ? "text-hub-ink after:scale-x-100"
-                  : "text-hub-ink/65 after:scale-x-0 hover:text-hub-ink";
+                  ? "text-hub-ink after:scale-x-100 group-data-[dark]/hd:text-white"
+                  : "text-hub-ink/65 after:scale-x-0 hover:text-hub-ink group-data-[dark]/hd:text-white/80 group-data-[dark]/hd:hover:text-white";
                 if (m.kind === "link") {
                   return (
                     <li key={m.label}>
@@ -370,10 +371,10 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
           <div className="hidden items-center gap-5 lg:flex">
             <a
               href={telHref(COMPANY.hotline)}
-              className="group hidden items-center gap-2 text-body font-semibold tabular-nums text-hub-ink xl:inline-flex"
+              className="group hidden items-center gap-2 text-body font-semibold tabular-nums text-hub-ink group-data-[dark]/hd:text-white xl:inline-flex"
             >
               <Phone
-                className="size-4 text-biz-moss transition-transform duration-300 group-hover:rotate-12"
+                className="size-4 text-mv-green transition-transform duration-300 group-hover:rotate-12 group-data-[dark]/hd:text-mv-gold-soft"
                 aria-hidden
               />{" "}
               {COMPANY.hotline}
@@ -392,7 +393,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
 
           <button
             type="button"
-            className="grid size-11 place-items-center rounded-full text-hub-ink lg:hidden"
+            className="grid size-11 place-items-center rounded-full text-hub-ink group-data-[dark]/hd:text-white lg:hidden"
             aria-label={open ? "Đóng menu" : "Mở menu"}
             aria-expanded={open}
             aria-controls="menu-hub"
@@ -414,7 +415,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
       {open && (
         <div
           id="menu-hub"
-          className="fixed inset-x-0 bottom-0 top-16 z-50 overflow-y-auto bg-white px-4 pb-8 pt-2 sm:px-6 lg:hidden"
+          className="fixed inset-x-0 bottom-0 top-16 z-50 overflow-y-auto bg-mv-ivory px-4 pb-8 pt-2 sm:px-6 lg:hidden"
         >
           <nav aria-label="Điều hướng di động">
             <ul className="divide-y divide-hub-ink/10">

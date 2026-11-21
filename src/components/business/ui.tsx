@@ -5,15 +5,28 @@ import { cn } from "@/lib/utils";
 
 /** Mảnh giao diện dùng chung của landing Business (Editorial Industrial): phẳng, không khung, bo góc rất nhẹ. */
 
+/**
+ * Nền khối (color blocking): vẽ bằng ::before ở z-index −20 để lớp lá “vườn xanh” (sticky, z −10)
+ * nằm GIỮA nền khối và nội dung – lá vẫn hiện ở mép, nền vẫn đổi màu theo khối. Khối KHÔNG được `isolate`.
+ */
+export const SECTION_BG = {
+  ivory: "relative before:pointer-events-none before:absolute before:inset-0 before:-z-20 before:bg-mv-ivory",
+  mint: "relative before:pointer-events-none before:absolute before:inset-0 before:-z-20 before:bg-mv-mint",
+} as const;
+
 /** Khung nội dung: tối đa 1280px, lề rộng rãi. */
 export const BIZ_WRAP = "mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-12";
 
 const BUTTON = "group inline-flex h-12 items-center justify-center gap-2 rounded-md px-6 text-body font-semibold transition-colors duration-200";
 export const bizButton = {
-  /** nút đặc – màu cam đồng */
+  /** nút đặc – cam hổ phách (bản đậm #C2410C để chữ trắng đạt 5.2:1) */
   solid: cn(BUTTON, "bg-hub-blue text-white hover:bg-hub-blue-hover"),
   /** nút nền trắng, dùng trên nền màu/ảnh */
   light: cn(BUTTON, "bg-white text-hub-ink shadow-sm hover:bg-hub-canvas"),
+  /** nút phẳng trên nền tối (hero) */
+  ghostDark: cn(BUTTON, "bg-white/10 text-white hover:bg-white/20"),
+  /** nút vàng lúa chín trên nền xanh – chữ xanh than đậm */
+  gold: cn(BUTTON, "bg-mv-gold font-bold text-mv-ink hover:bg-mv-gold-soft"),
 };
 
 /** Mũi tên trượt sang phải khi rê chuột vào phần tử cha có class `group`. */
@@ -34,10 +47,10 @@ export function ArrowLink({ href, children, className }: { href: string; childre
 /** Tông màu “mùa vụ”: đặc (chấm/vạch), chữ, nền nhạt, nút. */
 export type Tone = "leaf" | "sun" | "sky" | "ember";
 export const TONE: Record<Tone, { solid: string; ink: string; tint: string; btn: string; border: string }> = {
-  leaf: { solid: "bg-c-leaf", ink: "text-c-leaf-ink", tint: "bg-c-leaf-tint", btn: "bg-c-leaf-ink hover:bg-[#1c5a2e]", border: "border-c-leaf" },
-  sun: { solid: "bg-c-sun", ink: "text-c-sun-ink", tint: "bg-c-sun-tint", btn: "bg-c-sun-ink hover:bg-[#704900]", border: "border-c-sun" },
-  sky: { solid: "bg-c-sky", ink: "text-c-sky-ink", tint: "bg-c-sky-tint", btn: "bg-c-sky-ink hover:bg-[#1f4d7d]", border: "border-c-sky" },
-  ember: { solid: "bg-c-ember", ink: "text-c-ember-ink", tint: "bg-c-ember-tint", btn: "bg-c-ember-ink hover:bg-[#7d3b0f]", border: "border-c-ember" },
+  leaf: { solid: "bg-c-leaf", ink: "text-c-leaf-ink", tint: "bg-c-leaf-tint", btn: "bg-c-leaf-ink hover:bg-[#084a2b]", border: "border-c-leaf" },
+  sun: { solid: "bg-c-sun", ink: "text-c-sun-ink", tint: "bg-c-sun-tint", btn: "bg-c-sun-ink hover:bg-[#78350f]", border: "border-c-sun" },
+  sky: { solid: "bg-c-sky", ink: "text-c-sky-ink", tint: "bg-c-sky-tint", btn: "bg-c-sky-ink hover:bg-[#0b3a63]", border: "border-c-sky" },
+  ember: { solid: "bg-c-ember", ink: "text-c-ember-ink", tint: "bg-c-ember-tint", btn: "bg-c-ember-ink hover:bg-[#9a3412]", border: "border-c-ember" },
 };
 /** Màu từng ngành trên landing tổng. */
 export const SECTOR_TONE: Record<"phanbon" | "lopxe" | "satthep", Tone> = { phanbon: "leaf", lopxe: "ember", satthep: "sky" };

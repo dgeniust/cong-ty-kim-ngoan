@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUp, MessageCircle, Phone } from "lucide-react";
+import { ArrowUp, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /** Cụm nút nổi góc phải dưới: gọi hotline, Zalo, lên đầu trang. */
@@ -28,8 +28,8 @@ export function HubFloating({ phone, phoneHref, zalo }: { phone: string; phoneHr
       >
         <ArrowUp className="size-5" aria-hidden />
       </button>
-      <a href={zalo} target="_blank" rel="noopener noreferrer" aria-label="Nhắn Zalo" className={cn(circle, "bg-white text-hub-blue")}>
-        <MessageCircle className="size-5" aria-hidden />
+      <a href={zalo} target="_blank" rel="noopener noreferrer" aria-label="Chat Zalo" className={cn(circle, "bg-white text-[11px] font-bold text-[#0068ff]")}>
+        Zalo
       </a>
       <a href={phoneHref} aria-label={`Gọi hotline ${phone}`} className={cn(circle, "relative bg-hub-blue text-white")}>
         <span aria-hidden className="absolute inset-0 animate-ping rounded-full bg-hub-blue/30 [animation-duration:2.4s]" />

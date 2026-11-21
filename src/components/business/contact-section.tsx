@@ -15,7 +15,7 @@ import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { MapEmbed } from "./map-embed";
 import { QuoteForm } from "./quote-form";
-import { Eyebrow, SECTOR_TONE, SectionTitle, TONE, type Tone } from "./ui";
+import { Eyebrow, SECTION_BG, SectionTitle, SECTOR_TONE, TONE, type Tone } from "./ui";
 
 /** Liên hệ chia đôi màn hình: thông tin + form gạch chân bên trái, bản đồ tràn chiều cao bên phải. */
 export function ContactSection({
@@ -30,7 +30,7 @@ export function ContactSection({
       data-garden="1"
       id="lien-he"
       aria-labelledby="lien-he-title"
-      className="relative isolate scroll-mt-20"
+      className={cn(SECTION_BG.mint, "scroll-mt-20")}
     >
       <div className="grid lg:grid-cols-2">
         <Reveal className="px-5 py-20 sm:px-8 md:py-28 lg:py-32 lg:pl-[max(3rem,calc((100vw-1280px)/2+3rem))] lg:pr-16">

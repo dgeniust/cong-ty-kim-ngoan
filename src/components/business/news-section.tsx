@@ -8,7 +8,7 @@ import { formatDate } from "@/lib/format";
 import type { pickHomeNews } from "@/lib/hub/home";
 import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
-import { ArrowLink, BIZ_WRAP, Eyebrow, SECTOR_TONE, SectionTitle, SectorTag } from "./ui";
+import { ArrowLink, BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle, SECTOR_TONE, SectorTag } from "./ui";
 
 type Verticals = Settings["VERTICALS"];
 const TONE_BAR = { leaf: "after:bg-c-leaf", sun: "after:bg-c-sun", sky: "after:bg-c-sky", ember: "after:bg-c-ember" } as const;
@@ -18,7 +18,7 @@ export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickH
   const { feature, list } = news;
   if (!feature) return null;
   return (
-    <section data-garden="3" id="tin-tuc" aria-labelledby="tin-tuc-title" className="relative isolate scroll-mt-20 py-24 md:py-32">
+    <section data-garden="3" id="tin-tuc" aria-labelledby="tin-tuc-title" className={cn(SECTION_BG.ivory, "scroll-mt-20 py-24 md:py-32")}>
       <div className={BIZ_WRAP}>
         <Reveal className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
