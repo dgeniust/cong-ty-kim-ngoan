@@ -18,7 +18,7 @@ function LeafMark({ className, inverted }: { className?: string; inverted?: bool
   return (
     <svg viewBox="0 0 64 64" aria-hidden className={className}>
       <path d="M8 56C8 30 24 10 56 6c2 30-16 50-44 50" className={inverted ? "fill-brand-300" : "fill-brand-500"} />
-      <path d="M4 60C10 44 18 34 30 26" stroke={inverted ? "#1d3a25" : "white"} strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M4 60C10 44 18 34 30 26" stroke={inverted ? "#082919" : "white"} strokeWidth="3" fill="none" strokeLinecap="round" />
       <path d="M6 52C4 38 10 26 22 20c4 12 0 26-16 32Z" className={inverted ? "fill-sun-300" : "fill-brand-800"} />
     </svg>
   );

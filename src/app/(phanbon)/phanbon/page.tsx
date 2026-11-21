@@ -6,6 +6,8 @@ import { HeroShop, type HeroCrop } from "@/components/phanbon/hero-shop";
 import { PlantDoctor } from "@/components/phanbon/plant-doctor";
 import { RealGardens } from "@/components/phanbon/real-gardens";
 import { NpkLabel, type LabelProduct } from "@/components/phanbon/npk-label";
+import { GardenBackdrop } from "@/components/business/garden-backdrop";
+import { SECTION_BG } from "@/components/business/ui";
 import { Container } from "@/components/shared/container";
 import { Kicker } from "@/components/shared/kicker";
 import { Reveal } from "@/components/shared/reveal";
@@ -76,9 +78,10 @@ export default async function HomePage() {
   const [lead, ...rest] = news.slice(0, 4);
 
   return (
-    <div className="bg-paper">
+    <div className="biz-garden relative isolate overflow-x-clip">
+      <GardenBackdrop />
       {/* HERO kiểu cửa hàng: dòng thông tin → tiêu đề + tìm kiếm + nhóm hàng | ảnh vườn thật + gợi ý theo cây */}
-      <section aria-labelledby="hero-title" className="pt-6 md:pt-8">
+      <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
             <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · {site.companyName}</span>
@@ -109,7 +112,7 @@ export default async function HomePage() {
       </section>
 
       {/* 02. Bác sĩ cây trồng */}
-      <section id="bac-si-cay-trong" aria-labelledby="bac-si-title" className="scroll-mt-24 py-20 md:py-28">
+      <section id="bac-si-cay-trong" aria-labelledby="bac-si-title" data-garden="2" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <SectionHead
             id="bac-si-title"
@@ -123,7 +126,7 @@ export default async function HomePage() {
       </section>
 
       {/* 03. Sản phẩm – mục lục nhóm hàng (CMS) + thẻ nhãn bao */}
-      <section id="san-pham" aria-labelledby="san-pham-title" className="scroll-mt-24 bg-white py-20 md:py-28">
+      <section id="san-pham" aria-labelledby="san-pham-title" data-garden="3" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <SectionHead
             id="san-pham-title"
@@ -169,42 +172,42 @@ export default async function HomePage() {
       </section>
 
       {/* 04. Vườn thật, người thật */}
-      <section id="vuon-that" aria-labelledby="vuon-that-title" className="scroll-mt-24 py-20 md:py-28">
+      <section id="vuon-that" aria-labelledby="vuon-that-title" data-garden="1" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <RealGardens stories={content.stories} zalo={COMPANY.zalo} no="04" />
         </Container>
       </section>
 
       {/* 05. Về Kim Ngoan – ảnh lớn có chú thích, câu chuyện, số liệu, cam kết (đều từ CMS) */}
-      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 bg-white py-20 md:py-28">
+      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 bg-brand-900 py-20 text-white md:py-28">
         <Container className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-6">
             <figure className="lg:sticky lg:top-28">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface lg:aspect-[5/6]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-brand-800 lg:aspect-[5/6]">
                 <SmartImage src={about.image} alt="Vườn cây của bà con trong vùng" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
               </div>
-              <figcaption className="mt-3 flex justify-between gap-4 text-caption text-ink-muted">
+              <figcaption className="mt-3 flex justify-between gap-4 text-caption text-white/70">
                 <span>Vườn cây trong vùng {site.address}</span>
                 <span>{site.companyName}</span>
               </figcaption>
             </figure>
           </Reveal>
-          <div className="text-brand-900 lg:col-span-5 lg:col-start-8">
+          <div className="lg:col-span-5 lg:col-start-8">
             <Reveal>
-              <Kicker no="05">{about.title}</Kicker>
-              <h2 id="gioi-thieu-title" className="mt-7 whitespace-pre-line text-h2 font-semibold">{about.quote || about.title}</h2>
-              <div className="mt-6 space-y-4 text-body leading-relaxed text-ink-muted">
+              <Kicker no="05" className="text-white">{about.title}</Kicker>
+              <h2 id="gioi-thieu-title" className="mt-7 whitespace-pre-line text-h2 font-semibold !text-white">{about.quote || about.title}</h2>
+              <div className="mt-6 space-y-4 text-body leading-relaxed text-white/70">
                 {about.paragraphs.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
               </div>
               {content.hero.stats.length > 0 && (
-                <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-brand-900/15 pt-6">
+                <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/15 pt-6">
                   {content.hero.stats.map((s) => (
                     <div key={s.label}>
                       <dt className="sr-only">{s.label}</dt>
                       <dd className="text-h2 font-semibold tabular-nums">{s.value}</dd>
-                      <dd className="mt-1 text-caption text-ink-muted">{s.label}</dd>
+                      <dd className="mt-1 text-caption text-white/70">{s.label}</dd>
                     </div>
                   ))}
                 </dl>
@@ -212,14 +215,14 @@ export default async function HomePage() {
             </Reveal>
             {content.features.length > 0 && (
               <>
-                <h3 className="mt-14 text-h4 font-semibold">Điều Kim Ngoan cam kết</h3>
+                <h3 className="mt-14 text-h4 font-semibold !text-white">Điều Kim Ngoan cam kết</h3>
                 <ol className="mt-4 grid sm:grid-cols-2 sm:gap-x-6">
                   {content.features.map((f, i) => (
-                    <Reveal as="li" key={f.title} delay={i * 70} className="grid grid-cols-[2rem_1fr] gap-2 border-t border-brand-900/15 py-4">
-                      <span className="text-caption font-semibold tabular-nums text-ink-subtle">0{i + 1}</span>
+                    <Reveal as="li" key={f.title} delay={i * 70} className="grid grid-cols-[2rem_1fr] gap-2 border-t border-white/15 py-4">
+                      <span className="text-caption font-semibold tabular-nums text-white/60">0{i + 1}</span>
                       <span>
                         <span className="block text-body font-semibold">{f.title}</span>
-                        <span className="mt-0.5 block text-small text-ink-muted">{f.description}</span>
+                        <span className="mt-0.5 block text-small text-white/70">{f.description}</span>
                       </span>
                     </Reveal>
                   ))}
@@ -227,7 +230,7 @@ export default async function HomePage() {
               </>
             )}
             {about.ctaLabel && (
-              <Button asChild className="mt-8">
+              <Button asChild className="mt-8 bg-mv-gold text-mv-ink hover:bg-mv-gold-soft">
                 <Link href={resolveHref(about.ctaHref || "/phanbon/gioi-thieu")}>
                   {about.ctaLabel} <ArrowRight aria-hidden />
                 </Link>
@@ -239,7 +242,7 @@ export default async function HomePage() {
 
       {/* 06. Kiến thức canh tác – bài chính + mục lục */}
       {lead && (
-        <section id="tin-tuc" aria-labelledby="tin-tuc-title" className="scroll-mt-24 py-20 md:py-28">
+        <section id="tin-tuc" aria-labelledby="tin-tuc-title" data-garden="2" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
           <Container>
             <SectionHead
               id="tin-tuc-title"
@@ -280,7 +283,9 @@ export default async function HomePage() {
         </section>
       )}
 
-      <QuickConsult phone={site.phone} />
+      <div data-garden="3" className={SECTION_BG.ivory}>
+        <QuickConsult phone={site.phone} />
+      </div>
     </div>
   );
 }
