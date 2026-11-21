@@ -23,7 +23,9 @@ const nextConfig: NextConfig = {
     if (process.env.VERCEL_ENV === "production") {
       return [
         { source: "/satthep:path(.*)", destination: "/404" },
+        { source: "/satthep", destination: "/404" },
         { source: "/lopxe:path(.*)", destination: "/404" },
+        { source: "/lopxe", destination: "/404" },
       ];
     }
     return [];
