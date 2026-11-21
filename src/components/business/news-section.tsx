@@ -10,7 +10,6 @@ import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { SECTOR_DOT } from "@/lib/verticals";
 import { ArrowLink, BIZ_WRAP, Eyebrow, SectionTitle, SectorTag } from "./ui";
-import { LeafBackdrop } from "./leaf-backdrop";
 
 type Verticals = Settings["VERTICALS"];
 
@@ -19,8 +18,7 @@ export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickH
   const { feature, list } = news;
   if (!feature) return null;
   return (
-    <section id="tin-tuc" aria-labelledby="tin-tuc-title" className="relative isolate scroll-mt-20 bg-[linear-gradient(180deg,rgb(47_93_58/0)_0%,rgb(47_93_58/0.045)_18%,rgb(47_93_58/0.045)_82%,rgb(47_93_58/0)_100%)] py-24 md:py-32">
-      <LeafBackdrop set="news" />
+    <section data-garden="3" id="tin-tuc" aria-labelledby="tin-tuc-title" className="relative isolate scroll-mt-20 py-24 md:py-32">
       <div className={BIZ_WRAP}>
         <Reveal className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>

@@ -111,7 +111,13 @@ Mỗi trang chỉ có **một** màu hành động. Màu ngành dùng cho tag nh
 
 Thứ tự: **Hero → Về Kim Ngoan → Sản phẩm (3 ngành) → Tin tức → Liên hệ**.
 
-- **Nền chung “vườn xanh nhẹ”** (`.biz-garden` + `business/leaf-backdrop.tsx`): các mảng xanh loang so le hai mép theo chiều dài trang, nền kem xanh rất nhạt; mỗi khối có bộ nhành lá riêng ở mép (`LEAF_SETS.about/products/news/contact`, ảnh `/public/decor/sprig-*.webp`, có lá rõ nét và lá mờ chiều sâu). Lá nằm sau nội dung, không che chữ; điện thoại ẩn lá rõ nét và giảm độ đậm. Khối tin tức có dải xanh 4,5% để đổi nhịp.
+- **Nền chung “vườn xanh”** (`business/garden-backdrop.tsx`, ảnh trong `public/garden/`, dựng lại bằng `python3 tools/garden-bg/gen.py public/garden [--force]`):
+  - Một lớp **dính (sticky) cao 1 màn hình** đặt sau các khối Giới thiệu → Liên hệ: nền đứng yên, nội dung trôi qua, không còn đường cắt giữa các khối.
+  - `light.webp` (1920×1080): nắng sớm góc phải, mảng xanh loang hai mép, bokeh, cỏ mờ dưới hai góc, giữa sạch để đọc chữ. Dưới 1024px dùng `light-m.webp` (ảnh dọc, lá nhỏ ở góc).
+  - Khung lá `frame-{l,r}-{1,2,3}.webp` (600×1300, trong suốt): 3 lớp chiều sâu – tán lá xa nhoè, nhành chính nét có bóng đổ, lá tiền cảnh nhoè mạnh; mép trong phai dần.
+  - Mỗi khối gắn `data-garden="1|2|3"`; khi cuộn tới, khung lá đổi biến thể (mờ dần + trôi 12px, 1,4s). Mép phải luôn dùng biến thể khác mép trái.
+  - Khung tự lùi ra ngoài khi lề hẹp: `left = clamp(-16.5vh, (100vw−1280)/2 + 32px − 23vh, 0)` → lá nét không đè chữ; dưới 1440px giảm còn 80% độ đậm.
+  - Biến thể 2, 3 chỉ tải khi người xem đã cuộn tới phần nền (không tranh băng thông với hero).
 - **Hero** (`business/hero.tsx`): ảnh tràn viền + lớp phủ trắng trái→phải nhẹ (0,9 → 0,7 → 0,1 → 0) để ảnh lộ rõ, tự chuyển **6s** giữa 3 ngành, chỉ báo `01/02/03` có thanh tiến trình; dừng khi hover/focus, tab ẩn hoặc nút tạm dừng. Dải số liệu neo đáy (năm, sản phẩm, ngành hàng, bán kính giao).
 - **Về Kim Ngoan**: 2 cột chữ/ảnh, trích dẫn có gạch trái rêu 3px, 4 cam kết ngăn bằng đường kẻ.
 - **Sản phẩm**: tab 3 ngành với gạch chân trượt, mỗi ngành = ảnh lớn + 5 dòng hàng chính.

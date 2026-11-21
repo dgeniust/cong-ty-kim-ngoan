@@ -8,13 +8,11 @@ import { SECTOR_DOT, telHref } from "@/lib/verticals";
 import { MapEmbed } from "./map-embed";
 import { QuoteForm } from "./quote-form";
 import { Eyebrow, SectionTitle } from "./ui";
-import { LeafBackdrop } from "./leaf-backdrop";
 
 /** Liên hệ chia đôi màn hình: thông tin + form gạch chân bên trái, bản đồ tràn chiều cao bên phải. */
 export function ContactSection({ company, verticalList }: { company: Settings["COMPANY"]; verticalList: Settings["VERTICAL_LIST"] }) {
   return (
-    <section id="lien-he" aria-labelledby="lien-he-title" className="relative isolate scroll-mt-20">
-      <LeafBackdrop set="contact" />
+    <section data-garden="1" id="lien-he" aria-labelledby="lien-he-title" className="relative isolate scroll-mt-20">
       <div className="grid lg:grid-cols-2">
         <Reveal className="px-5 py-20 sm:px-8 md:py-28 lg:py-32 lg:pl-[max(3rem,calc((100vw-1280px)/2+3rem))] lg:pr-16">
           <Eyebrow>{HUB_CONTACT.eyebrow}</Eyebrow>

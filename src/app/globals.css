@@ -560,13 +560,10 @@
 /* Hero landing tổng: thanh thời gian 6s của ảnh nền */
 @keyframes biz-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes biz-panel { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-/* Landing tổng: nền chung “vườn xanh nhẹ” – các mảng xanh loang so le hai mép theo chiều dài trang */
-.biz-garden {
-  background:
-    radial-gradient(44rem 32rem at -6% 4%, rgb(196 223 157 / 0.26), transparent 70%),
-    radial-gradient(40rem 34rem at 106% 27%, rgb(156 199 126 / 0.2), transparent 70%),
-    radial-gradient(46rem 32rem at -6% 58%, rgb(184 217 143 / 0.22), transparent 70%),
-    radial-gradient(42rem 32rem at 106% 86%, rgb(169 208 138 / 0.22), transparent 70%),
-    linear-gradient(180deg, #f7faf4 0%, #fbfcf9 34%, #f4f8f0 64%, #f8faf5 100%);
+/* Landing tổng: nền chung “vườn xanh” (ảnh dựng ở tools/garden-bg) – màu dự phòng khi ảnh chưa tải */
+.biz-garden { background-color: #f5f8f0; }
+.garden-light { background: #f5f8f0 url("/garden/light-m.webp") center / cover no-repeat; }
+@media (min-width: 1024px) {
+  .garden-light { background-image: url("/garden/light.webp"); }
 }
 @keyframes biz-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }

@@ -1,5 +1,6 @@
 import { AboutSection } from "@/components/business/about-section";
 import { ContactSection } from "@/components/business/contact-section";
+import { GardenBackdrop } from "@/components/business/garden-backdrop";
 import { BizHero } from "@/components/business/hero";
 import { NewsSection } from "@/components/business/news-section";
 import { ProductsSection } from "@/components/business/products-section";
@@ -35,8 +36,9 @@ export default async function HubHome() {
           <ArrowLink href={HUB_HERO.secondaryCta.href}>{HUB_HERO.secondaryCta.label}</ArrowLink>
         </div>
       </BizHero>
-      {/* nền chung “vườn xanh nhẹ”: một lớp màu loang + nhành lá hai mép, mỗi khối đổi vị trí lá (design.md §6) */}
+      {/* nền chung “vườn xanh”: lớp ảnh dính đứng yên sau các khối, khung lá đổi nhẹ theo khối (design.md §6) */}
       <div className="biz-garden relative isolate overflow-x-clip">
+        <GardenBackdrop />
         <AboutSection company={COMPANY} />
         <ProductsSection spotlights={spotlights} />
         <NewsSection news={pickHomeNews(allNews)} verticals={VERTICALS} />
