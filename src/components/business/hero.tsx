@@ -100,10 +100,10 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
             </div>
           );
         })}
-        {/* scrim: điện thoại chỉ làm mờ mép dưới để ảnh liền với nền trắng; từ md phủ trái → phải theo đặc tả */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_22%,rgba(255,255,255,0)_70%,rgba(255,255,255,1)_100%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.85)_45%,rgba(255,255,255,0)_100%)]" />
+        {/* scrim: điện thoại chỉ làm mờ mép dưới để ảnh liền với nền trắng; từ md phủ trái → phải, nhẹ dần để ảnh lộ rõ hơn */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_22%,rgba(255,255,255,0)_70%,rgba(255,255,255,1)_100%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.7)_40%,rgba(255,255,255,0.1)_70%,rgba(255,255,255,0)_100%)]" />
         {/* dải sáng phía trên để menu trong suốt luôn đọc được */}
-        <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.75),rgba(255,255,255,0))] md:block" />
+        <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0))] md:block" />
       </div>
 
       {/* nội dung */}
@@ -144,7 +144,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
       </div>
 
       {/* thanh chỉ số neo đáy */}
-      <div className="border-t border-hub-ink/10 bg-white md:bg-white/80 md:backdrop-blur-md">
+      <div className="border-t border-hub-ink/10 bg-white md:bg-white/80 md:backdrop-blur-[3px]">
         <dl className={cn(BIZ_WRAP, "grid grid-cols-2 lg:grid-cols-4")}>
           {stats.map((s, i) => (
             <div key={s.label} className={cn("py-5 lg:py-6", i % 2 === 1 && "pl-5 lg:pl-0", i > 0 && "lg:border-l lg:border-hub-ink/10 lg:pl-8", i > 1 && "border-t border-hub-ink/10 lg:border-t-0")}>

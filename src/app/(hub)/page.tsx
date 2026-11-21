@@ -35,10 +35,13 @@ export default async function HubHome() {
           <ArrowLink href={HUB_HERO.secondaryCta.href}>{HUB_HERO.secondaryCta.label}</ArrowLink>
         </div>
       </BizHero>
-      <AboutSection company={COMPANY} />
-      <ProductsSection spotlights={spotlights} />
-      <NewsSection news={pickHomeNews(allNews)} verticals={VERTICALS} />
-      <ContactSection company={COMPANY} verticalList={VERTICAL_LIST} />
+      {/* nền chung “vườn xanh nhẹ”: một lớp màu loang + nhành lá hai mép, mỗi khối đổi vị trí lá (design.md §6) */}
+      <div className="biz-garden relative isolate overflow-x-clip">
+        <AboutSection company={COMPANY} />
+        <ProductsSection spotlights={spotlights} />
+        <NewsSection news={pickHomeNews(allNews)} verticals={VERTICALS} />
+        <ContactSection company={COMPANY} verticalList={VERTICAL_LIST} />
+      </div>
     </>
   );
 }

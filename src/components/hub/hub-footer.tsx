@@ -1,57 +1,126 @@
+import Image from "next/image";
 import Link from "next/link";
-import { telHref } from "@/lib/verticals";
+import { ArrowRight, Mail, Phone } from "lucide-react";
+import { HUB_NAV, NAV_SECTORS } from "@/lib/content/hub-nav";
+import { SECTOR_DOT, telHref } from "@/lib/verticals";
 import { Wordmark } from "@/components/shared/wordmark";
 import { getSettings } from "@/lib/settings/server";
+import { cn } from "@/lib/utils";
+import { FooterLandscape } from "./footer-landscape";
 
-export async function HubFooter() {
-  const { COMPANY, VERTICAL_LIST } = await getSettings();
+const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white";
+const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
+const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white hover:text-brand-900";
+
+/** Nhãn ngắn cho cột “Liên kết nhanh” (menu header dùng nhãn dài hơn). */
+const QUICK = HUB_NAV.map((m) => ({ label: m.label === "Giới thiệu" ? "Về chúng tôi" : m.label, href: m.href }));
+
+function FacebookIcon() {
   return (
-    <footer className="bg-hub-ink text-white/65">
-      <div className="mx-auto grid max-w-[1280px] gap-12 px-5 py-16 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr] lg:px-12 lg:py-20">
-        <div>
-          <p className="flex items-center gap-3 text-white">
-            <Wordmark label={COMPANY.legalName} className="h-7 w-auto" />
-            <span aria-hidden className="flex gap-1">
-              <span className="size-2 rounded-full bg-sector-phanbon" />
-              <span className="size-2 rounded-full bg-sector-lopxe" />
-              <span className="size-2 rounded-full bg-sector-satthep" />
-            </span>
-          </p>
+    <svg viewBox="0 0 24 24" aria-hidden className="size-[18px]" fill="currentColor">
+      <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3Z" />
+    </svg>
+  );
+}
+
+/** Footer landing tổng: nền xanh đậm, 4 cột + khối gọi, dải đồi vườn cây ở chân. */
+export async function HubFooter() {
+  const { COMPANY } = await getSettings();
+  return (
+    <footer className="relative isolate overflow-hidden bg-brand-900 text-white/70">
+      <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.35fr_0.8fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
+        {/* thương hiệu */}
+        <div className="sm:col-span-2 lg:col-span-1">
+          <Link href="/" aria-label={`${COMPANY.legalName} – trang chủ`} className="inline-flex flex-col gap-1.5 text-white">
+            <span className="logo-prefix text-white/60">{COMPANY.prefix}</span>
+            <Wordmark className="h-7 w-auto" />
+          </Link>
           <p className="mt-5 text-title font-semibold text-white">{COMPANY.slogan}</p>
-          <p className="mt-3 max-w-sm text-body leading-relaxed">
-            {COMPANY.legalName}. Phân bón, lốp xe ô tô, tôn sắt thép tại {COMPANY.address}.
-          </p>
+          <p className="mt-2 max-w-xs text-body leading-relaxed">Phân bón, tôn – sắt thép và lốp xe ô tô tại {COMPANY.address}.</p>
         </div>
-        <nav aria-label="Chuyên trang">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white">Chuyên trang</p>
-          <ul className="mt-4 space-y-2 text-body">
-            {VERTICAL_LIST.map((v) => (
-              <li key={v.id}>
-                <Link href={v.base} className="inline-block py-0.5 transition-colors hover:text-white">{v.name}</Link>
+
+        <nav aria-label="Liên kết nhanh">
+          <p className={LABEL}>Liên kết nhanh</p>
+          <ul className="mt-4 space-y-1">
+            {QUICK.map((l) => (
+              <li key={l.label}>
+                <Link href={l.href} className={LINK}>{l.label}</Link>
               </li>
             ))}
-            <li>
-              <Link href="/tin-tuc" className="inline-block py-0.5 transition-colors hover:text-white">Tin tức</Link>
-            </li>
           </ul>
         </nav>
-        <address className="not-italic">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white">Liên hệ</p>
-          <ul className="mt-4 space-y-2.5 text-body">
-            <li>
-              <a href={telHref(COMPANY.hotline)} className="font-semibold tabular-nums text-white hover:underline">{COMPANY.hotline}</a>
-            </li>
-            <li>
-              <a href={`mailto:${COMPANY.email}`} className="hover:text-white">{COMPANY.email}</a>
-            </li>
-            <li>{COMPANY.address}</li>
+
+        <nav aria-label="Sản phẩm">
+          <p className={LABEL}>Sản phẩm</p>
+          <ul className="mt-4 space-y-1">
+            {NAV_SECTORS.map((s) => (
+              <li key={s.id}>
+                <Link href={s.href} className={cn(LINK, "inline-flex items-center gap-2")}>
+                  <span aria-hidden className={cn("size-1.5 rounded-full ring-1 ring-white/30", SECTOR_DOT[s.id])} /> {s.short}
+                </Link>
+              </li>
+            ))}
           </ul>
-        </address>
+        </nav>
+
+        <div>
+          <p className={LABEL}>Theo dõi chúng tôi</p>
+          <ul className="mt-5 flex gap-3">
+            {COMPANY.facebook && (
+              <li>
+                <a href={COMPANY.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook Kim Ngoan" className={SOCIAL}>
+                  <FacebookIcon />
+                </a>
+              </li>
+            )}
+            {COMPANY.zalo && (
+              <li>
+                <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" aria-label="Zalo Kim Ngoan" className={cn(SOCIAL, "text-[11px] font-bold tracking-tight")}>
+                  Zalo
+                </a>
+              </li>
+            )}
+            {COMPANY.email && (
+              <li>
+                <a href={`mailto:${COMPANY.email}`} aria-label={`Gửi email ${COMPANY.email}`} className={SOCIAL}>
+                  <Mail className="size-[18px]" aria-hidden />
+                </a>
+              </li>
+            )}
+          </ul>
+          <p className="mt-5 text-small text-white/60">{COMPANY.email}</p>
+        </div>
+
+        {/* khối gọi – tách bằng đường kẻ dọc trên desktop */}
+        <div className="sm:col-span-2 lg:col-span-1 lg:border-l lg:border-white/15 lg:pl-10">
+          <a href={telHref(COMPANY.hotline)} className="group flex items-center gap-3.5 text-white">
+            <Phone className="size-8 shrink-0 transition-transform duration-300 group-hover:-rotate-12" strokeWidth={1.75} aria-hidden />
+            <span>
+              <span className="block text-[1.625rem] font-bold leading-tight tabular-nums">{COMPANY.hotline}</span>
+              <span className="block text-small text-white/70">Tư vấn miễn phí</span>
+            </span>
+          </a>
+          <Link href="/#lien-he" className="group mt-5 inline-flex h-12 items-center gap-2 rounded-full bg-[#3b7d46] px-6 text-body font-semibold text-white shadow-[0_8px_20px_-8px_rgb(0_0_0/0.5)] transition-colors duration-200 hover:bg-[#34733f]">
+            Nhận báo giá <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+          </Link>
+        </div>
       </div>
-      <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
-        <p className="border-t border-white/10 py-6 text-caption text-white/50">
-          © {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.
-        </p>
+
+      {/* dải đồi vườn cây + nhành lá hai góc, dòng bản quyền nằm trên đồi gần */}
+      <div className="relative h-[170px] sm:h-[210px] lg:h-[230px]">
+        <FooterLandscape className="absolute inset-0 size-full" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-6 -left-10 w-[130px] sm:w-[170px] lg:-left-4 lg:w-[200px]">
+          <Image src="/decor/sprig-a.webp" alt="" width={520} height={760} sizes="200px" loading="lazy" className="h-auto w-full -rotate-[18deg] opacity-90" />
+        </div>
+        <div aria-hidden className="pointer-events-none absolute -bottom-10 -right-10 hidden w-[140px] sm:block lg:w-[160px]">
+          <Image src="/decor/sprig-d.webp" alt="" width={300} height={420} sizes="180px" loading="lazy" className="h-auto w-full -scale-x-100 rotate-[14deg] opacity-90" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0">
+          <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-5 pb-5 text-caption text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+            <p>© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
+            <p>{COMPANY.address}</p>
+          </div>
+        </div>
       </div>
     </footer>
   );

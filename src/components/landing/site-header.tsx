@@ -53,7 +53,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
         Bỏ qua đến nội dung chính
       </a>
       <header data-hidden={hidden || undefined} className={cn(
-          "sticky top-0 z-50 bg-white/90 backdrop-blur-md transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+          "sticky top-0 z-50 before:absolute before:inset-0 before:-z-10 before:bg-white/90 before:backdrop-blur-md transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
           scrolled ? "shadow-[0_1px_0_rgb(24_24_27/0.08),0_8px_24px_-16px_rgb(24_24_27/0.25)]" : "shadow-[0_1px_0_rgb(24_24_27/0.08)]",
           hidden && "-translate-y-full",
         )}>

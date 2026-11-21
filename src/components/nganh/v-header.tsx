@@ -84,7 +84,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
         Bỏ qua đến nội dung chính
       </a>
       <header data-hidden={hidden || undefined} className={cn(
-          "sticky top-0 z-50 bg-v-bg/90 backdrop-blur-md transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+          "sticky top-0 z-50 before:absolute before:inset-0 before:-z-10 before:bg-v-bg/90 before:backdrop-blur-md transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
           scrolled ? "shadow-[0_1px_0_var(--v-line),0_8px_24px_-16px_rgb(0_0_0/0.25)]" : "shadow-[0_1px_0_var(--v-line)]",
           hidden && "-translate-y-full",
         )}>

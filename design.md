@@ -81,11 +81,16 @@ Mỗi trang chỉ có **một** màu hành động. Màu ngành dùng cho tag nh
 ### 5.1 Header (3 biến thể, cùng một ngữ pháp)
 - **Một hàng**, cao 64px (mobile) / 72–76px (desktop), nền trắng/than chì 90% + `backdrop-blur`, đường kẻ 1px phía dưới; cuộn xuống ẩn, cuộn lên hiện.
 - Trái: logo. Giữa: menu chữ, mục đang xem có **gạch chân 2px màu hành động** (không nền pill). Phải: tìm kiếm + nút hành động bo 6px.
-- `hub-header.tsx` (landing tổng: trong suốt trên hero, nút “Nhận báo giá”), `landing/site-header.tsx` (phân bón: nút gọi màu đồng), `nganh/v-header.tsx` (lốp xe / sắt thép).
+- `hub-header.tsx` (landing tổng: trong suốt trên hero, nút “Nhận báo giá”). Menu có **dropdown** (dữ liệu ở `lib/content/hub-nav.ts`):
+  Giới thiệu (danh sách), **Sản phẩm (bảng 3 cột: ảnh ngành + 4 nhóm hàng + dải “Nhận báo giá”)**, Tin tức (lọc theo ngành).
+  Mở khi rê chuột (đóng trễ 160ms) hoặc bấm; Esc đóng và trả focus về nút; bấm ra ngoài thì đóng. Điện thoại: accordion.
+- Lưu ý kỹ thuật: `backdrop-filter`/`transform` trên `<header>` biến nó thành khối chứa của phần tử `fixed` → menu di động đặt **ngoài** header, hoặc làm mờ nền bằng `before:`., `landing/site-header.tsx` (phân bón: nút gọi màu đồng), `nganh/v-header.tsx` (lốp xe / sắt thép).
 - Thanh chọn ngành phía trên (`sector-switcher`) ở các chuyên trang.
 
 ### 5.2 Footer
-Nền tối (`hub-ink` / `brand-950` / than chì), nhãn cột in hoa, slogan, thông tin liên hệ, đường kẻ phân cách mảnh.
+- Landing tổng (`hub-footer.tsx`): nền xanh rêu đậm `brand-900`; cột thương hiệu + slogan · Liên kết nhanh · Sản phẩm · Theo dõi (Facebook, Zalo, email) · đường kẻ dọc · khối gọi (hotline lớn, “Tư vấn miễn phí”, nút xanh `#3b7d46` “Nhận báo giá”).
+  Chân footer là **dải đồi vườn cây** SVG (`footer-landscape.tsx`: đồi xa sáng → gần tối, hàng cây tán tròn, luống cây) + nhành lá hai góc; dòng bản quyền nằm trên đồi gần.
+- Chuyên trang: nền tối (`brand-950` / than chì), nhãn cột in hoa, slogan, thông tin liên hệ, đường kẻ phân cách mảnh.
 
 ### 5.3 Mobile
 - Thanh hành động dưới đáy (`mobile-action-bar`, `v-mobile-bar`): Sản phẩm · Zalo · **Gọi ngay** (màu hành động).
@@ -106,7 +111,8 @@ Nền tối (`hub-ink` / `brand-950` / than chì), nhãn cột in hoa, slogan, t
 
 Thứ tự: **Hero → Về Kim Ngoan → Sản phẩm (3 ngành) → Tin tức → Liên hệ**.
 
-- **Hero** (`business/hero.tsx`): ảnh tràn viền + lớp phủ trắng trái→phải, tự chuyển **6s** giữa 3 ngành, chỉ báo `01/02/03` có thanh tiến trình; dừng khi hover/focus, tab ẩn hoặc nút tạm dừng. Dải số liệu neo đáy (năm, sản phẩm, ngành hàng, bán kính giao).
+- **Nền chung “vườn xanh nhẹ”** (`.biz-garden` + `business/leaf-backdrop.tsx`): các mảng xanh loang so le hai mép theo chiều dài trang, nền kem xanh rất nhạt; mỗi khối có bộ nhành lá riêng ở mép (`LEAF_SETS.about/products/news/contact`, ảnh `/public/decor/sprig-*.webp`, có lá rõ nét và lá mờ chiều sâu). Lá nằm sau nội dung, không che chữ; điện thoại ẩn lá rõ nét và giảm độ đậm. Khối tin tức có dải xanh 4,5% để đổi nhịp.
+- **Hero** (`business/hero.tsx`): ảnh tràn viền + lớp phủ trắng trái→phải nhẹ (0,9 → 0,7 → 0,1 → 0) để ảnh lộ rõ, tự chuyển **6s** giữa 3 ngành, chỉ báo `01/02/03` có thanh tiến trình; dừng khi hover/focus, tab ẩn hoặc nút tạm dừng. Dải số liệu neo đáy (năm, sản phẩm, ngành hàng, bán kính giao).
 - **Về Kim Ngoan**: 2 cột chữ/ảnh, trích dẫn có gạch trái rêu 3px, 4 cam kết ngăn bằng đường kẻ.
 - **Sản phẩm**: tab 3 ngành với gạch chân trượt, mỗi ngành = ảnh lớn + 5 dòng hàng chính.
 - **Tin tức**: 60/40 – bài chính + danh sách 3 bài.

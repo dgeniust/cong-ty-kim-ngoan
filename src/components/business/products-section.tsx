@@ -3,11 +3,13 @@ import { HUB_PRODUCTS } from "@/lib/content/hub-home";
 import type { Spotlight } from "@/lib/hub/home";
 import { SpotlightTabs } from "./spotlight";
 import { BIZ_WRAP, Eyebrow, SectionTitle } from "./ui";
+import { LeafBackdrop } from "./leaf-backdrop";
 
 /** Khối sản phẩm: tiêu đề + không gian trưng bày 3 ngành (phần tab chạy ở trình duyệt). */
 export function ProductsSection({ spotlights }: { spotlights: Spotlight[] }) {
   return (
-    <section id="san-pham" aria-labelledby="san-pham-title" className="scroll-mt-20 bg-white py-24 md:py-32">
+    <section id="san-pham" aria-labelledby="san-pham-title" className="relative isolate scroll-mt-20 py-24 md:py-32">
+      <LeafBackdrop set="products" />
       <div className={BIZ_WRAP}>
         <Reveal>
           <Eyebrow>{HUB_PRODUCTS.eyebrow}</Eyebrow>

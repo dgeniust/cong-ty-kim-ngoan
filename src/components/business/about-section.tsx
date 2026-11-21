@@ -4,12 +4,14 @@ import { HUB_ABOUT, HUB_COMMITMENTS } from "@/lib/content/hub-home";
 import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { BIZ_WRAP, Eyebrow, SectionTitle } from "./ui";
+import { LeafBackdrop } from "./leaf-backdrop";
 
 /** Giới thiệu kiểu tạp chí: câu chuyện + trích dẫn bên trái, ảnh thật bên phải, 4 cam kết bên dưới. */
 export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
   const fill = (t: string) => t.replace("{area}", company.area);
   return (
-    <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-20 bg-hub-canvas py-24 md:py-32">
+    <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="relative isolate scroll-mt-20 py-24 md:py-32">
+      <LeafBackdrop set="about" />
       <div className={cn(BIZ_WRAP, "grid gap-12 lg:grid-cols-12 lg:gap-16")}>
         <Reveal className="lg:col-span-6">
           <Eyebrow>{HUB_ABOUT.eyebrow}</Eyebrow>
