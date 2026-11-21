@@ -47,38 +47,38 @@ const BAR = ["bg-brand-500", "bg-sun-300", "bg-brand-900"];
 function Visual({ v, name }: { v: ShowcaseVisual; name: string }) {
   if (v.type === "image")
     return <Image src={v.src} alt={name} fill sizes="(min-width: 1024px) 22vw, 50vw" className="object-contain p-4 transition-transform duration-500 ease-soft group-hover:scale-105" />;
-  if (v.type === "art") return <ProductArt kind={v.art} className="absolute inset-0 m-auto !size-[72%] transition-transform duration-500 ease-soft group-hover:scale-105" />;
-  const t = TONE[v.tone];
-  const max = v.bars ? Math.max(30, ...v.bars) : 1;
-  return (
-    <div className={cn("absolute inset-0 grid place-items-center", t.bg)}>
-      {/* bao phân thu nhỏ */}
-      <div className="w-[80%] overflow-hidden rounded-[12px] sm:w-[64%] sm:rounded-[14px] bg-white shadow-[0_6px_18px_rgba(30,60,30,0.10)] transition-transform duration-500 ease-soft group-hover:-translate-y-1 group-hover:rotate-[-1.5deg]">
-        <div className={cn("px-2 py-2 text-center text-white sm:px-3 sm:py-2.5", t.band)}>
-          <p className="truncate text-[15px] font-bold leading-none tracking-tight tabular-nums sm:text-[clamp(1rem,1.6vw,1.35rem)]">{v.formula}</p>
-          {v.note && <p className="mt-1 truncate text-[8.5px] font-medium uppercase tracking-[0.1em] text-white/80 sm:text-[10px] sm:tracking-[0.12em]">{v.note}</p>}
-        </div>
-        <div className="space-y-1.5 px-2.5 py-2.5 sm:px-3 sm:py-3">
-          {v.bars ? (
-            v.bars.map((b, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className="w-3 text-[10px] font-bold text-hub-ink-soft">{"NPK"[i]}</span>
-                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-hub-stone">
-                  <span className={cn("block h-full rounded-full", BAR[i])} style={{ width: `${(b / max) * 100}%` }} />
-                </span>
-              </div>
-            ))
-          ) : (
-            <>
-              <span className="block h-1.5 w-4/5 rounded-full bg-hub-stone" />
-              <span className="block h-1.5 w-3/5 rounded-full bg-hub-stone" />
-              <span className="block h-1.5 w-2/3 rounded-full bg-hub-stone" />
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  // if (v.type === "art") return <ProductArt kind={v.art} className="absolute inset-0 m-auto !size-[72%] transition-transform duration-500 ease-soft group-hover:scale-105" />;
+  // const t = TONE[v.tone];
+  // const max = v.bars ? Math.max(30, ...v.bars) : 1;
+  // return (
+  //   <div className={cn("absolute inset-0 grid place-items-center", t.bg)}>
+  //     {/* bao phân thu nhỏ */}
+  //     <div className="w-[80%] overflow-hidden rounded-[12px] sm:w-[64%] sm:rounded-[14px] bg-white shadow-[0_6px_18px_rgba(30,60,30,0.10)] transition-transform duration-500 ease-soft group-hover:-translate-y-1 group-hover:rotate-[-1.5deg]">
+  //       <div className={cn("px-2 py-2 text-center text-white sm:px-3 sm:py-2.5", t.band)}>
+  //         <p className="truncate text-[15px] font-bold leading-none tracking-tight tabular-nums sm:text-[clamp(1rem,1.6vw,1.35rem)]">{v.formula}</p>
+  //         {v.note && <p className="mt-1 truncate text-[8.5px] font-medium uppercase tracking-[0.1em] text-white/80 sm:text-[10px] sm:tracking-[0.12em]">{v.note}</p>}
+  //       </div>
+  //       <div className="space-y-1.5 px-2.5 py-2.5 sm:px-3 sm:py-3">
+  //         {v.bars ? (
+  //           v.bars.map((b, i) => (
+  //             <div key={i} className="flex items-center gap-2">
+  //               <span className="w-3 text-[10px] font-bold text-hub-ink-soft">{"NPK"[i]}</span>
+  //               <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-hub-stone">
+  //                 <span className={cn("block h-full rounded-full", BAR[i])} style={{ width: `${(b / max) * 100}%` }} />
+  //               </span>
+  //             </div>
+  //           ))
+  //         ) : (
+  //           <>
+  //             <span className="block h-1.5 w-4/5 rounded-full bg-hub-stone" />
+  //             <span className="block h-1.5 w-3/5 rounded-full bg-hub-stone" />
+  //             <span className="block h-1.5 w-2/3 rounded-full bg-hub-stone" />
+  //           </>
+  //         )}
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 }
 
 /**
