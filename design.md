@@ -138,6 +138,13 @@ Thứ tự: **Hero → Về Kim Ngoan (ngà) → Sản phẩm (bạc hà) → Ba
 - **Liên hệ** (bạc hà): 50/50 – thông tin + số điện thoại từng ngành / form báo giá gạch chân + bản đồ bấm-để-mở.
 - Nội dung tĩnh: `src/lib/content/hub-home.ts`; dữ liệu dựng: `src/lib/hub/home.ts`.
 
+## 6b. Landing phân bón `/phanbon` dùng chung nền landing tổng
+
+- Khung trang: `theme-pb biz-garden relative isolate overflow-x-clip` + `GardenBackdrop` (khung lá dính hai mép), mỗi khối có `data-garden` 1/2/3 và nền `SECTION_BG` (ngà / bạc hà) như landing tổng.
+- `theme-pb` (globals.css) đổi `--color-paper` thành ngà `#FAF9F5`, `--color-surface` thành `#E3EFE6`, `--color-surface-strong` thành `#D3E6D9` để ô, thẻ, vùng chọn ngả xanh thay vì xám lạnh.
+- Nhịp màu: hero (bạc hà) → 01 Bảng tin (xanh rừng `brand-900`) → 02 Bác sĩ cây trồng (ngà) → 03 Sản phẩm (bạc hà) → 04 Vườn thật (ngà) → 05 Về Kim Ngoan (xanh rừng, chữ trắng, nút vàng) → 06 Kiến thức (bạc hà) → form gọi lại (ngà).
+- Khối xanh rừng là dải đặc nên che khung lá; tiêu đề trên nền đó dùng `!text-white` (màu heading mặc định là xanh rừng).
+
 ## 7. Phân bón `/phanbon`
 
 Trang chủ: hero cửa hàng (tìm kiếm + nhóm hàng + ảnh theo cây trồng) → bản tin nhà nông (thời tiết, việc nên làm) → nhãn bao NPK → bác sĩ cây trồng → vườn thật → tư vấn nhanh → tin tức.

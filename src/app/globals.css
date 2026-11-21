@@ -604,4 +604,10 @@
   --color-biz-moss: #0b5d36;
 }
 .biz-garden { background-color: #faf9f5; }
+/* Landing phân bón dùng chung nền với landing tổng; bề mặt thẻ ngả xanh thay vì xám lạnh */
+.theme-pb {
+  --color-paper: #faf9f5;
+  --color-surface: #e3efe6;
+  --color-surface-strong: #d3e6d9;
+}
 @keyframes biz-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
