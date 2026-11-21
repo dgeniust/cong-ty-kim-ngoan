@@ -12,7 +12,7 @@ export const articles: Article[] = [
     section: "tin-tuc",
     title: "Kỹ thuật bón phân cho cà phê vào đầu mùa mưa",
     excerpt: "Đầu mùa mưa là thời điểm vàng để bổ sung dinh dưỡng giúp cà phê phục hồi sau thu hoạch và chuẩn bị cho vụ mới.",
-    cover: "/news/phanbon-vuon-sau-rieng.jpg",
+    cover: "/photos/phanbon-vuon-sau-rieng.jpg",
     date: "2026-10-28",
     author: "Phòng Kỹ thuật",
     readingMinutes: 5,

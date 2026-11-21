@@ -5,7 +5,7 @@ import type { NewsItem } from "./types";
 /** DỮ LIỆU MẪU cho 2 chuyên trang mới. Tin phân bón lấy từ lib/mock/articles (section "tin-tuc"). */
 const raw: Omit<NewsItem, "href">[] = [
   {
-    site: "lopxe", slug: "cach-doc-thong-so-lop-xe", title: "Cách đọc thông số trên hông lốp ô tô", art: "tyre", cover: "/news/lopxe-cua-hang.jpg",
+    site: "lopxe", slug: "cach-doc-thong-so-lop-xe", title: "Cách đọc thông số trên hông lốp ô tô", art: "tyre", cover: "/photos/lopxe-cua-hang.jpg",
     excerpt: "205/55R16 91V nghĩa là gì? Hiểu đúng 5 nhóm ký hiệu để chọn lốp đúng cỡ, đúng tải.",
     date: "2026-11-10", author: "Kim Ngoan", readingMinutes: 4, tags: ["Kiến thức lốp", "Chọn lốp"],
     content: [
@@ -36,7 +36,7 @@ const raw: Omit<NewsItem, "href">[] = [
     ],
   },
   {
-    site: "satthep", slug: "phan-biet-cb300-cb400", title: "Phân biệt thép CB300 và CB400: dùng loại nào cho nhà phố?", art: "rebar", cover: "/news/satthep-bai-thep.jpg",
+    site: "satthep", slug: "phan-biet-cb300-cb400", title: "Phân biệt thép CB300 và CB400: dùng loại nào cho nhà phố?", art: "rebar", cover: "/photos/satthep-bai-thep.jpg",
     excerpt: "Hai mác thép phổ biến nhất khác nhau ở giới hạn chảy. Chọn đúng giúp tiết kiệm mà vẫn an toàn.",
     date: "2026-11-05", author: "Kim Ngoan", readingMinutes: 4, tags: ["Thép xây dựng", "Kiến thức"],
     content: [
