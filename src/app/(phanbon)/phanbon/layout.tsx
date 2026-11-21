@@ -4,7 +4,7 @@ import "@fontsource/dancing-script/vietnamese-600.css";
 import "@fontsource/dancing-script/latin-600.css";
 import { getSettings } from "@/lib/settings/server";
 import type { Metadata, Viewport } from "next";
-import { SiteFooter } from "@/components/landing/site-footer";
+import { PbFooter } from "@/components/phanbon/pb-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { JsonLd } from "@/components/shared/json-ld";
 import { MobileActionBar } from "@/components/site/mobile-action-bar";
@@ -12,7 +12,7 @@ import { getContent } from "@/lib/content/store";
 import { SectorSwitcher } from "@/components/shared/sector-switcher";
 import { absoluteUrl } from "@/lib/site";
 
-export const viewport: Viewport = { themeColor: "#1d3a25" };
+export const viewport: Viewport = { themeColor: "#082919" };
 
 /** Metadata của chuyên trang phân bón (lấy từ CMS) – ghi đè metadata landing tổng. */
 export async function generateMetadata(): Promise<Metadata> {
@@ -51,16 +51,16 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   };
 
   return (
-    <>
+    <div className="theme-pb">
       <JsonLd data={organization} />
       <SectorSwitcher current="phanbon" tone="green" />
       <SiteHeader site={site} nav={content.nav} />
       <main id="noi-dung" tabIndex={-1} className="min-h-[60vh] outline-none">
         {children}
       </main>
-      <SiteFooter site={site} footer={content.footer} />
+      <PbFooter site={site} footer={content.footer} />
       <MobileActionBar phone={site.phone} />
-      <BackToTop className="border border-brand-900/10 bg-white text-brand-900 shadow-lift" />
-    </>
+      <BackToTop className="bg-white text-brand-900 shadow-lift" />
+    </div>
   );
 }

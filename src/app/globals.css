@@ -604,10 +604,33 @@
   --color-biz-moss: #0b5d36;
 }
 .biz-garden { background-color: #faf9f5; }
-/* Landing phân bón dùng chung nền với landing tổng; bề mặt thẻ ngả xanh thay vì xám lạnh */
+/* Chuyên trang phân bón – bảng màu “Mùa Vàng & Đại Ngàn” (cùng landing tổng, design.md §2.4/§6b).
+ * Đổi giá trị token nên mọi component dùng brand-*, sun-*, ink-* tự đổi theo, không sửa từng chỗ.
+ * brand-500 (#16A34A) chỉ cho mảng/vạch; chữ xanh dùng brand-700 (#0B5D36 ≥ 7:1 trên ngà). */
 .theme-pb {
+  --color-brand-50: #eff6f1;
+  --color-brand-100: #dcefe2;
+  --color-brand-200: #bfe3cc;
+  --color-brand-300: #86cf9f;
+  --color-brand-400: #43b56a;
+  --color-brand-500: #16a34a;
+  --color-brand-600: #15803d;
+  --color-brand-700: #0b5d36;
+  --color-brand-800: #0b5d36;
+  --color-brand-900: #082919;
+  --color-brand-950: #051a10;
+  --color-sun-100: #fef3c7;
+  --color-sun-200: #fde68a;
+  --color-sun-300: #fbbf24;
+  --color-sun-400: #f59e0b;
+  --color-sun-500: #ea580c;
+  --color-ink: #132a1e;
+  --color-ink-muted: #4b5d52;
+  --color-ink-subtle: #52645a;
+  --color-biz-copper: #c2410c;
   --color-paper: #faf9f5;
   --color-surface: #e3efe6;
   --color-surface-strong: #d3e6d9;
+  --heading: #082919;
 }
 @keyframes biz-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }

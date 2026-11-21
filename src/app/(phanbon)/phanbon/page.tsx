@@ -78,7 +78,7 @@ export default async function HomePage() {
   const [lead, ...rest] = news.slice(0, 4);
 
   return (
-    <div className="theme-pb biz-garden relative isolate overflow-x-clip">
+    <div className="biz-garden relative isolate overflow-x-clip">
       <GardenBackdrop />
       {/* HERO kiểu cửa hàng: dòng thông tin → tiêu đề + tìm kiếm + nhóm hàng | ảnh vườn thật + gợi ý theo cây */}
       <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
