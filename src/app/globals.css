@@ -622,5 +622,3 @@
   .sb-plane { top: 46%; }
 }
 
-/* Hero landing tổng: thanh thời gian 6s của trình chiếu */
-@keyframes kn-hero-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }

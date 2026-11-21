@@ -349,9 +349,9 @@ Nhánh `fe/notion-style-v1.2` (tách từ v1.1). Giữ theme landing tổng: n�
 ### Thứ tự khối
 | Khối | File | Ghi chú |
 |---|---|---|
-| Hero | `app/(hub)/page.tsx` + `components/hub/hero-slides.tsx` | Trái: H1 “Chăm từ gốc rễ, cho mùa trĩu quả.”, lời dẫn, slogan, nút “Xem phân bón & thuốc” + gọi, 3 cam kết. Phải: ảnh đổi ngành **mỗi 6 giây** (mờ dần + phóng nhẹ), chú thích ngành trên ảnh, 3 thẻ chọn ngành có thanh thời gian. Rê chuột / focus thì dừng; có nút tạm dừng; “giảm chuyển động” thì không tự chuyển. Ảnh: `public/hero/phan-bon.jpg`, `lop-xe.jpg`, `sat-thep.jpg` (5:4, chủ thể lệch phải). |
+| Hero | `app/(hub)/page.tsx` | Ảnh nền toàn khối `public/hero/hero-bg.jpg` (16:9): ba sản phẩm (bao phân, thép, lốp) nằm **bên trái ảnh**, nửa phải để trống. Nội dung đặt bên phải trên thẻ giấy mờ (`hub-canvas/85` + blur) để luôn đọc được: H1 “Chăm từ gốc rễ, cho mùa trĩu quả.”, lời dẫn, slogan, 2 nút, 3 cam kết. Góc trái dưới ảnh: 3 nút ngành (phân bón nền xanh đậm, 2 ngành phụ nền trắng). Mobile: ảnh trên, nút ngành, rồi nội dung. Không còn carousel. |
 | Danh mục sản phẩm | page | “Từ gốc cây đến mái nhà”. Phân bón là khối lớn (ảnh, mô tả, 2 nhóm Phân bón / Thuốc BVTV với 8 danh mục con, số sản phẩm, 2 nút); lốp xe & sắt thép là 2 thẻ nhỏ “Ngành bổ trợ”. |
-| Tin tức | page | 3 bài: ưu tiên 2 bài phân bón mới nhất + 1 bài ngành khác. |
+| Tin tức | page | Bài phân bón nổi bật (ảnh lớn) bên trái; bên phải 1 bài lốp xe + 1 bài sắt thép (ảnh nhỏ ngang) và hộp “Thêm về phân bón & chăm cây” liệt kê bài phân bón khác. Ảnh bìa trong `public/news/`. |
 | Liên hệ | page | Khối nền lá nhạt: số điện thoại từng ngành, địa chỉ, giờ mở cửa, email, nút Gọi / Zalo; bản đồ Google + nút Chỉ đường. |
 
 Các khối của v1.1 (ba cánh cửa, lịch mùa vụ, sa bàn giao hàng, giới thiệu, hỏi đáp) vẫn giữ trong `components/hub/` để thêm lại khi cần.

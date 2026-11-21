@@ -3,7 +3,6 @@ import "@fontsource/dancing-script/latin-600.css";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Clock, Leaf, Mail, MapPin, MessageCircle, Navigation, Phone, ReceiptText, ShieldCheck, Truck } from "lucide-react";
-import { HeroSlides, type HeroSlide } from "@/components/hub/hero-slides";
 import { ProductArt } from "@/components/nganh/product-art";
 import { Reveal } from "@/components/shared/reveal";
 import { getCategories } from "@/lib/data/catalog";
@@ -23,7 +22,7 @@ import { telHref, type VerticalId } from "@/lib/verticals";
  *  - màu hành động chính sang xanh rừng (token hub-blue, xem globals.css) cho chất nông nghiệp;
  *  - hạn chế viền: tách khối bằng nền trắng / nền lá nhạt và khoảng trắng;
  *  - phân bón là ngành chính (khối lớn, đứng đầu), lốp xe & sắt thép là ngành bổ trợ.
- * Bốn khối: Hero (ảnh đổi ngành mỗi 6s) → Danh mục sản phẩm → Tin tức → Liên hệ.
+ * Bốn khối: Hero (ảnh nền ba ngành, nội dung bên phải) → Danh mục sản phẩm → Tin tức → Liên hệ.
  */
 
 const WRAP = "mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-10";
@@ -42,6 +41,17 @@ function Eyebrow({ children, className }: { children: React.ReactNode; className
   );
 }
 
+function NewsMeta({ item, label }: { item: NewsItem; label: string }) {
+  return (
+    <p className="flex flex-wrap items-center gap-x-3 text-caption text-hub-ink-soft">
+      <span className="inline-flex items-center gap-1.5 font-medium text-hub-ink">
+        <span aria-hidden className={cn("size-2 rounded-full", DOT[item.site])} /> {label}
+      </span>
+      <time dateTime={item.date}>{formatDate(item.date)}</time>
+    </p>
+  );
+}
+
 /** "Mo-Su 07:00-18:00" → "07:00 – 18:00, tất cả các ngày" */
 function hoursText(v: string) {
   const m = /^(Mo-Su|Mo-Sa|Mo-Fr)\s+(\d\d:\d\d)-(\d\d:\d\d)$/.exec(v.trim());
@@ -50,13 +60,16 @@ function hoursText(v: string) {
   return `${m[2]} – ${m[3]}, ${days}`;
 }
 
-/** 3 tin: ưu tiên 2 bài phân bón mới nhất + 1 bài mới nhất của ngành khác, xếp theo ngày. */
+/**
+ * Tin tức: 1 bài phân bón lớn (ưu tiên bài có ảnh) + 1 bài lốp xe + 1 bài sắt thép,
+ * kèm vài bài phân bón khác dạng danh sách ngắn → vẫn nghiêng về phân bón.
+ */
 function pickNews(all: NewsItem[]) {
-  const pb = all.filter((n) => n.site === "phanbon").slice(0, 2);
-  const other = all.filter((n) => n.site !== "phanbon").slice(0, 3 - pb.length);
-  const picked = [...pb, ...other];
-  if (picked.length < 3) picked.push(...all.filter((n) => !picked.includes(n)).slice(0, 3 - picked.length));
-  return picked.sort((a, b) => b.date.localeCompare(a.date));
+  const pb = all.filter((n) => n.site === "phanbon");
+  const feature = pb.find((n) => n.cover && !/tmp-img/.test(n.cover)) ?? pb[0] ?? all[0];
+  const side = (["lopxe", "satthep"] as const).map((site) => all.find((n) => n.site === site && n.cover) ?? all.find((n) => n.site === site)).filter((n): n is NewsItem => !!n && n !== feature);
+  const more = pb.filter((n) => n !== feature).slice(0, 3);
+  return { feature, side, more };
 }
 
 export default async function HubHome() {
@@ -65,42 +78,6 @@ export default async function HubHome() {
   const news = pickNews(await getNews());
   const tyreGroups = getCategories("lopxe").slice(0, 3);
   const steelGroups = getCategories("satthep").slice(0, 3);
-
-  const slides: HeroSlide[] = [
-    {
-      id: "phanbon",
-      label: VERTICALS.phanbon.short,
-      hint: "Ngành hàng chính",
-      title: "Dinh dưỡng đúng lúc cho cà phê, sầu riêng, hồ tiêu",
-      href: VERTICALS.phanbon.base,
-      cta: "Xem phân bón & thuốc BVTV",
-      image: "/hero/phan-bon.jpg",
-      alt: "Vườn cây ăn trái xanh tốt trên đất đỏ",
-      focus: "60% 50%",
-    },
-    {
-      id: "lopxe",
-      label: VERTICALS.lopxe.short,
-      hint: "Xe con, xe tải nhẹ",
-      title: "Lốp chính hãng, thay và cân bằng ngay tại cửa hàng",
-      href: VERTICALS.lopxe.base,
-      cta: "Xem lốp xe ô tô",
-      image: "/hero/lop-xe.jpg",
-      alt: "Lốp xe ô tô mới xếp trên kệ",
-      focus: "60% 50%",
-    },
-    {
-      id: "satthep",
-      label: VERTICALS.satthep.short,
-      hint: "Thép, tôn cho công trình",
-      title: "Đủ quy cách cho nhà ở, nhà kho, chuồng trại",
-      href: VERTICALS.satthep.base,
-      cta: "Xem tôn & sắt thép",
-      image: "/hero/sat-thep.jpg",
-      alt: "Thép ống và thép hộp xếp gọn trong kho",
-      focus: "65% 50%",
-    },
-  ];
 
   const promises = [
     { icon: ShieldCheck, text: "Chính hãng, có hoá đơn" },
@@ -112,43 +89,74 @@ export default async function HubHome() {
 
   return (
     <>
-      {/* ------------------------------------------------------------------ HERO */}
-      <section id="top" aria-labelledby="hero-title" className={cn(WRAP, "pb-16 pt-6 md:pb-24 md:pt-10")}>
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <Eyebrow>
-              {COMPANY.legalName} · từ năm {COMPANY.founded}
-            </Eyebrow>
-            <h1 id="hero-title" className="mt-5 text-[clamp(2.4rem,3.7vw,3.35rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-hub-ink">
-              <span className="block">Chăm từ gốc rễ,</span> <span className="block text-hub-blue">cho mùa trĩu quả.</span>
-            </h1>
-            <p className="mt-6 max-w-[34rem] text-lead leading-relaxed text-hub-ink-soft">
-              Từ năm {COMPANY.founded}, Kim Ngoan đi cùng những vườn cà phê, sầu riêng, hồ tiêu quanh {COMPANY.area}. Chúng tôi mang đến phân bón, thuốc bảo vệ thực vật chính hãng và lời khuyên thật lòng của người hiểu đất, hiểu cây.
-            </p>
-            <p className="mt-5 font-script text-[1.75rem] leading-none text-hub-blue sm:text-[2rem]">{COMPANY.slogan}</p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={VERTICALS.phanbon.base} className={BTN_PRIMARY}>
-                Xem phân bón & thuốc
-                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-              </Link>
-              <a href={telHref(COMPANY.hotline)} className={BTN_SOFT} aria-label={`Gọi tư vấn ${COMPANY.hotline}`}>
-                <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
-              </a>
-            </div>
-
-            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-small text-hub-ink-soft">
-              {promises.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-2">
-                  <Icon className="size-4 shrink-0 text-hub-blue" aria-hidden />
-                  {text}
-                </li>
-              ))}
-            </ul>
+      {/* ------------------------------------------------------------------ HERO
+          Ảnh nền ba ngành (bên trái ảnh), nội dung đặt bên phải trên nền giấy mờ để luôn dễ đọc. */}
+      <section id="top" aria-labelledby="hero-title" className="relative isolate pb-16 md:pb-24 lg:px-6 lg:pt-2 xl:px-8">
+        <div className="relative mx-auto max-w-[1600px] overflow-hidden lg:min-h-[clamp(600px,80vh,780px)] lg:rounded-[32px]">
+          {/* ảnh */}
+          <div className="relative aspect-[16/11] sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto">
+            <Image src="/hero/hero-bg.jpg" alt="Bao phân bón, thép và lốp xe bên vườn cây trên đất đỏ Chơn Thành" fill loading="eager" fetchPriority="high" sizes="100vw" className="object-cover object-[22%_60%] lg:object-[30%_55%]" />
           </div>
 
-          <div className="lg:col-span-7">
-            <HeroSlides slides={slides} />
+          {/* ba ngành hàng – nằm trên ảnh, góc trái dưới */}
+          <nav aria-label="Ba ngành hàng" className={cn(WRAP, "relative z-10 mt-4 lg:absolute lg:bottom-8 lg:left-0 lg:mt-0 lg:max-w-none lg:px-8 xl:px-10")}>
+            <ul className="flex flex-wrap gap-2">
+              {VERTICAL_LIST.map((v) => {
+                const main = v.id === "phanbon";
+                return (
+                  <li key={v.id} className="shrink-0">
+                    <Link
+                      href={v.base}
+                      className={cn(
+                        "group inline-flex min-h-11 items-center gap-2 rounded-full py-1.5 pl-2 pr-3.5 text-small font-semibold backdrop-blur-md transition-colors duration-200 lg:min-h-12 lg:gap-2.5 lg:py-2 lg:pl-3 lg:pr-4 lg:shadow-[var(--shadow-hub-ui)]",
+                        main ? "bg-hub-blue text-white hover:bg-hub-blue-hover" : "bg-hub-paper text-hub-ink hover:bg-hub-stone lg:bg-hub-paper/90 lg:hover:bg-hub-paper"
+                      )}
+                    >
+                      <span aria-hidden className={cn("grid size-6 place-items-center rounded-full lg:size-7", main ? "bg-white/15" : "bg-hub-canvas")}>
+                        <span className={cn("size-2 rounded-full", main ? "bg-white" : DOT[v.id])} />
+                      </span>
+                      {v.name}
+                      <ArrowUpRight className="size-4 opacity-70 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* nội dung */}
+          <div className={cn(WRAP, "relative z-10 lg:flex lg:min-h-[clamp(600px,80vh,780px)] lg:items-center lg:justify-end lg:px-8 lg:py-12 xl:px-10")}>
+            <div className="pt-8 lg:w-[min(560px,46%)] lg:rounded-[28px] lg:bg-hub-canvas/85 lg:p-10 lg:pt-10 lg:shadow-[var(--shadow-hub-ui)] lg:backdrop-blur-md xl:p-12">
+              <Eyebrow>
+                {COMPANY.legalName} · từ năm {COMPANY.founded}
+              </Eyebrow>
+              <h1 id="hero-title" className="mt-5 text-[clamp(2.4rem,3.9vw,3.5rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-hub-ink">
+                <span className="block">Chăm từ gốc rễ,</span> <span className="block text-hub-blue">cho mùa trĩu quả.</span>
+              </h1>
+              <p className="mt-5 text-lead leading-relaxed text-hub-ink-soft">
+                Từ năm {COMPANY.founded}, Kim Ngoan đi cùng những vườn cà phê, sầu riêng, hồ tiêu quanh {COMPANY.area}. Chúng tôi mang đến phân bón, thuốc bảo vệ thực vật chính hãng và lời khuyên thật lòng của người hiểu đất, hiểu cây.
+              </p>
+              <p className="mt-5 font-script text-[1.75rem] leading-none text-hub-blue sm:text-[2rem]">{COMPANY.slogan}</p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href={VERTICALS.phanbon.base} className={BTN_PRIMARY}>
+                  Xem phân bón & thuốc
+                  <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                </Link>
+                <a href={telHref(COMPANY.hotline)} className={BTN_SOFT} aria-label={`Gọi tư vấn ${COMPANY.hotline}`}>
+                  <Phone className="size-4" aria-hidden /> <span className="tabular-nums">{COMPANY.hotline}</span>
+                </a>
+              </div>
+
+              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-small text-hub-ink-soft">
+                {promises.map(({ icon: Icon, text }) => (
+                  <li key={text} className="flex items-center gap-2">
+                    <Icon className="size-4 shrink-0 text-hub-blue" aria-hidden />
+                    {text}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -250,8 +258,9 @@ export default async function HubHome() {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------------ TIN TỨC */}
-      {news.length > 0 && (
+      {/* ------------------------------------------------------------------ TIN TỨC
+          Bài phân bón lớn bên trái; lốp xe, sắt thép bên phải; thêm vài bài phân bón dạng danh sách. */}
+      {news.feature && (
         <section id="tin-tuc" aria-labelledby="tin-tuc-title" className={cn(WRAP, "scroll-mt-24 py-20 md:py-28")}>
           <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-5 md:mb-14">
             <div className="max-w-3xl">
@@ -266,43 +275,87 @@ export default async function HubHome() {
             </Link>
           </Reveal>
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {news.map((item, i) => (
-              <Reveal key={`${item.site}-${item.slug}`} delay={i * 80}>
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[22px] bg-hub-paper">
-                  <div className={cn("relative aspect-[16/10] overflow-hidden", item.site === "lopxe" ? "bg-lopxe-ink" : item.site === "satthep" ? "bg-satthep-soft" : "bg-hub-blue-tint")}>
-                    {item.cover ? (
-                      <Image src={item.cover} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-[1.04]" />
-                    ) : (
-                      item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto !size-[58%] transition-transform duration-500 ease-soft group-hover:scale-105" />
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <p className="flex flex-wrap items-center gap-x-3 text-caption text-hub-ink-soft">
-                      <span className="inline-flex items-center gap-1.5 font-medium text-hub-ink">
-                        <span aria-hidden className={cn("size-2 rounded-full", DOT[item.site])} /> {VERTICALS[item.site].short}
+          <div className="grid gap-5 lg:grid-cols-12">
+            {/* bài nổi bật – phân bón */}
+            <Reveal className="lg:col-span-7">
+              <article className="group relative flex h-full flex-col overflow-hidden rounded-[22px] bg-hub-paper">
+                <div className="relative aspect-[16/9] overflow-hidden bg-hub-blue-tint">
+                  {news.feature.cover && <Image src={news.feature.cover} alt="" fill sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-[1.03]" />}
+                  <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-hub-paper/95 px-3 py-1.5 text-caption font-semibold text-hub-blue backdrop-blur-sm">
+                    <Leaf className="size-3.5" aria-hidden /> Kỹ thuật canh tác
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-6 sm:p-8">
+                  <NewsMeta item={news.feature} label={VERTICALS[news.feature.site].short} />
+                  <h3 className="mt-3 text-h3 font-semibold leading-snug text-hub-ink">
+                    <Link href={news.feature.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-hub-blue">
+                      {news.feature.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-3 max-w-[40rem] text-body leading-relaxed text-hub-ink-soft">{news.feature.excerpt}</p>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-small font-semibold text-hub-ink transition-colors group-hover:text-hub-blue">
+                    Đọc bài viết <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                  </span>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* lốp xe, sắt thép + thêm bài phân bón */}
+            <div className="flex flex-col gap-5 lg:col-span-5">
+              {news.side.map((item, i) => (
+                <Reveal key={`${item.site}-${item.slug}`} delay={(i + 1) * 80}>
+                  <article className="group relative grid grid-cols-[minmax(0,9rem)_minmax(0,1fr)] gap-4 overflow-hidden rounded-[22px] bg-hub-paper p-3 sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] sm:gap-5">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-hub-canvas">
+                      {item.cover ? (
+                        <Image src={item.cover} alt="" fill sizes="12rem" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-[1.05]" />
+                      ) : (
+                        item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto !size-[70%]" />
+                      )}
+                    </div>
+                    <div className="flex min-w-0 flex-col py-1 pr-2">
+                      <NewsMeta item={item} label={VERTICALS[item.site].short} />
+                      <h3 className="mt-2 line-clamp-3 text-body font-semibold leading-snug text-hub-ink sm:text-title">
+                        <Link href={item.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-hub-blue">
+                          {item.title}
+                        </Link>
+                      </h3>
+                      <span className="mt-auto inline-flex items-center gap-1.5 pt-3 text-small font-semibold text-hub-ink transition-colors group-hover:text-hub-blue">
+                        Đọc tiếp <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                       </span>
-                      <time dateTime={item.date}>{formatDate(item.date)}</time>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+
+              {news.more.length > 0 && (
+                <Reveal delay={240} className="flex-1">
+                  <div className="flex h-full flex-col rounded-[22px] bg-hub-blue-tint p-5 sm:p-6">
+                    <p className="flex items-center gap-2 text-small font-semibold text-hub-blue">
+                      <Leaf className="size-4" aria-hidden /> Thêm về phân bón & chăm cây
                     </p>
-                    <h3 className="mt-2.5 text-title font-semibold leading-snug text-hub-ink">
-                      <Link href={item.href} className="after:absolute after:inset-0 after:content-[''] group-hover:text-hub-blue">
-                        {item.title}
-                      </Link>
-                    </h3>
-                    <p className="mt-2 line-clamp-2 text-body leading-relaxed text-hub-ink-soft">{item.excerpt}</p>
-                    <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-small font-semibold text-hub-ink transition-colors group-hover:text-hub-blue">
-                      Đọc tiếp <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-                    </span>
+                    <ul className="mt-3">
+                      {news.more.map((n) => (
+                        <li key={n.slug}>
+                          <Link href={n.href} className="group/l -mx-2 flex min-h-12 items-center justify-between gap-4 rounded-lg px-2 py-2 text-body text-hub-ink transition-colors hover:bg-hub-paper">
+                            <span className="line-clamp-2">{n.title}</span>
+                            <ArrowRight className="size-4 shrink-0 text-hub-ink-soft transition-transform duration-200 group-hover/l:translate-x-0.5 group-hover/l:text-hub-blue" aria-hidden />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href={`${VERTICALS.phanbon.base}/tin-tuc`} className="group mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-small font-semibold text-hub-blue">
+                      Tất cả bài viết về phân bón <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+                    </Link>
                   </div>
-                </article>
-              </Reveal>
-            ))}
+                </Reveal>
+              )}
+            </div>
           </div>
         </section>
       )}
 
       {/* ------------------------------------------------------------------ LIÊN HỆ */}
-      <section id="lien-he" aria-labelledby="lien-he-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28", news.length === 0 && "pt-20 md:pt-28")}>
+      <section id="lien-he" aria-labelledby="lien-he-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28", !news.feature && "pt-20 md:pt-28")}>
         <div className="grid overflow-hidden rounded-[28px] bg-hub-blue-tint lg:grid-cols-12">
           <Reveal className="p-6 sm:p-10 lg:col-span-5 lg:p-12">
             <Eyebrow>Liên hệ</Eyebrow>
