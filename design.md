@@ -334,3 +334,24 @@ Cây chọn ở hero dùng chung cho cả trang qua `lib/crop-store.ts` (localSt
 
 ### Cần xác nhận
 Câu chữ “Bác sĩ cây trồng” (`lib/content/plant-doctor.ts`) và các ngưỡng lời khuyên thời tiết (`farm-bulletin.tsx`: mưa ≥ 15 mm hoãn bón, 2–15 mm hợp bón; khả năng mưa ≥ 60 % hoặc gió ≥ 20 km/h không phun) – nhờ kỹ thuật viên duyệt.
+
+---
+
+## 15. Landing tổng `/` – bố cục v1.2 (nghiêng về phân bón)
+
+Nhánh `fe/notion-style-v1.2` (tách từ v1.1). Giữ theme landing tổng: nền giấy `hub-canvas`, Be Vietnam Pro, bo góc mềm, không gradient. Thay đổi:
+
+- **Màu hành động chính → xanh rừng** `#22662a` (vẫn tên token `hub-blue` trong `globals.css` để khỏi sửa hàng trăm chỗ dùng). Nền phụ `hub-blue-tint` = xanh lá nhạt `#edf5e4`.
+- **Hạn chế viền**: tách khối bằng nền trắng / nền lá nhạt và khoảng trắng; thẻ không viền, không đổ bóng (trừ thẻ nổi trên ảnh).
+- **Slogan**: “Mùa thuận, đường êm, nhà vững.” – ba vế ứng với phân bón, lốp xe, sắt thép. Viết bằng Dancing Script (chỉ dùng cho slogan), sửa được trong admin (Cài đặt → slogan).
+- Header: Trang chủ · Sản phẩm · Tin tức · Liên hệ.
+
+### Thứ tự khối
+| Khối | File | Ghi chú |
+|---|---|---|
+| Hero | `app/(hub)/page.tsx` + `components/hub/hero-slides.tsx` | Trái: H1 “Chăm từ gốc rễ, cho mùa trĩu quả.”, lời dẫn, slogan, nút “Xem phân bón & thuốc” + gọi, 3 cam kết. Phải: ảnh đổi ngành **mỗi 6 giây** (mờ dần + phóng nhẹ), chú thích ngành trên ảnh, 3 thẻ chọn ngành có thanh thời gian. Rê chuột / focus thì dừng; có nút tạm dừng; “giảm chuyển động” thì không tự chuyển. Ảnh: `public/hero/phan-bon.jpg`, `lop-xe.jpg`, `sat-thep.jpg` (5:4, chủ thể lệch phải). |
+| Danh mục sản phẩm | page | “Từ gốc cây đến mái nhà”. Phân bón là khối lớn (ảnh, mô tả, 2 nhóm Phân bón / Thuốc BVTV với 8 danh mục con, số sản phẩm, 2 nút); lốp xe & sắt thép là 2 thẻ nhỏ “Ngành bổ trợ”. |
+| Tin tức | page | 3 bài: ưu tiên 2 bài phân bón mới nhất + 1 bài ngành khác. |
+| Liên hệ | page | Khối nền lá nhạt: số điện thoại từng ngành, địa chỉ, giờ mở cửa, email, nút Gọi / Zalo; bản đồ Google + nút Chỉ đường. |
+
+Các khối của v1.1 (ba cánh cửa, lịch mùa vụ, sa bàn giao hàng, giới thiệu, hỏi đáp) vẫn giữ trong `components/hub/` để thêm lại khi cần.

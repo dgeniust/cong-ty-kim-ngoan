@@ -12,10 +12,8 @@ import { cn } from "@/lib/utils";
 
 /** `spy` = id của khối trên trang chủ; mục menu sáng lên khi cuộn tới khối đó. */
 const MAIN = [
+  { label: "Trang chủ", href: "/", spy: "" },
   { label: "Sản phẩm", href: "/#san-pham", spy: "san-pham" },
-  { label: "Mùa vụ", href: "/#mua-vu", spy: "mua-vu" },
-  { label: "Giao hàng", href: "/#giao-hang", spy: "giao-hang" },
-  { label: "Giới thiệu", href: "/#gioi-thieu", spy: "gioi-thieu" },
   { label: "Tin tức", href: "/tin-tuc", spy: "tin-tuc" },
   { label: "Liên hệ", href: "/#lien-he", spy: "lien-he" },
 ];
@@ -76,7 +74,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
   // Scrollspy trên trang chủ
   useEffect(() => {
     if (!onHome) return;
-    const ids = MAIN.map((m) => m.spy);
+    const ids = MAIN.map((m) => m.spy).filter(Boolean);
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
     const io = new IntersectionObserver(
       (entries) => {

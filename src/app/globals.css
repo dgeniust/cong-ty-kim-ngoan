@@ -99,9 +99,11 @@
   --color-hub-sand: #f6f5f4;
   --color-hub-stone: #e9e8e6;
   --color-hub-line: rgb(0 0 0 / 0.08);
-  --color-hub-blue: #0068c9; /* ≥ 4.5:1 cả trên nền trắng lẫn hub-blue-tint */
-  --color-hub-blue-hover: #00569f;
-  --color-hub-blue-tint: #e6f3fe;
+  /* v1.2: màu hành động chính của landing tổng chuyển từ xanh dương sang xanh rừng (brand-700) để trang
+     mang chất nông nghiệp, nghiêng về phân bón. Giữ tên token cũ để không phải đổi hàng trăm chỗ dùng. */
+  --color-hub-blue: #22662a; /* 6.6:1 trên nền trắng, ≥ 6:1 trên hub-blue-tint */
+  --color-hub-blue-hover: #1c5424;
+  --color-hub-blue-tint: #edf5e4;
   --color-hub-marigold: #ffb110;
   --color-hub-marigold-soft: #fff4d9;
   --color-hub-coral: #f64932;
@@ -619,3 +621,6 @@
 @media (max-width: 639px) {
   .sb-plane { top: 46%; }
 }
+
+/* Hero landing tổng: thanh thời gian 6s của trình chiếu */
+@keyframes kn-hero-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }

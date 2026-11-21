@@ -25,7 +25,7 @@ export const COMPANY = {
   prefix: "CÔNG TY TNHH",
   name: "KIM NGOAN",
   legalName: "Công ty TNHH Kim Ngoan",
-  slogan: "Đồng hành cùng nhà nông",
+  slogan: "Mùa thuận, đường êm, nhà vững.",
   // TODO(khách hàng): thay bằng thông tin thật
   hotline: "0123 456 789",
   email: "kimngoan@example.com",
