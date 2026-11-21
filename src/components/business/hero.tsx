@@ -96,6 +96,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
                 alt={s.alt}
                 fill
                 sizes="100vw"
+                quality={90}
                 {...(i === 0 ? { preload: true } : { loading: "lazy" as const })}
                 className={cn("object-cover transition-transform ease-out motion-reduce:transition-none", on && autoplay ? "scale-100 duration-[7000ms]" : "scale-[1.04] duration-[1200ms]")}
                 style={{ objectPosition: s.focus }}
@@ -104,7 +105,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
           );
         })}
         {/* overlay xanh rừng đêm #082919: điện thoại phủ trên–dưới để ảnh liền với nền tối; từ md phủ trái → phải 92% → 10% */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.92)_0%,rgba(8,41,25,0.8)_34%,rgba(8,41,25,0.4)_62%,rgba(8,41,25,0.1)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.9)_0%,rgba(8,41,25,0.72)_30%,rgba(8,41,25,0.2)_58%,rgba(8,41,25,0)_100%)]" />
         {/* dải tối phía trên để menu trong suốt (chữ trắng) luôn đọc được */}
         <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(8,41,25,0.55),rgba(8,41,25,0))] md:block" />
       </div>
