@@ -90,20 +90,27 @@
   /* Landing tổng (hub) – phong cách "sổ giấy dưới nắng chiều" (Notion):
    * nền giấy ấm, thẻ trắng viền mảnh không đổ bóng, MỘT màu xanh cho hành động chính,
    * các mảng màu phẳng (vàng, xanh trời, đào, xanh đêm) như giấy note. Không dùng gradient. */
-  --color-hub-ink: #000000;
+  --color-hub-ink: #18181b; /* xám than – business v1 */
   --color-hub-graphite: #37352f;
-  --color-hub-ink-soft: #615d59;
-  --color-hub-muted: #a39e98;
+  --color-hub-ink-soft: #52525b;
+  --color-hub-muted: #a1a1aa;
   --color-hub-paper: #ffffff;
-  --color-hub-canvas: #f6f5f4;
+  --color-hub-canvas: #f8f9fa;
   --color-hub-sand: #f6f5f4;
-  --color-hub-stone: #e9e8e6;
-  --color-hub-line: rgb(0 0 0 / 0.08);
+  --color-hub-stone: #eceef1;
+  --color-hub-line: rgb(24 24 27 / 0.1);
   /* v1.2: màu hành động chính của landing tổng chuyển từ xanh dương sang xanh rừng (brand-700) để trang
      mang chất nông nghiệp, nghiêng về phân bón. Giữ tên token cũ để không phải đổi hàng trăm chỗ dùng. */
-  --color-hub-blue: #22662a; /* 6.6:1 trên nền trắng, ≥ 6:1 trên hub-blue-tint */
-  --color-hub-blue-hover: #1c5424;
-  --color-hub-blue-tint: #edf5e4;
+  /* business v1 (Editorial Industrial): màu hành động = cam đồng; giữ tên token cũ để không sửa hàng trăm chỗ dùng */
+  --color-hub-blue: #a84b24; /* 5.6:1 trên nền trắng */
+  --color-hub-blue-hover: #8c3d1c;
+  --color-hub-blue-tint: #f8ece5;
+  /* màu nhận diện từng ngành trong landing business */
+  --color-biz-moss: #2f5d3a; /* phân bón */
+  --color-biz-moss-tint: #ecf2ec;
+  --color-biz-graphite: #26272b; /* lốp xe */
+  --color-biz-copper: #a84b24; /* sắt thép & nút hành động */
+  --color-biz-mist: #f4f5f7; /* nền khối tin tức */
   --color-hub-marigold: #ffb110;
   --color-hub-marigold-soft: #fff4d9;
   --color-hub-coral: #f64932;
@@ -551,4 +558,5 @@
 
 
 /* Hero landing tổng: thanh thời gian 6s của ảnh nền */
-@keyframes kn-hero-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes biz-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes biz-panel { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }

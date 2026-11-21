@@ -1,51 +1,44 @@
-import "@fontsource/dancing-script/vietnamese-600.css";
-import "@fontsource/dancing-script/latin-600.css";
-import { HeroCarousel } from "@/components/hub/hero-carousel";
-import { ContactSection } from "@/components/hub/home/contact-section";
-import { NewsSection } from "@/components/hub/home/news-section";
-import { ProductsSection } from "@/components/hub/home/products-section";
-import { SectorsSection } from "@/components/hub/home/sectors-section";
-import { StatsBar } from "@/components/hub/home/stats-bar";
-import { Eyebrow } from "@/components/hub/home/ui";
+import { AboutSection } from "@/components/business/about-section";
+import { ContactSection } from "@/components/business/contact-section";
+import { BizHero } from "@/components/business/hero";
+import { NewsSection } from "@/components/business/news-section";
+import { ProductsSection } from "@/components/business/products-section";
+import { ArrowLink, Eyebrow, SlideArrow, bizButton } from "@/components/business/ui";
 import { HUB_HERO } from "@/lib/content/hub-home";
 import { getNews } from "@/lib/data/news";
-import { buildHeroSlides, buildShowcase, buildStats, pickHomeNews } from "@/lib/hub/home";
+import { buildHeroSlides, buildSpotlights, buildStats, heroLead, pickHomeNews } from "@/lib/hub/home";
 import { getFertilizerProducts } from "@/lib/products/server";
 import { getSettings } from "@/lib/settings/server";
 
 /**
- * Landing tổng `/` (nhánh fe/notion-style-v1.2) – xem design.md §15.
- * Hero (ảnh nền 3 ngành, đổi mỗi 6s) → Số liệu → Danh mục + cam kết → Sản phẩm tiêu biểu → Tin tức → Liên hệ.
- * Trang là Server Component; chỉ HeroCarousel và ProductTabs chạy phía trình duyệt.
- * Chữ tĩnh nằm ở `lib/content/hub-home.ts`, phần dựng dữ liệu ở `lib/hub/home.ts`.
+ * Landing tổng `/` – phong cách Business / Editorial Industrial (nhánh fe/bussiness-style-v1), xem design.md §16.
+ * Hero (ảnh nền 3 ngành + thanh chỉ số) → Giới thiệu → Sản phẩm (tab trưng bày) → Tin tức → Liên hệ (form + bản đồ).
+ * Server Component; chỉ hero, tab sản phẩm, form và bản đồ chạy phía trình duyệt.
  */
 export default async function HubHome() {
   const [{ COMPANY, VERTICALS, VERTICAL_LIST }, fertilizers, allNews] = await Promise.all([getSettings(), getFertilizerProducts(), getNews()]);
-  const { tabs, productCount } = await buildShowcase(VERTICALS, fertilizers);
-  const news = pickHomeNews(allNews);
+  const { spotlights, productCount } = await buildSpotlights(VERTICALS, fertilizers);
   const [firstLine, secondLine] = HUB_HERO.titleLines;
 
   return (
     <>
-      <HeroCarousel
-        slides={buildHeroSlides(COMPANY, VERTICALS)}
-        slogan={COMPANY.slogan}
-        eyebrow={
-          <Eyebrow>
-            {COMPANY.legalName} · từ năm {COMPANY.founded}
-          </Eyebrow>
-        }
-        title={
-          <>
-            <span className="block">{firstLine}</span> <span className="block text-hub-blue">{secondLine}</span>
-          </>
-        }
-      />
-      <StatsBar stats={buildStats(COMPANY, productCount)} />
-      <SectorsSection verticals={VERTICALS} fertilizerCount={fertilizers.length} />
-      <ProductsSection tabs={tabs} />
-      <NewsSection news={news} verticals={VERTICALS} />
-      <ContactSection company={COMPANY} verticalList={VERTICAL_LIST} standalone={!news.feature} />
+      <BizHero slides={buildHeroSlides(VERTICALS)} stats={buildStats(COMPANY, productCount)}>
+        <Eyebrow className="text-hub-ink-soft">{HUB_HERO.eyebrow}</Eyebrow>
+        <h1 id="hero-title" className="mt-6 text-[clamp(2.6rem,5.2vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.03em] text-hub-ink">
+          <span className="block">{firstLine}</span> <span className="block text-biz-moss">{secondLine}</span>
+        </h1>
+        <p className="mt-6 max-w-[34rem] text-lead leading-relaxed text-hub-ink-soft">{heroLead(COMPANY)}</p>
+        <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
+          <a href={HUB_HERO.primaryCta.href} className={bizButton.solid}>
+            {HUB_HERO.primaryCta.label} <SlideArrow />
+          </a>
+          <ArrowLink href={HUB_HERO.secondaryCta.href}>{HUB_HERO.secondaryCta.label}</ArrowLink>
+        </div>
+      </BizHero>
+      <AboutSection company={COMPANY} />
+      <ProductsSection spotlights={spotlights} />
+      <NewsSection news={pickHomeNews(allNews)} verticals={VERTICALS} />
+      <ContactSection company={COMPANY} verticalList={VERTICAL_LIST} />
     </>
   );
 }

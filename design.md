@@ -372,3 +372,37 @@ Nhánh `fe/notion-style-v1.2` (tách từ v1.1). Giữ theme landing tổng: n�
 **Không viền**: tách khối bằng màu nền (giấy ↔ trắng ↔ lá nhạt), khoảng trắng và `shadow-sm`. Gradient chỉ dùng cho lớp phủ ảnh hero và hoạ tiết nền.
 
 Các khối của v1.1 (ba cánh cửa, lịch mùa vụ, sa bàn giao hàng) đã xoá khỏi code cho gọn; lấy lại từ lịch sử git (commit `255d22a` trở về trước) khi cần.
+
+---
+
+## 16. Landing tổng – Business / Editorial Industrial (nhánh `fe/bussiness-style-v1`)
+
+Tách từ `fe/notion-style-v1.2` (giữ nguyên nội dung, dữ liệu, 3 chuyên trang); chỉ đổi giao diện landing tổng `/` và khung chung (header, footer, nút nổi).
+
+**Tinh thần:** tạp chí công nghiệp hiện đại – lưới phẳng, không khung thẻ, ngăn khối bằng mảng nền + kẻ mảnh 1px (10%), ảnh thật, khoảng trắng rộng, bo góc rất nhẹ (4–6px).
+
+**Màu** (token `hub-*` giữ tên cũ, đổi giá trị):
+| Vai trò | Màu |
+|---|---|
+| Nền ngà / trắng | `#f8f9fa` / `#ffffff` |
+| Chữ xám than / phụ | `#18181b` / `#52525b` |
+| Nút hành động, nhãn khối (`hub-blue`) | cam đồng `#a84b24` (hover `#8c3d1c`) |
+| Phân bón (`biz-moss`) | xanh rêu `#2f5d3a` – dòng 2 tiêu đề hero, trích dẫn, biểu tượng cam kết |
+| Lốp xe (`biz-graphite`) | `#26272b` |
+| Sắt thép (`biz-copper`) | `#a84b24` |
+| Nền khối tin tức (`biz-mist`) | `#f4f5f7` |
+
+**Chữ:** Be Vietnam Pro; tiêu đề đậm (700), tracking −0.02em; nhãn nhỏ IN HOA 12px tracking 0.16em.
+
+### Thứ tự khối
+| Khối | File | Ghi chú |
+|---|---|---|
+| Header | `components/hub/hub-header.tsx` | Một hàng: logo · Giới thiệu / Sản phẩm / Tin tức / Liên hệ (gạch chân trượt) · hotline + nút **Nhận báo giá**. Trong suốt ở đỉnh hero trang chủ, trắng đục + blur khi cuộn (trang khác luôn trắng). |
+| Hero | `components/business/hero.tsx` | Ảnh nền tràn viền (3 ngành, đổi mỗi 6s), scrim trắng trái → phải đúng đặc tả `90deg 0.96 → 0.85 (45%) → 0`. Trái: nhãn, H1 2 dòng, mô tả, nút đặc “Khám phá sản phẩm” + liên kết chữ “Liên hệ báo giá →” (mũi tên trượt). Chỉ báo 01/02/03 có thanh thời gian + nút tạm dừng. **Thanh chỉ số neo đáy** (kẻ mảnh, nền trắng mờ). Điện thoại: ảnh trên, chữ dưới trên nền trắng. |
+| Giới thiệu | `components/business/about-section.tsx` | 2 cột: câu chuyện + **pull-quote** thanh rêu bên trái; ảnh thật bên phải. Dưới: 4 cam kết, ngăn bằng kẻ mảnh phía trên. |
+| Sản phẩm | `components/business/spotlight.tsx` | 3 tab lớn “01. Phân bón | 02. Lốp xe | 03. Sắt thép”, gạch chân trượt theo màu ngành. Trái: 5 dòng sản phẩm tiêu biểu (tên · nhóm · quy cách, kẻ mảnh) + nút xem danh mục + số ngành; phải: ảnh thật cỡ lớn. Bàn phím ←/→. |
+| Tin tức | `components/business/news-section.tsx` | Nền `biz-mist`, 1 bài tiêu điểm (60%) + 3 bài xếp dọc ngăn bằng `border-b` mảnh, ảnh nhỏ phóng nhẹ khi rê chuột. |
+| Liên hệ | `components/business/contact-section.tsx`, `quote-form.tsx`, `map-embed.tsx` | Chia đôi tràn viền. Trái: hotline/giờ/địa chỉ/email, số từng ngành, **form gạch chân** (họ tên, SĐT, ngành quan tâm, nhu cầu). Phải: bản đồ tràn chiều cao, **khoá cuộn** đến khi bấm vào, nút “Mở chỉ đường trên Google Maps”. Form hiện chỉ giao diện (giả lập gửi). |
+| Footer | `components/hub/hub-footer.tsx` | Nền xám than, slogan, chuyên trang, liên hệ. |
+
+Chữ tĩnh: `lib/content/hub-home.ts`; dựng dữ liệu: `lib/hub/home.ts`; mảnh dùng chung: `components/business/ui.tsx`.

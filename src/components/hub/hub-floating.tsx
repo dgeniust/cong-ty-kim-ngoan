@@ -15,7 +15,7 @@ export function HubFloating({ phone, phoneHref, zalo }: { phone: string; phoneHr
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const circle = "grid size-12 place-items-center rounded-full shadow-[var(--shadow-hub-ui)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110";
+  const circle = "grid size-12 place-items-center rounded-full shadow-[0_6px_20px_rgb(24_24_27/0.14)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110";
 
   return (
     <div className="pb-safe fixed bottom-4 right-4 z-40 flex flex-col items-center gap-2.5 sm:bottom-6 sm:right-6">
@@ -23,12 +23,12 @@ export function HubFloating({ phone, phoneHref, zalo }: { phone: string; phoneHr
         type="button"
         aria-label="Lên đầu trang"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={cn(circle, "border border-hub-line bg-hub-paper text-hub-ink transition-[opacity,transform]", deep ? "opacity-100" : "pointer-events-none translate-y-3 opacity-0")}
+        className={cn(circle, "bg-white text-hub-ink transition-[opacity,transform]", deep ? "opacity-100" : "pointer-events-none translate-y-3 opacity-0")}
         tabIndex={deep ? 0 : -1}
       >
         <ArrowUp className="size-5" aria-hidden />
       </button>
-      <a href={zalo} target="_blank" rel="noopener noreferrer" aria-label="Nhắn Zalo" className={cn(circle, "border border-hub-line bg-hub-paper text-hub-blue")}>
+      <a href={zalo} target="_blank" rel="noopener noreferrer" aria-label="Nhắn Zalo" className={cn(circle, "bg-white text-hub-blue")}>
         <MessageCircle className="size-5" aria-hidden />
       </a>
       <a href={phoneHref} aria-label={`Gọi hotline ${phone}`} className={cn(circle, "relative bg-hub-blue text-white")}>
