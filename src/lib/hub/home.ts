@@ -37,7 +37,7 @@ export function buildStats(company: Company, productCount: number): Stat[] {
     { value: `${new Date().getFullYear() - Number(company.founded)}+`, label: "Năm cung ứng vật tư" },
     { value: `${productCount}+`, label: "Sản phẩm sẵn hàng" },
     { value: "3", label: "Ngành hàng chủ lực" },
-    { value: `${ZONES[0].radiusKm} km`, label: "Bán kính giao trong ngày" },
+    { value: `1`, label: "Đội ngũ nhân sự kinh nghiệm" },
   ];
 }
 

@@ -22,8 +22,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     if (process.env.VERCEL_ENV === "production") {
       return [
-        { source: "/satthep", destination: "/404" },
-        { source: "/lopxe", destination: "/404" },
+        { source: "/satthep:path*", destination: "/404" },
+        { source: "/lopxe:path*", destination: "/404" },
       ];
     }
     return [];
