@@ -168,9 +168,9 @@ export function PlantDoctor({ phone, zalo }: { phone: string; zalo: string }) {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-2 rounded-[32px] bg-white p-2 ring-1 ring-brand-900/10 lg:grid-cols-[15rem_minmax(0,1fr)_minmax(0,1.15fr)] [&>*]:min-w-0">
+    <div className="grid grid-cols-1 gap-2 rounded-lg bg-white p-2 ring-1 ring-brand-900/10 lg:grid-cols-[15rem_minmax(0,1fr)_minmax(0,1.15fr)] [&>*]:min-w-0">
       {/* 1. bị ở đâu */}
-      <div className="rounded-[26px] bg-surface p-4 sm:p-5">
+      <div className="rounded-md bg-surface p-4 sm:p-5">
         <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
           <span className="grid size-6 place-items-center rounded-full bg-brand-900 text-[11px] text-white">1</span> Bị ở đâu?
         </p>
@@ -204,7 +204,7 @@ export function PlantDoctor({ phone, zalo }: { phone: string; zalo: string }) {
       </div>
 
       {/* 2. dấu hiệu */}
-      <div className="rounded-[26px] p-4 sm:p-5">
+      <div className="rounded-md p-4 sm:p-5">
         <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
           <span className="grid size-6 place-items-center rounded-full bg-brand-900 text-[11px] text-white">2</span> Dấu hiệu nào giống nhất?
         </p>
@@ -235,7 +235,7 @@ export function PlantDoctor({ phone, zalo }: { phone: string; zalo: string }) {
       {/* 3. kết quả */}
       <div ref={result} aria-live="polite" className="scroll-mt-24">
         {s ? (
-          <div key={s.id} className="kn-pop flex h-full flex-col rounded-[26px] bg-brand-900 p-5 text-white sm:p-7">
+          <div key={s.id} className="kn-pop flex h-full flex-col rounded-md bg-brand-900 p-5 text-white sm:p-7">
             <p className="flex items-center gap-2 text-caption font-semibold text-sun-300">
               <span className="grid size-6 place-items-center rounded-full bg-sun-300 text-[11px] text-brand-900">3</span> Nguyên nhân thường gặp
             </p>
@@ -271,7 +271,7 @@ export function PlantDoctor({ phone, zalo }: { phone: string; zalo: string }) {
             </div>
           </div>
         ) : (
-          <div className="flex h-full flex-col rounded-[26px] bg-surface p-5 sm:p-7">
+          <div className="flex h-full flex-col rounded-md bg-surface p-5 sm:p-7">
             <p className="flex items-center gap-2 text-caption font-semibold text-brand-600">
               <span className="grid size-6 place-items-center rounded-full bg-brand-900/15 text-[11px] text-brand-900">3</span> Kết quả hiện ở đây
             </p>

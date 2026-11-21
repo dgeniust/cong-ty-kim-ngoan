@@ -171,7 +171,7 @@ export function FarmBulletin({
 
       <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
         {/* THỜI TIẾT */}
-        <section aria-label={`Dự báo thời tiết ${place}`} className="rounded-3xl bg-white/[0.06] p-5 ring-1 ring-white/10 sm:p-7 lg:col-span-7">
+        <section aria-label={`Dự báo thời tiết ${place}`} className="rounded-lg bg-white/[0.06] p-5 ring-1 ring-white/10 sm:p-7 lg:col-span-7">
           {today && fert && spray ? (
             <>
               <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -254,7 +254,7 @@ export function FarmBulletin({
         </section>
 
         {/* VƯỜN CỦA BẠN THÁNG NÀY */}
-        <section aria-label={`Việc của vườn ${name} tháng ${month}`} className="flex flex-col rounded-3xl bg-white p-5 text-brand-900 sm:p-7 lg:col-span-5">
+        <section aria-label={`Việc của vườn ${name} tháng ${month}`} className="flex flex-col rounded-lg bg-white p-5 text-brand-900 sm:p-7 lg:col-span-5">
           <p className="text-caption text-ink-muted">Vườn {name.toLowerCase()} · tháng {month}</p>
           {cal ? (
             doing.length ? (

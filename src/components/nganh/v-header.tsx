@@ -80,24 +80,23 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
 
   return (
     <>
-      <a href="#noi-dung" className="sr-only z-[60] rounded-full bg-v-accent px-5 py-3 text-small font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+      <a href="#noi-dung" className="sr-only z-[60] rounded-md bg-v-accent px-5 py-3 text-small font-semibold text-v-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Bỏ qua đến nội dung chính
       </a>
-      <header data-hidden={hidden || undefined} className={cn("sticky top-0 z-50 pt-3", "transition-[translate,background-color] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none", hidden && "-translate-y-[calc(100%+1rem)]")}>
+      <header data-hidden={hidden || undefined} className={cn(
+          "sticky top-0 z-50 bg-v-bg/90 backdrop-blur-md transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+          scrolled ? "shadow-[0_1px_0_var(--v-line),0_8px_24px_-16px_rgb(0_0_0/0.25)]" : "shadow-[0_1px_0_var(--v-line)]",
+          hidden && "-translate-y-full",
+        )}>
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div
-            className={cn(
-              "flex h-16 items-center justify-between gap-4 rounded-full border border-v-line bg-v-card/95 pl-4 pr-2 backdrop-blur-md transition-shadow duration-200 md:h-[68px] md:pl-5",
-              scrolled ? "shadow-[0_4px_12px_rgb(0_0_0/0.12)]" : "shadow-[0_0.7px_1.5px_rgb(0_0_0/0.015),0_3px_9px_rgb(0_0_0/0.03)]",
-            )}
-          >
+          <div className="flex h-16 items-center justify-between gap-4 md:h-[72px]">
             <Link href={vertical.base} className="flex shrink-0 items-center gap-2.5 rounded-lg">
               <VMark site={vertical.id} />
               <span className="leading-none">
                 <span className="block logo-prefix text-v-mute">{COMPANY.prefix}</span>
                 <span className="mt-1 flex items-center gap-2">
                   <span className="logo-name font-bold text-v-fg">{COMPANY.name}</span>
-                  <span className="hidden rounded-full bg-v-pill px-2 py-0.5 text-micro font-medium text-v-on-pill sm:inline">{vertical.short}</span>
+                  <span className="hidden rounded-[4px] bg-v-pill px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-v-on-pill sm:inline">{vertical.short}</span>
                 </span>
               </span>
             </Link>
@@ -110,7 +109,10 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={cn("rounded-full px-4 py-2 text-body font-medium transition-colors duration-200", active ? "bg-v-tint text-v-on-tint" : "text-v-fg/60 hover:text-v-fg")}
+                    className={cn(
+                      "relative px-4 py-2 text-body font-medium transition-colors duration-200 after:absolute after:inset-x-4 after:-bottom-0.5 after:h-[2px] after:origin-left after:bg-v-accent after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)]",
+                      active ? "text-v-fg after:scale-x-100" : "text-v-fg/60 after:scale-x-0 hover:text-v-fg",
+                    )}
                   >
                     {item.label}
                   </Link>
@@ -125,7 +127,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
               <a
                 href={telHref(vertical.phone)}
                 aria-label={`Gọi ${vertical.phone}`}
-                className="hidden h-11 items-center gap-2 rounded-full bg-v-accent px-5 text-body font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover lg:inline-flex"
+                className="hidden h-11 items-center gap-2 rounded-md bg-v-accent px-5 text-body font-medium text-v-on-accent transition-colors duration-200 hover:bg-v-accent-hover lg:inline-flex"
               >
                 <Phone className="size-4" /> <span className="tabular-nums">{vertical.phone}</span>
               </a>
@@ -144,7 +146,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
         </div>
 
         {open && (
-          <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-[84px] overflow-y-auto bg-v-bg lg:hidden">
+          <div id="menu-nganh" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-v-bg lg:hidden">
             <nav aria-label="Điều hướng di động" className="mx-auto flex max-w-7xl flex-col px-4 py-6 sm:px-6">
               {nav.map((item) => {
                 const active = isActive(item.href);
@@ -154,13 +156,13 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
                     href={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
-                    className={cn("rounded-xl px-4 py-4 text-title font-medium transition-colors", active ? "bg-v-card text-v-fg" : "text-v-fg/80 hover:bg-v-card")}
+                    className={cn("rounded-md px-4 py-4 text-title font-medium transition-colors", active ? "bg-v-card text-v-fg" : "text-v-fg/80 hover:bg-v-card")}
                   >
                     {item.label}
                   </Link>
                 );
               })}
-              <a href={telHref(vertical.phone)} className="mt-6 flex h-13 items-center justify-center gap-2 rounded-full bg-v-accent text-body font-medium text-v-on-accent">
+              <a href={telHref(vertical.phone)} className="mt-6 flex h-13 items-center justify-center gap-2 rounded-md bg-v-accent text-body font-medium text-v-on-accent">
                 <Phone className="size-4" /> Gọi {vertical.phone}
               </a>
             </nav>

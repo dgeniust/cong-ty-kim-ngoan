@@ -245,7 +245,7 @@ export async function LopXeHome({
                   {formatDate(lead.date)} · {lead.readingMinutes} phút đọc
                 </span>
                 <span className="mt-16 block text-h2 font-semibold tracking-[-0.03em]">{lead.title}</span>
-                <span className="mt-3 block max-w-xl text-body leading-relaxed opacity-80">{lead.excerpt}</span>
+                <span className="mt-3 block max-w-xl text-body leading-relaxed opacity-90">{lead.excerpt}</span>
                 <span className="mt-6 inline-flex items-center gap-1 text-small font-semibold">
                   Đọc bài <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                 </span>
@@ -273,7 +273,7 @@ export async function LopXeHome({
       {/* Gọi ngay */}
       <section aria-labelledby="cta-title" className="pb-16 md:pb-24">
         <VContainer>
-          <div className="grid gap-8 rounded-2xl border border-v-line bg-v-card p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
+          <div className="grid gap-8 rounded-2xl bg-v-raise p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
             <div className="lg:col-span-6">
               <h2 id="cta-title" className="text-h1 v-display text-v-fg">{content.cta.title}</h2>
               <p className="mt-4 max-w-md text-lead leading-relaxed text-v-mute">{content.cta.description}</p>
@@ -286,7 +286,7 @@ export async function LopXeHome({
               <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-13 items-center justify-between gap-3 rounded-xl bg-v-tint px-5 text-body font-medium text-v-on-tint">
                 Gửi cỡ lốp qua Zalo <MessageCircle className="size-5" aria-hidden />
               </a>
-              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-xl border border-v-line px-5 text-body font-medium text-v-fg transition-colors hover:bg-white/[0.04]">
+              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-md bg-v-raise px-5 text-body font-medium text-v-fg transition-colors hover:bg-white/[0.04]">
                 Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
               </Link>
             </div>

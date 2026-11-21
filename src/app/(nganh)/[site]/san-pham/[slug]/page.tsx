@@ -102,7 +102,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
             ))}
           </ul>
 
-          <div className="mt-9 rounded-xl border border-v-line bg-v-card p-6 md:p-8">
+          <div className="mt-9 rounded-xl bg-v-raise p-6 md:p-8">
             <p className="text-caption font-medium text-v-mute">Giá</p>
             <p className="v-display mt-1 text-h3 text-v-fg">Liên hệ báo giá</p>
             <p className="mt-2 text-small text-v-mute">Giá thay đổi theo ngày và số lượng. Gọi hoặc nhắn Zalo để nhận giá tốt nhất hôm nay.</p>
@@ -121,7 +121,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
 
           <section aria-labelledby="thong-so-title" className="mt-14">
             <h2 id="thong-so-title" className="text-h2 v-display text-v-fg">Thông số kỹ thuật</h2>
-            <dl className="mt-5 overflow-hidden rounded-xl border border-v-line bg-v-card">
+            <dl className="mt-5 overflow-hidden rounded-xl bg-v-raise">
               {product.specs.map((s, i) => (
                 <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-body ${i > 0 ? "border-t border-v-line" : ""}`}>
                   <dt className="text-v-mute">{s.name}</dt>

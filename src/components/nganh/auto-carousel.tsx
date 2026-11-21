@@ -128,7 +128,7 @@ export function AutoCarousel({
             type="button"
             onClick={() => nudge(dir)}
             aria-label={dir < 0 ? "Sản phẩm trước" : "Sản phẩm tiếp theo"}
-            className="pointer-events-auto grid size-11 place-items-center rounded-full border border-v-line bg-v-card text-v-fg opacity-0 shadow-[0_4px_12px_rgb(0_0_0/0.25)] transition-[opacity,transform] duration-200 hover:scale-105 focus-visible:opacity-100 group-hover/carousel:opacity-100"
+            className="pointer-events-auto grid size-11 place-items-center rounded-full bg-v-card text-v-fg opacity-0 shadow-[0_4px_12px_rgb(0_0_0/0.25)] transition-[opacity,transform] duration-200 hover:scale-105 focus-visible:opacity-100 group-hover/carousel:opacity-100"
           >
             {dir < 0 ? <ChevronLeft className="size-5" /> : <ChevronRight className="size-5" />}
           </button>

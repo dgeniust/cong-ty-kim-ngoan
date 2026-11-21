@@ -101,7 +101,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
       {/* trái: 3 cách lập danh sách */}
-      <div className="rounded-2xl border border-v-line bg-v-card lg:col-span-7">
+      <div className="rounded-2xl bg-v-raise lg:col-span-7">
         <div role="tablist" aria-label="Cách lập danh sách" className="flex gap-1 overflow-x-auto border-b border-v-line p-2">
           {tabs.map((t) => (
             <button
@@ -276,7 +276,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
           </div>
           <ol className="mt-3 grid grid-cols-3 text-caption">
             {PRICE_TIERS.map((t, i) => (
-              <li key={t.name} className={cn(i === 1 && "text-center", i === 2 && "text-right", i === tierIdx ? "font-semibold text-white" : "text-white/45")}>
+              <li key={t.name} className={cn(i === 1 && "text-center", i === 2 && "text-right", i === tierIdx ? "font-semibold text-white" : "text-white/65")}>
                 {t.name}
                 <span className="block text-micro font-normal">{t.note}</span>
               </li>

@@ -77,7 +77,7 @@ export function TyreBooking({ phone, zalo }: { phone: string; zalo: string }) {
         } catch {}
         n.success("Đã ghi nhận lịch hẹn", { description: `Kim Ngoan sẽ gọi số ${tel} để xác nhận giờ thay lốp.` });
       }}
-      className="rounded-2xl border border-v-line bg-v-card p-6 sm:p-8"
+      className="rounded-2xl bg-v-raise p-6 sm:p-8"
     >
       <p className="inline-flex items-center gap-2 text-title font-semibold text-v-fg">
         <CalendarCheck className="size-5 text-v-accent" aria-hidden /> Đặt lịch thay lốp
@@ -128,7 +128,7 @@ export function TyreBooking({ phone, zalo }: { phone: string; zalo: string }) {
             <a href={zalo} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-full bg-v-tint px-4 font-medium text-v-on-tint">
               <MessageCircle className="size-4" aria-hidden /> Gửi qua Zalo
             </a>
-            <a href={telHref(phone)} className="inline-flex h-10 items-center gap-2 rounded-full border border-v-line px-4 font-medium text-v-fg">
+            <a href={telHref(phone)} className="inline-flex h-10 items-center gap-2 rounded-md bg-v-raise px-4 font-medium text-v-fg">
               <Phone className="size-4" aria-hidden /> {phone}
             </a>
           </div>

@@ -12,7 +12,7 @@ import { getContent } from "@/lib/content/store";
 import { SectorSwitcher } from "@/components/shared/sector-switcher";
 import { absoluteUrl } from "@/lib/site";
 
-export const viewport: Viewport = { themeColor: "#143f1b" };
+export const viewport: Viewport = { themeColor: "#1d3a25" };
 
 /** Metadata của chuyên trang phân bón (lấy từ CMS) – ghi đè metadata landing tổng. */
 export async function generateMetadata(): Promise<Metadata> {

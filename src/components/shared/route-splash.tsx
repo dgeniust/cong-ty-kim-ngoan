@@ -132,8 +132,8 @@ function SplashWordmark({ color }: { color: string }) {
 }
 
 const THEME: Record<SplashSection, { bg: string; ink: string; tagBg: string; tagFg: string }> = {
-  hub: { bg: "#f6f5f4", ink: "#111111", tagBg: "#111111", tagFg: "#ffffff" },
-  phanbon: { bg: "#f4f7f1", ink: "#1c5424", tagBg: "#1c5424", tagFg: "#f6e27a" },
-  lopxe: { bg: "#0a0a0a", ink: "#ff6b1a", tagBg: "#ff6b1a", tagFg: "#0a0a0a" },
-  satthep: { bg: "#f1f1f2", ink: "#3f3f46", tagBg: "#111111", tagFg: "#ffffff" },
+  hub: { bg: "#f8f9fa", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
+  phanbon: { bg: "#f1f5f1", ink: "#264c2f", tagBg: "#264c2f", tagFg: "#ffffff" },
+  lopxe: { bg: "#17181b", ink: "#e07a3f", tagBg: "#e07a3f", tagFg: "#17181b" },
+  satthep: { bg: "#f4f5f7", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
 };

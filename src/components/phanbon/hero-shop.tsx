@@ -135,7 +135,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
 
       {/* PHẢI: ảnh vườn thật + gợi ý theo cây */}
       {crop && (
-        <div className="relative isolate min-h-[34rem] overflow-hidden rounded-[32px] bg-brand-900 lg:col-span-6 lg:min-h-0">
+        <div className="relative isolate min-h-[34rem] overflow-hidden rounded-lg bg-brand-900 lg:col-span-6 lg:min-h-0">
           {crops.map((c, i) => (
             <Image
               key={c.key}
@@ -172,7 +172,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
 
           {/* gợi ý cho cây */}
           <div className="absolute inset-x-3 bottom-3 sm:inset-x-4 sm:bottom-4">
-            <div aria-live="polite" className="rounded-3xl bg-paper/95 p-3 backdrop-blur sm:p-4">
+            <div aria-live="polite" className="rounded-lg bg-paper/95 p-3 backdrop-blur sm:p-4">
               <div className="flex items-baseline justify-between gap-3 px-1">
                 <p className="text-small font-semibold text-brand-900">
                   Gợi ý cho vườn {name.toLowerCase()}

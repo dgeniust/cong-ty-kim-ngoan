@@ -52,7 +52,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     phone: "0123 456 781",
     seoTitle: "Phân bón & thuốc BVTV Kim Ngoan – Đại lý tại Chơn Thành",
     seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Đồng Nai. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
-    themeColor: "#143f1b",
+    themeColor: "#1d3a25",
   },
   lopxe: {
     id: "lopxe",

@@ -22,9 +22,9 @@ const loadFonts = async () => {
 type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent: string };
 export const OG_THEMES = {
   hub: { bg: "#f6f5f4", fg: "#000000", muted: "#615d59", accent: "#0068c9", onAccent: "#ffffff" },
-  phanbon: { bg: "#143f1b", fg: "#ffffff", muted: "#c7e1ae", accent: "#f6e27a", onAccent: "#0d2b12" },
-  lopxe: { bg: "#0a0a0a", fg: "#ffffff", muted: "#a1a1aa", accent: "#ff6b1a", onAccent: "#0a0a0a" },
-  satthep: { bg: "#ffffff", fg: "#111111", muted: "#52525b", accent: "#111111", onAccent: "#ffffff" },
+  phanbon: { bg: "#1d3a25", fg: "#ffffff", muted: "#c3d6c6", accent: "#e7c48e", onAccent: "#13281a" },
+  lopxe: { bg: "#17181b", fg: "#ffffff", muted: "#a1a1aa", accent: "#e07a3f", onAccent: "#17181b" },
+  satthep: { bg: "#ffffff", fg: "#18181b", muted: "#52525b", accent: "#a84b24", onAccent: "#ffffff" },
 } satisfies Record<string, OgTheme>;
 
 export async function ogImage({ eyebrow, title, subtitle, footer, theme }: { eyebrow: string; title: string; subtitle?: string; footer: string; theme: OgTheme }) {
@@ -35,8 +35,8 @@ export async function ogImage({ eyebrow, title, subtitle, footer, theme }: { eye
           <svg width="64" height="64" viewBox="0 0 48 48">
             <rect width="48" height="48" rx="12" fill={theme.fg === "#ffffff" ? "#ffffff" : "#000000"} />
             <path d="M14 12v24M14 24l12-12M14 24l12 12" stroke={theme.fg === "#ffffff" ? "#000000" : "#ffffff"} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <circle cx="34" cy="14" r="4" fill="#2e9e4f" />
-            <circle cx="34" cy="24" r="4" fill="#ff6b1a" />
+            <circle cx="34" cy="14" r="4" fill="#3b7a48" />
+            <circle cx="34" cy="24" r="4" fill="#e07a3f" />
             <circle cx="34" cy="34" r="4" fill="#a1a1aa" />
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>

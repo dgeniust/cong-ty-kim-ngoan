@@ -22,7 +22,7 @@ export function TyreLabel({ product: p, href }: { product: CatalogProduct; href:
   const structure = spec(p, "Kết cấu");
   const size = p.keySpec.replace(/\s*A\/T$/, "");
   return (
-    <article className="group relative flex h-full flex-col rounded-2xl border border-v-line bg-v-card p-5 transition-colors duration-200 hover:border-v-accent">
+    <article className="group relative flex h-full flex-col rounded-2xl bg-v-raise p-5 transition-shadow duration-300 hover:shadow-[0_12px_32px_-14px_rgb(0_0_0/0.28)]">
       <p className="flex items-center justify-between gap-3 text-caption">
         <span className="font-semibold uppercase tracking-[0.12em] text-v-fg">{p.brand}</span>
         {(p.featured || p.isNew) && <span className="rounded-full bg-v-tint px-2 py-0.5 text-micro font-medium text-v-on-tint">{p.isNew ? "Mới" : "Bán chạy"}</span>}
@@ -90,7 +90,7 @@ export function TyreTiers({ tiers, products, base, phone }: { tiers: TyreTier[];
             key={t.id}
             className={cn(
               "relative flex flex-col rounded-2xl p-6 sm:p-8",
-              t.popular ? "bg-v-fg text-v-bg lg:py-11" : "border border-v-line bg-v-card text-v-fg",
+              t.popular ? "bg-v-fg text-v-bg lg:py-11" : "bg-v-raise text-v-fg",
             )}
           >
             {t.popular && <span className="absolute -top-3 left-6 rounded-full bg-v-accent px-3 py-1 text-caption font-semibold text-v-on-accent sm:left-8">Nhiều người chọn</span>}

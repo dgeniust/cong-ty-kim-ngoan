@@ -8,7 +8,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
   const [active, setActive] = useState(0);
   return (
     <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
-      <div className="relative aspect-square overflow-hidden rounded-3xl bg-surface">
+      <div className="relative aspect-square overflow-hidden rounded-lg bg-surface">
         <SmartImage
           key={images[active]}
           src={images[active]}

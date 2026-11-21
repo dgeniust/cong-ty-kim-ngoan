@@ -59,7 +59,7 @@ export default async function Contact({ params, searchParams }: Props) {
             ))}
           </ul>
         </address>
-        <div className="rounded-xl border border-v-line bg-v-card p-6 md:p-10">
+        <div className="rounded-xl bg-v-raise p-6 md:p-10">
           <h2 className="text-h2 v-display mb-7 text-v-fg">Gửi yêu cầu</h2>
           <VContactForm defaultMessage={product ? `Tôi cần báo giá: ${product.name} (${product.keySpec}). Số lượng: ` : ""} />
         </div>

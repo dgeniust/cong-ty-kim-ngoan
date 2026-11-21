@@ -8,7 +8,7 @@ import { ProductVisual } from "./product-visual";
 export function VProductCard({ product, headingLevel: Heading = "h3" }: { product: CatalogProduct; headingLevel?: "h2" | "h3" }) {
   const href = `${VERTICALS[product.site].base}/san-pham/${product.slug}`;
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-v-line bg-v-card transition-colors duration-200 hover:border-v-mark/60">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-v-raise transition-shadow duration-300 hover:shadow-[0_12px_32px_-14px_rgb(0_0_0/0.28)]">
       <div className="relative m-1.5 mb-0">
         <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} className="aspect-square !rounded-lg" artClassName="v-hover-zoom" />
         <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">

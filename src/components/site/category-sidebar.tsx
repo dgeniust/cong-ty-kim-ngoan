@@ -16,7 +16,7 @@ const Count = ({ n }: { n?: number }) => <span className="text-caption tabular-n
 export function CategorySidebar({ active, counts, phone }: { active?: string; counts: Record<string, number>; phone: string }) {
   return (
     <aside className="space-y-6 lg:sticky lg:top-28">
-      <nav aria-label="Danh mục sản phẩm" className="rounded-3xl bg-surface p-4">
+      <nav aria-label="Danh mục sản phẩm" className="rounded-lg bg-surface p-4">
         <Link href="/phanbon/san-pham" aria-current={!active ? "page" : undefined} className={linkCls(!active)}>
           Tất cả sản phẩm <Count n={counts.__all} />
         </Link>
@@ -42,7 +42,7 @@ export function CategorySidebar({ active, counts, phone }: { active?: string; co
         ))}
       </nav>
 
-      <div className="rounded-3xl bg-brand-900 p-6 text-white">
+      <div className="rounded-lg bg-brand-900 p-6 text-white">
         <p className="text-title font-semibold">Chưa chắc nên chọn loại nào?</p>
         <p className="mt-2 text-small leading-relaxed text-white/70">Kỹ thuật viên tư vấn miễn phí theo loại cây, tuổi cây và tình trạng đất của vườn bạn.</p>
         <Button asChild variant="sun" className="mt-5 w-full">

@@ -24,14 +24,14 @@ export async function HubFooter() {
         </div>
         <nav aria-label="Chuyên trang">
           <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white">Chuyên trang</p>
-          <ul className="mt-4 space-y-2.5 text-body">
+          <ul className="mt-4 space-y-2 text-body">
             {VERTICAL_LIST.map((v) => (
               <li key={v.id}>
-                <Link href={v.base} className="transition-colors hover:text-white">{v.name}</Link>
+                <Link href={v.base} className="inline-block py-0.5 transition-colors hover:text-white">{v.name}</Link>
               </li>
             ))}
             <li>
-              <Link href="/tin-tuc" className="transition-colors hover:text-white">Tin tức</Link>
+              <Link href="/tin-tuc" className="inline-block py-0.5 transition-colors hover:text-white">Tin tức</Link>
             </li>
           </ul>
         </nav>

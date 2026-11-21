@@ -98,7 +98,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
         </header>
 
         <Container className="max-w-6xl">
-          <div className="relative -mt-12 aspect-[16/9] overflow-hidden rounded-3xl bg-surface md:-mt-16">
+          <div className="relative -mt-12 aspect-[16/9] overflow-hidden rounded-lg bg-surface md:-mt-16">
             <SmartImage src={article.cover} alt={article.title} fill preload sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
           </div>
         </Container>
@@ -129,7 +129,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
           </div>
 
           <aside className="space-y-8 lg:sticky lg:top-28 lg:self-start" aria-label="Thông tin thêm">
-            <div className="rounded-3xl bg-brand-900 p-6 text-white">
+            <div className="rounded-lg bg-brand-900 p-6 text-white">
               <p className="text-title font-semibold">Cần kỹ thuật viên hỗ trợ?</p>
               <p className="mt-2 text-small leading-relaxed text-white/70">Gọi để được tư vấn miễn phí cho vườn của bạn.</p>
               <Button asChild variant="sun" className="mt-5 w-full">

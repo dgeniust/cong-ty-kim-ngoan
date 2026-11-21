@@ -17,7 +17,7 @@ export function RebarAnatomy() {
   const ribs = Array.from({ length: 30 }, (_, i) => 52 + i * 22);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
-      <figure className="flex flex-col justify-center rounded-2xl border border-v-line bg-v-card p-4 sm:p-6 lg:col-span-8">
+      <figure className="flex flex-col justify-center rounded-2xl bg-v-raise p-4 sm:p-6 lg:col-span-8">
         <div className="overflow-x-auto">
         <svg viewBox="0 0 760 330" className="w-full min-w-[560px]" role="img" aria-label="Bản vẽ đoạn thép thanh vằn với 4 điểm kiểm tra: ký hiệu nhà máy, đường kính, mác thép, gân vằn">
           {/* kích thước chiều dài */}
@@ -62,7 +62,7 @@ export function RebarAnatomy() {
       </figure>
 
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <ol className="rounded-2xl border border-v-line bg-v-card p-6">
+        <ol className="rounded-2xl bg-v-raise p-6">
           {POINTS.map((p) => (
             <li key={p.n} className="grid grid-cols-[1.75rem_1fr] gap-2 border-t border-v-line py-3 first:border-0 first:pt-0 last:pb-0">
               <span className="grid size-6 place-items-center rounded-full bg-v-fg text-micro font-bold text-v-bg">{p.n}</span>

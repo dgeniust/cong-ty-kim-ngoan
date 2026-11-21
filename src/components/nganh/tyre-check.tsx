@@ -69,9 +69,9 @@ function TreadSection({ mm }: { mm: number }) {
       ))}
       {/* vạch báo mòn nằm trong rãnh */}
       {blocks.slice(0, -1).map((x) => (
-        <rect key={x} x={x + 50} y={twi} width="20" height={base - twi} fill="#ff6b1a" opacity="0.85" />
+        <rect key={x} x={x + 50} y={twi} width="20" height={base - twi} fill="#e07a3f" opacity="0.85" />
       ))}
-      <line x1="0" x2="360" y1={twi} y2={twi} stroke="#ff6b1a" strokeDasharray="4 4" strokeWidth="1.5" />
+      <line x1="0" x2="360" y1={twi} y2={twi} stroke="#e07a3f" strokeDasharray="4 4" strokeWidth="1.5" />
       <text x="356" y={twi - 6} textAnchor="end" fill="#ff9a5e" fontSize="11" fontWeight="600">vạch báo mòn 1,6 mm</text>
       <text x="4" y={Math.max(14, surface - 6)} fill="#fafafa" fontSize="12" fontWeight="600">{mm.toFixed(1).replace(".", ",")} mm</text>
     </svg>
@@ -92,7 +92,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
   const aV = age && "months" in age && age.months !== undefined ? ageVerdict(age.months) : null;
   const tV = treadVerdict(mm);
   const worst = Math.max(aV?.level ?? 0, tV.level);
-  const card = "rounded-2xl border border-v-line bg-v-card p-6 sm:p-8";
+  const card = "rounded-2xl bg-v-raise p-6 sm:p-8";
 
   return (
     <div>
@@ -164,7 +164,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
           <TreadSection mm={mm} />
           <label className="mt-3 block">
             <span className="sr-only">Độ sâu gai (mm)</span>
-            <input type="range" min={0.5} max={8} step={0.1} value={mm} onChange={(e) => setMm(Number(e.target.value))} aria-valuetext={`${mm.toFixed(1)} mm`} className="w-full accent-[#ff6b1a]" />
+            <input type="range" min={0.5} max={8} step={0.1} value={mm} onChange={(e) => setMm(Number(e.target.value))} aria-valuetext={`${mm.toFixed(1)} mm`} className="w-full accent-[#e07a3f]" />
           </label>
           <p className="flex justify-between text-micro tabular-nums text-v-mute" aria-hidden>
             <span>0,5 mm</span>
@@ -177,7 +177,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
       </div>
 
       {/* kết luận chung */}
-      <div className={cn("mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:p-7", worst >= 2 ? "bg-v-accent text-v-on-accent" : "border border-v-line bg-v-card text-v-fg")}>
+      <div className={cn("mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:p-7", worst >= 2 ? "bg-v-accent text-v-on-accent" : "bg-v-raise text-v-fg")}>
         <p className="text-title font-semibold">
           {worst >= 2 ? "Lốp của bạn nên được thay sớm — đặt lịch, thay xong trong khoảng 30 phút." : "Lốp còn dùng tốt. Lưu lại 4 số DOT để kiểm tra lần sau."}
         </p>

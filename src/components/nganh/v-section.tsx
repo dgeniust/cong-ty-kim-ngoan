@@ -42,7 +42,7 @@ export function VHeading({
         {subtitle && <p className="mt-4 max-w-xl text-lead leading-relaxed text-v-mute">{subtitle}</p>}
       </div>
       {href && (
-        <Link href={href} className="group inline-flex h-9 items-center gap-2 rounded-lg border border-v-line px-4 text-small font-medium text-v-fg transition-colors duration-200 hover:bg-v-raise">
+        <Link href={href} className="group inline-flex h-9 items-center gap-2 rounded-md bg-v-raise px-4 text-small font-medium text-v-fg transition-colors duration-200 hover:bg-v-raise">
           {hrefLabel ?? "Xem tất cả"}
           <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
         </Link>

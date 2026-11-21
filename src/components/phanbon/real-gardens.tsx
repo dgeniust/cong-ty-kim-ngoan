@@ -29,7 +29,7 @@ export function RealGardens({ stories, zalo, no }: { stories: Stories; zalo: str
 
       {lead ? (
         <>
-          <Reveal className="mt-10 grid overflow-hidden rounded-[28px] bg-white ring-1 ring-brand-900/10 lg:grid-cols-12">
+          <Reveal className="mt-10 grid overflow-hidden rounded-lg bg-white ring-1 ring-brand-900/10 lg:grid-cols-12">
             <figure className="relative aspect-[4/3] bg-surface lg:col-span-7 lg:aspect-auto lg:min-h-[480px]">
               {lead.image && <SmartImage src={lead.image} alt={`Vườn ${lead.crop.toLowerCase()} của ${lead.name}`} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />}
               <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3.5 py-1.5 text-caption font-semibold backdrop-blur">
@@ -61,7 +61,7 @@ export function RealGardens({ stories, zalo, no }: { stories: Stories; zalo: str
           {rest.length > 0 && (
             <ul className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {rest.map((x, i) => (
-                <Reveal as="li" key={`${x.name}-${i}`} delay={i * 70} className="flex flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-brand-900/10">
+                <Reveal as="li" key={`${x.name}-${i}`} delay={i * 70} className="flex flex-col overflow-hidden rounded-md bg-white ring-1 ring-brand-900/10">
                   <div className="relative aspect-[16/10] bg-surface">{x.image && <SmartImage src={x.image} alt={`Vườn ${x.crop.toLowerCase()} của ${x.name}`} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" />}</div>
                   <div className="flex flex-1 flex-col p-5">
                     <p className="text-body font-semibold leading-snug">“{x.quote}”</p>
@@ -77,7 +77,7 @@ export function RealGardens({ stories, zalo, no }: { stories: Stories; zalo: str
         </>
       ) : (
         /* chưa có câu chuyện thật → mời gửi, khung ảnh trống */
-        <Reveal className="mt-10 grid gap-6 overflow-hidden rounded-[28px] bg-white p-6 ring-1 ring-brand-900/10 sm:p-10 lg:grid-cols-12 lg:gap-10">
+        <Reveal className="mt-10 grid gap-6 overflow-hidden rounded-lg bg-white p-6 ring-1 ring-brand-900/10 sm:p-10 lg:grid-cols-12 lg:gap-10">
           <div aria-hidden className="relative grid min-h-[300px] grid-cols-2 gap-3 lg:col-span-6">
             {["Ảnh vườn trước", "Ảnh vườn sau", "Ảnh trái, sản phẩm", "Chủ vườn"].map((t, i) => (
               <div

@@ -123,7 +123,7 @@ export default async function ProductListing({ params, searchParams }: Props) {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-v-line bg-v-card px-8 py-16 text-center">
+            <div className="rounded-xl bg-v-raise px-8 py-16 text-center">
               <p className="v-display text-h3 text-v-fg">Chưa có sản phẩm phù hợp</p>
               <p className="mt-3 text-v-mute">Thử bỏ bớt bộ lọc, hoặc gọi {vertical.phone} để được báo giá theo quy cách riêng.</p>
               <Link href={base} className="mt-6 inline-flex h-11 items-center rounded-lg bg-v-accent px-5 text-body font-medium text-v-on-accent">Xoá bộ lọc</Link>

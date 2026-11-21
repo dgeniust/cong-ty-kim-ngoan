@@ -64,7 +64,7 @@ export default async function VerticalLayout({ children, params }: { children: R
       </main>
       <VFooter vertical={vertical} categories={getCategories(site)} />
       <VMobileBar vertical={vertical} />
-      <BackToTop className="border border-v-line bg-v-card text-v-fg shadow-[0_4px_12px_rgb(0_0_0/0.12)]" />
+      <BackToTop className="bg-v-card text-v-fg shadow-[0_6px_20px_rgb(0_0_0/0.16)]" />
     </div>
   );
 }

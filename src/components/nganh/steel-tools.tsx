@@ -23,7 +23,7 @@ export function CategoryExplorer({ groups }: { groups: ExplorerGroup[] }) {
   if (!g) return null;
 
   return (
-    <div className="grid overflow-hidden rounded-xl border border-v-line bg-v-card md:grid-cols-[260px_1fr]">
+    <div className="grid overflow-hidden rounded-xl bg-v-raise md:grid-cols-[260px_1fr]">
       <div role="tablist" aria-label="Nhóm vật tư" aria-orientation="vertical" className="flex gap-1 overflow-x-auto border-b border-v-line bg-v-raise p-2 [scrollbar-width:none] md:flex-col md:border-b-0 md:border-r [&::-webkit-scrollbar]:hidden">
         <p className="hidden px-3 pb-1 pt-2 text-micro font-medium text-v-mute md:block">Nhóm vật tư</p>
         {groups.map((x) => {
@@ -53,7 +53,7 @@ export function CategoryExplorer({ groups }: { groups: ExplorerGroup[] }) {
             <h3 className="text-h3 font-semibold text-v-fg">{g.name}</h3>
             <p className="mt-1.5 max-w-lg text-body text-v-mute">{g.description}</p>
           </div>
-          <Link href={g.href} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-v-line px-3.5 text-small font-medium text-v-fg transition-colors hover:bg-v-raise">
+          <Link href={g.href} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-v-raise px-3.5 text-small font-medium text-v-fg transition-colors hover:bg-v-tint">
             Xem nhóm này <ArrowUpRight className="size-4" aria-hidden />
           </Link>
         </div>

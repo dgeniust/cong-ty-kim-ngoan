@@ -96,7 +96,7 @@ export function QuickConsult({ phone }: { phone: string }) {
         </div>
 
         {status === "sent" ? (
-          <div role="status" className="flex items-start gap-4 rounded-[2rem] bg-white p-8 shadow-soft">
+          <div role="status" className="flex items-start gap-4 rounded-lg bg-white p-8 shadow-soft">
             <CheckCircle2 className="size-8 shrink-0 text-brand-600" aria-hidden />
             <div>
               <p className="text-h4 font-medium text-brand-900">Đã nhận yêu cầu của {values.name}</p>

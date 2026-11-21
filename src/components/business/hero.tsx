@@ -117,7 +117,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
           {slides.map((s, i) => {
             const on = i === index;
             return (
-              <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} aria-label={`0${i + 1} ${s.label}`} className="group flex min-h-11 w-16 flex-col justify-center gap-2 pr-3 text-left sm:w-36">
+              <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} className="group flex min-h-11 w-16 flex-col justify-center gap-2 pr-3 text-left sm:w-36">
                 <span className="relative block h-[2px] overflow-hidden bg-hub-ink/15">
                   {on && (
                     <span
@@ -130,7 +130,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
                 </span>
                 <span className={cn("text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-hub-ink" : "text-hub-ink-soft group-hover:text-hub-ink")}>
                   0{i + 1}
-                  <span className="ml-2 hidden font-medium tracking-normal sm:inline">{s.label}</span>
+                  <span className="sr-only font-medium tracking-normal sm:not-sr-only sm:ml-2"> {s.label}</span>
                 </span>
               </button>
             );

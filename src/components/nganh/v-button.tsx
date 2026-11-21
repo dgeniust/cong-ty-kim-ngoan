@@ -5,7 +5,7 @@ import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";
 
 /**
- * Nút chuyên trang (phong cách Notion): bo 8px, chữ 500, chuyển màu 200ms.
+ * Nút chuyên trang (phong cách Business): bo 6px, chữ 500, chuyển màu 200ms.
  * accent = hành động chính duy nhất; tint = hành động phụ; quiet = nút chữ; onInvert = trên mảng màu.
  */
 const vButton = cva(
@@ -15,7 +15,7 @@ const vButton = cva(
       variant: {
         accent: "bg-v-accent text-v-on-accent hover:bg-v-accent-hover",
         tint: "bg-v-tint text-v-on-tint hover:brightness-110",
-        quiet: "border border-v-line bg-v-card text-v-fg hover:bg-v-raise",
+        quiet: "bg-v-raise text-v-fg hover:bg-v-tint hover:text-v-on-tint",
         onInvert: "bg-v-on-invert text-v-invert hover:opacity-90",
         /** giữ tương thích tên cũ */
         solid: "bg-v-tint text-v-on-tint hover:brightness-110",
