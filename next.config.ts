@@ -19,6 +19,15 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
+  async rewrites() {
+    if (process.env.VERCEL_ENV === "production") {
+      return [
+        { source: "/satthep", destination: "/404" },
+        { source: "/lopxe", destination: "/404" },
+      ];
+    }
+    return [];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

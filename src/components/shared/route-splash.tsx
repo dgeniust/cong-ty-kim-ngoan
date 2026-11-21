@@ -14,7 +14,7 @@ export type SplashSection = "hub" | "phanbon" | "lopxe" | "satthep";
 export type SplashBrand = { prefix: string; name: string; sections: Record<SplashSection, { title: string; tagline: string }> };
 
 const MIN_MS = 1050; // đủ để chạy trọn chuyển động logo (~0.9s)
-const MAX_MS = 6000;
+const MAX_MS = 2500; // tối đa: trang đích lỗi/404/không đổi đường dẫn cũng không kẹt
 const OUT_MS = 260;
 
 function sectionOf(pathname: string): SplashSection | "admin" | null {
@@ -62,6 +62,7 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
     [hide],
   );
 
+
   // Bắt click vào link nội bộ dẫn sang khu khác (pha capture: trước khi Next xử lý)
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -80,10 +81,20 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
       if (to && to !== "admin" && current.current !== "admin" && to !== current.current) show(to);
     };
     document.addEventListener("click", onClick, true);
+    // Quay lại từ bộ nhớ đệm (bfcache) hoặc từ trang 404 điều hướng cứng: trang cũ còn nguyên splash → tắt ngay
+    const onShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      clear();
+      setTarget(null);
+      setLeaving(false);
+    };
+    document.addEventListener("click", onClick, true);
     window.addEventListener("popstate", onPop);
+    window.addEventListener("pageshow", onShow);
     return () => {
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("popstate", onPop);
+      window.removeEventListener("pageshow", onShow);
     };
   }, [show]);
 
@@ -95,6 +106,21 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
     const elapsed = performance.now() - started.current;
     hide(reduce ? 0 : Math.max(0, MIN_MS - elapsed));
   }, [pathname, target, hide]);
+
+  // Dự phòng: usePathname() có thể lệch với địa chỉ thật (VD: trang 404 từ rewrite) → cũng kiểm tra location.pathname
+  useEffect(() => {
+    if (!target) return;
+    const iv = window.setInterval(() => {
+      const now = sectionOf(location.pathname);
+      if (now === target) {
+        current.current = now;
+        window.clearInterval(iv);
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        hide(reduce ? 0 : Math.max(0, MIN_MS - (performance.now() - started.current)));
+      }
+    }, 150);
+    return () => window.clearInterval(iv);
+  }, [target, hide]);
 
   useEffect(() => clear, []);
 
