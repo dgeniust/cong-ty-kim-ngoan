@@ -6,6 +6,7 @@ import { ArrowRight, Camera, Check, Cherry, Leaf as LeafIcon, Phone, Shovel, Spr
 import { SYMPTOMS, ZONES, type SymptomIcon, type ZoneId } from "@/lib/content/plant-doctor";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 /* ---------------------------------------------------------------- hình minh hoạ từng triệu chứng */
 const LEAF = "M32 5 C 53 15 57 41 32 59 C 7 41 11 15 32 5 Z";
@@ -29,10 +30,45 @@ const Fruit = ({ children, fill = "#6aa84f" }: { children?: React.ReactNode; fil
   </g>
 );
 
+const IMAGE_SYMPTOMS: Partial<Record<SymptomIcon, string>> = {
+  yellow: "/yellow.jpg",
+  scorch: "/scorch.jpg",
+  interveinal: "/interveinal.jpg",
+  "young-interveinal": "/young-interveinal.jpg",
+  purple: "/purple.jpg",
+  small: "/small.jpg",
+  deformed: "/deformed.jpg",
+  holes: "/holes.jpg",
+  drop: "/drop.jpg",
+  crack: "/crack.png",
+  rot: "/rot.jpg",
+  "root-rot": "/root-rot.png",
+  knots: "/knots.jpg",
+  "hard-soil": "/hard-soil.jpg",
+
+  // ví dụ sau này thêm: scorch: "/scorch.png",
+};
+
 export function SymptomArt({ kind, className }: { kind: SymptomIcon; className?: string }) {
+  const imageSrc = IMAGE_SYMPTOMS[kind];
+
+  // Nếu kind có trong danh sách ảnh thật -> Render <Image> độc lập (không bọc <svg>)
+  if (imageSrc) {
+    return (
+      <Image
+        src={imageSrc}
+        width={64}
+        height={64}
+        alt=""
+        className={className}
+        aria-hidden
+      />
+    );
+  }
+
+  // Các kind còn lại vẫn render bằng SVG như cũ
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
-      {kind === "yellow" && <Leaf fill="#e3cf5a" vein="#c2ab3e" />}
       {kind === "scorch" && (
         <Leaf>
           <path d={LEAF} fill="none" stroke="#8a5a2b" strokeWidth="6" strokeLinejoin="round" />

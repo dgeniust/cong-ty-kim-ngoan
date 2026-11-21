@@ -204,7 +204,7 @@ export default async function HubHome() {
         <div className="mt-8 grid gap-6 border-t border-hub-line pt-6 md:mt-12 lg:grid-cols-12 lg:items-end lg:gap-8 lg:pt-8">
           <h1 id="hero-title" className="text-display font-semibold text-hub-ink lg:col-span-8">
             <span className="sr-only">{COMPANY.legalName}: </span>
-            Phân bón cho rẫy, lốp cho xe, thép cho công trình.
+            Ươm mầm mùa vụ, vững vàng lăn bánh, kiên cố công trình
           </h1>
           <div className="lg:col-span-4">
             <p className="text-lead leading-relaxed text-hub-ink-soft">
@@ -271,7 +271,7 @@ export default async function HubHome() {
       </section>
 
       {/* 6. Vùng giao hàng + quy trình */}
-      <section id="giao-hang" aria-labelledby="giao-hang-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28")}>
+      {/* <section id="giao-hang" aria-labelledby="giao-hang-title" className={cn(WRAP, "scroll-mt-24 pb-20 md:pb-28")}>
         <SectionHead
           id="giao-hang-title"
           no={no()}
@@ -294,7 +294,7 @@ export default async function HubHome() {
             ))}
           </ol>
         </div>
-      </section>
+      </section> */}
 
       {/* 7. Về Kim Ngoan: ảnh lớn có chú thích – câu chuyện, thông tin, cam kết */}
       <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 border-y border-hub-line bg-hub-paper py-20 md:py-28">
@@ -396,7 +396,7 @@ export default async function HubHome() {
             </a>
           }
         />
-        <Reveal className={cn(CARD, "px-6 sm:px-8 lg:ml-auto lg:w-[calc(100%*8/12)]")}>
+        <Reveal className={cn(CARD, "px-6 sm:px-8 mx-auto lg:w-[calc(100%*8/12)]")}>
           <Accordion type="single" collapsible defaultValue="faq-0">
             {faqs.map((f, i) => (
               <AccordionItem key={f.q} value={`faq-${i}`} className="last:border-b-0">
