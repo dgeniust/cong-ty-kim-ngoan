@@ -52,7 +52,20 @@ Nguyên tắc kiểm tra nhanh: *nếu bỏ đường viền mà khối vẫn đ
 | Hành động | cam `#e07a3f` | đồng `#a84b24` |
 | Màu nhấn tiêu đề | cam | xám `#5b5b63` |
 
-Mỗi trang chỉ có **một** màu hành động. Màu ngành dùng cho tag nhỏ: phân bón `#3b7a48`, lốp xe `#3f4148`, sắt thép `#a84b24`.
+Mỗi trang chỉ có **một** màu hành động (nút đặc màu đồng). Màu ngành dùng cho chấm/tag: phân bón `#3a9a4f`, lốp xe `#e07a3f`, sắt thép `#3d7fc2`.
+
+### 2.4 Bảng màu “mùa vụ” – landing tổng (sặc sỡ vừa đủ)
+| Tông | Đặc (chấm, vạch) | Chữ (≥4.5:1) | Nền nhạt | Gắn với |
+|---|---|---|---|---|
+| `leaf` | `#3a9a4f` | `#24703a` | `#e7f3e4` | phân bón · khối Giới thiệu |
+| `sun` | `#f0b429` | `#8a5a00` | `#fdf3d8` | khối Sản phẩm |
+| `sky` | `#3d7fc2` | `#285f99` | `#e5eef8` | sắt thép · khối Tin tức |
+| `ember` | `#e07a3f` | `#9a4a14` | `#fbeadf` | lốp xe · khối Liên hệ |
+
+Dùng qua `TONE` / `SECTOR_TONE` trong `components/business/ui.tsx`. Quy tắc để không “quá”:
+- Màu chỉ xuất hiện ở **mảng nhỏ**: vạch eyebrow, ô icon nền nhạt, viên tag ngành, gạch chân tab, vạch tiến trình hero, mảng màu lệch sau ảnh, thẻ số điện thoại từng ngành. Nền khối, chữ thân bài và tiêu đề vẫn trung tính.
+- Mỗi khối một tông chủ đạo (eyebrow); trong khối Sản phẩm, tab nào thì cả bảng (tag, nút, hover, mảng sau ảnh) theo màu ngành đó.
+- Chữ màu luôn dùng bản “chữ”, không dùng bản “đặc” cho chữ.
 
 ---
 

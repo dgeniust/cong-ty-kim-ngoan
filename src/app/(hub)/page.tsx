@@ -4,7 +4,7 @@ import { GardenBackdrop } from "@/components/business/garden-backdrop";
 import { BizHero } from "@/components/business/hero";
 import { NewsSection } from "@/components/business/news-section";
 import { ProductsSection } from "@/components/business/products-section";
-import { ArrowLink, Eyebrow, SlideArrow, bizButton } from "@/components/business/ui";
+import { ArrowLink, SlideArrow, bizButton } from "@/components/business/ui";
 import { HUB_HERO } from "@/lib/content/hub-home";
 import { getNews } from "@/lib/data/news";
 import { buildHeroSlides, buildSpotlights, buildStats, heroLead, pickHomeNews } from "@/lib/hub/home";
@@ -24,7 +24,14 @@ export default async function HubHome() {
   return (
     <>
       <BizHero slides={buildHeroSlides(VERTICALS)} stats={buildStats(COMPANY, productCount)}>
-        <Eyebrow className="text-hub-ink-soft">{HUB_HERO.eyebrow}</Eyebrow>
+        <p className="flex items-center gap-3 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.16em] text-hub-ink-soft">
+          <span aria-hidden className="flex gap-1">
+            <span className="size-2 rounded-full bg-c-leaf" />
+            <span className="size-2 rounded-full bg-c-ember" />
+            <span className="size-2 rounded-full bg-c-sky" />
+          </span>
+          {HUB_HERO.eyebrow}
+        </p>
         <h1 id="hero-title" className="mt-6 text-[clamp(2.6rem,5.2vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.03em] text-hub-ink">
           <span className="block">{firstLine}</span> <span className="block text-biz-moss">{secondLine}</span>
         </h1>

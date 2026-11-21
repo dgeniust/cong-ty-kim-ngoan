@@ -2,10 +2,18 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { Pause, Play } from "lucide-react";
+import { CalendarCheck, LayoutGrid, Package, Pause, Play, Truck, type LucideIcon } from "lucide-react";
 import type { HeroSlide, Stat } from "@/lib/hub/home";
 import { cn } from "@/lib/utils";
-import { BIZ_WRAP } from "./ui";
+import { BIZ_WRAP, SECTOR_TONE, TONE, type Tone } from "./ui";
+
+/** icon + tông màu cho 4 chỉ số neo đáy (theo thứ tự buildStats) */
+const STAT_DECOR: { icon: LucideIcon; tone: Tone }[] = [
+  { icon: CalendarCheck, tone: "leaf" },
+  { icon: Package, tone: "sun" },
+  { icon: LayoutGrid, tone: "sky" },
+  { icon: Truck, tone: "ember" },
+];
 
 const AUTOPLAY = 6000;
 
@@ -118,18 +126,18 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
             const on = i === index;
             return (
               <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} className="group flex min-h-11 w-16 flex-col justify-center gap-2 pr-3 text-left sm:w-36">
-                <span className="relative block h-[2px] overflow-hidden bg-hub-ink/15">
+                <span className="relative block h-[3px] overflow-hidden rounded-full bg-hub-ink/15">
                   {on && (
                     <span
                       key={lap}
                       aria-hidden
-                      className={cn("absolute inset-0 origin-left bg-hub-blue", autoplay ? "animate-[biz-progress_linear_forwards]" : "")}
+                      className={cn("absolute inset-0 origin-left", TONE[SECTOR_TONE[s.id]].solid, autoplay ? "animate-[biz-progress_linear_forwards]" : "")}
                       style={{ animationDuration: `${AUTOPLAY}ms`, animationPlayState: running ? "running" : "paused" }}
                     />
                   )}
                 </span>
                 <span className={cn("text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-hub-ink" : "text-hub-ink-soft group-hover:text-hub-ink")}>
-                  0{i + 1}
+                  <span className={cn(on && TONE[SECTOR_TONE[s.id]].ink)}>0{i + 1}</span>
                   <span className="sr-only font-medium tracking-normal sm:not-sr-only sm:ml-2"> {s.label}</span>
                 </span>
               </button>
@@ -146,13 +154,23 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
       {/* thanh chỉ số neo đáy */}
       <div className="border-t border-hub-ink/10 bg-white md:bg-white/80 md:backdrop-blur-[3px]">
         <dl className={cn(BIZ_WRAP, "grid grid-cols-2 lg:grid-cols-4")}>
-          {stats.map((s, i) => (
-            <div key={s.label} className={cn("py-5 lg:py-6", i % 2 === 1 && "pl-5 lg:pl-0", i > 0 && "lg:border-l lg:border-hub-ink/10 lg:pl-8", i > 1 && "border-t border-hub-ink/10 lg:border-t-0")}>
-              <dt className="sr-only">{s.label}</dt>
-              <dd className="text-[clamp(1.5rem,2.4vw,2rem)] font-bold leading-none tracking-[-0.02em] tabular-nums text-hub-ink">{s.value}</dd>
-              <dd className="mt-1.5 text-small text-hub-ink-soft">{s.label}</dd>
-            </div>
-          ))}
+          {stats.map((s, i) => {
+            const { icon: Icon, tone } = STAT_DECOR[i % STAT_DECOR.length];
+            return (
+              <div key={s.label} className={cn("py-5 lg:py-6", i % 2 === 1 && "pl-5 lg:pl-0", i > 0 && "lg:border-l lg:border-hub-ink/10 lg:pl-8", i > 1 && "border-t border-hub-ink/10 lg:border-t-0")}>
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="flex items-center gap-3.5 lg:gap-4">
+                  <span aria-hidden className={cn("hidden size-11 shrink-0 place-items-center rounded-md sm:grid", TONE[tone].tint)}>
+                    <Icon className={cn("size-5", TONE[tone].ink)} strokeWidth={1.9} />
+                  </span>
+                  <span>
+                    <span className="block text-[clamp(1.5rem,2.4vw,2rem)] font-bold leading-none tracking-[-0.02em] tabular-nums text-hub-ink">{s.value}</span>
+                    <span aria-hidden className="mt-1.5 block text-small text-hub-ink-soft">{s.label}</span>
+                  </span>
+                </dd>
+              </div>
+            );
+          })}
         </dl>
       </div>
     </section>

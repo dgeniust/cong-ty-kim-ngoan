@@ -8,10 +8,10 @@ import { formatDate } from "@/lib/format";
 import type { pickHomeNews } from "@/lib/hub/home";
 import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
-import { SECTOR_DOT } from "@/lib/verticals";
-import { ArrowLink, BIZ_WRAP, Eyebrow, SectionTitle, SectorTag } from "./ui";
+import { ArrowLink, BIZ_WRAP, Eyebrow, SECTOR_TONE, SectionTitle, SectorTag } from "./ui";
 
 type Verticals = Settings["VERTICALS"];
+const TONE_BAR = { leaf: "after:bg-c-leaf", sun: "after:bg-c-sun", sky: "after:bg-c-sky", ember: "after:bg-c-ember" } as const;
 
 /** Tin tức kiểu báo chí: nền xám nhạt, 1 bài tiêu điểm (60%) + 3 bài xếp dọc ngăn bằng kẻ mảnh (40%). */
 export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickHomeNews>; verticals: Verticals }) {
@@ -22,7 +22,7 @@ export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickH
       <div className={BIZ_WRAP}>
         <Reveal className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
-            <Eyebrow>{HUB_NEWS.eyebrow}</Eyebrow>
+            <Eyebrow tone="sky">{HUB_NEWS.eyebrow}</Eyebrow>
             <SectionTitle id="tin-tuc-title">{HUB_NEWS.title}</SectionTitle>
           </div>
           <ArrowLink href="/tin-tuc">{HUB_NEWS.allLabel}</ArrowLink>
@@ -31,11 +31,11 @@ export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickH
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-14">
           <Reveal>
             <article className="group relative">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[4px] bg-hub-stone">
+              <div className={cn("relative aspect-[16/10] overflow-hidden rounded-[4px] bg-hub-stone after:absolute after:inset-x-0 after:bottom-0 after:h-1", TONE_BAR[SECTOR_TONE[feature.site]])}>
                 {feature.cover && <Image src={feature.cover} alt={feature.title} fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105" />}
               </div>
               <p className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <SectorTag dot={SECTOR_DOT[feature.site]}>{HUB_NEWS.featureTag}</SectorTag>
+                <SectorTag tone={SECTOR_TONE[feature.site]}>{HUB_NEWS.featureTag}</SectorTag>
                 <time dateTime={feature.date} className="text-small text-hub-ink-soft">
                   {formatDate(feature.date)}
                 </time>
@@ -76,7 +76,7 @@ function CompactNews({ item, label }: { item: NewsItem; label: string }) {
       </div>
       <div className="min-w-0">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <SectorTag dot={SECTOR_DOT[item.site]}>{label}</SectorTag>
+          <SectorTag tone={SECTOR_TONE[item.site]}>{label}</SectorTag>
           <time dateTime={item.date} className="text-caption text-hub-ink-soft">
             {formatDate(item.date)}
           </time>

@@ -111,6 +111,20 @@
   --color-biz-graphite: #26272b; /* lốp xe */
   --color-biz-copper: #a84b24; /* sắt thép & nút hành động */
   --color-biz-mist: #f4f5f7; /* nền khối tin tức */
+  /* Bảng màu “mùa vụ” cho landing tổng – sặc sỡ vừa đủ: mỗi màu có bản đặc (chấm, vạch),
+   * bản chữ (≥4.5:1 trên trắng và trên nền nhạt của chính nó) và bản nền nhạt. */
+  --color-c-leaf: #3a9a4f;
+  --color-c-leaf-ink: #24703a;
+  --color-c-leaf-tint: #e7f3e4;
+  --color-c-sun: #f0b429;
+  --color-c-sun-ink: #8a5a00;
+  --color-c-sun-tint: #fdf3d8;
+  --color-c-sky: #3d7fc2;
+  --color-c-sky-ink: #285f99;
+  --color-c-sky-tint: #e5eef8;
+  --color-c-ember: #e07a3f;
+  --color-c-ember-ink: #9a4a14;
+  --color-c-ember-tint: #fbeadf;
   --color-hub-marigold: #ffb110;
   --color-hub-marigold-soft: #fff4d9;
   --color-hub-coral: #f64932;
@@ -139,10 +153,10 @@
     to { opacity: 1; transform: none; }
   }
   /* Màu đại diện ngành trên trang tổng – khớp theme chuyên trang:
-   * phân bón = xanh lá; lốp xe = đen + cam; sắt thép = trắng + xám + chữ đen. */
-  --color-sector-phanbon: #3b7a48;
-  --color-sector-lopxe: #3f4148;
-  --color-sector-satthep: #a84b24;
+   * phân bón = xanh lá; lốp xe = cam (màu nhấn chuyên trang lốp); sắt thép = xanh thép. */
+  --color-sector-phanbon: #3a9a4f;
+  --color-sector-lopxe: #e07a3f;
+  --color-sector-satthep: #3d7fc2;
   --color-lopxe-ink: #17181b;
   --color-lopxe-orange: #e07a3f;
   --color-lopxe-soft: #f6ece5;

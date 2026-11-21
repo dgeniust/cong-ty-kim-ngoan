@@ -31,9 +31,25 @@ export function ArrowLink({ href, children, className }: { href: string; childre
   );
 }
 
-/** Nhãn nhỏ in hoa đầu khối. */
-export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
-  return <p className={cn("text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.16em] text-hub-blue", className)}>{children}</p>;
+/** Tông màu “mùa vụ”: đặc (chấm/vạch), chữ, nền nhạt, nút. */
+export type Tone = "leaf" | "sun" | "sky" | "ember";
+export const TONE: Record<Tone, { solid: string; ink: string; tint: string; btn: string; border: string }> = {
+  leaf: { solid: "bg-c-leaf", ink: "text-c-leaf-ink", tint: "bg-c-leaf-tint", btn: "bg-c-leaf-ink hover:bg-[#1c5a2e]", border: "border-c-leaf" },
+  sun: { solid: "bg-c-sun", ink: "text-c-sun-ink", tint: "bg-c-sun-tint", btn: "bg-c-sun-ink hover:bg-[#704900]", border: "border-c-sun" },
+  sky: { solid: "bg-c-sky", ink: "text-c-sky-ink", tint: "bg-c-sky-tint", btn: "bg-c-sky-ink hover:bg-[#1f4d7d]", border: "border-c-sky" },
+  ember: { solid: "bg-c-ember", ink: "text-c-ember-ink", tint: "bg-c-ember-tint", btn: "bg-c-ember-ink hover:bg-[#7d3b0f]", border: "border-c-ember" },
+};
+/** Màu từng ngành trên landing tổng. */
+export const SECTOR_TONE: Record<"phanbon" | "lopxe" | "satthep", Tone> = { phanbon: "leaf", lopxe: "ember", satthep: "sky" };
+
+/** Nhãn nhỏ in hoa đầu khối, có vạch màu phía trước (mỗi khối một tông). */
+export function Eyebrow({ children, className, tone }: { children: ReactNode; className?: string; tone?: Tone }) {
+  return (
+    <p className={cn("flex items-center gap-2.5 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.16em]", tone ? TONE[tone].ink : "text-hub-blue", className)}>
+      {tone && <span aria-hidden className={cn("h-[3px] w-6 rounded-full", TONE[tone].solid)} />}
+      {children}
+    </p>
+  );
 }
 
 /** Tiêu đề khối (h2) – đậm, tracking âm nhẹ. */
@@ -45,11 +61,11 @@ export function SectionTitle({ id, children, className }: { id: string; children
   );
 }
 
-/** Thẻ ngành nhỏ (chấm màu + tên). */
-export function SectorTag({ dot, children, className }: { dot: string; children: ReactNode; className?: string }) {
+/** Thẻ ngành nhỏ: viên nền nhạt + chấm + chữ cùng tông. */
+export function SectorTag({ tone, children, className }: { tone: Tone; children: ReactNode; className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-hub-ink-soft", className)}>
-      <span aria-hidden className={cn("size-1.5 rounded-full", dot)} />
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em]", TONE[tone].tint, TONE[tone].ink, className)}>
+      <span aria-hidden className={cn("size-1.5 rounded-full", TONE[tone].solid)} />
       {children}
     </span>
   );

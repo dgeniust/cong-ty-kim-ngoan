@@ -10,7 +10,7 @@ export function ProductsSection({ spotlights }: { spotlights: Spotlight[] }) {
     <section data-garden="2" id="san-pham" aria-labelledby="san-pham-title" className="relative isolate scroll-mt-20 py-24 md:py-32">
       <div className={BIZ_WRAP}>
         <Reveal>
-          <Eyebrow>{HUB_PRODUCTS.eyebrow}</Eyebrow>
+          <Eyebrow tone="sun">{HUB_PRODUCTS.eyebrow}</Eyebrow>
           <SectionTitle id="san-pham-title">{HUB_PRODUCTS.title}</SectionTitle>
         </Reveal>
         <Reveal className="mt-10">
