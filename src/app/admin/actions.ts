@@ -17,7 +17,7 @@ import { catalogContentSchema } from "@/lib/catalog-content/schema";
 import { CATALOG_CONTENT_DEFAULTS, resetCatalogContent, saveCatalogContent } from "@/lib/catalog-content/server";
 import type { Product } from "@/lib/mock/types";
 
-export type ActionResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN" };
+type ActionResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN" };
 
 export async function loginAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const email = String(formData.get("email") ?? "");
@@ -81,7 +81,7 @@ export async function resetContentAction(): Promise<ActionResult> {
  * ===================================================================== */
 
 export type FieldErrors = Record<string, string>;
-export type FormResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN"; fieldErrors?: FieldErrors };
+type FormResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN"; fieldErrors?: FieldErrors };
 
 const firstErrors = (issues: { path: PropertyKey[]; message: string }[]): FieldErrors => {
   const out: FieldErrors = {};

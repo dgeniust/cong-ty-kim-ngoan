@@ -4,7 +4,7 @@ import { useId } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 
-export const SORT_OPTIONS = [
+const SORT_OPTIONS = [
   { value: "noi-bat", label: "Nổi bật" },
   { value: "moi-nhat", label: "Mới nhất" },
   { value: "ten-az", label: "Tên A → Z" },

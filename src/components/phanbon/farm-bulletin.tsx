@@ -13,8 +13,8 @@ import { npkOf, type LabelProduct } from "./npk-label";
 
 /* kiểu dữ liệu dự báo (trùng lib/weather.ts – file đó chỉ chạy phía server) */
 type DayForecast = { date: string; code: number; tmax: number; tmin: number; rain: number; prob: number; wind: number };
-export type BulletinCrop = { key: string; name: string };
-export type BulletinArticle = { href: string; title: string; tags: string[] };
+type BulletinCrop = { key: string; name: string };
+type BulletinArticle = { href: string; title: string; tags: string[] };
 
 /* ---------------------------------------------------------------- biểu tượng thời tiết (vẽ tay, cùng nét) */
 type Sky = "nang" | "it-may" | "may" | "mua" | "dong" | "suong";

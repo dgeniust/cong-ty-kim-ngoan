@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 /** Google hiển thị ~60 ký tự title, ~155 ký tự mô tả. */
-export const TITLE_MAX = 60;
-export const DESCRIPTION_MAX = 155;
+const TITLE_MAX = 60;
+const DESCRIPTION_MAX = 155;
 
 /**
  * Title cho trang con: giữ hậu tố thương hiệu của layout nếu tổng ≤ 60 ký tự,

@@ -10,7 +10,6 @@ import * as satthep from "./satthep";
  */
 const SOURCES = { lopxe, satthep } as const;
 
-export const getCatalog = (site: CatalogSite) => ({ categories: SOURCES[site].categories, content: SOURCES[site].content });
 export const getCategories = (site: CatalogSite) => SOURCES[site].categories;
 export const getCategory = (site: CatalogSite, slug: string) => SOURCES[site].categories.find((c) => c.slug === slug);
 

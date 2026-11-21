@@ -18,7 +18,7 @@ const authSchema = z.object({
   ADMIN_PASSWORD: z.string().min(IS_PROD ? 8 : 1, "ADMIN_PASSWORD tối thiểu 8 ký tự"),
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET tối thiểu 32 ký tự (tạo bằng: openssl rand -base64 48)"),
 });
-export type AuthEnv = z.infer<typeof authSchema>;
+type AuthEnv = z.infer<typeof authSchema>;
 
 const pick = (key: keyof typeof DEV_DEFAULTS) => process.env[key] || (IS_PROD ? undefined : DEV_DEFAULTS[key]);
 

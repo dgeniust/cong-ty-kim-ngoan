@@ -29,7 +29,7 @@ const Fruit = ({ children, fill = "#6aa84f" }: { children?: React.ReactNode; fil
   </g>
 );
 
-export function SymptomArt({ kind, className }: { kind: SymptomIcon; className?: string }) {
+function SymptomArt({ kind, className }: { kind: SymptomIcon; className?: string }) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
       {kind === "yellow" && <Leaf fill="#e3cf5a" vein="#c2ab3e" />}

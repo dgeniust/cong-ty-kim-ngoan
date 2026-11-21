@@ -8,13 +8,8 @@ export function VContainer({ className, ...props }: React.ComponentProps<"div">)
 }
 
 /** Viên nhãn nhỏ đầu khối (kiểu tag Notion). */
-export function VTag({ children, className }: { children: React.ReactNode; className?: string }) {
+function VTag({ children, className }: { children: React.ReactNode; className?: string }) {
   return <p className={cn("inline-flex items-center gap-1.5 rounded-full bg-v-chip px-3 py-1 text-caption font-medium text-v-fg", className)}>{children}</p>;
-}
-
-/** Từ được bọc trong viên màu – dấu hiệu chữ ký của phong cách Notion. */
-export function VPill({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <span className={cn("inline-block rounded-full bg-v-pill px-[0.35em] leading-[1.15] text-v-on-pill", className)}>{children}</span>;
 }
 
 /** Tiêu đề khối: viên nhãn + tiêu đề lớn + link "xem tất cả". */

@@ -140,7 +140,8 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
             <Image
               key={c.key}
               src={c.image}
-              alt={c.key === key ? `Vườn ${label(c.name).toLowerCase()}` : ""}
+              alt={`Vườn ${label(c.name).toLowerCase()}`}
+              aria-hidden={c.key !== key}
               fill
               loading={i === 0 ? "eager" : undefined}
               sizes="(min-width: 1024px) 50vw, 100vw"

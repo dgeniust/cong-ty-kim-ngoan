@@ -12,7 +12,7 @@ import { getGuide, stepsFor, type Guide, type GuideSite, type TourStep } from ".
 
 type GuideCtx = { openCenter: (id?: string) => void; start: (id: string, site?: GuideSite) => void };
 const Ctx = createContext<GuideCtx | null>(null);
-export const useGuide = () => {
+const useGuide = () => {
   const c = useContext(Ctx);
   if (!c) throw new Error("useGuide phải nằm trong GuideProvider");
   return c;

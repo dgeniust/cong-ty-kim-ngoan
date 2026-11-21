@@ -124,14 +124,13 @@ export function HeroCarousel({ slides, eyebrow, title, slogan }: { slides: HeroS
         {slides.map((s, i) => {
           const on = i === index;
           return (
-            <div key={s.id} aria-hidden className={cn("absolute inset-0 transition-opacity duration-[1100ms] ease-soft", on ? "opacity-100" : "opacity-0")}>
+            <div key={s.id} aria-hidden={!on} className={cn("absolute inset-0 transition-opacity duration-[1100ms] ease-soft", on ? "opacity-100" : "opacity-0")}>
               <Image
                 src={s.image}
-                alt=""
+                alt={s.alt}
                 fill
                 sizes="100vw"
-                loading={i === 0 ? "eager" : "lazy"}
-                fetchPriority={i === 0 ? "high" : "auto"}
+                {...(i === 0 ? { preload: true } : { loading: "lazy" as const })}
                 className={cn("object-cover transition-transform ease-out motion-reduce:transition-none", on && autoplay ? "scale-100 duration-[7000ms]" : "scale-[1.05] duration-[1100ms]")}
                 style={{ objectPosition: s.focus ?? "70% 50%" }}
               />

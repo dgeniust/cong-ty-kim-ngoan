@@ -7,7 +7,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { telHref } from "@/lib/verticals";
 import { Wordmark } from "@/components/shared/wordmark";
 
-export type HeaderCompany = { prefix: string; name: string; slogan: string; legalName: string; hotline: string };
+type HeaderCompany = { prefix: string; name: string; slogan: string; legalName: string; hotline: string };
 import { cn } from "@/lib/utils";
 
 /** `spy` = id của khối trên trang chủ; mục menu sáng lên khi cuộn tới khối đó. */

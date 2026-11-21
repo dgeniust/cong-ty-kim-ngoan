@@ -11,7 +11,7 @@ export function ProductVisual({
   sizes = "(min-width: 1024px) 25vw, 50vw",
   className,
   artClassName,
-  priority,
+  preload,
 }: {
   name: string;
   art: ArtKind;
@@ -19,12 +19,13 @@ export function ProductVisual({
   sizes?: string;
   className?: string;
   artClassName?: string;
-  priority?: boolean;
+  /** ảnh lớn ở màn hình đầu (LCP) → tải trước */
+  preload?: boolean;
 }) {
   return (
     <div className={cn("v-art relative overflow-hidden", className)}>
       {image ? (
-        <SmartImage src={image} alt={name} fill sizes={sizes} priority={priority} className="object-cover" />
+        <SmartImage src={image} alt={name} fill sizes={sizes} preload={preload} className="object-cover" />
       ) : (
         <ProductArt kind={art} title={name} className={cn("absolute inset-0 m-auto size-[78%]", artClassName)} />
       )}

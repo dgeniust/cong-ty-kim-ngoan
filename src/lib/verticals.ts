@@ -82,10 +82,16 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
   },
 };
 
-export const VERTICAL_LIST: Vertical[] = [VERTICALS.phanbon, VERTICALS.lopxe, VERTICALS.satthep];
 /** Hai chuyên trang dùng chung bộ route động `app/(nganh)/[site]`. */
 export const CATALOG_SITES = ["lopxe", "satthep"] as const;
 export type CatalogSite = (typeof CATALOG_SITES)[number];
 export const isCatalogSite = (s: string): s is CatalogSite => (CATALOG_SITES as readonly string[]).includes(s);
+
+/** Chấm màu nhận diện từng ngành (class Tailwind dùng chung cho mọi nơi). */
+export const SECTOR_DOT: Record<VerticalId, string> = {
+  phanbon: "bg-sector-phanbon",
+  lopxe: "bg-sector-lopxe",
+  satthep: "bg-sector-satthep",
+};
 
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;

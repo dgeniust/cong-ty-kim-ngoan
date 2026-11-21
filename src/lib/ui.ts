@@ -12,7 +12,3 @@ export const BUTTON_SIZES = {
   lg: "h-13 px-7 text-body",
   icon: "size-11",
 } as const;
-/** Chip / nhãn bấm được (nhóm hàng, gợi ý tìm kiếm): 32px, chữ 13px. */
-export const TAG_SIZE = "h-8 px-3 text-caption";
-
-export type ButtonSize = keyof typeof BUTTON_SIZES;

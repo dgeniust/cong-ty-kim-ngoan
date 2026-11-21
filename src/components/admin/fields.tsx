@@ -52,15 +52,6 @@ export function Field({ label, value, onChange, multiline, hint, placeholder }: 
   );
 }
 
-export function SwitchField({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <label className="flex cursor-pointer items-center gap-3 text-sm font-medium">
-      <input type="checkbox" className="size-4 accent-brand-600" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      {label}
-    </label>
-  );
-}
-
 export function IconSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const id = useId();
   return (
@@ -115,7 +106,7 @@ export function ImageField({ label, value, onChange }: { label: string; value: s
       <Label htmlFor={id}>{label}</Label>
       <div className="flex gap-3">
         <div className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-surface">
-          {value && <SmartImage src={value} alt="" fill sizes="80px" className="object-cover" />}
+          {value && <SmartImage src={value} alt="Ảnh đã chọn" fill sizes="80px" className="object-cover" />}
         </div>
         <div className="flex-1 space-y-2">
           <Input id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder="/images/... hoặc https://..." />

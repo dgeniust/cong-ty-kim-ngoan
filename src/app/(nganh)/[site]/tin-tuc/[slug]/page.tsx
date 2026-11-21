@@ -110,7 +110,7 @@ export default async function NewsDetail({ params }: { params: Params }) {
         <div className="lg:col-start-2">
           <div className="v-art relative mb-10 aspect-[16/9] overflow-hidden">
             {item.cover ? (
-              <SmartImage src={item.cover} alt="" fill priority sizes="(min-width: 1024px) 720px, 100vw" className="object-cover" />
+              <SmartImage src={item.cover} alt={item.title} fill preload sizes="(min-width: 1024px) 720px, 100vw" className="object-cover" />
             ) : (
               item.art && <ProductArt kind={item.art} className="absolute inset-0 m-auto size-[70%]" />
             )}

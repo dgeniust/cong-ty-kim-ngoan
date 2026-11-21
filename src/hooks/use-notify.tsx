@@ -64,7 +64,7 @@ function createNotifier({ record: recordDefault = false }: { record?: boolean })
   };
 }
 
-export type Notifier = ReturnType<typeof createNotifier>;
+type Notifier = ReturnType<typeof createNotifier>;
 
 /** Dùng ngoài React (VD: trong hàm tiện ích). Không ghi lịch sử. */
 export const notify: Notifier = createNotifier({});

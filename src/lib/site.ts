@@ -10,7 +10,7 @@ export const absoluteUrl = (path = "/") =>
   /^https?:\/\//.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
 /** Chuyên trang phân bón sống dưới /phanbon (xem src/lib/verticals.ts). */
-export const PHANBON_BASE = "/phanbon";
+const PHANBON_BASE = "/phanbon";
 const PHANBON_ROUTES = /^\/(san-pham|danh-muc|dich-vu|tin-tuc|gioi-thieu|lien-he|tim-kiem)(\/|\?|#|$)/;
 
 /**

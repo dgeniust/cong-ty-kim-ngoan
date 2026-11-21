@@ -5,7 +5,7 @@ const text = z.string().trim();
 const phone = text.regex(/^[\d\s+().-]{6,20}$/, "Số điện thoại không hợp lệ");
 const url = text.refine((v) => v === "" || /^https?:\/\//.test(v), "Đường dẫn phải bắt đầu bằng http:// hoặc https://");
 
-export const companySchema = z.object({
+const companySchema = z.object({
   prefix: text,
   name: text.min(1, "Bắt buộc"),
   legalName: text.min(1, "Bắt buộc"),
@@ -23,7 +23,7 @@ export const companySchema = z.object({
 });
 
 /** Phần chỉnh sửa được của mỗi chuyên trang (đường dẫn, id, màu là cố định trong code). */
-export const verticalEditableSchema = z.object({
+const verticalEditableSchema = z.object({
   name: text.min(1, "Bắt buộc"),
   short: text.min(1, "Bắt buộc"),
   tagline: text,

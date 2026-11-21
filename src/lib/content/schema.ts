@@ -3,7 +3,7 @@ import { z } from "zod";
 const text = z.string().trim();
 const link = z.object({ label: text.min(1), href: text.min(1) });
 
-export const heroSlideSchema = z.object({
+const heroSlideSchema = z.object({
   eyebrow: text,
   titleLine1: text,
   titleLine2: text,
@@ -86,4 +86,3 @@ export const siteContentSchema = z.object({
 });
 
 export type SiteContent = z.infer<typeof siteContentSchema>;
-export type HeroSlide = z.infer<typeof heroSlideSchema>;

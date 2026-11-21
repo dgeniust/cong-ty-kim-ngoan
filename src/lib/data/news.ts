@@ -73,7 +73,7 @@ const fromFertilizer = (): Omit<NewsItem, "href">[] =>
     author: a.author, readingMinutes: a.readingMinutes, tags: a.tags, content: a.content,
   }));
 
-export type NewsQuery = { site?: VerticalId; limit?: number };
+type NewsQuery = { site?: VerticalId; limit?: number };
 
 /**
  * Nguồn tin tức duy nhất của toàn hệ thống.

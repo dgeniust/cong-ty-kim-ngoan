@@ -9,8 +9,8 @@ import "server-only";
  */
 export const WEATHER_PLACE = { name: "Chơn Thành", lat: 11.43, lon: 106.62 }; // toạ độ gần đúng trung tâm Chơn Thành
 
-export type DayForecast = { date: string; code: number; tmax: number; tmin: number; rain: number; prob: number; wind: number };
-export type Forecast = { days: DayForecast[]; fetchedAt: string };
+type DayForecast = { date: string; code: number; tmax: number; tmin: number; rain: number; prob: number; wind: number };
+type Forecast = { days: DayForecast[]; fetchedAt: string };
 
 const URL =
   `https://api.open-meteo.com/v1/forecast?latitude=${WEATHER_PLACE.lat}&longitude=${WEATHER_PLACE.lon}` +

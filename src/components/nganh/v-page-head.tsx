@@ -4,7 +4,7 @@ import { absoluteUrl } from "@/lib/site";
 import type { Vertical } from "@/lib/verticals";
 import { VContainer } from "./v-section";
 
-export type VCrumb = { label: string; href?: string };
+type VCrumb = { label: string; href?: string };
 
 /** Đầu trang con: breadcrumb (kèm schema.org BreadcrumbList) + H1 lớn. */
 export function VPageHead({ vertical, crumbs, title, lead, children }: { vertical: Vertical; crumbs: VCrumb[]; title: string; lead?: string; children?: React.ReactNode }) {

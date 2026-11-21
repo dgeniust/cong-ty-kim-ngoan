@@ -21,9 +21,6 @@ const NG =
   "M12,100 V44 Q12,0 52,0 Q92,0 92,44 V80 Q92,102 106,102 Q120,102 120,82 V50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 A50,50 0 0 1 170,100 A50,50 0 0 1 120,50 A50,50 0 0 1 170,0 A50,50 0 0 1 220,50 V125 Q220,170 176,170 Q142,170 126,152";
 const NG_X = 362;
 
-/** Tỉ lệ khung chữ (rộng / cao) – để đặt kích thước chính xác. */
-export const WORDMARK_RATIO = 1004 / 258;
-
 export function Wordmark({
   className,
   animate = false,

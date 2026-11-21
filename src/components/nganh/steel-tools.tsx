@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { ArtKind } from "@/lib/data/types";
@@ -82,69 +82,6 @@ export function CategoryExplorer({ groups }: { groups: ExplorerGroup[] }) {
           </tbody>
         </table>
       </div>
-    </div>
-  );
-}
-
-const DIAMETERS = [6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 32];
-const BAR_LENGTH = 11.7; // m / cây thép thanh vằn
-
-/**
- * Ước tính trọng lượng thép tròn (thanh vằn / trơn): m = d² × 0,00617 kg/m (d tính bằng mm).
- * Số liệu tham khảo theo công thức lý thuyết – barem thực tế từng nhà máy có thể chênh vài %.
- */
-export function WeightCalculator() {
-  const [d, setD] = useState(16);
-  const [bars, setBars] = useState(100);
-  const perM = useMemo(() => d * d * 0.00617, [d]);
-  const perBar = perM * BAR_LENGTH;
-  const total = perBar * bars;
-  const fmt = (n: number, digits = 2) => n.toLocaleString("vi-VN", { maximumFractionDigits: digits, minimumFractionDigits: digits });
-
-  return (
-    <div className="rounded-xl border border-v-line bg-v-card p-6 shadow-[0_4px_12px_rgb(0_0_0/0.1)] sm:p-7">
-      <p className="text-small font-semibold text-v-fg">Ước tính trọng lượng thép tròn</p>
-      <div className="mt-5">
-        <p className="mb-2 text-caption text-v-mute">Đường kính (mm)</p>
-        <div className="flex flex-wrap gap-1.5">
-          {DIAMETERS.map((x) => (
-            <button
-              key={x}
-              type="button"
-              aria-pressed={x === d}
-              onClick={() => setD(x)}
-              className={cn("h-9 min-w-11 rounded-lg px-2.5 text-small font-medium tabular-nums transition-colors duration-200", x === d ? "bg-v-accent text-v-on-accent" : "bg-v-chip text-v-fg hover:bg-v-tint")}
-            >
-              Ø{x}
-            </button>
-          ))}
-        </div>
-      </div>
-      <label className="mt-5 block">
-        <span className="mb-2 block text-caption text-v-mute">Số cây (dài {fmt(BAR_LENGTH, 1)} m/cây)</span>
-        <input
-          type="number"
-          inputMode="numeric"
-          min={1}
-          max={100000}
-          value={bars}
-          onChange={(e) => setBars(Math.max(0, Math.min(100000, Number(e.target.value) || 0)))}
-          className="h-11 w-full rounded-lg border border-v-line bg-v-bg px-3.5 text-lead font-semibold tabular-nums text-v-fg outline-none focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)]"
-        />
-      </label>
-      <dl className="mt-6 grid grid-cols-3 divide-x divide-v-line overflow-hidden rounded-lg border border-v-line text-center" aria-live="polite">
-        {[
-          ["kg / m", fmt(perM, 3)],
-          ["kg / cây", fmt(perBar)],
-          ["Tổng (kg)", fmt(total, 0)],
-        ].map(([k, v], i) => (
-          <div key={k} className={cn("px-2 py-4", i === 2 && "bg-v-island text-v-on-island")}>
-            <dd className="text-h4 font-semibold tabular-nums tracking-[-0.02em]">{v}</dd>
-            <dt className={cn("mt-1 text-micro", i === 2 ? "opacity-70" : "text-v-mute")}>{k}</dt>
-          </div>
-        ))}
-      </dl>
-      <p className="mt-3 text-micro text-v-mute">Theo công thức lý thuyết d² × 0,00617; barem thực tế từng nhà máy có thể chênh lệch vài phần trăm.</p>
     </div>
   );
 }

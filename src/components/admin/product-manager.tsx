@@ -54,7 +54,7 @@ const ART_LABEL: Record<ArtKind, string> = {
 // Màu nhãn phẳng kiểu Notion, gán ổn định theo danh mục.
 const TAG_TONES = ["bg-hub-sky-soft text-[#0b5394]", "bg-hub-mint-soft text-[#1a6b46]", "bg-hub-marigold-soft text-[#7a5200]", "bg-hub-coral-soft text-[#9b2c1f]", "bg-[#efe6fb] text-[#5b2a86]", "bg-hub-canvas text-hub-ink/70"];
 
-export function slugify(s: string) {
+function slugify(s: string) {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 }
 
@@ -83,7 +83,7 @@ function Thumb({ p, className }: { p: AdminProduct; className?: string }) {
   const img = p.images?.[0];
   return (
     <span className={cn("relative grid shrink-0 place-items-center overflow-hidden rounded-md bg-hub-canvas", className)}>
-      {img ? <SmartImage src={img} alt="" fill sizes="48px" className="object-cover" /> : p.art ? <ProductArt kind={p.art} className="!size-[80%]" /> : <Package className="size-4 text-hub-ink/30" />}
+      {img ? <SmartImage src={img} alt={p.name} fill sizes="48px" className="object-cover" /> : p.art ? <ProductArt kind={p.art} className="!size-[80%]" /> : <Package className="size-4 text-hub-ink/30" />}
     </span>
   );
 }

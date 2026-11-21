@@ -29,7 +29,7 @@ export function Logo({ prefix, name, slogan, logo, inverted, compact, className 
     <div className={cn("flex items-center gap-3", className)}>
       {logo ? (
         <div className="relative size-11 shrink-0">
-          <SmartImage src={logo} alt="" fill sizes="44px" className="object-contain" />
+          <SmartImage src={logo} alt={`Logo ${name}`} fill sizes="44px" className="object-contain" />
         </div>
       ) : (
         <LeafMark className="size-11 shrink-0" inverted={inverted} />

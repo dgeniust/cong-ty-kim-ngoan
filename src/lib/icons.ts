@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 /** Whitelist of icons that admins may pick (design.md §6.6). */
-export const ICONS = {
+const ICONS = {
   ShieldCheck,
   Truck,
   Sprout,
@@ -30,7 +30,7 @@ export const ICONS = {
   MapPin,
 } satisfies Record<string, LucideIcon>;
 
-export type IconName = keyof typeof ICONS;
+type IconName = keyof typeof ICONS;
 export const ICON_NAMES = Object.keys(ICONS) as IconName[];
 
 export function getIcon(name: string): LucideIcon {

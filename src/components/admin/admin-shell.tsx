@@ -15,20 +15,16 @@ import {
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
 import { cn } from "@/lib/utils";
+import { SECTOR_DOT } from "@/lib/verticals";
 import { GuideButton, GuideProvider } from "./guide/guide-provider";
 import { NotifyCenter } from "./notify-center";
 
-export type AdminNavCounts = {
+type AdminNavCounts = {
   phanbon: number;
   lopxe: number;
   satthep: number;
 };
 
-const DOT = {
-  phanbon: "bg-sector-phanbon",
-  lopxe: "bg-sector-lopxe",
-  satthep: "bg-sector-satthep",
-} as const;
 
 /** Khung admin kiểu thanh bên Notion: không gian làm việc · trang · cơ sở dữ liệu sản phẩm. */
 export function AdminShell({
@@ -128,7 +124,7 @@ export function AdminShell({
             <Link key={c.href} href={c.href} aria-current={isActive(c.href) ? "page" : undefined} className={item(isActive(c.href))}>
               <FileText className="size-4 shrink-0" strokeWidth={1.8} aria-hidden />
               <span className="flex-1">{c.label}</span>
-              <span aria-hidden className={cn("size-1.5 rounded-full", DOT[c.id])} />
+              <span aria-hidden className={cn("size-1.5 rounded-full", SECTOR_DOT[c.id])} />
             </Link>
           ))}
         </nav>
@@ -154,7 +150,7 @@ export function AdminShell({
               <span className="flex-1">{d.label}</span>
               <span
                 aria-hidden
-                className={cn("size-1.5 rounded-full", DOT[d.id])}
+                className={cn("size-1.5 rounded-full", SECTOR_DOT[d.id])}
               />
               <span className="text-[12px] tabular-nums text-hub-ink/45">
                 {counts[d.id]}

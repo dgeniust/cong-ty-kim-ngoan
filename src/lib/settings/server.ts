@@ -42,7 +42,6 @@ export const getSettings = cache(async () => {
 });
 
 export type Settings = Awaited<ReturnType<typeof getSettings>>;
-export type Company = Settings["COMPANY"];
 
 export const saveSettings = (s: SiteSettings) => writeJson(FILE, s);
 export const resetSettings = () => removeJson(FILE);

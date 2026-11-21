@@ -11,7 +11,7 @@
 /** bon = bón phân · bvtv = phòng trừ sâu bệnh · thu = thu hoạch · cham = chăm sóc khác (ra hoa, nghỉ cạo…) */
 export type StageKind = "bon" | "bvtv" | "thu" | "cham";
 
-export type CropStage = {
+type CropStage = {
   name: string;
   /** tháng bắt đầu / kết thúc (1–12); `to < from` nghĩa là vắt qua năm mới */
   from: number;
@@ -22,7 +22,7 @@ export type CropStage = {
   category?: string;
 };
 
-export type Crop = { id: string; name: string; image?: string; stages: CropStage[] };
+type Crop = { id: string; name: string; image?: string; stages: CropStage[] };
 
 export const CROPS: Crop[] = [
   {
@@ -93,25 +93,11 @@ export function inStage(s: Pick<CropStage, "from" | "to">, m: number) {
 
 /* ------------------------------------------------------------------ Vùng giao hàng */
 
-export type DeliveryZone = { id: string; label: string; when: string; radiusKm: number; places: string; note: string };
+type DeliveryZone = { id: string; label: string; when: string; radiusKm: number; places: string; note: string };
 
 /** Ba vòng tính từ cửa hàng ở Chơn Thành. */
 export const ZONES: DeliveryZone[] = [
   { id: "z1", label: "Vòng 1", when: "Giao trong ngày", radiusKm: 20, places: "Chơn Thành, Hớn Quản, Bàu Bàng và các xã lân cận", note: "Đặt trước 10 giờ sáng, nhận hàng trong ngày." },
   { id: "z2", label: "Vòng 2", when: "Giao 1–2 ngày", radiusKm: 50, places: "Bình Long, Đồng Xoài, Dầu Tiếng, Phú Giáo, Bến Cát", note: "Gom chuyến theo tuyến QL13 và QL14." },
   { id: "z3", label: "Vòng 3", when: "Theo lịch hẹn", radiusKm: 90, places: "Lộc Ninh, Bù Đăng, Bình Dương, TP.HCM", note: "Đơn số lượng lớn, gọi trước để xếp xe." },
-];
-
-/** Địa danh trên sơ đồ: hướng (độ, 0 = Bắc, theo chiều kim đồng hồ) và khoảng cách gần đúng (km) từ Chơn Thành. */
-export const PLACES: { name: string; bearing: number; km: number; zone: string }[] = [
-  { name: "Hớn Quản", bearing: 355, km: 12, zone: "z1" },
-  { name: "Bàu Bàng", bearing: 175, km: 18, zone: "z1" },
-  { name: "Bình Long", bearing: 350, km: 30, zone: "z2" },
-  { name: "Đồng Xoài", bearing: 70, km: 32, zone: "z2" },
-  { name: "Dầu Tiếng", bearing: 245, km: 32, zone: "z2" },
-  { name: "Phú Giáo", bearing: 140, km: 32, zone: "z2" },
-  { name: "Bến Cát", bearing: 178, km: 42, zone: "z2" },
-  { name: "Lộc Ninh", bearing: 355, km: 62, zone: "z3" },
-  { name: "Bù Đăng", bearing: 75, km: 72, zone: "z3" },
-  { name: "TP.HCM", bearing: 182, km: 78, zone: "z3" },
 ];

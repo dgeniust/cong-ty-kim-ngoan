@@ -19,7 +19,7 @@ const loadFonts = async () => {
   );
 };
 
-export type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent: string };
+type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent: string };
 export const OG_THEMES = {
   hub: { bg: "#f6f5f4", fg: "#000000", muted: "#615d59", accent: "#0068c9", onAccent: "#ffffff" },
   phanbon: { bg: "#143f1b", fg: "#ffffff", muted: "#c7e1ae", accent: "#f6e27a", onAccent: "#0d2b12" },

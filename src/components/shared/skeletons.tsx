@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
  * Bố cục bám sát trang thật để khi nội dung hiện ra không bị nhảy (CLS ≈ 0).
  */
 
-export function Skel({ className }: { className?: string }) {
+function Skel({ className }: { className?: string }) {
   return <div aria-hidden className={cn("skel rounded-lg", className)} />;
 }
 
 /** Vùng đang tải: thông báo cho trình đọc màn hình, ẩn khối trang trí. */
-export function Loading({ label = "Đang tải nội dung…", className, children }: { label?: string; className?: string; children: React.ReactNode }) {
+function Loading({ label = "Đang tải nội dung…", className, children }: { label?: string; className?: string; children: React.ReactNode }) {
   return (
     <div role="status" aria-live="polite" aria-busy="true" className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}>
       <span className="sr-only">{label}</span>
@@ -29,7 +29,7 @@ const Lines = ({ n = 3, last = "w-2/3", className }: { n?: number; last?: string
 );
 
 /** Đầu trang con: breadcrumb + tiêu đề + mô tả */
-export function PageHeadSkeleton() {
+function PageHeadSkeleton() {
   return (
     <div className="pb-10 pt-8 md:pt-12">
       <Skel className="h-3.5 w-56" />
@@ -39,7 +39,7 @@ export function PageHeadSkeleton() {
   );
 }
 
-export function ProductCardSkeleton() {
+function ProductCardSkeleton() {
   return (
     <div>
       <Skel className="aspect-[4/3] w-full rounded-xl" />

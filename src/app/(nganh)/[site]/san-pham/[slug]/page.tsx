@@ -83,7 +83,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
 
       <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} priority sizes="(min-width: 1024px) 50vw, 100vw" className="animate-rise aspect-square" />
+          <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} preload sizes="(min-width: 1024px) 50vw, 100vw" className="animate-rise aspect-square" />
         </div>
 
         <div>

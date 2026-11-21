@@ -14,7 +14,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
           src={images[active]}
           alt={images.length > 1 ? `${alt} – ảnh ${active + 1}` : alt}
           fill
-          priority
+          preload
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="object-cover animate-in fade-in duration-300"
         />
@@ -33,7 +33,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
                 i === active ? "ring-2 ring-brand-700 ring-offset-2" : "opacity-60 hover:opacity-100"
               )}
             >
-              <SmartImage src={src} alt="" fill sizes="120px" className="object-cover" />
+              <SmartImage src={src} alt={`${alt} – ảnh ${i + 1}`} fill sizes="120px" className="object-cover" />
             </button>
           ))}
         </div>

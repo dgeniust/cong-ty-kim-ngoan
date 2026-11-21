@@ -4,7 +4,7 @@ const text = z.string().trim();
 const req = (msg = "Bắt buộc") => text.min(1, msg);
 const item = z.object({ title: req("Thiếu tiêu đề"), description: req("Thiếu mô tả") });
 
-export const sectionHeadingSchema = z.object({
+const sectionHeadingSchema = z.object({
   title: req("Thiếu tiêu đề"),
   highlight: text.optional(),
   after: text.optional(),

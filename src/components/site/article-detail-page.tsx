@@ -99,7 +99,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
 
         <Container className="max-w-6xl">
           <div className="relative -mt-12 aspect-[16/9] overflow-hidden rounded-3xl bg-surface md:-mt-16">
-            <SmartImage src={article.cover} alt={article.title} fill priority sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
+            <SmartImage src={article.cover} alt={article.title} fill preload sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
           </div>
         </Container>
 
@@ -147,7 +147,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
                     <li key={a.slug}>
                       <Link href={`/phanbon/${a.section}/${a.slug}`} className="group flex gap-4">
                         <div className="relative size-[72px] shrink-0 overflow-hidden rounded-xl bg-surface">
-                          <SmartImage src={a.cover} alt="" fill sizes="72px" className="object-cover" />
+                          <SmartImage src={a.cover} alt={a.title} fill sizes="72px" className="object-cover" />
                         </div>
                         <div className="min-w-0">
                           <p className="line-clamp-2 text-body font-medium leading-snug text-brand-900 group-hover:text-brand-700">{a.title}</p>

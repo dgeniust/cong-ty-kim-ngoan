@@ -17,7 +17,7 @@ const MIN_MS = 1050; // đủ để chạy trọn chuyển động logo (~0.9s)
 const MAX_MS = 6000;
 const OUT_MS = 260;
 
-export function sectionOf(pathname: string): SplashSection | "admin" | null {
+function sectionOf(pathname: string): SplashSection | "admin" | null {
   const seg = pathname.split("/")[1] ?? "";
   if (seg === "admin" || seg === "api" || seg === "uploads") return "admin";
   if (seg === "phanbon" || seg === "lopxe" || seg === "satthep") return seg;

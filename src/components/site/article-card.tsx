@@ -26,7 +26,7 @@ export function ArticleCard({
       <div className={cn("relative aspect-[16/10] overflow-hidden rounded-2xl bg-surface", featured && "md:aspect-[4/3]")}>
         <SmartImage
           src={article.cover}
-          alt=""
+          alt={article.title}
           fill
           sizes={featured ? "(min-width: 768px) 55vw, 100vw" : "(min-width: 1024px) 31vw, (min-width: 768px) 46vw, 100vw"}
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"

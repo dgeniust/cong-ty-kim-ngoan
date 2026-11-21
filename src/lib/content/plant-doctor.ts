@@ -7,7 +7,7 @@
 export type ZoneId = "la-non" | "la-gia" | "trai" | "re";
 export type SymptomIcon = "yellow" | "scorch" | "interveinal" | "purple" | "young-interveinal" | "small" | "deformed" | "holes" | "drop" | "crack" | "rot" | "root-rot" | "hard-soil" | "knots";
 
-export type Symptom = {
+type Symptom = {
   id: string;
   zone: ZoneId;
   title: string;

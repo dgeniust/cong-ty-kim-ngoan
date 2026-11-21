@@ -356,6 +356,19 @@ Nhánh `fe/notion-style-v1.2` (tách từ v1.1). Giữ theme landing tổng: n�
 | Tin tức | page | Bài phân bón nổi bật bên trái; bên phải bài lốp xe + sắt thép và hộp “Thêm về phân bón & chăm cây”. |
 | Liên hệ | page | Số từng ngành, địa chỉ, giờ, email, Gọi / Zalo, bản đồ + Chỉ đường. |
 
+### Cấu trúc code (sau refactor)
+| Việc cần sửa | Sửa ở đâu |
+|---|---|
+| Câu chữ, ảnh, danh sách cam kết của landing tổng | `lib/content/hub-home.ts` |
+| Cách dựng dữ liệu (slide hero, số liệu, tab sản phẩm, chọn tin) | `lib/hub/home.ts` (chỉ chạy trên server) |
+| Từng khối giao diện | `components/hub/home/` – `stats-bar`, `sectors-section`, `products-section`, `news-section`, `contact-section` |
+| Mảnh dùng chung (Eyebrow, tiêu đề khối, nút, chấm ngành, mũi tên) | `components/hub/home/ui.tsx` |
+| Phần tương tác (chỉ 2 Client Component) | `components/hub/hero-carousel.tsx`, `components/hub/product-tabs.tsx` |
+| Màu chấm từng ngành | `SECTOR_DOT` trong `lib/verticals.ts` |
+| Giờ mở cửa dạng chữ | `formatOpeningHours` trong `lib/format.ts` |
+
+Ảnh LCP (ảnh hero đầu tiên, ảnh lớn trang chi tiết) dùng `preload` (Next 16 thay `priority`); ảnh còn lại để mặc định `lazy`. Mọi ảnh có `alt` mô tả.
+
 **Không viền**: tách khối bằng màu nền (giấy ↔ trắng ↔ lá nhạt), khoảng trắng và `shadow-sm`. Gradient chỉ dùng cho lớp phủ ảnh hero và hoạ tiết nền.
 
-Các khối của v1.1 (ba cánh cửa, lịch mùa vụ, sa bàn giao hàng, giới thiệu, hỏi đáp) vẫn giữ trong `components/hub/` để thêm lại khi cần.
+Các khối của v1.1 (ba cánh cửa, lịch mùa vụ, sa bàn giao hàng) đã xoá khỏi code cho gọn; lấy lại từ lịch sử git (commit `255d22a` trở về trước) khi cần.

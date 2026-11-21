@@ -239,7 +239,3 @@ export const products: Product[] = [
     isNew: true,
   },
 ];
-
-export function getProduct(slug: string) {
-  return products.find((p) => p.slug === slug);
-}

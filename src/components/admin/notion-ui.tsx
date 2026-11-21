@@ -8,9 +8,8 @@ import { cn } from "@/lib/utils";
 
 /* Bộ thành phần form cho trang admin – phong cách Notion: thẻ trắng viền mảnh 12px, nút 8px, một màu xanh hành động. */
 
-export const BTN = "inline-flex h-9 items-center justify-center gap-1.5 rounded-lg px-3.5 text-sm font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4";
+const BTN = "inline-flex h-9 items-center justify-center gap-1.5 rounded-lg px-3.5 text-sm font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4";
 export const BTN_PRIMARY = `${BTN} bg-hub-blue text-white hover:bg-hub-blue-hover`;
-export const BTN_GHOST = `${BTN} bg-hub-blue-tint text-hub-blue hover:bg-[#d4eafd]`;
 export const BTN_TEXT = `${BTN} text-hub-ink/80 hover:bg-hub-ink/5`;
 export const BTN_DANGER = `${BTN} text-[#d1242f] hover:bg-[#d1242f]/10`;
 const INPUT =
@@ -82,20 +81,6 @@ export function TextField({ value, onChange, multiline, placeholder, recommended
   return (
     <FieldShell id={id} {...f} counter={recommended ? `${value.length}/${recommended}` : undefined} over={!!recommended && value.length > recommended}>
       {multiline ? <textarea rows={3} {...common} /> : <input type={type} {...common} />}
-    </FieldShell>
-  );
-}
-
-export function SelectField({ value, onChange, options, ...f }: BaseField & { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
-  const id = useId();
-  return (
-    <FieldShell id={id} {...f}>
-      <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className={cn(INPUT, "appearance-none")} aria-invalid={f.error ? true : undefined}>
-        <option value="">— Chọn —</option>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>{o.label}</option>
-        ))}
-      </select>
     </FieldShell>
   );
 }
@@ -193,7 +178,7 @@ export function ImagesField({ label, value, onChange, error, max = 6 }: { label:
       <div className="flex flex-wrap gap-2">
         {value.map((src, i) => (
           <div key={`${src}-${i}`} className="group relative size-20 overflow-hidden rounded-lg border border-hub-line bg-hub-canvas">
-            <SmartImage src={src} alt="" fill sizes="80px" className="object-cover" />
+            <SmartImage src={src} alt="Ảnh đã chọn" fill sizes="80px" className="object-cover" />
             {i === 0 && <span className="absolute left-1 top-1 rounded bg-white/90 px-1 text-[10px] font-medium">Ảnh chính</span>}
             <button type="button" aria-label="Xoá ảnh" onClick={() => onChange(value.filter((_, j) => j !== i))} className="absolute right-1 top-1 grid size-6 place-items-center rounded-md bg-white/90 text-[#d1242f] opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100">
               <Trash2 className="size-3.5" />
