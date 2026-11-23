@@ -10,12 +10,12 @@ import { getCategory } from "@/lib/mock/categories";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { npkOf, type LabelProduct } from "./npk-label";
+import { BrandMarquee } from "./brand-marquee";
+import { CropPicker } from "./crop-picker";
 
 export type HeroCrop = { key: string; name: string; description: string; image: string };
 
 /** Lối vào theo nhóm hàng – mỗi ô một danh mục thật (lib/mock/categories). */
-/** Hãng phân bón tiêu biểu – bấm để tìm sản phẩm theo hãng. Logo thật sẽ thay chữ khi có file. */
-const BRANDS = ["Phú Mỹ", "Lâm Thao", "Mặt Trời Mới", "Đầu Trâu", "Con Cò", "Komix"];
 const TRUST = [BadgeCheck, Truck, HeartHandshake, Leaf];
 
 const label = (name: string) => {
@@ -88,21 +88,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
           <HeroSearch quick={false} />
         </div>
 
-        <nav aria-label="Mua theo hãng" className="mt-6">
-          <p className="mb-2.5 text-caption font-medium text-ink-muted">Hoặc chọn hãng</p>
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-3 xl:grid-cols-6">
-            {BRANDS.map((b) => (
-              <li key={b}>
-                <Link
-                  href={`/phanbon/tim-kiem?q=${encodeURIComponent(b)}`}
-                  className="group flex h-full min-h-16 items-center justify-center rounded-2xl bg-white px-2 py-3 text-center shadow-[0_1px_2px_rgb(19_42_30/0.06)] transition-colors hover:bg-brand-900"
-                >
-                  <span className="text-small font-bold uppercase leading-tight tracking-[0.02em] text-brand-800 group-hover:text-sun-300">{b}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <BrandMarquee />
 
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <a href={telHref(phone)} className="inline-flex h-12 items-center gap-2 rounded-full bg-sun-300 px-6 text-body font-semibold text-brand-900 transition-colors hover:bg-sun-400">
@@ -146,23 +132,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
 
           {/* chọn cây */}
           <div className="absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4">
-            <div role="radiogroup" aria-label="Vườn của bạn trồng gì?" className="flex gap-1 overflow-x-auto rounded-full bg-white/90 p-1 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {crops.map((c) => {
-                const on = c.key === key;
-                return (
-                  <button
-                    key={c.key}
-                    type="button"
-                    role="radio"
-                    aria-checked={on}
-                    onClick={() => setCrop(c.key)}
-                    className={cn("h-10 shrink-0 rounded-full px-3 text-small font-semibold transition-colors xl:px-3.5", on ? "bg-brand-900 text-white" : "text-brand-900 hover:bg-brand-100")}
-                  >
-                    {label(c.name)}
-                  </button>
-                );
-              })}
-            </div>
+            <CropPicker crops={crops.map((c) => ({ key: c.key, label: label(c.name), image: c.image }))} value={key} onChange={setCrop} />
           </div>
 
           {/* gợi ý cho cây */}
