@@ -85,7 +85,7 @@ export default async function HomePage() {
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
             <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · {site.companyName}</span>
-            <span className="hidden text-ink-muted sm:inline">{site.address}</span>
+            <span className="hidden text-ink-muted sm:inline">{COMPANY.area}</span>
             <a href={telHref(site.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-brand-600">
               <Phone className="size-3.5" aria-hidden /> {site.phone}
             </a>
@@ -187,7 +187,7 @@ export default async function HomePage() {
                 <SmartImage src={about.image} alt="Vườn cây của bà con trong vùng" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
               </div>
               <figcaption className="mt-3 flex justify-between gap-4 text-caption text-white/70">
-                <span>Vườn cây trong vùng {site.address}</span>
+                <span>Vườn cây trong vùng {COMPANY.area}</span>
                 <span>{site.companyName}</span>
               </figcaption>
             </figure>

@@ -29,14 +29,14 @@ export const COMPANY = {
   // TODO(khách hàng): thay bằng thông tin thật
   hotline: "0123 456 789",
   email: "kimngoan@example.com",
-  address: "Chơn Thành – Đồng Nai",
+  address: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước",
   /** Khu vực phục vụ – dùng trong các câu “giao tận nơi khu vực …”, mô tả SEO */
-  area: "Chơn Thành – Đồng Nai",
+  area: "Chơn Thành – Bình Phước",
   zalo: "https://zalo.me/0123456789",
   facebook: "https://facebook.com",
   /** Truy vấn dùng cho Google Maps embed – thay bằng địa chỉ/toạ độ chính xác. */
-  mapQuery: "Chơn Thành",
-  openingHours: "Mo-Su 07:00-18:00",
+  mapQuery: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước, Việt Nam",
+  openingHours: "Mo-Su 07:00-17:00",
   founded: "2015",
 };
 
@@ -51,7 +51,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     contactLabel: "Liên hệ về phân bón & thuốc BVTV",
     phone: "0123 456 781",
     seoTitle: "Phân bón & thuốc BVTV Kim Ngoan – Đại lý tại Chơn Thành",
-    seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Đồng Nai. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
+    seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Bình Phước. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
     themeColor: "#1d3a25",
   },
   lopxe: {

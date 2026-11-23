@@ -53,7 +53,7 @@ export async function LopXeHome({
         <VContainer>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg/80 pb-3 text-caption text-v-fg">
             <span className="font-semibold">{hero.eyebrow}</span>
-            <span className="hidden text-v-mute sm:inline">{COMPANY.address} · 07:00 – 18:00</span>
+            <span className="hidden text-v-mute sm:inline">{COMPANY.area} · 07:00 – 17:00</span>
             <a href={telHref(vertical.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-v-accent">
               <Phone className="size-3.5" aria-hidden /> {vertical.phone}
             </a>

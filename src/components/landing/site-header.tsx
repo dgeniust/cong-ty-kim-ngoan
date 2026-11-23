@@ -57,7 +57,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
           scrolled ? "shadow-[0_1px_0_rgb(24_24_27/0.08),0_8px_24px_-16px_rgb(24_24_27/0.25)]" : "shadow-[0_1px_0_rgb(24_24_27/0.08)]",
           hidden && "-translate-y-full",
         )}>
-        <Container>
+        <div className="px-4 sm:px-6 lg:pl-6 lg:pr-8 2xl:pl-8">
           <div className="flex h-16 items-center justify-between gap-4 md:h-[72px]">
             <Link href="/phanbon" className="shrink-0 rounded-lg">
               <Logo
@@ -114,7 +114,7 @@ export function SiteHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
               </Button>
             </div>
           </div>
-        </Container>
+        </div>
 
         {open && (
           <div id="menu-di-dong" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-paper lg:hidden">

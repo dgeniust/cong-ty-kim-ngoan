@@ -16,7 +16,7 @@ export const NAV_SECTORS: NavSector[] = [
     short: "Phân bón & BVTV",
     href: "/phanbon",
     image: "/coffee.jpg",
-    note: "Ngành chính · cà phê, sầu riêng, tiêu, cao su",
+    note: "Cà phê, sầu riêng, tiêu, cao su, cây ăn trái, rau màu",
     links: [
       { label: "Phân bón NPK", href: "/phanbon/danh-muc/phan-bon-npk" },
       { label: "Phân bón hữu cơ", href: "/phanbon/danh-muc/phan-bon-huu-co" },

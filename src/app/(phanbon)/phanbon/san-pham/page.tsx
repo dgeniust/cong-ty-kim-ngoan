@@ -3,7 +3,7 @@ import { ProductListing } from "@/components/site/product-listing";
 
 export const metadata: Metadata = {
   title: "Sản phẩm phân bón & thuốc bảo vệ thực vật",
-  description: "Phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Kim Ngoan – Chơn Thành – Đồng Nai. Tư vấn kỹ thuật miễn phí.",
+  description: "Phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Kim Ngoan – Chơn Thành – Bình Phước. Tư vấn kỹ thuật miễn phí.",
   alternates: { canonical: "/phanbon/san-pham" },
 };
 

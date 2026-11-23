@@ -3,7 +3,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { HUB_CTA } from "@/lib/content/hub-home";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
-import { BIZ_WRAP, SlideArrow, bizButton } from "./ui";
+import { BIZ_WRAP, bizButton } from "./ui";
 
 /**
  * Banner kêu gọi báo giá giữa trang: khối ngang tràn viền, chuyển sắc #0B5D36 → #15803D,
@@ -27,11 +27,8 @@ export function QuoteBanner({ hotline }: { hotline: string }) {
           <p className="mt-4 max-w-[38rem] text-body leading-relaxed text-mv-mist">{HUB_CTA.text}</p>
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 lg:col-span-4 lg:justify-end">
-          <a href={HUB_CTA.button.href} className={bizButton.gold}>
-            {HUB_CTA.button.label} <SlideArrow />
-          </a>
-          <a href={telHref(hotline)} className="inline-flex h-12 items-center gap-2 text-body font-semibold tabular-nums text-white hover:text-mv-gold-soft">
-            <Phone className="size-4 text-mv-gold-soft" aria-hidden /> {hotline}
+          <a href={telHref(hotline)} className={bizButton.gold}>
+            <Phone className="size-4" aria-hidden /> Gọi <span className="tabular-nums">{hotline}</span>
           </a>
         </div>
       </Reveal>

@@ -34,7 +34,7 @@ export default async function HubLayout({ children }: { children: React.ReactNod
       <HubHeader company={{ prefix: COMPANY.prefix, name: COMPANY.name, slogan: COMPANY.slogan, legalName: COMPANY.legalName, hotline: COMPANY.hotline }} />
       <main id="noi-dung" tabIndex={-1} className="outline-none">{children}</main>
       <HubFooter />
-      <HubFloating phone={COMPANY.hotline} phoneHref={telHref(COMPANY.hotline)} zalo={COMPANY.zalo} />
+      <HubFloating phone={COMPANY.hotline} phoneHref={telHref(COMPANY.hotline)} zalo={COMPANY.zalo} facebook={COMPANY.facebook} />
     </div>
   );
 }

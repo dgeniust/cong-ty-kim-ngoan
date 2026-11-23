@@ -140,9 +140,6 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               <Spec label="Quy cách">{product.packing.join(", ")}</Spec>
               <Spec label="Xuất xứ">{product.origin}</Spec>
               <Spec label="Phù hợp cho">{product.crops.join(", ")}</Spec>
-              <Spec label="Giá bán">
-                <span className="text-brand-700">Liên hệ để nhận báo giá theo số lượng</span>
-              </Spec>
             </dl>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">

@@ -73,7 +73,7 @@ export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
 
       {/* cam kết: lưới phẳng, ngăn bằng kẻ mảnh phía trên */}
       <Reveal className={cn(BIZ_WRAP, "mt-20 md:mt-24")}>
-        <ul className="grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-x-10 sm:grid-cols-3">
           {HUB_COMMITMENTS.map(({ icon: Icon, title, text }, i) => {
             const tone = TONE[COMMIT_TONES[i % COMMIT_TONES.length]];
             return (

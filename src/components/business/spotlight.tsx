@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
@@ -52,16 +52,26 @@ const SECTOR_STYLE: Record<string, { main: string; accent: string; btn: string; 
 export function SpotlightTabs({ items }: { items: Spotlight[] }) {
   const uid = useId();
   const [active, setActive] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  // báo ngành đang xem cho nền hai mép (lá ↔ họa tiết lốp/thép), xem garden-backdrop.tsx
+  useEffect(() => {
+    const section = rootRef.current?.closest<HTMLElement>("[data-garden]");
+    if (section) section.dataset.motif = items[active]?.id ?? "";
+  }, [active, items]);
   const cur = items[active];
   const st = SECTOR_STYLE[cur.id];
 
   const select = (i: number, focus = false) => {
     setActive(i);
-    if (focus) document.getElementById(`${uid}-tab-${items[i].id}`)?.focus();
+    const tab = document.getElementById(`${uid}-tab-${items[i].id}`);
+    if (focus) tab?.focus();
+    // thanh tab cuộn ngang trên điện thoại: kéo tab vừa chọn vào tầm nhìn (chỉ cuộn ngang trong thanh)
+    const bar = tab?.parentElement;
+    if (tab && bar) bar.scrollTo({ left: tab.offsetLeft - bar.offsetLeft - 16, behavior: "smooth" });
   };
 
   return (
-    <div>
+    <div ref={rootRef}>
       <div
         role="tablist"
         aria-label="Ngành hàng"
@@ -90,8 +100,7 @@ export function SpotlightTabs({ items }: { items: Spotlight[] }) {
               )}
             >
               <span aria-hidden className={cn("size-2.5 shrink-0 rounded-full", SECTOR_STYLE[s.id].main, on && "ring-2 ring-white/70")} />
-              <span className="text-[clamp(1.05rem,1.8vw,1.35rem)] font-bold tracking-[-0.01em]">{s.short}</span>
-              {i === 0 && <span className={cn("hidden rounded-full px-2 py-0.5 text-[11px] font-semibold sm:inline", on ? "bg-mv-gold text-mv-ink" : "bg-[#fef3c7] text-[#92400e]")}>Ngành chính</span>}
+              <span className="text-[clamp(1rem,1.5vw,1.2rem)] font-bold leading-snug tracking-[-0.01em]"><span className={cn("mr-1.5 tabular-nums", on ? "text-mv-gold-soft" : "text-mv-ink/45")}>0{i + 1}.</span>{s.tab}</span>
             </button>
           );
         })}

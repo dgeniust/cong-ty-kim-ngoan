@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { SteelMotif, TyreMotif } from "./sector-motifs";
 
 /**
  * Nền chung “vườn xanh” của landing tổng (ảnh dựng bằng tools/garden-bg/gen.py, design.md §6).
@@ -20,37 +21,67 @@ const pair = (v: Variant): Variant => ((v % 3) + 1) as Variant;
 
 /** lề trong của nội dung = (100vw − 1280)/2 + 32px; phần lá nét chiếm ~23% chiều cao màn hình */
 const EDGE = "clamp(-16.5vh, calc(max(0px, (100vw - 1280px) / 2) + 32px - 23vh), 0px)";
+/** bề rộng dải họa tiết ngành: vừa khoảng lề hai bên nội dung */
+const MOTIF_W = "clamp(64px, calc((100vw - 1280px) / 2 + 40px), 280px)";
+
+type Motif = "garden" | "lopxe" | "satthep";
+const readMotif = (el: HTMLElement): Motif => (el.dataset.motif === "lopxe" || el.dataset.motif === "satthep" ? el.dataset.motif : "garden");
 
 export function GardenBackdrop() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Variant>(1);
   // biến thể 2, 3 chỉ tải khi người xem đã cuộn tới phần nền (không tranh băng thông với hero)
   const [warm, setWarm] = useState(false);
+  // khối đang xem có thể đổi họa tiết (tab Lốp xe / Sắt thép ở khối Sản phẩm đặt data-motif)
+  const [motif, setMotif] = useState<Motif>("garden");
 
   useEffect(() => {
     const root = ref.current?.parentElement;
     if (!root) return;
     const sections = [...root.querySelectorAll<HTMLElement>("[data-garden]")];
+    let current: HTMLElement | null = null;
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           setWarm(true);
-          const v = Number((e.target as HTMLElement).dataset.garden);
+          current = e.target as HTMLElement;
+          setMotif(readMotif(current));
+          const v = Number(current.dataset.garden);
           if (v === 1 || v === 2 || v === 3) setActive(v);
         }
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
-    sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
+    const mo = new MutationObserver((records) => {
+      for (const r of records) if (r.target === current) setMotif(readMotif(current));
+    });
+    sections.forEach((s) => {
+      io.observe(s);
+      mo.observe(s, { attributes: true, attributeFilter: ["data-motif"] });
+    });
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
   }, []);
 
   return (
     <div ref={ref} aria-hidden className="pointer-events-none sticky top-0 -z-10 -mb-[100lvh] h-[100lvh] w-full overflow-hidden">
       <div className="absolute inset-0 hidden lg:block">
+        {/* họa tiết ngành thay lá (lốp xe / sắt thép) */}
+        {(["lopxe", "satthep"] as const).map((m) => {
+          const Motif = m === "lopxe" ? TyreMotif : SteelMotif;
+          const on = motif === m;
+          return (
+            <div key={m} className={cn("absolute inset-0 transition-opacity duration-700 ease-soft motion-reduce:transition-none", on ? "opacity-100" : "opacity-0")}>
+              <Motif side="l" className="absolute inset-y-0 left-0 h-full" style={{ width: MOTIF_W }} />
+              <Motif side="r" className="absolute inset-y-0 right-0 h-full" style={{ width: MOTIF_W }} />
+            </div>
+          );
+        })}
         {VARIANTS.map((v) => {
-          const on = v === active;
+          const on = v === active && motif === "garden";
           if (v !== 1 && !warm) return null;
           return (
             <div

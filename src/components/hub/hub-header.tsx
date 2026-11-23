@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
 import { HUB_NAV, type NavItem } from "@/lib/content/hub-nav";
 import { SECTOR_DOT, telHref } from "@/lib/verticals";
-import { Wordmark } from "@/components/shared/wordmark";
 
 import { cn } from "@/lib/utils";
 
@@ -291,16 +290,16 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
         >
           Bỏ qua đến nội dung chính
         </a>
-        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-6 px-4 sm:px-6 lg:h-[76px] lg:px-10">
+        <div className="flex h-16 items-center justify-between gap-6 px-4 sm:px-6 lg:h-[76px] lg:pl-6 lg:pr-8 2xl:pl-8">
           <Link
             href="/"
-            aria-label={`${COMPANY.legalName} – trang chủ`}
-            className="group flex flex-col gap-1 rounded-md text-hub-ink transition-colors group-data-[dark]/hd:text-white"
+           
+            className="group flex flex-col gap-1.5 rounded-md text-hub-ink transition-colors group-data-[dark]/hd:text-white"
           >
             <span className="block logo-prefix text-hub-ink-soft group-data-[dark]/hd:text-white/75">
               {COMPANY.prefix}
             </span>
-            <Wordmark className="h-[22px] w-auto transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:h-6" />
+            <span className="block text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:text-[1.75rem]">{COMPANY.name}</span>
           </Link>
 
           <nav

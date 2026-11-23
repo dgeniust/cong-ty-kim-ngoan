@@ -5,7 +5,6 @@ import { VHeader } from "@/components/nganh/v-header";
 import { VMobileBar } from "@/components/nganh/v-mobile-bar";
 import { JsonLd } from "@/components/shared/json-ld";
 import { SectorSwitcher } from "@/components/shared/sector-switcher";
-import { getCategories } from "@/lib/data/catalog";
 import { absoluteUrl } from "@/lib/site";
 import { resolveSite, siteStaticParams } from "@/lib/site-params";
 import { isCatalogSite } from "@/lib/verticals";
@@ -62,7 +61,7 @@ export default async function VerticalLayout({ children, params }: { children: R
       <main id="noi-dung" tabIndex={-1} className="min-h-[60vh] outline-none">
         {children}
       </main>
-      <VFooter vertical={vertical} categories={getCategories(site)} />
+      <VFooter vertical={vertical} />
       <VMobileBar vertical={vertical} />
       <BackToTop className="bg-v-card text-v-fg shadow-[0_6px_20px_rgb(0_0_0/0.16)]" />
     </div>

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail, Phone } from "lucide-react";
-import { HUB_NAV, NAV_SECTORS } from "@/lib/content/hub-nav";
-import { SECTOR_DOT, telHref } from "@/lib/verticals";
-import { Wordmark } from "@/components/shared/wordmark";
+import { HUB_NAV } from "@/lib/content/hub-nav";
+import { telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { FooterLandscape } from "./footer-landscape";
@@ -28,15 +27,15 @@ export async function HubFooter() {
   const { COMPANY } = await getSettings();
   return (
     <footer className="relative isolate overflow-hidden bg-mv-night text-white/70">
-      <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.35fr_0.8fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
+      <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
         {/* thương hiệu */}
         <div className="sm:col-span-2 lg:col-span-1">
-          <Link href="/" aria-label={`${COMPANY.legalName} – trang chủ`} className="inline-flex flex-col gap-1.5 text-white">
+          <Link href="/" className="inline-flex flex-col gap-1.5 text-white">
             <span className="logo-prefix text-white/60">{COMPANY.prefix}</span>
-            <Wordmark className="h-7 w-auto" />
+            <span className="block text-[1.75rem] font-extrabold uppercase leading-none tracking-[0.01em]">{COMPANY.name}</span>
           </Link>
           <p className="mt-5 text-title font-semibold text-white">{COMPANY.slogan}</p>
-          <p className="mt-2 max-w-xs text-body leading-relaxed">Phân bón, tôn – sắt thép và lốp xe ô tô tại {COMPANY.address}.</p>
+          <p className="mt-2 max-w-xs text-body leading-relaxed">Phân bón, tôn – sắt thép và lốp xe ô tô tại {COMPANY.area}.</p>
         </div>
 
         <nav aria-label="Liên kết nhanh">
@@ -45,19 +44,6 @@ export async function HubFooter() {
             {QUICK.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className={LINK}>{l.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav aria-label="Sản phẩm">
-          <p className={LABEL}>Sản phẩm</p>
-          <ul className="mt-4 space-y-1">
-            {NAV_SECTORS.map((s) => (
-              <li key={s.id}>
-                <Link href={s.href} className={cn(LINK, "inline-flex items-center gap-2")}>
-                  <span aria-hidden className={cn("size-1.5 rounded-full ring-1 ring-white/30", SECTOR_DOT[s.id])} /> {s.short}
-                </Link>
               </li>
             ))}
           </ul>
