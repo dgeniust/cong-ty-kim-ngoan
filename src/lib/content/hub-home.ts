@@ -77,7 +77,7 @@ export const HUB_COMMITMENTS: { icon: LucideIcon; title: string; text: string }[
 /** Khối sản phẩm: mỗi ngành một "không gian trưng bày". */
 export const HUB_PRODUCTS = {
   eyebrow: "Sản phẩm",
-  title: "Ba ngành hàng, một đầu mối",
+  title: "Ba ngành hàng, một nhà cung cấp",
   sectors: [
     {
       id: "phanbon",
