@@ -1,16 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { MapEmbed } from "@/components/business/map-embed";
 import { FooterLandscape } from "@/components/hub/footer-landscape";
 import { Logo } from "@/components/shared/logo";
 import type { SiteContent } from "@/lib/content/schema";
-import { categories } from "@/lib/mock/categories";
 import { getSettings } from "@/lib/settings/server";
 import { resolveHref } from "@/lib/site";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
-const FOOTER_CATEGORIES = categories.filter((c) => c.parent).slice(0, 6);
+const HOURS = "Thứ 2 – Chủ nhật, 7:00 – 17:00";
 
 const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white";
 const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
@@ -26,45 +26,54 @@ function FacebookIcon() {
 
 /**
  * Footer chuyên trang phân bón – cùng ngôn ngữ với footer landing tổng (design.md §5.2):
- * nền xanh rừng đêm, 4 cột + khối gọi tư vấn, dải đồi vườn cây ở chân. Dữ liệu lấy từ CMS (site, footer).
+ * nền xanh rừng đêm: thương hiệu + địa chỉ, liên kết, bản đồ Google, khối gọi tư vấn; dải đồi vườn cây ở chân. Dữ liệu lấy từ CMS (site, footer).
  */
 export async function PbFooter({ site, footer }: { site: SiteContent["site"]; footer: SiteContent["footer"] }) {
   const { COMPANY } = await getSettings();
   return (
     <footer className="theme-pb relative isolate overflow-hidden bg-brand-900 text-white/70">
-      <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1fr_auto] lg:px-12 lg:pt-20">
-        {/* thương hiệu */}
-        <div className="sm:col-span-2 lg:col-span-1">
-          <Link href="/phanbon" aria-label={`${site.companyPrefix} ${site.companyName} – trang chủ phân bón`} className="inline-flex text-white">
+      <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.3fr_0.7fr_1.5fr_auto] lg:px-12 lg:pt-20">
+        {/* thương hiệu + địa chỉ + mạng xã hội */}
+        <div>
+          <Link href="/phanbon" className="inline-flex text-white">
             <Logo prefix={site.companyPrefix} name={site.companyName} slogan="" logo={site.logo} compact inverted />
           </Link>
           <p className="mt-5 text-title font-semibold text-white">
             {footer.sloganLine1} – {footer.sloganLine2}
           </p>
-          <p className="mt-2 max-w-xs text-body leading-relaxed">{site.seoDescription}</p>
-          <p className="mt-5 flex max-w-xs gap-2 text-small text-white/70">
-            <MapPin className="mt-0.5 size-4 shrink-0 text-sun-300" aria-hidden />
-            {site.address}
-          </p>
-        </div>
-
-        <nav aria-label="Danh mục sản phẩm">
-          <p className={LABEL}>Sản phẩm</p>
-          <ul className="mt-4 space-y-1">
-            {FOOTER_CATEGORIES.map((c) => (
-              <li key={c.slug}>
-                <Link href={`/phanbon/danh-muc/${c.slug}`} className={LINK}>
-                  {c.name}
-                </Link>
+          <address className="mt-4 space-y-2.5 not-italic text-small">
+            <p className="flex max-w-xs gap-2">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-sun-300" aria-hidden />
+              {site.address}
+            </p>
+            <p className="flex gap-2">
+              <Clock className="mt-0.5 size-4 shrink-0 text-sun-300" aria-hidden />
+              {HOURS}
+            </p>
+            {site.email && (
+              <p className="flex gap-2">
+                <Mail className="mt-0.5 size-4 shrink-0 text-sun-300" aria-hidden />
+                <a href={`mailto:${site.email}`} className="hover:text-white">{site.email}</a>
+              </p>
+            )}
+          </address>
+          <ul className="mt-6 flex gap-3" aria-label="Theo dõi chúng tôi">
+            {(site.facebook || COMPANY.facebook) && (
+              <li>
+                <a href={site.facebook || COMPANY.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook Kim Ngoan" className={SOCIAL}>
+                  <FacebookIcon />
+                </a>
               </li>
-            ))}
-            <li>
-              <Link href="/phanbon/san-pham" className={cn(LINK, "font-medium text-sun-300 hover:text-sun-200")}>
-                Tất cả sản phẩm
-              </Link>
-            </li>
+            )}
+            {COMPANY.zalo && (
+              <li>
+                <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" aria-label="Zalo Kim Ngoan" className={cn(SOCIAL, "text-[11px] font-bold tracking-tight")}>
+                  Zalo
+                </a>
+              </li>
+            )}
           </ul>
-        </nav>
+        </div>
 
         <nav aria-label="Liên kết Kim Ngoan">
           <p className={LABEL}>Kim Ngoan</p>
@@ -84,33 +93,17 @@ export async function PbFooter({ site, footer }: { site: SiteContent["site"]; fo
           </ul>
         </nav>
 
-        <div>
-          <p className={LABEL}>Theo dõi chúng tôi</p>
-          <ul className="mt-5 flex gap-3">
-            {(site.facebook || COMPANY.facebook) && (
-              <li>
-                <a href={site.facebook || COMPANY.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook Kim Ngoan" className={SOCIAL}>
-                  <FacebookIcon />
-                </a>
-              </li>
-            )}
-            {COMPANY.zalo && (
-              <li>
-                <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" aria-label="Zalo Kim Ngoan" className={cn(SOCIAL, "text-[11px] font-bold tracking-tight")}>
-                  Zalo
-                </a>
-              </li>
-            )}
-            {site.email && (
-              <li>
-                <a href={`mailto:${site.email}`} aria-label={`Gửi email ${site.email}`} className={SOCIAL}>
-                  <Mail className="size-[18px]" aria-hidden />
-                </a>
-              </li>
-            )}
-          </ul>
-          <p className="mt-5 text-small text-white/60">{site.email}</p>
-          <p className="mt-1 text-small text-white/60">Thứ 2 – Chủ nhật, 7:00 – 18:00</p>
+        {/* bản đồ cửa hàng */}
+        <div className="sm:col-span-2 lg:col-span-1">
+          <p className={LABEL}>Đường đến cửa hàng</p>
+          <MapEmbed
+            query={COMPANY.mapQuery}
+            title={`Bản đồ đường đến ${site.companyPrefix} ${site.companyName}`}
+            hint="Bấm để xem bản đồ"
+            directionsLabel="Chỉ đường"
+            compact
+            className="mt-4 min-h-[220px] rounded-lg lg:h-[220px]"
+          />
         </div>
 
         {/* khối gọi – tách bằng đường kẻ dọc trên desktop */}

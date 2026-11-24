@@ -134,7 +134,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
           </Grid>
           <Grid>
             <TextField label="Từ khoá bản đồ Google" value={c.mapQuery} onChange={setC("mapQuery")} hint="Địa chỉ hoặc toạ độ để nhúng Google Maps" />
-            <TextField label="Giờ mở cửa (định dạng schema.org)" value={c.openingHours} onChange={setC("openingHours")} hint="VD: Mo-Su 07:00-18:00" />
+            <TextField label="Giờ mở cửa (định dạng schema.org)" value={c.openingHours} onChange={setC("openingHours")} hint="VD: Mo-Su 07:00-17:00" />
           </Grid>
         </Card>
 

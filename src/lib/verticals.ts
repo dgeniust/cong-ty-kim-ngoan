@@ -27,16 +27,16 @@ export const COMPANY = {
   legalName: "Công ty TNHH Kim Ngoan",
   slogan: "Mùa thuận, đường êm, nhà vững.",
   // TODO(khách hàng): thay bằng thông tin thật
-  hotline: "0123 456 789",
+  hotline: "02713668112",
   email: "kimngoan@example.com",
-  address: "Chơn Thành – Đồng Nai",
+  address: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước",
   /** Khu vực phục vụ – dùng trong các câu “giao tận nơi khu vực …”, mô tả SEO */
-  area: "Chơn Thành – Đồng Nai",
-  zalo: "https://zalo.me/0123456789",
+  area: "Chơn Thành – Bình Phước",
+  zalo: "https://zalo.me/02713668112",
   facebook: "https://facebook.com",
   /** Truy vấn dùng cho Google Maps embed – thay bằng địa chỉ/toạ độ chính xác. */
-  mapQuery: "Chơn Thành",
-  openingHours: "Mo-Su 07:00-18:00",
+  mapQuery: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước, Việt Nam",
+  openingHours: "Mo-Su 07:00-17:00",
   founded: "2015",
 };
 
@@ -49,9 +49,9 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     tagline: "Vì mùa màng bội thu",
     description: "Phân bón hữu cơ, vô cơ, NPK, vi sinh và thuốc bảo vệ thực vật chính hãng cho cà phê, cao su, sầu riêng, tiêu, lúa.",
     contactLabel: "Liên hệ về phân bón & thuốc BVTV",
-    phone: "0123 456 781",
+    phone: "02713668112",
     seoTitle: "Phân bón & thuốc BVTV Kim Ngoan – Đại lý tại Chơn Thành",
-    seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Đồng Nai. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
+    seoDescription: "Đại lý phân bón NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật chính hãng tại Chơn Thành – Bình Phước. Tư vấn kỹ thuật miễn phí, giao tận vườn.",
     themeColor: "#1d3a25",
   },
   lopxe: {
@@ -60,11 +60,11 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     name: "Lốp xe ô tô",
     short: "Lốp xe",
     tagline: "Bám đường. Bền bỉ. Chính hãng.",
-    description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách từ các thương hiệu lớn. Thay lắp, cân bằng động tại chỗ.",
+    description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách chính hãng. Tư vấn đúng cỡ, báo giá qua điện thoại và Zalo.",
     contactLabel: "Liên hệ về lốp xe ô tô",
-    phone: "0123 456 782",
-    seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Thay lắp tại Chơn Thành",
-    seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Báo giá nhanh, thay lắp và cân bằng động tại chỗ.",
+    phone: "02713668112",
+    seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Chơn Thành, Bình Phước",
+    seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Tư vấn đúng cỡ, gọi hoặc nhắn Zalo để nhận báo giá.",
     themeColor: "#100904",
   },
   satthep: {
@@ -75,9 +75,9 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     tagline: "Vững từ lõi thép.",
     description: "Thép xây dựng, thép hình, thép ống – hộp, tôn lợp và thép tấm cho công trình dân dụng, nhà xưởng.",
     contactLabel: "Liên hệ về tôn – sắt thép",
-    phone: "0123 456 783",
+    phone: "02713668112",
     seoTitle: "Tôn, sắt thép Kim Ngoan – Thép xây dựng, tôn lợp Chơn Thành",
-    seoDescription: "Thép xây dựng, thép hình, ống hộp, tôn lợp chính phẩm tại Chơn Thành. Báo giá theo ngày, cắt theo quy cách, giao tận công trình.",
+    seoDescription: "Thép xây dựng, thép hình, ống hộp, tôn lợp chính phẩm tại Chơn Thành. Gửi danh sách vật tư để nhận báo giá, giao tận công trình.",
     themeColor: "#08090a",
   },
 };

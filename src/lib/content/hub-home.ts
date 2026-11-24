@@ -1,4 +1,4 @@
-import { BadgeCheck, Headset, ReceiptText, ShieldCheck, type LucideIcon } from "lucide-react";
+import { BadgeCheck, Headset, Truck, type LucideIcon } from "lucide-react";
 import type { VerticalId } from "@/lib/verticals";
 
 /**
@@ -6,38 +6,72 @@ import type { VerticalId } from "@/lib/verticals";
  * Sửa câu chữ, ảnh ở đây; không cần đụng vào JSX. `{founded}`, `{area}` lấy từ phần Cài đặt công ty.
  */
 
+/**
+ * Hero: mỗi slide một ngành – ảnh nền, dòng nhỏ, slogan 2 dòng (dòng 2 tô vàng), mô tả.
+ * Chữ đổi theo slide; `{founded}`, `{area}` lấy từ Cài đặt công ty. Ảnh: chủ thể lệch phải, nửa trái để chữ.
+ */
 export const HUB_HERO = {
-  eyebrow: "Nhà phân phối vật tư nông nghiệp · vận tải · xây dựng",
-  titleLines: ["Chăm từ gốc rễ,", "cho mùa trĩu quả."],
-  lead: "Từ năm {founded}, Kim Ngoan cung ứng phân bón, thuốc bảo vệ thực vật chính hãng cho nhà vườn quanh {area}, cùng lốp xe và tôn – sắt thép cho xe chở nông sản, nhà kho, công trình. Một đầu mối, đủ hàng, giá báo theo ngày.",
   primaryCta: { label: "Khám phá sản phẩm", href: "#san-pham" },
-  secondaryCta: { label: "Liên hệ báo giá", href: "#lien-he" },
-  /** ảnh nền: chủ thể lệch phải, nửa trái để trống cho chữ */
+  secondaryCta: { label: "Nhận báo giá", href: "#lien-he" },
   slides: [
-    { id: "phanbon", image: "/photos/phanbon-vuon-sau-rieng.jpg", alt: "Vườn sầu riêng, cà phê trên đất đỏ và bao phân bón", focus: "72% 50%" },
-    { id: "lopxe", image: "/photos/lopxe-cua-hang.jpg", alt: "Cửa hàng lốp xe với lốp mới xếp trên kệ", focus: "75% 50%" },
-    { id: "satthep", image: "/photos/satthep-bai-thep.jpg", alt: "Bãi thép với những bó thép cây xếp gọn", focus: "72% 50%" },
-  ] satisfies { id: VerticalId; image: string; alt: string; focus: string }[],
+    {
+      id: "phanbon",
+      image: "/photos/phanbon-hero.jpg",
+      alt: "Vườn cao su, cà phê chín đỏ, hồ tiêu và cây ăn trái dưới nắng sớm",
+      focus: "58% 50%",
+      eyebrow: "Phân bón & thuốc bảo vệ thực vật",
+      titleLines: ["Chăm từ gốc rễ,", "cho mùa trĩu quả."],
+      lead: "Từ năm {founded}, Kim Ngoan cung ứng phân bón, thuốc bảo vệ thực vật chính hãng cho vườn cà phê, cao su, sầu riêng, tiêu, cây ăn trái và rau màu quanh {area}.",
+    },
+    {
+      id: "satthep",
+      image: "/photos/satthep-hero.jpg",
+      alt: "Kho thép với ống, hộp, thép cây xếp gọn, xe nâng và xe tải đang giao hàng",
+      focus: "62% 50%",
+      eyebrow: "Tôn – sắt thép xây dựng",
+      titleLines: ["Thép đủ quy cách,", "công trình vững bền."],
+      lead: "Thép cây, thép hình, ống hộp và tôn lợp cho nhà ở, nhà kho, chuồng trại. Gửi danh sách vật tư để nhận báo giá, giao tận công trình.",
+    },
+    {
+      id: "lopxe",
+      image: "/photos/lopxe-hero.jpg",
+      alt: "Kho lốp xe ô tô với lốp mới chính hãng xếp trên kệ",
+      focus: "70% 50%",
+      eyebrow: "Lốp xe ô tô chính hãng",
+      titleLines: ["Lốp chính hãng,", "vững mọi cung đường."],
+      lead: "Đủ cỡ cho xe con, bán tải, xe tải nhẹ và xe chở nông sản. Tư vấn đúng cỡ lốp, gọi hoặc nhắn Zalo để nhận báo giá.",
+    },
+  ] satisfies { id: VerticalId; image: string; alt: string; focus: string; eyebrow: string; titleLines: [string, string]; lead: string }[],
 };
+
+/**
+ * Thanh chỉ số đáy hero. `{years}` = số năm từ năm thành lập.
+ * TODO(khách hàng): gửi số nhân sự thật để thêm chỉ số “Đội ngũ”.
+ */
+export const HUB_STATS = [
+  { value: "{years}+", label: "Năm kinh nghiệm" },
+  { value: "3.000+", label: "Mặt hàng chủ lực" },
+  { value: "3", label: "Ngành hàng" },
+  { value: "7h – 17h", label: "Mở cửa tất cả các ngày" },
+];
 
 export const HUB_ABOUT = {
   eyebrow: "Về Kim Ngoan",
   title: "Từ đại lý vật tư nông nghiệp đến ba ngành hàng",
   paragraphs: [
-    "Khởi đầu là một đại lý phân bón nhỏ ở {area}, Kim Ngoan lớn lên cùng những vườn cà phê, sầu riêng, hồ tiêu của bà con trong vùng. Phân bón và thuốc bảo vệ thực vật vẫn là nghề chính, là nơi chúng tôi đặt nhiều tâm sức nhất.",
-    "Rồi bà con cần lốp cho xe chở nông sản, cần thép cho nhà kho, chuồng trại. Chúng tôi mở thêm hai ngành hàng để một cuộc gọi là lo đủ cho mùa vụ, con đường và mái nhà.",
+    "Kim Ngoan bắt đầu từ một đại lý phân bón ở {area}, bán phân và thuốc bảo vệ thực vật cho các vườn cà phê, sầu riêng, hồ tiêu của bà con trong vùng.",
+    "Sau đó bà con cần thêm lốp cho xe chở nông sản, thép và tôn cho nhà kho, chuồng trại. Kim Ngoan mở thêm hai ngành hàng này để bà con mua được ở một chỗ quen.",
   ],
-  quote: "Bán đúng hàng, nói đúng liều, giao đúng hẹn. Bà con tin mình vì mình chưa từng bán thứ mình không dám dùng.",
-  quoteBy: "Ban điều hành Kim Ngoan",
+  quote: "Bán đúng hàng, hướng dẫn đúng liều, giao đúng hẹn.",
+  quoteBy: "Phương châm của Kim Ngoan",
   image: "/garden.jpg",
   alt: "Vườn cây ăn trái nhìn từ trên cao ở vùng Chơn Thành",
 };
 
 export const HUB_COMMITMENTS: { icon: LucideIcon; title: string; text: string }[] = [
-  { icon: ShieldCheck, title: "Chính hãng 100%", text: "Nhập từ nhà sản xuất và đại lý cấp 1, có hoá đơn, tem nhãn đầy đủ." },
-  { icon: Headset, title: "Tư vấn đúng nghề", text: "Liều bón theo tuổi cây, cỡ lốp theo xe, quy cách thép theo công trình." },
-  { icon: ReceiptText, title: "Giá rõ, báo theo ngày", text: "Báo giá trước khi giao, không phát sinh. Đơn lớn có giá riêng." },
+  { icon: Headset, title: "Tư vấn đúng ngành", text: "Liều bón theo tuổi cây, cỡ lốp theo xe, quy cách thép theo công trình." },
   { icon: BadgeCheck, title: "Đổi trả minh bạch", text: "Hàng lỗi do nhà sản xuất được đổi theo chính sách của hãng." },
+  { icon: Truck, title: "Giao hàng tận nơi", text: "Xe nhà giao tận vườn, tận công trình trong khu vực Chơn Thành và lân cận." },
 ];
 
 /** Khối sản phẩm: mỗi ngành một "không gian trưng bày". */
@@ -47,37 +81,39 @@ export const HUB_PRODUCTS = {
   sectors: [
     {
       id: "phanbon",
+      tab: "Phân bón và thuốc bảo vệ thực vật",
       title: "Dinh dưỡng đúng lúc cho từng giai đoạn cây",
-      text: "Phân hữu cơ, vô cơ, NPK, vi sinh và thuốc bảo vệ thực vật chính hãng. Mỗi bao phân bán ra đều kèm hướng dẫn liều lượng theo tuổi cây và thời điểm trong mùa.",
+      text: "Phân hữu cơ, vô cơ, NPK, vi sinh và thuốc bảo vệ thực vật chính hãng. Nhân viên hướng dẫn liều lượng theo tuổi cây và thời điểm trong mùa.",
       image: "/coffee.jpg",
       alt: "Cành cà phê chín đỏ trong vườn",
       caption: "Cà phê vào mùa thu hoạch, Chơn Thành",
     },
     {
+      id: "satthep",
+      tab: "Tôn – sắt thép",
+      title: "Thép, tôn đủ quy cách cho nhà ở và nhà xưởng",
+      text: "Thép cây, thép hình, ống hộp, tôn lợp cho nhà ở, nhà kho, chuồng trại. Gửi quy cách và khối lượng để nhận báo giá, giao tận công trình.",
+      image: "/photos/satthep-bai-thep.jpg",
+      alt: "Những bó thép cây xếp trên bãi",
+      caption: "Thép cây xếp bó tại bãi",
+    },
+    {
       id: "lopxe",
+      tab: "Lốp xe ô tô",
       title: "Lốp chính hãng cho xe con, bán tải, xe tải nhẹ",
-      text: "Đủ cỡ thông dụng cho xe gia đình và xe chở nông sản. Thay, cân bằng động và đảo lốp ngay tại cửa hàng, có hẹn giờ trước.",
+      text: "Đủ cỡ thông dụng cho xe gia đình, xe dịch vụ và xe chở nông sản. Cho biết cỡ lốp hoặc đời xe, nhân viên tư vấn và báo giá qua điện thoại.",
       image: "/photos/lopxe-cua-hang.jpg",
       alt: "Kệ lốp xe mới trong cửa hàng",
       caption: "Khu trưng bày lốp tại cửa hàng",
     },
-    {
-      id: "satthep",
-      title: "Thép, tôn đủ quy cách cho nhà ở và nhà xưởng",
-      text: "Thép cây, thép hình, ống hộp, tôn lợp cho nhà ở, nhà kho, chuồng trại. Cắt theo yêu cầu, báo giá theo ngày, giao tận công trình.",
-      image: "/photos/satthep-bai-thep.jpg",
-      alt: "Những bó thép cây xếp trên bãi",
-      caption: "Bãi thép – hàng có sẵn mỗi ngày",
-    },
-  ] satisfies { id: VerticalId; title: string; text: string; image: string; alt: string; caption: string }[],
+  ] satisfies { id: VerticalId; tab: string; title: string; text: string; image: string; alt: string; caption: string }[],
 };
 
 /** Banner kêu gọi báo giá giữa trang (sau khối Sản phẩm). */
 export const HUB_CTA = {
-  eyebrow: "Báo giá trong ngày",
+  eyebrow: "Tư vấn miễn phí",
   title: "Cần phân bón cho vụ mới, lốp cho xe hay thép cho công trình?",
-  text: "Gửi nhu cầu một lần – người phụ trách từng ngành gọi lại báo giá rõ ràng, giao tận nơi trong bán kính 20 km.",
-  button: { label: "Liên hệ báo giá ngay", href: "#lien-he" },
+  text: "Gọi hotline, người phụ trách từng ngành tư vấn đúng hàng và báo giá theo thời điểm. Giao tận nơi trong khu vực Chơn Thành và lân cận.",
 };
 
 export const HUB_NEWS = {
@@ -89,8 +125,8 @@ export const HUB_NEWS = {
 
 export const HUB_CONTACT = {
   eyebrow: "Liên hệ",
-  title: "Cần báo giá? Để lại số, chúng tôi gọi lại ngay.",
-  lead: "Mỗi ngành có người phụ trách riêng, trả lời đúng chuyên môn. Gấp thì gọi thẳng hotline hoặc nhắn Zalo.",
+  title: "Cần báo giá? Để lại số, chúng tôi gọi lại.",
+  lead: "Mỗi ngành có người phụ trách riêng. Nhân viên gọi lại trong giờ làm việc (7:00 – 17:00). Cần gấp thì gọi thẳng hotline hoặc nhắn Zalo.",
   formTitle: "Yêu cầu báo giá nhanh",
   mapHint: "Bấm để xem bản đồ",
   directions: "Mở chỉ đường trên Google Maps",

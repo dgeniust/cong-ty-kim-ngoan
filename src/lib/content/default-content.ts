@@ -8,11 +8,11 @@ export const defaultContent: SiteContent = {
     logo: "",
     phone: "123456789",
     email: "kimngoan@example.com",
-    address: "Chơn Thành – Đồng Nai",
+    address: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước",
     facebook: "https://facebook.com",
     seoTitle: "Công ty TNHH Kim Ngoan – Đại lý phân bón & thuốc BVTV",
     seoDescription:
-      "Đại lý phân bón uy tín tại Chơn Thành – Đồng Nai. Cung cấp phân bón, thuốc bảo vệ thực vật chất lượng cao cho nhà nông.",
+      "Đại lý phân bón uy tín tại Chơn Thành – Bình Phước. Cung cấp phân bón, thuốc bảo vệ thực vật chất lượng cao cho nhà nông.",
   },
   nav: [
     { label: "Trang chủ", href: "/phanbon" },
@@ -86,6 +86,9 @@ export const defaultContent: SiteContent = {
       { name: "Cây sầu riêng", description: "Trái to - Ngọt đậm", image: "/durian.jpg" },
       { name: "Cây tiêu", description: "Phát triển mạnh - Ít sâu bệnh", image: "/tieu.webp" },
       { name: "Cây lúa", description: "Xanh lá - Bội thu", image: "/lua.jpg" },
+      { name: "Cây ăn trái", description: "Bưởi, cam, quýt - Trái đều, ngọt", image: "/hero-img.jpg" },
+      // TODO(khách hàng): thay ảnh vườn rau thật
+      { name: "Rau màu", description: "Lá xanh - Thu hoạch nhanh", image: "/garden.jpg" },
     ],
   },
   about: {
@@ -93,7 +96,7 @@ export const defaultContent: SiteContent = {
     quote: "Nông nghiệp phát triển\nlà cuộc sống ấm no hơn",
     image: "/garden.jpg",
     paragraphs: [
-      "Công ty TNHH Kim Ngoan là đại lý phân bón uy tín tại khu vực Chơn Thành - Đồng Nai, chuyên cung cấp các loại phân bón và thuốc bảo vệ thực vật chất lượng cao, phục vụ bà con nông dân.",
+      "Công ty TNHH Kim Ngoan là đại lý phân bón uy tín tại khu vực Chơn Thành – Bình Phước, chuyên cung cấp các loại phân bón và thuốc bảo vệ thực vật chất lượng cao, phục vụ bà con nông dân.",
       "Với phương châm \"Chất lượng tạo nên niềm tin\", chúng tôi luôn nỗ lực mang đến những sản phẩm tốt nhất, dịch vụ chuyên nghiệp và giải pháp nông nghiệp hiệu quả cho mọi nhà nông.",
     ],
     ctaLabel: "Câu chuyện Kim Ngoan",

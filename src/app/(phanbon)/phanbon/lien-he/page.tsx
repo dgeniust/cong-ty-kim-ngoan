@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/phanbon/lien-he" },
 };
 
-const WORKING_HOURS = "Thứ 2 – Chủ nhật, 7:00 – 18:00";
+const WORKING_HOURS = "Thứ 2 – Chủ nhật, 7:00 – 17:00";
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ "san-pham"?: string }> }) {
   const [{ site }, sp] = await Promise.all([getContent(), searchParams]);

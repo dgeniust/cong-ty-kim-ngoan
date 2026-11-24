@@ -34,7 +34,7 @@ export default async function Contact({ params, searchParams }: Props) {
     { icon: MessageCircle, label: "Zalo", value: "Nhắn Zalo báo giá", href: COMPANY.zalo },
     { icon: Mail, label: "Email", value: COMPANY.email, href: `mailto:${COMPANY.email}` },
     { icon: MapPin, label: "Địa chỉ", value: COMPANY.address },
-    { icon: Clock, label: "Giờ mở cửa", value: "07:00 – 18:00, tất cả các ngày" },
+    { icon: Clock, label: "Giờ mở cửa", value: "07:00 – 17:00, tất cả các ngày" },
   ];
 
   return (

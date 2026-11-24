@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Bug, FlaskConical, HeartHandshake, Leaf, Microscope, Phone, Recycle, ShieldPlus, Sprout, Truck } from "lucide-react";
+import { ArrowRight, BadgeCheck, HeartHandshake, Leaf, Phone, Truck } from "lucide-react";
 import { HeroSearch } from "@/components/landing/hero-search";
 import { cropKey } from "@/lib/content/crop-match";
 import { setCrop, useCrop } from "@/lib/crop-store";
@@ -10,22 +10,17 @@ import { getCategory } from "@/lib/mock/categories";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { npkOf, type LabelProduct } from "./npk-label";
+import { BrandMarquee } from "./brand-marquee";
+import { CropPicker } from "./crop-picker";
 
 export type HeroCrop = { key: string; name: string; description: string; image: string };
 
 /** Lối vào theo nhóm hàng – mỗi ô một danh mục thật (lib/mock/categories). */
-const GROUPS = [
-  { slug: "phan-bon-npk", label: "Phân NPK", icon: FlaskConical },
-  { slug: "phan-bon-huu-co", label: "Phân hữu cơ", icon: Recycle },
-  { slug: "phan-bon-vi-sinh", label: "Phân vi sinh", icon: Microscope },
-  { slug: "phan-bon-vo-co", label: "Phân vô cơ", icon: Sprout },
-  { slug: "thuoc-tru-sau", label: "Thuốc trừ sâu", icon: Bug },
-  { slug: "thuoc-tru-benh", label: "Thuốc trừ bệnh", icon: ShieldPlus },
-];
 const TRUST = [BadgeCheck, Truck, HeartHandshake, Leaf];
 
 const label = (name: string) => {
-  const s = name.replace(/^cây\s+/i, "");
+  // bỏ chữ “Cây” đầu tên cho gọn (Cây cà phê → Cà phê), trừ “Cây ăn trái”
+  const s = /^cây\s+ăn\s/i.test(name) ? name : name.replace(/^cây\s+/i, "");
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
@@ -87,27 +82,13 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
           <span className="sr-only">{srCompany} – </span>
           Phân bón, thuốc BVTV <span className="text-brand-600">đúng cho từng vườn</span>
         </h1>
-        <p className="mt-4 max-w-xl text-lead leading-relaxed text-ink-muted">Phân NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật cho cà phê, cao su, sầu riêng, tiêu, lúa. Tư vấn đúng loại, giao tận vườn.</p>
+        <p className="mt-4 max-w-xl text-lead leading-relaxed text-ink-muted">Phân NPK, hữu cơ, vi sinh và thuốc bảo vệ thực vật cho cà phê, cao su, sầu riêng, tiêu, lúa, cây ăn trái và rau màu. Tư vấn đúng loại, giao tận vườn.</p>
 
         <div className="mt-6 max-w-xl">
           <HeroSearch quick={false} />
         </div>
 
-        <nav aria-label="Mua theo nhóm hàng" className="mt-6">
-          <p className="mb-2.5 text-caption font-medium text-ink-muted">Hoặc chọn nhóm hàng</p>
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-3 xl:grid-cols-6">
-            {GROUPS.map((g) => (
-              <li key={g.slug}>
-                <Link href={`/phanbon/danh-muc/${g.slug}`} className="group flex h-full flex-col items-center gap-2 rounded-2xl bg-white px-2 py-3.5 text-center ring-1 ring-brand-900/10 transition-colors hover:bg-brand-900 hover:ring-brand-900">
-                  <span className="grid size-10 place-items-center rounded-xl bg-brand-100 text-brand-700 transition-colors group-hover:bg-white/15 group-hover:text-sun-300">
-                    <g.icon className="size-5" strokeWidth={1.8} aria-hidden />
-                  </span>
-                  <span className="text-caption font-semibold leading-tight text-brand-900 group-hover:text-white">{g.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <BrandMarquee />
 
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <a href={telHref(phone)} className="inline-flex h-12 items-center gap-2 rounded-full bg-sun-300 px-6 text-body font-semibold text-brand-900 transition-colors hover:bg-sun-400">
@@ -151,23 +132,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
 
           {/* chọn cây */}
           <div className="absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4">
-            <div role="radiogroup" aria-label="Vườn của bạn trồng gì?" className="flex gap-1 overflow-x-auto rounded-full bg-white/90 p-1 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {crops.map((c) => {
-                const on = c.key === key;
-                return (
-                  <button
-                    key={c.key}
-                    type="button"
-                    role="radio"
-                    aria-checked={on}
-                    onClick={() => setCrop(c.key)}
-                    className={cn("h-10 shrink-0 rounded-full px-4 text-small font-semibold transition-colors", on ? "bg-brand-900 text-white" : "text-brand-900 hover:bg-brand-100")}
-                  >
-                    {label(c.name)}
-                  </button>
-                );
-              })}
-            </div>
+            <CropPicker crops={crops.map((c) => ({ key: c.key, label: label(c.name), image: c.image }))} value={key} onChange={setCrop} />
           </div>
 
           {/* gợi ý cho cây */}

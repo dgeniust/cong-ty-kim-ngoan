@@ -46,7 +46,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     email: site.email,
     image: site.logo ? absoluteUrl(site.logo) : undefined,
     address: { "@type": "PostalAddress", streetAddress: site.address, addressCountry: "VN" },
-    openingHours: "Mo-Su 07:00-18:00",
+    openingHours: "Mo-Su 07:00-17:00",
     sameAs: site.facebook ? [site.facebook] : undefined,
   };
 

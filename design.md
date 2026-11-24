@@ -149,6 +149,27 @@ Thứ tự: **Hero → Về Kim Ngoan (ngà) → Sản phẩm (bạc hà) → Ba
 - Nhịp màu: hero (bạc hà) → 01 Bảng tin (xanh rừng `brand-900`) → 02 Bác sĩ cây trồng (ngà) → 03 Sản phẩm (bạc hà) → 04 Vườn thật (ngà) → 05 Về Kim Ngoan (xanh rừng, chữ trắng, nút vàng) → 06 Kiến thức (bạc hà) → form gọi lại (ngà).
 - Khối xanh rừng là dải đặc nên che khung lá; tiêu đề trên nền đó dùng `!text-white` (màu heading mặc định là xanh rừng).
 
+## 6c. Chỉnh sửa sau buổi họp (nhánh `fe/demo-v1`)
+
+- **Tên công ty:** “KIM NGOAN” in hoa, đậm, cỡ 22–28px dưới dòng “CÔNG TY TNHH”; header landing tổng và phân bón sát lề trái (không còn khung 1280/1400px).
+- **Địa chỉ / giờ:** `COMPANY.address` = Tổ 3, Ấp 2, QL13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước; `area` = Chơn Thành – Bình Phước (dùng ở chỗ ghi ngắn); giờ 7:00 – 17:00 (`Mo-Su 07:00-17:00`).
+- **Hero landing tổng:** 3 ảnh `public/photos/{phanbon,satthep,lopxe}-hero.jpg`, tự chuyển 5s, nút lùi/tới + chỉ báo + tạm dừng. Mỗi slide có dòng nhỏ, slogan 2 dòng, mô tả riêng (`HUB_HERO.slides`); chữ các slide xếp chồng một ô lưới, chỉ slide đang hiện là `<h1>`. Lớp phủ 92% → 10%.
+- **Chỉ số:** `HUB_STATS` (số năm tự tính, 3.000+ mặt hàng, 3 ngành, giờ mở cửa).
+- **Sản phẩm:** tab đánh số “01. Phân bón và thuốc bảo vệ thực vật · 02. Tôn – sắt thép · 03. Lốp xe ô tô”, bỏ nhãn “Ngành chính”. Tab Lốp xe/Sắt thép đặt `data-motif` lên khối → `GardenBackdrop` thay lá hai mép bằng họa tiết `sector-motifs.tsx` (lốp: #1E293B + #EA580C; thép: #0F4C81 + #DC2626).
+- **Cam kết:** 3 tiêu chí – Tư vấn đúng ngành, Đổi trả minh bạch, Giao hàng tận nơi.
+- **Báo giá / giá:** banner giữa trang chỉ còn nút gọi hotline; bỏ dòng “Giá bán” ở chi tiết sản phẩm phân bón.
+- **Nút nổi:** thêm Facebook (fanpage) cạnh Zalo và hotline.
+- **Phân bón:** “Hoặc chọn hãng” với 6 hãng (tìm theo tên hãng); thêm cây “Cây ăn trái”, “Rau màu”.
+- **Footer:** bỏ cột Sản phẩm (landing tổng, phân bón, lốp xe/sắt thép); footer phân bón và chuyên trang có Google Maps (`MapEmbed compact`, khoá con lăn tới khi bấm).
+
+## 6d. Lốp xe & sắt thép: chỉ “liên hệ nhận báo giá”
+
+- Kim Ngoan không nhận đặt lịch thay lốp và không niêm yết giá (giá đổi theo hãng, nhà máy, thời điểm). Mọi nút dẫn về gọi / Zalo / gửi yêu cầu báo giá.
+- **Lốp xe:** khối 05 `#bao-gia` = 3 bước nhận báo giá (`content.services`) + form `TyreQuote` (cỡ lốp tự điền từ ô tra cỡ, số lượng, mức lốp, SĐT). Bỏ đồng hồ “30:00”, bỏ các cam kết lắp đặt / cân bằng động / cứu hộ / bơm ni-tơ. Kết quả kiểm tra lốp xấu → “Nhận báo giá lốp”.
+- **Sắt thép:** `SteelBoard` thành “Vật tư thép thường dùng”: cột Giá ghi “Liên hệ”, nút “Gọi nhận báo giá”. Danh sách vật tư bỏ thước giá lẻ / sỉ / dự án, thay bằng ghi chú báo giá theo thời điểm. Admin bỏ phần nhập giá (dữ liệu `quote.prices` cũ vẫn đọc được, không hiển thị).
+- **Header chuyên trang:** logo chữ giống landing tổng (CÔNG TY TNHH / KIM NGOAN in hoa, sát lề trái) + nhãn ngành nhỏ.
+- **Câu chữ:** ngắn, nói việc cụ thể, không hứa điều chưa xác nhận (thời gian giao, bán kính, dịch vụ tại chỗ).
+
 ## 7. Phân bón `/phanbon`
 
 Trang chủ: hero cửa hàng (tìm kiếm + nhóm hàng + ảnh theo cây trồng) → bản tin nhà nông (thời tiết, việc nên làm) → nhãn bao NPK → bác sĩ cây trồng → vườn thật → tư vấn nhanh → tin tức.

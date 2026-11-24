@@ -1,6 +1,5 @@
 import "server-only";
-import { HUB_HERO, HUB_PRODUCTS } from "@/lib/content/hub-home";
-import { ZONES } from "@/lib/content/hub-extras";
+import { HUB_HERO, HUB_PRODUCTS, HUB_STATS } from "@/lib/content/hub-home";
 import { getCategories, getProducts } from "@/lib/data/catalog";
 import type { ArtKind, NewsItem } from "@/lib/data/types";
 import { getCategory as getFertilizerCategory } from "@/lib/mock/categories";
@@ -24,21 +23,16 @@ const byHighlight = <T extends { featured?: boolean; isNew?: boolean }>(a: T, b:
 
 export type HeroSlide = (typeof HUB_HERO.slides)[number] & { label: string };
 
-export const buildHeroSlides = (verticals: Verticals): HeroSlide[] => HUB_HERO.slides.map((s) => ({ ...s, label: verticals[s.id].short }));
-
-export const heroLead = (company: Company) => fill(HUB_HERO.lead, company);
+export const buildHeroSlides = (verticals: Verticals, company: Company): HeroSlide[] =>
+  HUB_HERO.slides.map((s) => ({ ...s, lead: fill(s.lead, company), label: verticals[s.id].short }));
 
 /* ------------------------------------------------------------------ số liệu (thanh neo đáy hero) */
 
 export type Stat = { value: string; label: string };
 
-export function buildStats(company: Company, productCount: number): Stat[] {
-  return [
-    { value: `${new Date().getFullYear() - Number(company.founded)}+`, label: "Năm cung ứng vật tư" },
-    { value: `${productCount}+`, label: "Sản phẩm sẵn hàng" },
-    { value: "3", label: "Ngành hàng chủ lực" },
-    { value: `1`, label: "Đội ngũ nhân sự kinh nghiệm" },
-  ];
+export function buildStats(company: Company): Stat[] {
+  const years = String(new Date().getFullYear() - Number(company.founded));
+  return HUB_STATS.map((s) => ({ ...s, value: s.value.replace("{years}", years) }));
 }
 
 /* ------------------------------------------------------------------ sản phẩm: không gian trưng bày từng ngành */

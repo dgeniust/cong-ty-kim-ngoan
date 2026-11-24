@@ -2,19 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { CalendarCheck, LayoutGrid, Package, Pause, Play, Truck, type LucideIcon } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight, Clock, Layers, Package, Pause, Play, type LucideIcon } from "lucide-react";
 import type { HeroSlide, Stat } from "@/lib/hub/home";
 import { cn } from "@/lib/utils";
 import { BIZ_WRAP } from "./ui";
 
 /** icon cho 4 chỉ số neo đáy (theo thứ tự buildStats) */
-const STAT_ICONS: LucideIcon[] = [CalendarCheck, Package, LayoutGrid, Truck];
+const STAT_ICONS: LucideIcon[] = [CalendarCheck, Package, Layers, Clock];
 
-const AUTOPLAY = 6000;
+const AUTOPLAY = 5000;
 
 /**
- * Hero tràn viền: ảnh nền toàn cảnh (3 ngành, đổi mỗi 6s), lớp scrim trắng mượt từ trái sang phải
- * giữ chữ bên trái đạt tương phản cao mà ảnh bên phải vẫn sắc nét. Đáy hero là thanh chỉ số neo đáy.
+ * Hero tràn viền: ảnh nền 3 ngành đổi mỗi 5s, chữ (dòng nhỏ, slogan, mô tả) đổi theo từng ngành.
+ * Lớp phủ xanh rừng đêm từ trái sang phải giữ chữ đọc rõ. `children` = cụm nút bấm. Đáy hero là thanh chỉ số.
  * Hẹn giờ giữ "thời gian còn lại" khi tạm dừng (rê chuột vào nội dung/nút, focus, tab ẩn, nút tạm dừng).
  */
 export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stats: Stat[]; children: ReactNode }) {
@@ -105,19 +105,49 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
           );
         })}
         {/* overlay xanh rừng đêm #082919: điện thoại phủ trên–dưới để ảnh liền với nền tối; từ md phủ trái → phải 92% → 10% */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.9)_0%,rgba(8,41,25,0.72)_30%,rgba(8,41,25,0.2)_58%,rgba(8,41,25,0)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.92)_0%,rgba(8,41,25,0.84)_32%,rgba(8,41,25,0.45)_58%,rgba(8,41,25,0.1)_100%)]" />
         {/* dải tối phía trên để menu trong suốt (chữ trắng) luôn đọc được */}
         <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(8,41,25,0.55),rgba(8,41,25,0))] md:block" />
       </div>
 
       {/* nội dung */}
       <div className={cn(BIZ_WRAP, "flex flex-1 flex-col pb-8 pt-4 md:justify-center md:pb-14 md:pt-32")}>
-        <div className="max-w-[620px]" {...holdProps}>
+        <div className="max-w-[700px]" {...holdProps}>
+          {/* chữ của mọi slide xếp chồng một ô lưới → chiều cao ổn định; chỉ slide đang hiện là <h1> */}
+          <div className="grid">
+            {slides.map((s, i) => {
+              const on = i === index;
+              const Title = on ? "h1" : "p";
+              return (
+                <div
+                  key={s.id}
+                  aria-hidden={!on}
+                  inert={!on}
+                  className={cn(
+                    "col-start-1 row-start-1 transition-[opacity,translate] duration-700 ease-soft motion-reduce:transition-none",
+                    on ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
+                  )}
+                >
+                  <p className="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-3.5 py-1.5 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.14em] text-mv-mist">
+                    <span aria-hidden className="size-2 rounded-full bg-mv-gold-soft" />
+                    {s.eyebrow}
+                  </p>
+                  <Title id={on ? "hero-title" : undefined} className="mt-6 text-[clamp(2.3rem,4.4vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white">
+                    <span className="block">{s.titleLines[0]}</span> <span className="block text-mv-gold-soft">{s.titleLines[1]}</span>
+                  </Title>
+                  <p className="mt-6 max-w-[34rem] text-lead leading-relaxed text-white/85">{s.lead}</p>
+                </div>
+              );
+            })}
+          </div>
           {children}
         </div>
 
         {/* chọn ảnh */}
-        <div className="mt-10 flex items-center gap-1 md:mt-14" role="group" aria-label="Chọn ảnh ngành hàng" {...holdProps}>
+        <div className="mt-10 flex flex-wrap items-center gap-1 md:mt-14" role="group" aria-label="Chọn ảnh ngành hàng" {...holdProps}>
+          <button type="button" onClick={() => go(index - 1)} aria-label="Ảnh trước" className="mr-2 grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
+            <ChevronLeft className="size-5" aria-hidden />
+          </button>
           {slides.map((s, i) => {
             const on = i === index;
             return (
@@ -139,6 +169,9 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
               </button>
             );
           })}
+          <button type="button" onClick={() => go(index + 1)} aria-label="Ảnh tiếp theo" className="grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
+            <ChevronRight className="size-5" aria-hidden />
+          </button>
           {!reduced && (
             <button type="button" onClick={togglePause} aria-label={paused ? "Tiếp tục tự chuyển ảnh" : "Tạm dừng tự chuyển ảnh"} className="ml-1 grid size-11 place-items-center rounded-full text-white/75 transition-colors hover:bg-white/10 hover:text-white">
               {paused ? <Play className="size-4" aria-hidden /> : <Pause className="size-4" aria-hidden />}
