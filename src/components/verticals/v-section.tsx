@@ -3,10 +3,6 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/shared/reveal";
 import { cn } from "@/lib/utils";
 
-export function VContainer({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)} {...props} />;
-}
-
 /** Viên nhãn nhỏ đầu khối (kiểu tag Notion). */
 function VTag({ children, className }: { children: React.ReactNode; className?: string }) {
   return <p className={cn("inline-flex items-center gap-1.5 rounded-full bg-v-chip px-3 py-1 text-caption font-medium text-v-fg", className)}>{children}</p>;

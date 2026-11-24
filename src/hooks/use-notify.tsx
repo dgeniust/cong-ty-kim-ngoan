@@ -6,7 +6,6 @@ import { NotifyToast } from "@/components/shared/notify-toast";
 import { activityStore } from "@/lib/notify/activity-store";
 import type { NotifyMessage, NotifyOptions, NotifyStatus } from "@/lib/notify/types";
 
-export type { NotifyMessage, NotifyOptions } from "@/lib/notify/types";
 
 const DURATION: Record<NotifyStatus, number> = { success: 4500, info: 4500, warning: 6000, error: 7000, loading: Infinity };
 let seq = 0;

@@ -13,8 +13,9 @@ import { SteelBoard } from "./steel-board";
 import { SteelCart, type CartProduct } from "./steel-cart";
 import { CategoryExplorer, type ExplorerGroup } from "./steel-tools";
 import { VButton } from "./v-button";
-import { VContainer } from "./v-section";
+
 import { VSectionHead } from "./v-section-head";
+import { Container } from "@/components/shared/container";
 
 /** Đơn vị đặt hàng + khối lượng 1 đơn vị đọc từ thông số (“≈ 7,22 kg/cây”, “≈ 21,3 kg/m”). */
 function cartUnit(p: CatalogProduct): CartProduct {
@@ -66,7 +67,7 @@ export async function SatThepHome({
     <>
       {/* BANNER trên nền giấy kẻ ô: dòng thông tin → tiêu đề → bảng vật tư → số liệu */}
       <section aria-labelledby="hero-title" className="blueprint border-b border-v-line pb-16 md:pb-20">
-        <VContainer className="pt-6 md:pt-10">
+        <Container className="pt-6 md:pt-10">
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg pb-3 text-caption text-v-fg">
             <span className="font-semibold">{hero.eyebrow}</span>
             <span className="hidden text-v-mute sm:inline">Phân phối: {brands.join(" · ")}</span>
@@ -106,20 +107,20 @@ export async function SatThepHome({
               </div>
             ))}
           </dl>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 01. Danh sách vật tư & dự toán */}
       <section id="vat-tu-cua-ban" aria-labelledby="tinh-thep-title" className="scroll-mt-24 py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="tinh-thep-title" no="01" kicker="Danh sách vật tư" title={<Headline h={sec.tool} pillClassName="text-v-mute" />} lead={sec.tool?.subtitle} />
           <SteelCart products={allProducts.map(cartUnit)} phone={vertical.phone} zalo={COMPANY.zalo} />
-        </VContainer>
+        </Container>
       </section>
 
       {/* 02. Duyệt vật tư */}
       <section aria-labelledby="vat-tu-title" className="border-y border-v-line bg-v-raise py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead
             id="vat-tu-title"
             no="02"
@@ -135,20 +136,20 @@ export async function SatThepHome({
             }
           />
           <CategoryExplorer groups={groups} />
-        </VContainer>
+        </Container>
       </section>
 
       {/* 03. Nhận biết thép chính phẩm */}
       <section aria-labelledby="chinh-pham-title" className="blueprint py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="chinh-pham-title" no="03" kicker="Kiểm tra khi nhận hàng" title={<Headline h={sec.genuine} pillClassName="text-v-mute" />} lead={sec.genuine?.subtitle} />
           <RebarAnatomy />
-        </VContainer>
+        </Container>
       </section>
 
       {/* 04. Dịch vụ – khung tên bản vẽ */}
       <section aria-labelledby="dich-vu-title" className="border-y border-v-line py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="dich-vu-title" no="04" kicker="Dịch vụ" title={content.about.title} lead={content.about.paragraphs[0]} />
           <ol className="grid gap-4 md:grid-cols-3">
             {content.services.map((s, i) => (
@@ -165,12 +166,12 @@ export async function SatThepHome({
             ))}
           </ol>
           {content.about.paragraphs[1] && <p className="mt-8 max-w-3xl text-lead leading-relaxed text-v-fg">{content.about.paragraphs[1]}</p>}
-        </VContainer>
+        </Container>
       </section>
 
       {/* 05. Cam kết */}
       <section aria-labelledby="cam-ket-title" className="py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="cam-ket-title" no="05" kicker="Cam kết" title={<Headline h={sec.commitments} pillClassName="text-v-mute" />} lead={sec.commitments?.subtitle} />
           <ol className="grid sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
             {content.usps.map((u, i) => (
@@ -181,13 +182,13 @@ export async function SatThepHome({
               </Reveal>
             ))}
           </ol>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 06. Tin tức – mục lục */}
       {news.length > 0 && (
         <section aria-labelledby="tin-tuc-title" className="border-t border-v-line bg-v-raise py-16 md:py-24">
-          <VContainer>
+          <Container>
             <VSectionHead
               id="tin-tuc-title"
               no="06"
@@ -219,13 +220,13 @@ export async function SatThepHome({
                 </li>
               ))}
             </ol>
-          </VContainer>
+          </Container>
         </section>
       )}
 
       {/* Gọi nhận báo giá */}
       <section aria-labelledby="cta-title" className="py-16 md:py-24">
-        <VContainer>
+        <Container>
           <div className="grid items-end gap-8 rounded-2xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-12 lg:p-14">
             <div className="lg:col-span-7">
               <Kicker no="—" className="text-white">
@@ -246,7 +247,7 @@ export async function SatThepHome({
               </Link>
             </div>
           </div>
-        </VContainer>
+        </Container>
       </section>
     </>
   );

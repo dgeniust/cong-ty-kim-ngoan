@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { useHideOnScroll } from "@/hooks/use-hide-on-scroll";
+import { useModalMenu } from "@/hooks/use-modal-menu";
+import { useScrolled } from "@/hooks/use-scrolled";
 
 /**
  * Header chuyên trang lốp xe / sắt thép – CÙNG CẤU TRÚC với header phân bón
@@ -18,7 +20,8 @@ import { useHideOnScroll } from "@/hooks/use-hide-on-scroll";
 export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; company: { prefix: string; name: string; legalName: string } }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrolled({ on: 16, off: 4 });
+  const close = useCallback(() => setOpen(false), []);
   const nav = [
     { label: "Trang chủ", href: vertical.base },
     { label: "Sản phẩm", href: `${vertical.base}/san-pham` },
@@ -27,35 +30,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
   ];
   const isActive = (href: string) => (href === vertical.base ? pathname === href : pathname.startsWith(href));
 
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      setScrolled((prev) => (prev ? window.scrollY > 4 : window.scrollY > 16));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  // Khoá cuộn trang khi mở menu di động; Esc để đóng.
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
+  useModalMenu(open, close);
 
   // Cuộn xuống: header trượt lên biến mất · cuộn lên: trượt xuống hiện lại (luôn hiện khi mở menu)
   const hidden = useHideOnScroll({ lock: open });

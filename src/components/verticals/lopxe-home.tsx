@@ -14,8 +14,9 @@ import { TyreCheck } from "./tyre-check";
 import { TyreHero } from "./tyre-hero";
 import { TyreLabel, TyreTiers } from "./tyre-parts";
 import { VButton } from "./v-button";
-import { VContainer } from "./v-section";
+
 import { VSectionHead } from "./v-section-head";
+import { Container } from "@/components/shared/container";
 
 /**
  * Trang chủ LỐP XE – bố cục v1.1 (design.md §13). Giữ theme đen · trắng · cam.
@@ -50,7 +51,7 @@ export async function LopXeHome({
     <>
       {/* BANNER: dòng thông tin → tiêu đề + lời dẫn → hông lốp khổng lồ (tra cỡ) → số liệu */}
       <section aria-labelledby="hero-title" className="pb-16 pt-6 md:pb-20 md:pt-10">
-        <VContainer>
+        <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg/80 pb-3 text-caption text-v-fg">
             <span className="font-semibold">{hero.eyebrow}</span>
             <span className="hidden text-v-mute sm:inline">{COMPANY.area} · 07:00 – 17:00</span>
@@ -88,28 +89,28 @@ export async function LopXeHome({
               </div>
             ))}
           </dl>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 01. Lốp còn an toàn? */}
       <section id="an-toan" aria-labelledby="an-toan-title" className="scroll-mt-24 py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="an-toan-title" no="01" kicker="Kiểm tra an toàn" title={<Headline h={sec.safety} />} lead={sec.safety?.subtitle} />
           <TyreCheck serverNow={serverNow} />
-        </VContainer>
+        </Container>
       </section>
 
       {/* 02. Ba mức lốp */}
       <section aria-labelledby="muc-lop-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="muc-lop-title" no="02" kicker="Chọn mức lốp" title={<Headline h={sec.tiers} />} lead={sec.tiers?.subtitle} />
           <TyreTiers tiers={TYRE_TIERS} products={ordered} base={base} phone={vertical.phone} />
-        </VContainer>
+        </Container>
       </section>
 
       {/* 03. Theo loại xe – mục lục đánh số */}
       <section aria-labelledby="loai-xe-title" className="py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead
             id="loai-xe-title"
             no="03"
@@ -140,12 +141,12 @@ export async function LopXeHome({
               </Reveal>
             ))}
           </ol>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 04. Cỡ lốp hỏi nhiều – nhãn thông số tự cuộn */}
       <section aria-labelledby="noi-bat-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead
             id="noi-bat-title"
             no="04"
@@ -160,7 +161,7 @@ export async function LopXeHome({
               </VButton>
             }
           />
-        </VContainer>
+        </Container>
         <AutoCarousel label="Lốp được hỏi nhiều" itemClassName="w-[270px] sm:w-[290px]">
           {ordered.map((p) => (
             <TyreLabel key={p.slug} product={p} href={`${base}/san-pham/${p.slug}`} />
@@ -170,7 +171,7 @@ export async function LopXeHome({
 
       {/* 05. Nhận báo giá: 3 bước + form */}
       <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 py-16 md:py-24">
-        <VContainer>
+        <Container>
           <VSectionHead id="bao-gia-title" no="05" kicker="Báo giá" title={<Headline h={sec.process} />} lead={sec.process?.subtitle} />
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-6">
@@ -193,12 +194,12 @@ export async function LopXeHome({
               <TyreQuote phone={vertical.phone} zalo={COMPANY.zalo} />
             </div>
           </div>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 06. Cam kết */}
       <section aria-labelledby="cam-ket-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
-        <VContainer className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+        <Container className="grid gap-10 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-5">
             <Kicker no="06" className="text-v-fg">Cam kết</Kicker>
             <h2 id="cam-ket-title" className="text-h1 v-display mt-7 text-v-fg">{content.about.title}</h2>
@@ -217,13 +218,13 @@ export async function LopXeHome({
               </Reveal>
             ))}
           </ol>
-        </VContainer>
+        </Container>
       </section>
 
       {/* 07. Tin tức: bài chính + mục lục */}
       {lead && (
         <section aria-labelledby="tin-tuc-title" className="py-16 md:py-24">
-          <VContainer>
+          <Container>
             <VSectionHead
               id="tin-tuc-title"
               no="07"
@@ -265,13 +266,13 @@ export async function LopXeHome({
                 ))}
               </ol>
             </div>
-          </VContainer>
+          </Container>
         </section>
       )}
 
       {/* Gọi ngay */}
       <section aria-labelledby="cta-title" className="pb-16 md:pb-24">
-        <VContainer>
+        <Container>
           <div className="grid gap-8 rounded-2xl bg-v-raise p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
             <div className="lg:col-span-6">
               <h2 id="cta-title" className="text-h1 v-display text-v-fg">{content.cta.title}</h2>
@@ -290,7 +291,7 @@ export async function LopXeHome({
               </Link>
             </div>
           </div>
-        </VContainer>
+        </Container>
       </section>
     </>
   );

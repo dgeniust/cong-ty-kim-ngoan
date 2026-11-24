@@ -1,14 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { BookOpenText, Sparkles } from "lucide-react";
 import { notify } from "@/hooks/use-notify";
 import { cn } from "@/lib/utils";
-import { GuideCenter } from "./guide-center";
 import { guideStore } from "./guide-store";
-import { TourRunner } from "./tour-runner";
 import { getGuide, stepsFor, type Guide, type GuideSite, type TourStep } from "./tours";
+
+// Both panels render only after the admin opens the guide, so their code is split out of the admin bundle.
+const GuideCenter = dynamic(() => import("./guide-center").then((m) => m.GuideCenter), { ssr: false });
+const TourRunner = dynamic(() => import("./tour-runner").then((m) => m.TourRunner), { ssr: false });
 
 type GuideCtx = { openCenter: (id?: string) => void; start: (id: string, site?: GuideSite) => void };
 const Ctx = createContext<GuideCtx | null>(null);

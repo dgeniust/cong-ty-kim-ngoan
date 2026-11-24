@@ -3,14 +3,6 @@ import Link from "next/link";
 /** Hãng phân bón tiêu biểu – bấm để tìm sản phẩm theo hãng. Logo thật sẽ thay ô chữ viết tắt khi có file. */
 const BRANDS = ["Phú Mỹ", "Lâm Thao", "Mặt Trời Mới", "Đầu Trâu", "Con Cò", "Komix"];
 
-const initials = (name: string) =>
-  name
-    .split(/\s+/)
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
 /**
  * Dải hãng chạy ngang liên tục (marquee): danh sách nhân đôi, dịch −50% rồi lặp lại liền mạch.
  * Rê chuột hoặc tab vào thì dừng; prefers-reduced-motion thì đứng yên và cuộn ngang bằng tay.

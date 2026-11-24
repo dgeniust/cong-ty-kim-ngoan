@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PickerCrop = { key: string; label: string; image?: string };
+type PickerCrop = { key: string; label: string; image?: string };
 
 /**
  * Thanh chọn cây trên ảnh vườn: viên có ảnh tròn nhỏ của từng cây + tên.

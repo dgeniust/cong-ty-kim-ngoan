@@ -2,12 +2,13 @@ import { metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { VNewsCard } from "@/components/verticals/v-news-card";
 import { VPageHead } from "@/components/verticals/v-page-head";
-import { VContainer } from "@/components/verticals/v-section";
+
 import { Reveal } from "@/components/shared/reveal";
 import { getNews } from "@/lib/data/news";
 import { resolveSite } from "@/lib/site-params";
 import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { Container } from "@/components/shared/container";
 
 type Params = Promise<{ site: string }>;
 
@@ -29,7 +30,7 @@ export default async function NewsList({ params }: { params: Params }) {
   return (
     <>
       <VPageHead vertical={vertical} crumbs={[{ label: "Tin tức" }]} title="Tin tức & kiến thức" lead={`Kinh nghiệm chọn mua, sử dụng và bảo quản ${vertical.name.toLowerCase()}.`} />
-      <VContainer className="py-12 md:py-20">
+      <Container className="py-12 md:py-20">
         {first ? (
           <>
             <Reveal><VNewsCard item={first} large headingLevel="h2" /></Reveal>
@@ -42,7 +43,7 @@ export default async function NewsList({ params }: { params: Params }) {
         ) : (
           <p className="text-v-mute">Chưa có bài viết.</p>
         )}
-      </VContainer>
+      </Container>
     </>
   );
 }

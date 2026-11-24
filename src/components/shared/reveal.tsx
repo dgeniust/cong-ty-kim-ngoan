@@ -38,8 +38,10 @@ export function Reveal({
 
   return (
     <Tag
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ref={ref as any}
+      // A callback ref typed on HTMLElement fits every tag in the `as` union without a cast.
+      ref={(el: HTMLElement | null) => {
+        ref.current = el;
+      }}
       className={cn("reveal", className)}
       style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
     >

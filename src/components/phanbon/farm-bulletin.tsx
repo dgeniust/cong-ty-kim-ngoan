@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Droplets, Phone, Wind } from "lucide-react";
 import { Kicker } from "@/components/shared/kicker";
 import { inStage, type StageKind } from "@/constants/hub-extras";
-import { calendarFor, cropKey } from "@/lib/content/crop-match";
+import { calendarFor, cropKey, cropLabel as label } from "@/lib/content/crop-match";
 import { useCrop, useMonth } from "@/lib/crop-store";
 import { getCategory } from "@/lib/mock/categories";
 import { telHref } from "@/lib/verticals";
@@ -113,10 +113,6 @@ function seasonal(m: number) {
 }
 
 const KIND_LABEL: Record<StageKind, string> = { bon: "Bón phân", bvtv: "Phòng sâu bệnh", thu: "Thu hoạch", cham: "Chăm sóc" };
-const label = (name: string) => {
-  const s = name.replace(/^cây\s+/i, "");
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 /**
  * “Bảng tin nhà vườn hôm nay” – tầng xanh rừng đậm của trang:

@@ -8,7 +8,7 @@ import { ProductVisual } from "@/components/verticals/product-visual";
 import { VButton } from "@/components/verticals/v-button";
 import { VPageHead } from "@/components/verticals/v-page-head";
 import { VProductCard } from "@/components/verticals/v-product-card";
-import { VContainer, VHeading } from "@/components/verticals/v-section";
+import { VHeading } from "@/components/verticals/v-section";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { getCategory, getProduct, getProducts } from "@/lib/data/catalog";
@@ -16,6 +16,7 @@ import { absoluteUrl } from "@/lib/site";
 import { resolveSite } from "@/lib/site-params";
 import { CATALOG_SITES, isCatalogSite, telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { Container } from "@/components/shared/container";
 
 type Params = Promise<{ site: string; slug: string }>;
 
@@ -81,7 +82,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
         title={product.name}
       />
 
-      <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-2 lg:gap-16">
+      <Container className="grid gap-10 py-12 md:py-16 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} preload sizes="(min-width: 1024px) 50vw, 100vw" className="animate-rise aspect-square" />
         </div>
@@ -138,18 +139,18 @@ export default async function ProductDetail({ params }: { params: Params }) {
             ))}
           </section>
         </div>
-      </VContainer>
+      </Container>
 
       {related.length > 0 && (
         <section aria-labelledby="lien-quan-title" className="border-t border-v-line bg-v-sunk py-16 md:py-24">
-          <VContainer>
+          <Container>
             <VHeading id="lien-quan-title" title="Sản phẩm cùng nhóm" href={`${vertical.base}/san-pham?nhom=${product.categorySlug}`} />
             <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:gap-x-5 lg:grid-cols-4">
               {related.map((p, i) => (
                 <Reveal key={p.slug} delay={i * 70}><VProductCard product={p} /></Reveal>
               ))}
             </div>
-          </VContainer>
+          </Container>
         </section>
       )}
     </>

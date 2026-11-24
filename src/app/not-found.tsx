@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
-import { HubMark } from "@/components/hub/hub-header";
+import { HubMark } from "@/components/hub/hub-mark";
 import { getSettings } from "@/lib/settings/server";
 import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";

@@ -6,6 +6,7 @@ import { telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { FooterLandscape } from "./footer-landscape";
+import { FacebookIcon } from "@/components/shared/social-icons";
 
 const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white";
 const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
@@ -13,14 +14,6 @@ const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-wh
 
 /** Nhãn ngắn cho cột “Liên kết nhanh” (menu header dùng nhãn dài hơn). */
 const QUICK = HUB_NAV.map((m) => ({ label: m.label === "Giới thiệu" ? "Về chúng tôi" : m.label, href: m.href }));
-
-function FacebookIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className="size-[18px]" fill="currentColor">
-      <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3Z" />
-    </svg>
-  );
-}
 
 /** Footer landing tổng: nền xanh đậm, 4 cột + khối gọi, dải đồi vườn cây ở chân. */
 export async function HubFooter() {

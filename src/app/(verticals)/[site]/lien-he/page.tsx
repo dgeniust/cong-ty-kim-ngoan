@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { VContactForm } from "@/components/verticals/v-contact-form";
 import { VPageHead } from "@/components/verticals/v-page-head";
-import { VContainer } from "@/components/verticals/v-section";
+
 import { getProduct } from "@/lib/data/catalog";
 import { resolveSite } from "@/lib/site-params";
 import { isCatalogSite, telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { Container } from "@/components/shared/container";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ "san-pham"?: string }> };
 
@@ -40,7 +41,7 @@ export default async function Contact({ params, searchParams }: Props) {
   return (
     <>
       <VPageHead vertical={vertical} crumbs={[{ label: "Liên hệ" }]} title="Liên hệ báo giá" lead={`${vertical.contactLabel}. Gửi quy cách và số lượng, chúng tôi sẽ gọi lại.`} />
-      <VContainer className="grid gap-12 py-12 md:py-20 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+      <Container className="grid gap-12 py-12 md:py-20 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
         <address className="not-italic">
           <a href={telHref(vertical.phone)} className="v-display block whitespace-nowrap text-h2 tabular-nums text-v-fg transition-colors hover:text-v-accent">{vertical.phone}</a>
           <ul className="mt-10 space-y-6">
@@ -63,7 +64,7 @@ export default async function Contact({ params, searchParams }: Props) {
           <h2 className="text-h2 v-display mb-7 text-v-fg">Gửi yêu cầu</h2>
           <VContactForm defaultMessage={product ? `Tôi cần báo giá: ${product.name} (${product.keySpec}). Số lượng: ` : ""} />
         </div>
-      </VContainer>
+      </Container>
       <iframe
         title={`Bản đồ ${COMPANY.legalName}`}
         src={`https://www.google.com/maps?q=${encodeURIComponent(COMPANY.mapQuery)}&output=embed`}

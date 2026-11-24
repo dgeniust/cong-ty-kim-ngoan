@@ -9,7 +9,7 @@ export type NavItem =
   | { kind: "list"; label: string; href: string; spy?: string; links: NavLink[] }
   | { kind: "sectors"; label: string; href: string; spy?: string; sectors: NavSector[] };
 
-export const NAV_SECTORS: NavSector[] = [
+const NAV_SECTORS: NavSector[] = [
   {
     id: "phanbon",
     label: "Phân bón & thuốc BVTV",

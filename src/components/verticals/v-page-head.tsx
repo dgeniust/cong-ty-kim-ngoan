@@ -2,7 +2,8 @@ import Link from "next/link";
 import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
 import type { Vertical } from "@/lib/verticals";
-import { VContainer } from "./v-section";
+import { Container } from "@/components/shared/container";
+
 
 type VCrumb = { label: string; href?: string };
 
@@ -18,7 +19,7 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
           itemListElement: trail.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.label, ...(c.href ? { item: absoluteUrl(c.href) } : {}) })),
         }}
       />
-      <VContainer className="py-10 md:py-16">
+      <Container className="py-10 md:py-16">
         <nav aria-label="Đường dẫn">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-caption text-v-mute">
             {trail.map((c, i) => (
@@ -36,7 +37,7 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
         <h1 className="text-display v-display animate-rise mt-5 max-w-5xl text-v-fg">{title}</h1>
         {lead && <p className="animate-rise mt-5 max-w-2xl text-title leading-relaxed text-v-mute" style={{ animationDelay: "120ms" }}>{lead}</p>}
         {children}
-      </VContainer>
+      </Container>
     </div>
   );
 }

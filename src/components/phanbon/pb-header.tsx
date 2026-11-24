@@ -1,7 +1,7 @@
 "use client";
 
 import { telHref } from "@/lib/verticals";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
@@ -12,31 +12,16 @@ import type { SiteContent } from "@/lib/content/schema";
 import { resolveHref } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useHideOnScroll } from "@/hooks/use-hide-on-scroll";
+import { useModalMenu } from "@/hooks/use-modal-menu";
+import { useScrolled } from "@/hooks/use-scrolled";
 
 export function PbHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrolled({ on: 8, off: 8 });
+  const close = useCallback(() => setOpen(false), []);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Lock page scroll while the mobile menu is open; close it with Escape.
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
+  useModalMenu(open, close);
 
   const links = nav.map((item) => ({ ...item, href: resolveHref(item.href) }));
   const isActive = (href: string) => (href === "/phanbon" ? pathname === "/phanbon" : !href.includes("#") && pathname.startsWith(href));

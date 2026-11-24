@@ -4,13 +4,14 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import { VPageHead } from "@/components/verticals/v-page-head";
 import { VProductCard } from "@/components/verticals/v-product-card";
-import { VContainer } from "@/components/verticals/v-section";
+
 import { Reveal } from "@/components/shared/reveal";
 import { getBrands, getCategories, getCategory, getProducts } from "@/lib/data/catalog";
 import { resolveSite } from "@/lib/site-params";
 import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
+import { Container } from "@/components/shared/container";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ nhom?: string; hang?: string; q?: string }> };
 
@@ -91,7 +92,7 @@ export default async function ProductListing({ params, searchParams }: Props) {
           </button>
         </form>
       </VPageHead>
-      <VContainer className="grid gap-10 py-12 md:py-16 lg:grid-cols-[250px_1fr] lg:gap-14">
+      <Container className="grid gap-10 py-12 md:py-16 lg:grid-cols-[250px_1fr] lg:gap-14">
         {/* Bộ lọc: nhóm hàng + thương hiệu (theo phác thảo của khách) */}
         <aside aria-label="Bộ lọc sản phẩm" className="lg:sticky lg:top-28 lg:self-start">
           <p className="mb-2 px-3.5 text-caption font-medium text-v-mute">Nhóm sản phẩm</p>
@@ -130,7 +131,7 @@ export default async function ProductListing({ params, searchParams }: Props) {
             </div>
           )}
         </div>
-      </VContainer>
+      </Container>
     </>
   );
 }

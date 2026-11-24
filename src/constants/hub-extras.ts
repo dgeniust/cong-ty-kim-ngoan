@@ -90,14 +90,3 @@ export const CROPS: Crop[] = [
 export function inStage(s: Pick<CropStage, "from" | "to">, m: number) {
   return s.from <= s.to ? m >= s.from && m <= s.to : m >= s.from || m <= s.to;
 }
-
-/* ------------------------------------------------------------------ Vùng giao hàng */
-
-type DeliveryZone = { id: string; label: string; when: string; radiusKm: number; places: string; note: string };
-
-/** Ba vòng tính từ cửa hàng ở Chơn Thành. */
-export const ZONES: DeliveryZone[] = [
-  { id: "z1", label: "Vòng 1", when: "Giao trong ngày", radiusKm: 20, places: "Chơn Thành, Hớn Quản, Bàu Bàng và các xã lân cận", note: "Đặt trước 10 giờ sáng, nhận hàng trong ngày." },
-  { id: "z2", label: "Vòng 2", when: "Giao 1–2 ngày", radiusKm: 50, places: "Bình Long, Đồng Xoài, Dầu Tiếng, Phú Giáo, Bến Cát", note: "Gom chuyến theo tuyến QL13 và QL14." },
-  { id: "z3", label: "Vòng 3", when: "Theo lịch hẹn", radiusKm: 90, places: "Lộc Ninh, Bù Đăng, Bình Dương, TP.HCM", note: "Đơn số lượng lớn, gọi trước để xếp xe." },
-];
