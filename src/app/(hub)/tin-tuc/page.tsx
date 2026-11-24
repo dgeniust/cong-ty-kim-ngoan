@@ -6,12 +6,19 @@ import { getNews } from "@/lib/data/news";
 import { type VerticalId } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
+import { socialMeta } from "@/lib/seo";
+import { siteNameFor } from "@/lib/site-name";
 
-export const metadata: Metadata = {
-  title: "Tin tức",
-  description: "Tin tức, kiến thức về phân bón, lốp xe ô tô và tôn sắt thép từ Công ty TNHH Kim Ngoan.",
-  alternates: { canonical: "/tin-tuc" },
-};
+const TITLE = "Tin tức";
+const DESCRIPTION = "Tin tức, kiến thức về phân bón, lốp xe ô tô và tôn sắt thép từ Công ty TNHH Kim Ngoan.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: TITLE,
+    description: DESCRIPTION,
+    ...socialMeta({ title: TITLE, description: DESCRIPTION, path: "/tin-tuc", siteName: await siteNameFor("hub") }),
+  };
+}
 
 export default async function HubNews({ searchParams }: { searchParams: Promise<{ nganh?: string }> }) {
   const { VERTICALS, VERTICAL_LIST } = await getSettings();

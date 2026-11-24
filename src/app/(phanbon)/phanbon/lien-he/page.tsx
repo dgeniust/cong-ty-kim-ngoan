@@ -6,13 +6,19 @@ import { ContactForm } from "@/components/phanbon/catalog/contact-form";
 import { PageHero } from "@/components/phanbon/catalog/page-hero";
 import { getContent } from "@/lib/content/store";
 import { getFertilizerProduct } from "@/lib/products/server";
+import { socialMeta } from "@/lib/seo";
+import { siteNameFor } from "@/lib/site-name";
 
-export const metadata: Metadata = {
-  title: "Liên hệ",
-  description:
-    "Liên hệ Kim Ngoan để đặt hàng và được tư vấn kỹ thuật miễn phí. Địa chỉ, số điện thoại, giờ làm việc và bản đồ chỉ đường.",
-  alternates: { canonical: "/phanbon/lien-he" },
-};
+const TITLE = "Liên hệ";
+const DESCRIPTION = "Liên hệ Kim Ngoan để đặt hàng và được tư vấn kỹ thuật miễn phí. Địa chỉ, số điện thoại, giờ làm việc và bản đồ chỉ đường.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: TITLE,
+    description: DESCRIPTION,
+    ...socialMeta({ title: TITLE, description: DESCRIPTION, path: "/phanbon/lien-he", siteName: await siteNameFor("phanbon") }),
+  };
+}
 
 const WORKING_HOURS = "Thứ 2 – Chủ nhật, 7:00 – 17:00";
 

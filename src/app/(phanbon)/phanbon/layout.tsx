@@ -1,7 +1,4 @@
-// Phân bón: chữ viết tay cho trích dẫn (chỉ tải ở chuyên trang này)
 import { BackToTop } from "@/components/shared/back-to-top";
-import "@fontsource/dancing-script/vietnamese-600.css";
-import "@fontsource/dancing-script/latin-600.css";
 import { getSettings } from "@/lib/settings/server";
 import type { Metadata, Viewport } from "next";
 import { PbFooter } from "@/components/phanbon/pb-footer";
@@ -11,6 +8,8 @@ import { MobileActionBar } from "@/components/phanbon/catalog/mobile-action-bar"
 import { getContent } from "@/lib/content/store";
 import { SectorSwitcher } from "@/components/shared/sector-switcher";
 import { absoluteUrl } from "@/lib/site";
+import { socialMeta } from "@/lib/seo";
+import { siteNameFor } from "@/lib/site-name";
 
 export const viewport: Viewport = { themeColor: "#082919" };
 
@@ -18,13 +17,11 @@ export const viewport: Viewport = { themeColor: "#082919" };
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getContent();
   const brand = site.companyName.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase());
-  const siteName = `${site.companyPrefix} ${site.companyName}`.trim();
+  const siteName = await siteNameFor("phanbon");
   return {
     title: { absolute: site.seoTitle, template: `%s | ${brand || site.seoTitle}` },
     description: site.seoDescription,
-    alternates: { canonical: "/phanbon" },
-    openGraph: { type: "website", locale: "vi_VN", siteName, title: site.seoTitle, description: site.seoDescription, url: "/phanbon" },
-    twitter: { card: "summary_large_image", title: site.seoTitle, description: site.seoDescription },
+    ...socialMeta({ title: site.seoTitle, description: site.seoDescription, path: "/phanbon", siteName }),
   };
 }
 

@@ -1,4 +1,4 @@
-import { metaDescription } from "@/lib/seo";
+import { metaDescription, socialMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import { VNewsCard } from "@/components/verticals/v-news-card";
 import { VPageHead } from "@/components/verticals/v-page-head";
@@ -9,6 +9,10 @@ import { resolveSite } from "@/lib/site-params";
 import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
+import { siteNameFor } from "@/lib/site-name";
+
+// Unknown sites 404 at routing time (see `[site]/page.tsx`).
+export const dynamicParams = false;
 
 type Params = Promise<{ site: string }>;
 
@@ -17,11 +21,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
-  return {
-    title: `Tin tức & kiến thức ${v.short.toLowerCase()}`,
-    description: metaDescription([`Bài viết, kinh nghiệm chọn mua và sử dụng ${v.name.toLowerCase()} từ đội ngũ Kim Ngoan`, v.description]),
-    alternates: { canonical: `${v.base}/tin-tuc` },
-  };
+  const title = `Tin tức & kiến thức ${v.short.toLowerCase()}`;
+  const description = metaDescription([`Bài viết, kinh nghiệm chọn mua và sử dụng ${v.name.toLowerCase()} từ đội ngũ Kim Ngoan`, v.description]);
+  return { title, description, ...socialMeta({ title, description, path: `${v.base}/tin-tuc`, siteName: await siteNameFor(site) }) };
 }
 
 export default async function NewsList({ params }: { params: Params }) {

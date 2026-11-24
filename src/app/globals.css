@@ -84,8 +84,8 @@
   --color-ink-muted: #52525b;
   --color-ink-subtle: #5b5b63; /* ≥ 4.5:1 trên nền trắng & surface */
 
-  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
-  --font-script: "Dancing Script", cursive;
+  --font-sans: var(--font-be-vietnam-vi), var(--font-be-vietnam-latin), ui-sans-serif, system-ui, sans-serif;
+  --font-script: var(--font-dancing-script), cursive;
 
   /* Landing tổng (hub) – phong cách "sổ giấy dưới nắng chiều" (Notion):
    * nền giấy ấm, thẻ trắng viền mảnh không đổ bóng, MỘT màu xanh cho hành động chính,

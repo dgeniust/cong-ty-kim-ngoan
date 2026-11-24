@@ -38,3 +38,43 @@ export function metaDescription(parts: (string | undefined | null | false)[], ma
   }
   return out;
 }
+
+type SocialInput = {
+  /** Plain page title for link previews (no brand suffix; `<title>` is set separately). */
+  title: string;
+  description: string;
+  /** Path relative to `metadataBase`; used for both the canonical URL and `og:url`. */
+  path: string;
+  /** Shown as `og:site_name`; differs per site (hub, fertilizer, tyres, steel). */
+  siteName: string;
+  type?: "website" | "article";
+  /** Real photo for the preview; omit to fall back to the route's generated opengraph-image. */
+  image?: string;
+  publishedTime?: string;
+  authors?: string[];
+};
+
+/**
+ * Canonical + Open Graph + Twitter card for one page, kept in sync.
+ *
+ * Next.js replaces (does not deep-merge) the `openGraph` / `twitter` objects of parent layouts,
+ * so every page that customises its preview must restate `siteName` and `locale`, and must set
+ * `twitter` too — otherwise X/Zalo previews keep the parent layout's title.
+ */
+export function socialMeta({ title, description, path, siteName, type = "website", image, publishedTime, authors }: SocialInput): Pick<Metadata, "alternates" | "openGraph" | "twitter"> {
+  const images = image ? [image] : undefined;
+  return {
+    alternates: { canonical: path },
+    openGraph: {
+      type,
+      locale: "vi_VN",
+      siteName,
+      url: path,
+      title,
+      description,
+      ...(images && { images }),
+      ...(type === "article" && { publishedTime, authors }),
+    },
+    twitter: { card: "summary_large_image", title, description, ...(images && { images }) },
+  };
+}

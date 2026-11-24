@@ -1,4 +1,4 @@
-import { fitTitle, metaDescription } from "@/lib/seo";
+import { fitTitle, metaDescription, socialMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductArt } from "@/components/shared/product-art";
@@ -15,6 +15,7 @@ import { resolveSite } from "@/lib/site-params";
 import { CATALOG_SITES, isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
+import { siteNameFor } from "@/lib/site-name";
 
 type Params = Promise<{ site: string; slug: string }>;
 
@@ -35,8 +36,16 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: fitTitle(n.title, `${VERTICALS[site].name} Kim Ngoan`),
     description: metaDescription([n.excerpt, `${VERTICALS[site].name} Kim Ngoan – ${COMPANY.area}`]),
-    alternates: { canonical: n.href },
-    openGraph: { type: "article", url: n.href, title: n.title, description: n.excerpt, publishedTime: n.date, authors: [n.author], ...(n.cover ? { images: [n.cover] } : {}) },
+    ...socialMeta({
+      title: n.title,
+      description: n.excerpt,
+      path: n.href,
+      siteName: await siteNameFor(site),
+      type: "article",
+      image: n.cover || undefined,
+      publishedTime: n.date,
+      authors: [n.author],
+    }),
   };
 }
 

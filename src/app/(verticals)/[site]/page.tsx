@@ -5,6 +5,11 @@ import { getBrands, getCategories, getFeatured, getProducts } from "@/lib/data/c
 import { getNews } from "@/lib/data/news";
 import { resolveSite } from "@/lib/site-params";
 
+// Only the two known sites exist at this level, so unknown first segments (e.g. /abc) 404 at routing
+// time and get the server-rendered root not-found. Kept on this page only: on the layout it would
+// also apply to child routes and block catalog items added from the admin after build.
+export const dynamicParams = false;
+
 /**
  * Trang chủ chuyên trang: cùng ngôn ngữ Notion nhưng MỖI NGÀNH MỘT BỐ CỤC RIÊNG
  * (lốp xe xoay quanh việc tra cỡ lốp; sắt thép mang chất tài liệu báo giá & công cụ tính thép).

@@ -1,4 +1,4 @@
-import { metaDescription } from "@/lib/seo";
+import { metaDescription, socialMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { VContactForm } from "@/components/verticals/v-contact-form";
@@ -9,6 +9,7 @@ import { resolveSite } from "@/lib/site-params";
 import { isCatalogSite, telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
+import { siteNameFor } from "@/lib/site-name";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ "san-pham"?: string }> };
 
@@ -17,11 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
-  return {
-    title: `Liên hệ báo giá ${v.short.toLowerCase()}`,
-    description: metaDescription([`${v.contactLabel}: ${v.phone}`, `Địa chỉ: ${COMPANY.address}`, "Báo giá nhanh qua điện thoại hoặc Zalo, phản hồi trong giờ làm việc"]),
-    alternates: { canonical: `${v.base}/lien-he` },
-  };
+  const title = `Liên hệ báo giá ${v.short.toLowerCase()}`;
+  const description = metaDescription([`${v.contactLabel}: ${v.phone}`, `Địa chỉ: ${COMPANY.address}`, "Báo giá nhanh qua điện thoại hoặc Zalo, phản hồi trong giờ làm việc"]);
+  return { title, description, ...socialMeta({ title, description, path: `${v.base}/lien-he`, siteName: await siteNameFor(site) }) };
 }
 
 export default async function Contact({ params, searchParams }: Props) {

@@ -9,6 +9,8 @@ import { absoluteUrl } from "@/lib/site";
 import { resolveSite, siteStaticParams } from "@/lib/site-params";
 import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { socialMeta } from "@/lib/seo";
+import { siteNameFor } from "@/lib/site-name";
 
 type Params = Promise<{ site: string }>;
 
@@ -23,15 +25,14 @@ export async function generateViewport({ params }: { params: Params }): Promise<
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { COMPANY, VERTICALS } = await getSettings();
+  const { VERTICALS } = await getSettings();
   const { site } = await params;
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
   return {
     title: { absolute: v.seoTitle, template: `%s | ${v.name} Kim Ngoan` },
     description: v.seoDescription,
-    alternates: { canonical: v.base },
-    openGraph: { type: "website", locale: "vi_VN", siteName: `${COMPANY.legalName} – ${v.name}`, title: v.seoTitle, description: v.seoDescription, url: v.base },
+    ...socialMeta({ title: v.seoTitle, description: v.seoDescription, path: v.base, siteName: await siteNameFor(site) }),
   };
 }
 

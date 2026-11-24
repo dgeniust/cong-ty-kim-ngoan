@@ -1,4 +1,4 @@
-import { fitTitle, metaDescription } from "@/lib/seo";
+import { fitTitle, metaDescription, socialMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Search } from "lucide-react";
@@ -12,6 +12,7 @@ import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/container";
+import { siteNameFor } from "@/lib/site-name";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ nhom?: string; hang?: string; q?: string }> };
 
@@ -23,11 +24,12 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { nhom, hang } = await searchParams;
   const cat = nhom ? getCategory(site, nhom) : undefined;
   const title = [cat?.name ?? `Sản phẩm ${v.name.toLowerCase()}`, hang].filter(Boolean).join(" ");
+  const description = metaDescription([cat?.description ?? v.description, `${cat?.name ?? v.name} chính hãng tại Kim Ngoan – ${COMPANY.area}`, "Báo giá nhanh, tư vấn miễn phí, giao tận nơi"]);
   return {
     title: fitTitle(title, `${v.name} Kim Ngoan`),
-    description: metaDescription([cat?.description ?? v.description, `${cat?.name ?? v.name} chính hãng tại Kim Ngoan – ${COMPANY.area}`, "Báo giá nhanh, tư vấn miễn phí, giao tận nơi"]),
-    // Trang lọc theo nhóm có canonical riêng; lọc theo hãng gộp về trang nhóm để tránh trùng lặp nội dung
-    alternates: { canonical: cat ? `${v.base}/san-pham?nhom=${cat.slug}` : `${v.base}/san-pham` },
+    description,
+    // A category filter gets its own canonical; a brand filter folds into its category page to avoid duplicate content.
+    ...socialMeta({ title, description, path: cat ? `${v.base}/san-pham?nhom=${cat.slug}` : `${v.base}/san-pham`, siteName: await siteNameFor(site) }),
   };
 }
 
