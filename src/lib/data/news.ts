@@ -1,6 +1,6 @@
 import { getArticles } from "@/lib/mock/articles";
 import { VERTICALS, type VerticalId } from "@/lib/verticals";
-import type { NewsItem } from "./types";
+import type { NewsItem } from "@/types/catalog";
 
 /** DỮ LIỆU MẪU cho 2 chuyên trang mới. Tin phân bón lấy từ lib/mock/articles (section "tin-tuc"). */
 const raw: Omit<NewsItem, "href">[] = [

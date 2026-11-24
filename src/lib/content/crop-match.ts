@@ -1,5 +1,5 @@
 import { normalize } from "@/lib/mock/search";
-import { CROPS } from "@/lib/content/hub-extras";
+import { CROPS } from "@/constants/hub-extras";
 
 /** Khoá so khớp tên cây: “Cây cà phê” = “Cà phê”, “Hồ tiêu” = “Tiêu”. */
 export function cropKey(name: string) {

@@ -2,8 +2,8 @@ import { getSettings } from "@/lib/settings/server";
 import { fitTitle, metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductListing } from "@/components/site/product-listing";
-import type { Crumb } from "@/components/site/breadcrumbs";
+import { ProductListing } from "@/components/phanbon/catalog/product-listing";
+import type { Crumb } from "@/components/phanbon/catalog/breadcrumbs";
 import { categories, getCategory } from "@/lib/mock/categories";
 
 type Params = Promise<{ slug: string }>;

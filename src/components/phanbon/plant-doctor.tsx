@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Camera, Check, Cherry, Leaf as LeafIcon, Phone, Shovel, Sprout, type LucideIcon } from "lucide-react";
-import { SYMPTOMS, ZONES, type SymptomIcon, type ZoneId } from "@/lib/content/plant-doctor";
+import { SYMPTOMS, ZONES, type SymptomIcon, type ZoneId } from "@/constants/plant-doctor";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import Image from "next/image";

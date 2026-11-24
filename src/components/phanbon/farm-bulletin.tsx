@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Droplets, Phone, Wind } from "lucide-react";
 import { Kicker } from "@/components/shared/kicker";
-import { inStage, type StageKind } from "@/lib/content/hub-extras";
+import { inStage, type StageKind } from "@/constants/hub-extras";
 import { calendarFor, cropKey } from "@/lib/content/crop-match";
 import { useCrop, useMonth } from "@/lib/crop-store";
 import { getCategory } from "@/lib/mock/categories";

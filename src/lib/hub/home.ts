@@ -1,9 +1,9 @@
 import "server-only";
-import { HUB_HERO, HUB_PRODUCTS, HUB_STATS } from "@/lib/content/hub-home";
+import { HUB_HERO, HUB_PRODUCTS, HUB_STATS } from "@/constants/hub-home";
 import { getCategories, getProducts } from "@/lib/data/catalog";
-import type { ArtKind, NewsItem } from "@/lib/data/types";
+import type { ArtKind, NewsItem } from "@/types/catalog";
 import { getCategory as getFertilizerCategory } from "@/lib/mock/categories";
-import type { Product } from "@/lib/mock/types";
+import type { Product } from "@/types/phanbon";
 import type { Settings } from "@/lib/settings/server";
 import { telHref, type VerticalId } from "@/lib/verticals";
 

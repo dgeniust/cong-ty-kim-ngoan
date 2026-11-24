@@ -1,7 +1,7 @@
 import { realImage } from "@/lib/og";
 import { fitTitle, metaDescription } from "@/lib/seo";
 import type { Metadata } from "next";
-import { ArticleDetailPage } from "@/components/site/article-detail-page";
+import { ArticleDetailPage } from "@/components/phanbon/catalog/article-detail-page";
 import { getArticle, getArticles } from "@/lib/mock/articles";
 
 type Params = Promise<{ slug: string }>;

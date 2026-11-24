@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail, Phone } from "lucide-react";
-import { HUB_NAV } from "@/lib/content/hub-nav";
+import { HUB_NAV } from "@/constants/hub-nav";
 import { telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";

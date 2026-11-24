@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
-import { HUB_NAV, type NavItem } from "@/lib/content/hub-nav";
+import { HUB_NAV, type NavItem } from "@/constants/hub-nav";
 import { SECTOR_DOT, telHref } from "@/lib/verticals";
 
 import { cn } from "@/lib/utils";

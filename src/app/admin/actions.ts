@@ -12,10 +12,10 @@ import { settingsSchema, type SiteSettings } from "@/lib/settings/schema";
 import { defaultSettings, resetSettings, saveSettings } from "@/lib/settings/server";
 import { catalogProductSchema, fertilizerProductSchema } from "@/lib/products/schema";
 import { getCatalogProducts, getFertilizerProducts, saveCatalogProducts, saveFertilizerProducts, type ProductSite } from "@/lib/products/server";
-import type { CatalogContent, CatalogProduct } from "@/lib/data/types";
+import type { CatalogContent, CatalogProduct } from "@/types/catalog";
 import { catalogContentSchema } from "@/lib/catalog-content/schema";
 import { CATALOG_CONTENT_DEFAULTS, resetCatalogContent, saveCatalogContent } from "@/lib/catalog-content/server";
-import type { Product } from "@/lib/mock/types";
+import type { Product } from "@/types/phanbon";
 
 type ActionResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN" };
 

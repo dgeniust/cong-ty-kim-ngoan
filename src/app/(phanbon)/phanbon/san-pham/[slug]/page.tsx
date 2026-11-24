@@ -12,10 +12,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Container } from "@/components/shared/container";
 import { JsonLd } from "@/components/shared/json-ld";
 import { MoreLink } from "@/components/shared/more-link";
-import { SectionHeading } from "@/components/landing/section-heading";
-import { Breadcrumbs, type Crumb } from "@/components/site/breadcrumbs";
-import { ProductCard } from "@/components/site/product-card";
-import { ProductGallery } from "@/components/site/product-gallery";
+import { SectionHeading } from "@/components/phanbon/section-heading";
+import { Breadcrumbs, type Crumb } from "@/components/phanbon/catalog/breadcrumbs";
+import { ProductCard } from "@/components/phanbon/catalog/product-card";
+import { ProductGallery } from "@/components/phanbon/catalog/product-gallery";
 import { getContent } from "@/lib/content/store";
 import { getCategory } from "@/lib/mock/categories";
 import { getFertilizerProduct as getProduct, getFertilizerProducts } from "@/lib/products/server";

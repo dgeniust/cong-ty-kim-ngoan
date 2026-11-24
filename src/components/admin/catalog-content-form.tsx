@@ -6,7 +6,7 @@ import { resetCatalogContentAction, saveCatalogContentAction, type FieldErrors }
 import { useNotify } from "@/hooks/use-notify";
 import { catalogContentSchema } from "@/lib/catalog-content/schema";
 import { SECTION_SPECS } from "@/lib/catalog-content/sections";
-import type { CatalogContent, SectionHeading } from "@/lib/data/types";
+import type { CatalogContent, SectionHeading } from "@/types/catalog";
 import { cn } from "@/lib/utils";
 import { failure } from "./notify-helpers";
 import { BTN_TEXT, Card, Grid, ItemsField, LinesField, PageHeader, SaveBar, TextField } from "./notion-ui";

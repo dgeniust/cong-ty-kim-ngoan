@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
-import { MapEmbed } from "@/components/business/map-embed";
+import { MapEmbed } from "@/components/shared/map-embed";
 import { FooterLandscape } from "@/components/hub/footer-landscape";
 import { Logo } from "@/components/shared/logo";
 import type { SiteContent } from "@/lib/content/schema";

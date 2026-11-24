@@ -2,8 +2,8 @@ import { getSettings } from "@/lib/settings/server";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/shared/container";
-import { ContactForm } from "@/components/site/contact-form";
-import { PageHero } from "@/components/site/page-hero";
+import { ContactForm } from "@/components/phanbon/catalog/contact-form";
+import { PageHero } from "@/components/phanbon/catalog/page-hero";
 import { getContent } from "@/lib/content/store";
 import { getFertilizerProduct } from "@/lib/products/server";
 

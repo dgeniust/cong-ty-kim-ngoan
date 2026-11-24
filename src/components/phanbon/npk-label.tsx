@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getCategory } from "@/lib/mock/categories";
-import type { Product } from "@/lib/mock/types";
+import type { Product } from "@/types/phanbon";
 import { cn } from "@/lib/utils";
 
 export type LabelProduct = Pick<Product, "slug" | "name" | "categorySlug" | "ingredients" | "crops" | "packing" | "featured" | "isNew">;

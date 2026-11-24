@@ -6,9 +6,9 @@ import { ArrowUpRight, Loader2, Package, Plus, Search, Trash2, X } from "lucide-
 import { deleteProductAction, upsertProductAction, type FieldErrors } from "@/app/admin/actions";
 import { useNotify } from "@/hooks/use-notify";
 import { failure } from "./notify-helpers";
-import { ProductArt } from "@/components/nganh/product-art";
+import { ProductArt } from "@/components/shared/product-art";
 import { SmartImage } from "@/components/shared/smart-image";
-import type { ArtKind } from "@/lib/data/types";
+import type { ArtKind } from "@/types/catalog";
 import { ART_KINDS, catalogProductSchema, fertilizerProductSchema } from "@/lib/products/schema";
 import { cn } from "@/lib/utils";
 import { BTN_DANGER, BTN_PRIMARY, BTN_TEXT, ImagesField, LinesField, PageHeader, PairsField, TextField, Toggle } from "./notion-ui";

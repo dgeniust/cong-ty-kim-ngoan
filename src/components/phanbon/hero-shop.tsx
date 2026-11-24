@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, HeartHandshake, Leaf, Phone, Truck } from "lucide-react";
-import { HeroSearch } from "@/components/landing/hero-search";
+import { HeroSearch } from "@/components/phanbon/hero-search";
 import { cropKey } from "@/lib/content/crop-match";
 import { setCrop, useCrop } from "@/lib/crop-store";
 import { getCategory } from "@/lib/mock/categories";

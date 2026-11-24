@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, BookOpenText, FileText, PackagePlus, Package, PencilLine, Play, Settings2, Sprout } from "lucide-react";
 import { GuideLauncher } from "@/components/admin/guide/guide-provider";
-import { ProductArt } from "@/components/nganh/product-art";
+import { ProductArt } from "@/components/shared/product-art";
 import { getSession } from "@/lib/auth/server";
 import { getCatalogProducts, getFertilizerProducts } from "@/lib/products/server";
 import { getRawSettings } from "@/lib/settings/server";

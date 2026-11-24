@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArticleListPage } from "@/components/site/article-list-page";
+import { ArticleListPage } from "@/components/phanbon/catalog/article-list-page";
 
 export const metadata: Metadata = {
   title: "Tin tức & kiến thức canh tác",

@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { content as lopxeDefault } from "@/lib/data/lopxe";
 import { content as satthepDefault } from "@/lib/data/satthep";
-import type { CatalogContent } from "@/lib/data/types";
+import type { CatalogContent } from "@/types/catalog";
 import { readJson, removeJson, writeJson } from "@/lib/store/json-file";
 import type { CatalogSite } from "@/lib/verticals";
 import { catalogContentSchema } from "./schema";

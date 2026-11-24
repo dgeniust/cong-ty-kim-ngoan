@@ -5,9 +5,9 @@ import "@fontsource/dancing-script/latin-600.css";
 import { getSettings } from "@/lib/settings/server";
 import type { Metadata, Viewport } from "next";
 import { PbFooter } from "@/components/phanbon/pb-footer";
-import { SiteHeader } from "@/components/landing/site-header";
+import { PbHeader } from "@/components/phanbon/pb-header";
 import { JsonLd } from "@/components/shared/json-ld";
-import { MobileActionBar } from "@/components/site/mobile-action-bar";
+import { MobileActionBar } from "@/components/phanbon/catalog/mobile-action-bar";
 import { getContent } from "@/lib/content/store";
 import { SectorSwitcher } from "@/components/shared/sector-switcher";
 import { absoluteUrl } from "@/lib/site";
@@ -54,7 +54,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <div className="theme-pb">
       <JsonLd data={organization} />
       <SectorSwitcher current="phanbon" tone="green" />
-      <SiteHeader site={site} nav={content.nav} />
+      <PbHeader site={site} nav={content.nav} />
       <main id="noi-dung" tabIndex={-1} className="min-h-[60vh] outline-none">
         {children}
       </main>

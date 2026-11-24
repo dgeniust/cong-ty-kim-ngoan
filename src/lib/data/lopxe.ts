@@ -1,4 +1,4 @@
-import type { CatalogCategory, CatalogContent, CatalogProduct } from "./types";
+import type { CatalogCategory, CatalogContent, CatalogProduct } from "@/types/catalog";
 
 /** DỮ LIỆU MẪU – thay bằng API/CMS. Thương hiệu, quy cách chỉ để minh hoạ bố cục. */
 export const categories: CatalogCategory[] = [
