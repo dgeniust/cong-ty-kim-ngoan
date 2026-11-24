@@ -8,15 +8,15 @@ export const GUIDE_SITES: { id: GuideSite; label: string; dot: string }[] = [
 ];
 
 export type TourStep = {
-  /** giá trị thuộc tính data-tour của phần tử cần chỉ vào; bỏ trống = thẻ ở giữa màn hình */
+  /** data-tour attribute of the element to point at; empty = card centred on screen */
   target?: string;
   title: string;
   body: string;
   tips?: string[];
   placement?: "right" | "left" | "top" | "bottom";
-  /** thao tác giao diện trước khi hiện bước: mở khung thêm mới / mở sản phẩm đầu tiên / đóng khung */
+  /** UI action before showing the step: open the add form / open the first product / close the editor */
   open?: "peek-new" | "peek-first" | "close-peek";
-  /** chỉ hiện với các chuyên trang này */
+  /** only shown for these sites */
   only?: GuideSite[];
 };
 
@@ -26,13 +26,13 @@ export type Guide = {
   summary: string;
   icon: LucideIcon;
   minutes: number;
-  /** cần chọn nhóm sản phẩm trước khi bắt đầu */
+  /** a product group must be selected before starting */
   needsSite?: boolean;
   route?: (site: GuideSite) => string;
   steps: TourStep[];
-  /** đóng khung sửa khi kết thúc */
+  /** close the editor when the tour ends */
   cleanup?: "close-peek";
-  /** hướng dẫn chỉ đọc (không có tour tương tác) */
+  /** read-only guide (no interactive tour) */
   faq?: { q: string; a: string }[];
 };
 

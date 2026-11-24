@@ -7,7 +7,7 @@ import { Container } from "@/components/shared/container";
 
 type VCrumb = { label: string; href?: string };
 
-/** Đầu trang con: breadcrumb (kèm schema.org BreadcrumbList) + H1 lớn. */
+/** Sub-page header: breadcrumb (with schema.org BreadcrumbList) + large H1. */
 export function VPageHead({ vertical, crumbs, title, lead, children }: { vertical: Vertical; crumbs: VCrumb[]; title: string; lead?: string; children?: React.ReactNode }) {
   const trail: VCrumb[] = [{ label: "Kim Ngoan", href: "/" }, { label: vertical.short, href: vertical.base }, ...crumbs];
   return (

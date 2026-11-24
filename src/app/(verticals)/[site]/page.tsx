@@ -11,8 +11,8 @@ import { resolveSite } from "@/lib/site-params";
 export const dynamicParams = false;
 
 /**
- * Trang chủ chuyên trang: cùng ngôn ngữ Notion nhưng MỖI NGÀNH MỘT BỐ CỤC RIÊNG
- * (lốp xe xoay quanh việc tra cỡ lốp; sắt thép mang chất tài liệu báo giá & công cụ tính thép).
+ * Sector-site home page: same Notion-like language, but EACH SECTOR HAS ITS OWN LAYOUT
+ * (tyres revolve around the size finder; steel reads like a quotation document with weight calculators).
  */
 export default async function VerticalHomePage({ params }: { params: Promise<{ site: string }> }) {
   const { site, vertical } = await resolveSite((await params).site);
@@ -25,7 +25,7 @@ export default async function VerticalHomePage({ params }: { params: Promise<{ s
     featured: await getFeatured(site, 4),
     allProducts: await getProducts(site),
     brands: await getBrands(site),
-    news: await getNews({ site, limit: 3 }), // tin tức lọc theo chuyên trang
+    news: await getNews({ site, limit: 3 }), // news filtered to this site
   };
   return site === "lopxe" ? <LopXeHome {...props} /> : <SatThepHome {...props} />;
 }

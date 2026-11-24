@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Hiện dần (fade + trượt nhẹ) khi phần tử vào khung nhìn. Chỉ chạy một lần,
- * dùng CSS transition (.reveal trong globals.css) nên không cần thư viện animation.
+ * Fades in (and slides slightly) when the element enters the viewport. Runs once and uses a
+ * CSS transition (.reveal in globals.css), so no animation library is needed.
  */
 export function Reveal({
   children,

@@ -13,7 +13,7 @@ import { ArrowLink, BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle, SECTOR_TONE, Se
 type Verticals = Settings["VERTICALS"];
 const TONE_BAR = { leaf: "after:bg-c-leaf", sun: "after:bg-c-sun", sky: "after:bg-c-sky", ember: "after:bg-c-ember" } as const;
 
-/** Tin tức kiểu báo chí: nền xám nhạt, 1 bài tiêu điểm (60%) + 3 bài xếp dọc ngăn bằng kẻ mảnh (40%). */
+/** Newspaper-style news block: one lead story (60%) + three stacked items separated by hairlines (40%). */
 export function NewsSection({ news, verticals }: { news: ReturnType<typeof pickHomeNews>; verticals: Verticals }) {
   const { feature, list } = news;
   if (!feature) return null;

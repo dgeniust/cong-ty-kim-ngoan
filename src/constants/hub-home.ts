@@ -2,13 +2,13 @@ import { BadgeCheck, Headset, Truck, type LucideIcon } from "lucide-react";
 import type { VerticalId } from "@/lib/verticals";
 
 /**
- * Nội dung tĩnh của landing tổng `/` – phong cách Business (Editorial Industrial), nhánh fe/bussiness-style-v1.
- * Sửa câu chữ, ảnh ở đây; không cần đụng vào JSX. `{founded}`, `{area}` lấy từ phần Cài đặt công ty.
+ * Static content for the landing hub `/` (Business / Editorial Industrial style).
+ * Edit copy and images here without touching JSX. `{founded}` and `{area}` come from the company settings.
  */
 
 /**
- * Hero: mỗi slide một ngành – ảnh nền, dòng nhỏ, slogan 2 dòng (dòng 2 tô vàng), mô tả.
- * Chữ đổi theo slide; `{founded}`, `{area}` lấy từ Cài đặt công ty. Ảnh: chủ thể lệch phải, nửa trái để chữ.
+ * Hero: one slide per sector – background photo, eyebrow, two-line slogan (second line in gold), lead.
+ * The text changes with the slide; `{founded}`, `{area}` come from the company settings. Photos: subject on the right, left half free for text.
  */
 export const HUB_HERO = {
   primaryCta: { label: "Khám phá sản phẩm", href: "#san-pham" },
@@ -45,8 +45,8 @@ export const HUB_HERO = {
 };
 
 /**
- * Thanh chỉ số đáy hero. `{years}` = số năm từ năm thành lập.
- * TODO(khách hàng): gửi số nhân sự thật để thêm chỉ số “Đội ngũ”.
+ * Stats bar at the bottom of the hero. `{years}` = years since the founding year.
+ * TODO(client): send the real head count to add a "Team" figure.
  */
 export const HUB_STATS = [
   { value: "{years}+", label: "Năm kinh nghiệm" },
@@ -74,7 +74,7 @@ export const HUB_COMMITMENTS: { icon: LucideIcon; title: string; text: string }[
   { icon: Truck, title: "Giao hàng tận nơi", text: "Xe nhà giao tận vườn, tận công trình trong khu vực Chơn Thành và lân cận." },
 ];
 
-/** Khối sản phẩm: mỗi ngành một "không gian trưng bày". */
+/** Products block: one "showroom" per sector. */
 export const HUB_PRODUCTS = {
   eyebrow: "Sản phẩm",
   title: "Ba ngành hàng, một nhà cung cấp",
@@ -109,7 +109,7 @@ export const HUB_PRODUCTS = {
   ] satisfies { id: VerticalId; tab: string; title: string; text: string; image: string; alt: string; caption: string }[],
 };
 
-/** Banner kêu gọi báo giá giữa trang (sau khối Sản phẩm). */
+/** Mid-page quote banner (after the Products block). */
 export const HUB_CTA = {
   eyebrow: "Tư vấn miễn phí",
   title: "Cần phân bón cho vụ mới, lốp cho xe hay thép cho công trình?",

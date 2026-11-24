@@ -11,7 +11,7 @@ import { npkOf, type LabelProduct } from "./npk-label";
 
 export type HeroCrop = { key: string; name: string; description: string; image: string };
 
-/** Thẻ sản phẩm gọn: dải xanh in công thức như trên bao + 3 vạch N-P-K + tên. */
+/** Compact product card: green band with the formula as printed on the bag + 3 N-P-K bars + name. */
 function MiniLabel({ p }: { p: LabelProduct }) {
   const npk = npkOf(p);
   const cat = getCategory(p.categorySlug)?.name;
@@ -77,12 +77,12 @@ export function HeroCropPanel({ crops, products }: { crops: HeroCrop[]; products
         />
       ))}
 
-      {/* chọn cây */}
+      {/* crop picker */}
       <div className="absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4">
         <CropPicker crops={crops.map((c) => ({ key: c.key, label: label(c.name), image: c.image }))} value={key} onChange={setCrop} />
       </div>
 
-      {/* gợi ý cho cây */}
+      {/* suggestions for the crop */}
       <div className="absolute inset-x-3 bottom-3 sm:inset-x-4 sm:bottom-4">
         <div aria-live="polite" className="rounded-lg bg-paper/95 p-3 backdrop-blur sm:p-4">
           <div className="flex items-baseline justify-between gap-3 px-1">

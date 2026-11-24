@@ -1,6 +1,6 @@
 import type { SectionHeading } from "@/types/catalog";
 
-/** “{title} [highlight]{after}” – phần nổi bật đổi màu nhấn của chuyên trang (không bọc viên nhãn); `after` bắt đầu bằng dấu câu thì không thêm khoảng trắng. */
+/** "{title} [highlight]{after}" – the highlight takes the site's accent colour (no pill); no space is added before `after` when it starts with punctuation. */
 export function Headline({ h, pillClassName }: { h?: Pick<SectionHeading, "title" | "highlight" | "after">; pillClassName?: string }) {
   if (!h) return null;
   const after = h.after ? (/^[,.;:!?…]/.test(h.after) ? h.after : ` ${h.after}`) : null;

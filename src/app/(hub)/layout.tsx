@@ -9,7 +9,7 @@ import { getSettings } from "@/lib/settings/server";
 
 export const viewport: Viewport = { themeColor: "#082919" };
 
-/** Landing tổng của công ty – điều hướng về 3 chuyên trang. */
+/** Company landing hub – routes visitors to the three sector sites. */
 export default async function HubLayout({ children }: { children: React.ReactNode }) {
   const { COMPANY, VERTICAL_LIST } = await getSettings();
   const organization = {

@@ -29,16 +29,16 @@ import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
 /**
- * Landing phân bón – bố cục v1.2 (design.md §14). Giữ theme “Vườn Xanh” (§3–4).
- *  hero kiểu cửa hàng (tìm kiếm, nhóm hàng, ảnh vườn thật + gợi ý theo cây) → 01 bảng tin nhà vườn (thời tiết + việc tháng này)
- *  → 02 bác sĩ cây trồng → 03 nhãn bao → 04 vườn thật, người thật → 05 về Kim Ngoan → 06 kiến thức → form gọi lại.
- * Cây chọn ở hero dùng chung cho cả trang (lib/crop-store). Chữ lấy từ CMS khi có trường tương ứng.
+ * Fertilizer landing page (design.md §14), "Vườn Xanh" theme (§3–4):
+ *  shop-style hero (search, brands, real garden photo + crop-based suggestions) → 01 farm bulletin (weather + this month's tasks)
+ *  → 02 plant doctor → 03 bag-label products → 04 real gardens → 05 about Kim Ngoan → 06 farming guides → call-back form.
+ * The crop picked in the hero is shared page-wide (lib/crop-store). Copy comes from the CMS where a field exists.
  */
 
-// dự báo thời tiết cache 30 phút → trang tự làm mới theo (ISR)
+// the weather forecast is cached for 30 minutes → the page revalidates on the same cadence (ISR)
 export const revalidate = 1800;
 
-/** CMS ghi nhóm hàng dạng chữ (“Phân bón NPK”) → nối tới danh mục trùng tên, không có thì sang trang tìm kiếm. */
+/** The CMS stores product groups as text ("Phân bón NPK") → link to the category with that name, else to search. */
 const categoryHref = (label: string) => {
   const c = categories.find((x) => normalize(x.name) === normalize(label));
   return c ? `/phanbon/danh-muc/${c.slug}` : `/phanbon/tim-kiem?q=${encodeURIComponent(label)}`;
@@ -80,7 +80,7 @@ export default async function HomePage() {
   return (
     <div className="biz-garden relative isolate overflow-x-clip">
       <GardenBackdrop />
-      {/* HERO kiểu cửa hàng: dòng thông tin → tiêu đề + tìm kiếm + nhóm hàng | ảnh vườn thật + gợi ý theo cây */}
+      {/* shop-style HERO: info row → headline + search + brands | real garden photo + crop suggestions */}
       <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
@@ -96,7 +96,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 01. Bảng tin nhà vườn hôm nay – tầng xanh rừng đậm */}
+      {/* 01. Today's farm bulletin – dark green band */}
       <section id="bang-tin" aria-labelledby="bang-tin-title" className="scroll-mt-24 bg-brand-900 py-20 md:py-28">
         <Container>
           <FarmBulletin
@@ -111,7 +111,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 02. Bác sĩ cây trồng */}
+      {/* 02. Plant doctor */}
       <section id="bac-si-cay-trong" aria-labelledby="bac-si-title" data-garden="2" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <SectionHead
@@ -125,7 +125,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 03. Sản phẩm – mục lục nhóm hàng (CMS) + thẻ nhãn bao */}
+      {/* 03. Products – category index (CMS) + bag-label cards */}
       <section id="san-pham" aria-labelledby="san-pham-title" data-garden="3" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <SectionHead
@@ -171,14 +171,14 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 04. Vườn thật, người thật */}
+      {/* 04. Real gardens, real people */}
       <section id="vuon-that" aria-labelledby="vuon-that-title" data-garden="1" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
         <Container>
           <RealGardens stories={content.stories} zalo={COMPANY.zalo} no="04" />
         </Container>
       </section>
 
-      {/* 05. Về Kim Ngoan – ảnh lớn có chú thích, câu chuyện, số liệu, cam kết (đều từ CMS) */}
+      {/* 05. About Kim Ngoan – large captioned photo, story, figures, commitments (all from the CMS) */}
       <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 bg-brand-900 py-20 text-white md:py-28">
         <Container className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-6">
@@ -240,7 +240,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 06. Kiến thức canh tác – bài chính + mục lục */}
+      {/* 06. Farming guides – lead article + index */}
       {lead && (
         <section id="tin-tuc" aria-labelledby="tin-tuc-title" data-garden="2" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
           <Container>

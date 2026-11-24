@@ -14,8 +14,8 @@ import { siteNameFor } from "@/lib/site-name";
 
 type Params = Promise<{ site: string }>;
 
-// KHÔNG đặt dynamicParams = false ở đây: cấu hình layout áp cho cả trang con → sản phẩm/bài mới thêm từ admin sẽ 404.
-// Site lạ (VD: /abc) do resolveSite() trả 404 (mã 404 chuẩn, nội dung 404 hiển thị phía trình duyệt).
+// Do NOT set `dynamicParams = false` here: layout segment config also applies to child pages, so catalog items
+// added from the admin after build would 404. Unknown sites are rejected by `[site]/page.tsx` instead.
 export const generateStaticParams = siteStaticParams;
 
 export async function generateViewport({ params }: { params: Params }): Promise<Viewport> {

@@ -15,7 +15,7 @@ import { BTN_DANGER, BTN_PRIMARY, BTN_TEXT, ImagesField, LinesField, PageHeader,
 
 export type AdminSite = "phanbon" | "lopxe" | "satthep";
 type Pair = { name: string; value: string };
-/** Dạng chung cho cả 2 loại sản phẩm – trường nào không dùng sẽ bị bỏ khi gửi lên. */
+/** Shared shape for both product kinds – unused fields are dropped before submitting. */
 export type AdminProduct = {
   slug: string;
   name: string;
@@ -26,14 +26,14 @@ export type AdminProduct = {
   images?: string[];
   featured?: boolean;
   isNew?: boolean;
-  // phân bón
+  // fertilizer
   packing?: string[];
   origin?: string;
   ingredients?: Pair[];
   uses?: string[];
   usage?: string[];
   crops?: string[];
-  // lốp xe / sắt thép
+  // tyres / steel
   brand?: string;
   keySpec?: string;
   specs?: Pair[];
@@ -51,7 +51,7 @@ const ART_LABEL: Record<ArtKind, string> = {
   tyre: "Lốp du lịch", "tyre-at": "Lốp địa hình", "tyre-truck": "Lốp tải", rebar: "Thép cây", ibeam: "Thép hình", pipe: "Ống thép", box: "Thép hộp", roofing: "Tôn lợp", coil: "Cuộn", plate: "Tấm",
 };
 
-// Màu nhãn phẳng kiểu Notion, gán ổn định theo danh mục.
+// Flat Notion-style label colours, assigned stably per category.
 const TAG_TONES = ["bg-hub-sky-soft text-[#0b5394]", "bg-hub-mint-soft text-[#1a6b46]", "bg-hub-marigold-soft text-[#7a5200]", "bg-hub-coral-soft text-[#9b2c1f]", "bg-[#efe6fb] text-[#5b2a86]", "bg-hub-canvas text-hub-ink/70"];
 
 function slugify(s: string) {
@@ -63,7 +63,7 @@ const blank = (site: AdminSite): AdminProduct =>
     ? { slug: "", name: "", categorySlug: "", sku: "", shortDescription: "", description: [], images: [], packing: [], origin: "", ingredients: [], uses: [], usage: [], crops: [] }
     : { slug: "", name: "", categorySlug: "", sku: "", shortDescription: "", description: [], images: [], brand: "", keySpec: "", specs: [], highlights: [], art: site === "lopxe" ? "tyre" : "rebar" };
 
-/** Chỉ giữ các trường của đúng loại sản phẩm trước khi kiểm tra / gửi. */
+/** Keeps only the fields of the right product kind before validating / submitting. */
 function payload(site: AdminSite, p: AdminProduct) {
   const common = { slug: p.slug, name: p.name, categorySlug: p.categorySlug, sku: p.sku, shortDescription: p.shortDescription, description: p.description, featured: p.featured || undefined, isNew: p.isNew || undefined };
   if (site === "phanbon") return { ...common, images: p.images ?? [], packing: p.packing ?? [], origin: p.origin ?? "", ingredients: p.ingredients ?? [], uses: p.uses ?? [], usage: p.usage ?? [], crops: p.crops ?? [] };
@@ -159,7 +159,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
       />
 
       <div className="mx-auto max-w-5xl px-5 pb-24 sm:px-10">
-        {/* thanh view + công cụ kiểu cơ sở dữ liệu Notion */}
+        {/* view bar + tools, Notion-database style */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hub-line pb-2">
           <div role="tablist" aria-label="Chế độ xem" data-tour="db-views" className="flex gap-1">
             {views.map((v) => (
@@ -190,7 +190,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
           </div>
         </div>
 
-        {/* bảng */}
+        {/* table */}
         <div className="relative mt-2 overflow-x-auto">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead>
@@ -294,7 +294,7 @@ export function ProductManager({ site, products, categories, brands }: { site: A
   );
 }
 
-/* ---------------- Side-peek: sửa / thêm sản phẩm ---------------- */
+/* ---------------- Side peek: edit / add a product ---------------- */
 
 function PropRow({ label, children, error, tour }: { label: string; children: React.ReactNode; error?: string; tour?: string }) {
   return (
@@ -386,7 +386,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
     <div className="fixed inset-0 z-50">
       <button type="button" aria-label="Đóng" onClick={close} className="absolute inset-0 animate-fade bg-black/20" />
       <aside data-tour="peek" data-mode={original ? "edit" : "new"} role="dialog" aria-modal="true" aria-label={original ? `Sửa ${initial.name}` : "Thêm sản phẩm"} className="absolute inset-y-0 right-0 flex w-full max-w-[680px] animate-[peek_.24s_cubic-bezier(.2,.8,.2,1)] flex-col border-l border-hub-line bg-hub-paper shadow-[-8px_0_32px_rgb(0_0_0/0.08)]">
-        {/* thanh đầu */}
+        {/* header bar */}
         <div data-tour="peek-head" className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-hub-line px-3">
           <div className="flex min-w-0 items-center gap-1.5 text-sm text-hub-ink/55">
             <button type="button" data-tour="peek-close" onClick={close} aria-label="Đóng" className="grid size-8 place-items-center rounded-md hover:bg-hub-ink/5">
@@ -424,7 +424,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
           />
           {err("name") && <p className="text-[13px] text-[#d1242f]">{err("name")}</p>}
 
-          {/* thuộc tính */}
+          {/* properties */}
           <div className="mt-5 space-y-1 border-b border-hub-line pb-5">
             <PropRow label="Đường dẫn" error={err("slug")} tour="peek-slug">
               <div className="flex items-center rounded-md">
@@ -521,7 +521,7 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
           </div>
         </div>
 
-        {/* thanh dưới */}
+        {/* footer bar */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-hub-line px-4 py-3">
           {original ? (
             <button type="button" data-tour="peek-delete" onClick={() => onDelete(initial)} className={BTN_DANGER}>

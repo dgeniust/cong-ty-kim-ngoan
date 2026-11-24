@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
-/** Google hiển thị ~60 ký tự title, ~155 ký tự mô tả. */
+/** Google shows ~60 characters of a title and ~155 of a description. */
 const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 155;
 
 /**
- * Title cho trang con: giữ hậu tố thương hiệu của layout nếu tổng ≤ 60 ký tự,
- * quá dài thì bỏ hậu tố (dùng absolute) để Google không cắt mất ý chính.
+ * Sub-page title: keep the layout's brand suffix when the total stays ≤ 60 characters,
+ * otherwise drop it (absolute title) so Google does not truncate the meaningful part.
  */
 export function fitTitle(title: string, suffix: string): Metadata["title"] {
   return `${title} | ${suffix}`.length <= TITLE_MAX ? title : { absolute: title };
@@ -23,8 +23,8 @@ const cut = (s: string, max: number) => {
 };
 
 /**
- * Ghép mô tả SEO từ nhiều câu theo thứ tự ưu tiên, dừng khi đủ dài (≤ 155 ký tự).
- * VD: metaDescription([p.shortDescription, `${cat} chính hãng tại Kim Ngoan – ${area}`, "Báo giá nhanh, tư vấn miễn phí"])
+ * Builds an SEO description from several sentences in priority order, stopping once long enough (≤ 155 characters).
+ * e.g. metaDescription([p.shortDescription, `${cat} chính hãng tại Kim Ngoan – ${area}`, "Báo giá nhanh, tư vấn miễn phí"])
  */
 export function metaDescription(parts: (string | undefined | null | false)[], max = DESCRIPTION_MAX): string {
   let out = "";

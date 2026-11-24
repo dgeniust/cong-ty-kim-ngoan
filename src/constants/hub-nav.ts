@@ -1,6 +1,6 @@
 /**
- * Menu landing tổng (header có dropdown + footer “Liên kết nhanh”).
- * `spy` = id khối trên trang chủ: mục menu gạch chân khi cuộn tới khối đó.
+ * Hub menu (header with dropdowns + footer "Quick links").
+ * `spy` = section id on the home page: the menu item is underlined while that section is in view.
  */
 export type NavLink = { label: string; href: string; note?: string };
 export type NavSector = { id: "phanbon" | "satthep" | "lopxe"; label: string; short: string; href: string; image: string; note: string; links: NavLink[] };

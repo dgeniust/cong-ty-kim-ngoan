@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import { SlideArrow } from "@/components/hub/ui";
 
 /**
- * Màu riêng từng nhóm (design.md §2.5):
- * phân bón = xanh lá #16A34A + vàng #F59E0B · lốp xe = than đất #1E293B + cam #EA580C · sắt thép = xanh thép #0F4C81 + đỏ gạch #DC2626.
- * `main` cho vạch/mảng lớn, `btn` cho nút (chữ trắng ≥4.5:1), `badge` = nền nhạt + chữ đậm của màu nhấn.
+ * Per-sector colours (design.md §2.5):
+ * fertilizer = green #16A34A + gold #F59E0B · tyres = slate #1E293B + orange #EA580C · steel = steel blue #0F4C81 + brick #DC2626.
+ * `main` for rules / large fields, `btn` for buttons (white text ≥ 4.5:1), `badge` = light tint + dark accent text.
  */
 const SECTOR_STYLE: Record<string, { main: string; accent: string; btn: string; ink: string; tint: string; badge: string; hover: string }> = {
   phanbon: {
@@ -45,15 +45,15 @@ const SECTOR_STYLE: Record<string, { main: string; accent: string; btn: string; 
 };
 
 /**
- * Trưng bày từng ngành: thanh chuyển nhóm lớn không viền (tab chọn = nền đặc #0B5D36, chữ trắng),
- * bên dưới là phần giới thiệu ngành + ảnh lớn, rồi 4 thẻ dòng sản phẩm tiêu biểu (ảnh, tên, thông số/ứng dụng)
- * – thẻ không khung viền, chỉ đổ bóng mềm. Bàn phím: ←/→ giữa các tab.
+ * Sector showcase: a large borderless tab bar (selected tab = solid #0B5D36, white text),
+ * then the sector intro + large photo, then 4 featured product-line cards (image, name, spec/use)
+ * – borderless cards with a soft shadow only. Keyboard: ←/→ moves between tabs.
  */
 export function SpotlightTabs({ items }: { items: Spotlight[] }) {
   const uid = useId();
   const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
-  // báo ngành đang xem cho nền hai mép (lá ↔ họa tiết lốp/thép), xem garden-backdrop.tsx
+  // tell the edge backdrop which sector is shown (leaves ↔ tyre/steel motifs), see garden-backdrop.tsx
   useEffect(() => {
     const section = rootRef.current?.closest<HTMLElement>("[data-garden]");
     if (section) section.dataset.motif = items[active]?.id ?? "";
@@ -65,7 +65,7 @@ export function SpotlightTabs({ items }: { items: Spotlight[] }) {
     setActive(i);
     const tab = document.getElementById(`${uid}-tab-${items[i].id}`);
     if (focus) tab?.focus();
-    // thanh tab cuộn ngang trên điện thoại: kéo tab vừa chọn vào tầm nhìn (chỉ cuộn ngang trong thanh)
+    // the tab bar scrolls horizontally on phones: bring the selected tab into view (scrolls the bar only)
     const bar = tab?.parentElement;
     if (tab && bar) bar.scrollTo({ left: tab.offsetLeft - bar.offsetLeft - 16, behavior: "smooth" });
   };
@@ -137,7 +137,7 @@ export function SpotlightTabs({ items }: { items: Spotlight[] }) {
             </figure>
           </div>
 
-          {/* dòng sản phẩm tiêu biểu */}
+          {/* featured product lines */}
           <div className="mt-12 flex items-end justify-between gap-4">
             <h4 className="text-title font-bold text-mv-ink">Dòng sản phẩm tiêu biểu</h4>
             <Link href={cur.href} className={cn("group inline-flex items-center gap-1.5 text-small font-semibold", st.ink)}>

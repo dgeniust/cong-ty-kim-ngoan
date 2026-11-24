@@ -17,7 +17,7 @@ type Errors = Partial<Record<keyof Values, string>>;
 const fieldClass =
   "min-h-11 w-full rounded-lg border border-v-line bg-v-bg px-4 py-2.5 text-body text-v-fg placeholder:text-v-mute/70 outline-none transition-[border-color,box-shadow] duration-200 focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)] aria-[invalid=true]:border-[#e5484d]";
 
-/** Chỉ giao diện: kiểm tra dữ liệu phía client và giả lập gửi. Nối `onSubmit` với API/server action khi có backend. */
+/** UI only: client-side validation and a simulated send. Wire `onSubmit` to an API / server action when a backend exists. */
 export function VContactForm({ defaultMessage = "" }: { defaultMessage?: string }) {
   const [values, setValues] = useState<Values>({ name: "", phone: "", message: defaultMessage });
   const [errors, setErrors] = useState<Errors>({});

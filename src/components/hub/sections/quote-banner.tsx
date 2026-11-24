@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils";
 import { BIZ_WRAP, bizButton } from "@/components/hub/ui";
 
 /**
- * Banner kêu gọi báo giá giữa trang: khối ngang tràn viền, chuyển sắc #0B5D36 → #15803D,
- * tiêu đề trắng, nút vàng lúa chín chữ xanh than. `z-0` để nằm trên lớp lá nền (z −10).
+ * Mid-page quote banner: full-width band, gradient #0B5D36 → #15803D,
+ * white title, gold button with dark text. `z-0` keeps it above the leaf backdrop (z −10).
  */
 export function QuoteBanner({ hotline }: { hotline: string }) {
   return (
     <section aria-labelledby="bao-gia-title" className="relative z-0 overflow-hidden bg-[linear-gradient(100deg,#0b5d36_0%,#0e6b3c_45%,#15803d_100%)] text-white">
-      {/* họa tiết nhẹ: quầng sáng vàng + vòng tròn mảnh, không giành chú ý với chữ */}
+      {/* subtle decoration: warm glow + thin circles, never competing with the text */}
       <span aria-hidden className="pointer-events-none absolute -right-24 -top-32 size-[28rem] rounded-full bg-[radial-gradient(circle,rgb(251_191_36/0.22),transparent_65%)]" />
       <span aria-hidden className="pointer-events-none absolute -bottom-40 left-[38%] size-[26rem] rounded-full ring-1 ring-white/10" />
       <span aria-hidden className="pointer-events-none absolute -bottom-24 left-[42%] size-[18rem] rounded-full ring-1 ring-white/10" />

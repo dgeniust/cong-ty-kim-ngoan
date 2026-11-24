@@ -19,7 +19,7 @@ import { siteNameFor } from "@/lib/site-name";
 
 type Params = Promise<{ site: string; slug: string }>;
 
-/** Sản phẩm / bài mới thêm từ admin (chưa có lúc build) vẫn mở được. */
+/** Products / articles added from the admin after the build still resolve. */
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

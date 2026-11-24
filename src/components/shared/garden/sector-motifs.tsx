@@ -1,7 +1,7 @@
 /**
- * Họa tiết hai mép thay khung lá khi khối Sản phẩm (landing tổng) đang ở tab Lốp xe / Sắt thép.
- * Vẽ SVG nét phẳng, nhạt, đúng cặp màu ngành (design.md §6): lốp = than đất #1E293B + cam #EA580C,
- * thép = xanh thép #0F4C81 + đỏ gạch #DC2626. `side` lật đối xứng cho mép phải.
+ * Edge motifs that replace the leaf frames while the hub products block shows the Tyres / Steel tab.
+ * Flat, faint SVG in each sector's colour pair (design.md §6): tyres = slate #1E293B + orange #EA580C,
+ * steel = steel blue #0F4C81 + brick #DC2626. `side` mirrors the drawing for the right edge.
  */
 type Side = "l" | "r";
 
@@ -11,7 +11,7 @@ function Tyre({ cx, cy, r }: { cx: number; cy: number; r: number }) {
   const blocks = 40;
   return (
     <g>
-      {/* gai lốp */}
+      {/* tread blocks */}
       {range(blocks).map((i) => (
         <rect
           key={i}
@@ -26,7 +26,7 @@ function Tyre({ cx, cy, r }: { cx: number; cy: number; r: number }) {
         />
       ))}
       <circle cx={cx} cy={cy} r={r * 0.86} fill="none" stroke="#1E293B" strokeOpacity={0.14} strokeWidth={r * 0.24} />
-      {/* mâm */}
+      {/* rim */}
       <circle cx={cx} cy={cy} r={r * 0.56} fill="none" stroke="#EA580C" strokeOpacity={0.55} strokeWidth={4} />
       <circle cx={cx} cy={cy} r={r * 0.14} fill="#EA580C" fillOpacity={0.35} />
       {range(5).map((i) => (
@@ -53,7 +53,7 @@ export function TyreMotif({ side, className, style }: { side: Side; className?: 
       <g transform={side === "r" ? "translate(300 0) scale(-1 1)" : undefined}>
         <Tyre cx={20} cy={250} r={210} />
         <Tyre cx={150} cy={720} r={130} />
-        {/* vệt bánh xe */}
+        {/* tyre tracks */}
         {range(14).map((i) => (
           <rect key={i} x={250} y={420 + i * 42} width={26} height={20} rx={3} fill="#EA580C" fillOpacity={i % 3 === 0 ? 0.35 : 0.12} transform="skewY(-8)" />
         ))}
@@ -93,7 +93,7 @@ export function SteelMotif({ side, className, style }: { side: Side; className?:
   return (
     <svg viewBox="0 0 300 1000" preserveAspectRatio={side === "l" ? "xMinYMid slice" : "xMaxYMid slice"} aria-hidden className={className} style={style}>
       <g transform={side === "r" ? "translate(300 0) scale(-1 1)" : undefined}>
-        {/* lưới bản vẽ kỹ thuật */}
+        {/* drafting grid */}
         {range(11).map((i) => (
           <line key={`h${i}`} x1={0} y1={i * 100} x2={300} y2={i * 100} stroke="#0F4C81" strokeOpacity={0.08} />
         ))}
@@ -106,7 +106,7 @@ export function SteelMotif({ side, className, style }: { side: Side; className?:
         <Rebar x={100} y={380} len={360} />
         <Rebar x={140} y={430} len={300} />
         <IBeam x={40} y={790} w={100} />
-        {/* điểm nhấn đỏ gạch */}
+        {/* brick-red accents */}
         <rect x={200} y={560} width={60} height={60} fill="#DC2626" fillOpacity={0.22} />
         <rect x={230} y={640} width={30} height={30} fill="#DC2626" fillOpacity={0.4} />
         <rect x={180} y={120} width={14} height={14} fill="#DC2626" fillOpacity={0.5} />

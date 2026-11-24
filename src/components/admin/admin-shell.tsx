@@ -26,7 +26,7 @@ type AdminNavCounts = {
 };
 
 
-/** Khung admin kiểu thanh bên Notion: không gian làm việc · trang · cơ sở dữ liệu sản phẩm. */
+/** Notion-style admin shell with a sidebar: workspace · pages · product databases. */
 export function AdminShell({
   user,
   counts,
@@ -38,7 +38,7 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- đóng menu di động khi chuyển trang
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- close the mobile menu on navigation
   useEffect(() => setOpen(false), [pathname]);
 
   const pages = [
@@ -184,7 +184,7 @@ export function AdminShell({
   return (
     <GuideProvider>
       <div className="theme-hub min-h-screen bg-hub-paper text-hub-ink">
-        {/* thanh trên cho điện thoại */}
+        {/* top bar on phones */}
         <div className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-hub-line bg-hub-paper/95 px-3 backdrop-blur lg:hidden">
           <button
             type="button"

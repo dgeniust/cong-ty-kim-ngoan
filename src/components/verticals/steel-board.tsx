@@ -5,13 +5,13 @@ import { telHref } from "@/lib/verticals";
 
 
 /**
- * Bảng vật tư thép thường dùng – khối lớn ở banner sắt thép, góc phải là khung tên như bản vẽ kỹ thuật.
- * Không niêm yết giá: giá thép đổi theo nhà máy và thời điểm, khách gọi / gửi danh sách để nhận báo giá.
+ * Common steel materials board – the large block in the steel banner, with a drawing title block top right.
+ * No prices: steel prices follow the mill and the market, so customers call or send a list for a quote.
  */
 export function SteelBoard({ quote, products, base, phone, today }: { quote: NonNullable<CatalogContent["quote"]>; products: CatalogProduct[]; base: string; phone: string; today: string }) {
   return (
     <div className="overflow-hidden rounded-2xl bg-v-island text-v-on-island">
-      {/* đầu bảng + khung tên */}
+      {/* header + title block */}
       <div className="grid gap-6 border-b border-white/10 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <p className="inline-flex items-center gap-2 text-caption font-medium text-white/70">
@@ -44,7 +44,7 @@ export function SteelBoard({ quote, products, base, phone, today }: { quote: Non
         </dl>
       </div>
 
-      {/* bảng giá */}
+      {/* materials table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <caption className="sr-only">{quote.title}</caption>
@@ -78,7 +78,7 @@ export function SteelBoard({ quote, products, base, phone, today }: { quote: Non
         </table>
       </div>
 
-      {/* chân bảng */}
+      {/* footer */}
       <div className="flex flex-col gap-5 border-t border-white/10 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-small text-white/70">
           <li>Chứng từ: {quote.documents}</li>

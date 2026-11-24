@@ -3,7 +3,7 @@ import type { ArtKind } from "@/types/catalog";
 import { cn } from "@/lib/utils";
 import { ProductArt } from "@/components/shared/product-art";
 
-/** Ảnh thật nếu có, không thì hình minh hoạ. Luôn nằm trên nền `.v-art` để sản phẩm nổi rõ. */
+/** Real photo when available, otherwise the vector illustration. Always on a `.v-art` background so the product stands out. */
 export function ProductVisual({
   name,
   art,
@@ -19,7 +19,7 @@ export function ProductVisual({
   sizes?: string;
   className?: string;
   artClassName?: string;
-  /** ảnh lớn ở màn hình đầu (LCP) → tải trước */
+  /** Large above-the-fold image (LCP) → preload. */
   preload?: boolean;
 }) {
   return (

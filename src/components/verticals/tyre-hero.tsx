@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 const WIDTHS = [155, 165, 175, 185, 195, 205, 215, 225, 235, 245, 255, 265, 275, 285];
 const RATIOS = [40, 45, 50, 55, 60, 65, 70, 75, 80];
 const RIMS = [13, 14, 15, 16, 17, 18, 19, 20];
-export const SIZE_KEY = "kn-co-lop"; // cỡ lốp vừa tra – form nhận báo giá đọc lại
+export const SIZE_KEY = "kn-co-lop"; // last size looked up – the quote form reads it back
 
-/* Hông lốp: tâm bánh xe nằm dưới khung, chỉ thấy một cung lớn (gai + hông lốp + chữ nổi). */
+/* Sidewall: the wheel centre sits below the frame, so only a large arc shows (tread + sidewall + raised text). */
 const C = { x: 600, y: 1390 };
 const arc = (r: number) => `M ${C.x - r} ${C.y} A ${r} ${r} 0 1 1 ${C.x + r} ${C.y} A ${r} ${r} 0 1 1 ${C.x - r} ${C.y}`;
 
@@ -20,19 +20,19 @@ function Sidewall() {
       <defs>
         <path id="hong-lop" d={arc(1125)} />
       </defs>
-      {/* gai lốp: khối gai = nét đứt trên vòng ngoài */}
+      {/* tread: tread blocks = a dashed outer ring */}
       <circle cx={C.x} cy={C.y} r={1292} fill="none" stroke="#181818" strokeWidth={84} strokeDasharray="34 12" />
       <circle cx={C.x} cy={C.y} r={1292} fill="none" stroke="#0e0e0e" strokeWidth={10} strokeDasharray="6 40" />
-      {/* hông lốp */}
+      {/* sidewall */}
       <circle cx={C.x} cy={C.y} r={1075} fill="none" stroke="#141414" strokeWidth={350} />
       {[1238, 1216, 1010, 935].map((r) => (
         <circle key={r} cx={C.x} cy={C.y} r={r} fill="none" stroke="#202020" strokeWidth={2} />
       ))}
-      {/* vạch báo mòn (TWI) – tam giác nhỏ quanh vai lốp */}
+      {/* tread wear indicators (TWI) – small triangles around the shoulder */}
       {[-30, -15, 15, 30].map((a) => (
         <path key={a} d="M -9 0 L 9 0 L 0 -14 Z" fill="#262626" transform={`rotate(${a} ${C.x} ${C.y}) translate(${C.x} ${C.y - 1222})`} />
       ))}
-      {/* chữ nổi trên hông lốp */}
+      {/* raised sidewall lettering */}
       <g fontWeight={800} fontSize={40} letterSpacing={8} fill="#232323">
         <text>
           <textPath href="#hong-lop" startOffset="17.4%" textAnchor="middle">RADIAL · TUBELESS</textPath>
@@ -41,7 +41,7 @@ function Sidewall() {
           <textPath href="#hong-lop" startOffset="32.6%" textAnchor="middle">DOT 4K2X 2326</textPath>
         </text>
       </g>
-      {/* mép mâm */}
+      {/* rim edge */}
       <circle cx={C.x} cy={C.y} r={900} fill="#1d1d1d" />
       <circle cx={C.x} cy={C.y} r={890} fill="none" stroke="#2b2b2b" strokeWidth={4} />
     </svg>
@@ -49,8 +49,8 @@ function Sidewall() {
 }
 
 /**
- * Banner lốp xe: một hông lốp khổng lồ, dãy cỡ lốp in nổi chính là ô tra cứu
- * (chọn bề rộng / tỉ lệ / mâm → mở danh sách lốp đúng cỡ). Chạm vào từng số để xem nghĩa.
+ * Tyre banner: one giant sidewall whose raised size code IS the size finder
+ * (pick width / aspect / rim → opens the matching tyre list). Tap each number to see what it means.
  */
 export function TyreHero({ base, popular, label, sub }: { base: string; popular: string[]; label: React.ReactNode; sub?: string }) {
   const router = useRouter();
@@ -88,7 +88,7 @@ export function TyreHero({ base, popular, label, sub }: { base: string; popular:
         <p className="text-title font-semibold text-v-fg">{label}</p>
         {sub && <p className="mt-1.5 max-w-md text-small text-v-mute">{sub}</p>}
 
-        {/* dãy cỡ lốp in nổi = 3 ô chọn */}
+        {/* raised size code = 3 selects */}
         <div className="mt-6 flex items-end justify-center gap-1 text-[clamp(3rem,10vw,7.5rem)] leading-none text-v-fg sm:gap-2">
           {parts.map((p, i) => (
             <div key={p.k} className="flex items-end">

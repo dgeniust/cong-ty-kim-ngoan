@@ -8,7 +8,7 @@ import { getSettings } from "@/lib/settings/server";
 import { socialMeta } from "@/lib/seo";
 
 
-/** Metadata gốc (landing tổng). Mỗi chuyên trang ghi đè title/description trong layout riêng. */
+/** Root metadata (landing hub). Each sector site overrides title/description in its own layout. */
 export async function generateMetadata(): Promise<Metadata> {
   const { COMPANY } = await getSettings();
   const TITLE = `${COMPANY.legalName} – Phân bón, lốp xe ô tô, tôn sắt thép`;
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ...socialMeta({ title: TITLE, description: DESCRIPTION, path: "/", siteName: COMPANY.legalName }),
   formatDetection: { telephone: false },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
-  // Sau khi xác minh Search Console: verification: { google: "..." },
+  // After verifying Search Console: verification: { google: "..." },
   };
 }
 
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="vi" className={`${beVietnamLatin.variable} ${beVietnamVi.variable} ${dancingScript.variable}`}>
       <body>
-        {/* Không có JS thì nội dung .reveal vẫn hiện đầy đủ */}
+        {/* Without JS, .reveal content is still fully visible */}
         <noscript>
           <style>{".reveal{opacity:1!important;transform:none!important}"}</style>
         </noscript>

@@ -17,7 +17,7 @@ import { VButton } from "./v-button";
 import { VSectionHead } from "./v-section-head";
 import { Container } from "@/components/shared/container";
 
-/** Đơn vị đặt hàng + khối lượng 1 đơn vị đọc từ thông số (“≈ 7,22 kg/cây”, “≈ 21,3 kg/m”). */
+/** Order unit + weight per unit parsed from the spec ("≈ 7,22 kg/cây", "≈ 21,3 kg/m"). */
 function cartUnit(p: CatalogProduct): CartProduct {
   const w = p.specs.find((s) => s.name === "Trọng lượng")?.value ?? "";
   const m = w.match(/([\d.,]+)\s*kg\/(cây|m)/);
@@ -27,10 +27,10 @@ function cartUnit(p: CatalogProduct): CartProduct {
 }
 
 /**
- * Trang chủ SẮT THÉP – bố cục v1.1 “bản vẽ kỹ thuật” (design.md §13). Giữ theme trắng · xám · đen.
- * Giá thép đổi theo thời điểm → không niêm yết; mọi nút dẫn về gọi / gửi danh sách để nhận báo giá.
- *  banner + bảng vật tư (không ghi giá) → 01 danh sách vật tư & dự toán → 02 duyệt vật tư → 03 nhận biết thép chính phẩm
- *  → 04 dịch vụ → 05 cam kết → 06 tin tức → gọi nhận báo giá.
+ * Steel site home page – "technical drawing" layout (design.md §13). White · grey · black theme.
+ * Steel prices follow the market, so nothing is priced; every CTA leads to calling or sending a list for a quote.
+ *  banner + materials board (no prices) → 01 materials list & estimate → 02 browse materials → 03 spot genuine steel
+ *  → 04 services → 05 promises → 06 news → call for a quote.
  */
 export async function SatThepHome({
   vertical,
@@ -65,7 +65,7 @@ export async function SatThepHome({
 
   return (
     <>
-      {/* BANNER trên nền giấy kẻ ô: dòng thông tin → tiêu đề → bảng vật tư → số liệu */}
+      {/* BANNER on drafting paper: info row → title → materials board → stats */}
       <section aria-labelledby="hero-title" className="blueprint border-b border-v-line pb-16 md:pb-20">
         <Container className="pt-6 md:pt-10">
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg pb-3 text-caption text-v-fg">
@@ -110,7 +110,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 01. Danh sách vật tư & dự toán */}
+      {/* 01. Materials list & estimate */}
       <section id="vat-tu-cua-ban" aria-labelledby="tinh-thep-title" className="scroll-mt-24 py-16 md:py-24">
         <Container>
           <VSectionHead id="tinh-thep-title" no="01" kicker="Danh sách vật tư" title={<Headline h={sec.tool} pillClassName="text-v-mute" />} lead={sec.tool?.subtitle} />
@@ -118,7 +118,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 02. Duyệt vật tư */}
+      {/* 02. Browse materials */}
       <section aria-labelledby="vat-tu-title" className="border-y border-v-line bg-v-raise py-16 md:py-24">
         <Container>
           <VSectionHead
@@ -139,7 +139,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 03. Nhận biết thép chính phẩm */}
+      {/* 03. Spot genuine steel */}
       <section aria-labelledby="chinh-pham-title" className="blueprint py-16 md:py-24">
         <Container>
           <VSectionHead id="chinh-pham-title" no="03" kicker="Kiểm tra khi nhận hàng" title={<Headline h={sec.genuine} pillClassName="text-v-mute" />} lead={sec.genuine?.subtitle} />
@@ -147,7 +147,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 04. Dịch vụ – khung tên bản vẽ */}
+      {/* 04. Services – drawing title block */}
       <section aria-labelledby="dich-vu-title" className="border-y border-v-line py-16 md:py-24">
         <Container>
           <VSectionHead id="dich-vu-title" no="04" kicker="Dịch vụ" title={content.about.title} lead={content.about.paragraphs[0]} />
@@ -169,7 +169,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 05. Cam kết */}
+      {/* 05. Promises */}
       <section aria-labelledby="cam-ket-title" className="py-16 md:py-24">
         <Container>
           <VSectionHead id="cam-ket-title" no="05" kicker="Cam kết" title={<Headline h={sec.commitments} pillClassName="text-v-mute" />} lead={sec.commitments?.subtitle} />
@@ -185,7 +185,7 @@ export async function SatThepHome({
         </Container>
       </section>
 
-      {/* 06. Tin tức – mục lục */}
+      {/* 06. News – index */}
       {news.length > 0 && (
         <section aria-labelledby="tin-tuc-title" className="border-t border-v-line bg-v-raise py-16 md:py-24">
           <Container>
@@ -224,7 +224,7 @@ export async function SatThepHome({
         </section>
       )}
 
-      {/* Gọi nhận báo giá */}
+      {/* Call for a quote */}
       <section aria-labelledby="cta-title" className="py-16 md:py-24">
         <Container>
           <div className="grid items-end gap-8 rounded-2xl bg-v-island p-8 text-v-on-island sm:p-12 lg:grid-cols-12 lg:p-14">

@@ -7,7 +7,7 @@ import { BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle, TONE, type Tone } from "@/
 
 const COMMIT_TONES: Tone[] = ["leaf", "sun", "sky", "ember"];
 
-/** Giới thiệu kiểu tạp chí: câu chuyện + trích dẫn bên trái, ảnh thật bên phải, 4 cam kết bên dưới. */
+/** Magazine-style about block: story + quote on the left, real photo on the right, commitments below. */
 export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
   const fill = (t: string) => t.replace("{area}", company.area);
   return (
@@ -71,7 +71,7 @@ export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
         </Reveal>
       </div>
 
-      {/* cam kết: lưới phẳng, ngăn bằng kẻ mảnh phía trên */}
+      {/* commitments: flat grid separated by a hairline on top */}
       <Reveal className={cn(BIZ_WRAP, "mt-20 md:mt-24")}>
         <ul className="grid gap-x-10 sm:grid-cols-3">
           {HUB_COMMITMENTS.map(({ icon: Icon, title, text }, i) => {

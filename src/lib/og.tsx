@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { ImageResponse } from "next/og";
 
-/** Ảnh chia sẻ (Open Graph) sinh từ chữ – dùng khi trang chưa có ảnh chụp thật. 1200×630. */
+/** Text-generated share image (Open Graph), used when a page has no real photo. 1200×630. */
 export const OG_SIZE = { width: 1200, height: 630 };
 
 const FONT_DIR = path.join(process.cwd(), "node_modules/@fontsource/be-vietnam-pro/files");
@@ -10,7 +10,7 @@ const loadFonts = async () => {
   const files = ["latin", "vietnamese", "latin-ext"].flatMap((subset) => [600, 700].map((weight) => ({ subset, weight: weight as 600 | 700 })));
   return Promise.all(
     files.map(async ({ subset, weight }) => ({
-      // mỗi subset một tên riêng: satori bỏ qua font trùng tên/độ đậm → thiếu dấu tiếng Việt
+      // a distinct name per subset: satori ignores fonts with a duplicate name/weight → missing Vietnamese diacritics
       name: `BVP ${subset}`,
       data: await readFile(path.join(FONT_DIR, `be-vietnam-pro-${subset}-${weight}-normal.woff`)),
       weight,
@@ -56,5 +56,5 @@ export async function ogImage({ eyebrow, title, subtitle, footer, theme }: { eye
   );
 }
 
-/** Ảnh giữ chỗ (VD: /tmp-img.jpg) không được dùng làm ảnh chia sẻ – để ảnh sinh tự động thay thế. */
+/** Placeholder images (e.g. /tmp-img.jpg) must never be used as share images – let the generated one take over. */
 export const realImage = (src?: string) => (src && !/tmp-img/.test(src) ? src : undefined);

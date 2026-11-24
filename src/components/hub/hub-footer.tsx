@@ -12,16 +12,16 @@ const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white"
 const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
 const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white hover:text-mv-night";
 
-/** Nhãn ngắn cho cột “Liên kết nhanh” (menu header dùng nhãn dài hơn). */
+/** Short labels for the "Quick links" column (the header menu uses longer ones). */
 const QUICK = HUB_NAV.map((m) => ({ label: m.label === "Giới thiệu" ? "Về chúng tôi" : m.label, href: m.href }));
 
-/** Footer landing tổng: nền xanh đậm, 4 cột + khối gọi, dải đồi vườn cây ở chân. */
+/** Hub footer: dark green, 4 columns + call block, orchard hills along the bottom. */
 export async function HubFooter() {
   const { COMPANY } = await getSettings();
   return (
     <footer className="relative isolate overflow-hidden bg-mv-night text-white/70">
       <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
-        {/* thương hiệu */}
+        {/* brand */}
         <div className="sm:col-span-2 lg:col-span-1">
           <Link href="/" className="inline-flex flex-col gap-1.5 text-white">
             <span className="logo-prefix text-white/60">{COMPANY.prefix}</span>
@@ -70,7 +70,7 @@ export async function HubFooter() {
           <p className="mt-5 text-small text-white/60">{COMPANY.email}</p>
         </div>
 
-        {/* khối gọi – tách bằng đường kẻ dọc trên desktop */}
+        {/* call block – separated by a vertical rule on desktop */}
         <div className="sm:col-span-2 lg:col-span-1 lg:border-l lg:border-white/15 lg:pl-10">
           <a href={telHref(COMPANY.hotline)} className="group flex items-center gap-3.5 text-white">
             <Phone className="size-8 shrink-0 text-mv-gold-soft transition-transform duration-300 group-hover:-rotate-12" strokeWidth={1.75} aria-hidden />
@@ -85,7 +85,7 @@ export async function HubFooter() {
         </div>
       </div>
 
-      {/* dải đồi vườn cây + nhành lá hai góc, dòng bản quyền nằm trên đồi gần */}
+      {/* orchard hills + leaf sprigs in both corners; the copyright sits on the near hill */}
       <div className="relative h-[170px] sm:h-[210px] lg:h-[230px]">
         <FooterLandscape className="absolute inset-0 size-full" />
         <div aria-hidden className="pointer-events-none absolute -bottom-6 -left-10 w-[130px] sm:w-[170px] lg:-left-4 lg:w-[200px]">

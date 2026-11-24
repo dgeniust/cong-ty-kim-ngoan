@@ -16,14 +16,14 @@ const schema = z.object({
 type Values = z.infer<typeof schema>;
 type Errors = Partial<Record<keyof Values, string>>;
 
-/** Ô nhập kiểu gạch chân: chỉ một đường kẻ đáy, đổi màu khi focus / lỗi. */
+/** Underline-style input: a single bottom rule that changes colour on focus / error. */
 const FIELD =
   "peer w-full border-0 border-b border-hub-ink/20 bg-transparent px-0 pb-2.5 pt-1 text-body text-hub-ink placeholder:text-hub-ink-soft/60 outline-none transition-colors duration-200 focus:border-mv-green aria-[invalid=true]:border-[#c4320a] [&:focus-visible]:outline-none";
 const LABEL = "block text-[12px] font-semibold uppercase tracking-[0.12em] text-hub-ink-soft";
 
 /**
- * Form báo giá nhanh (chỉ giao diện): kiểm tra dữ liệu phía trình duyệt rồi giả lập gửi.
- * Khi có backend, thay đoạn `await new Promise(...)` bằng lời gọi API / server action.
+ * Quick quote form (UI only): validates in the browser, then simulates sending.
+ * Once a backend exists, replace the `await new Promise(...)` with an API call / server action.
  */
 export function QuoteForm({ sectors }: { sectors: { id: string; name: string }[] }) {
   const [values, setValues] = useState<Values>({ name: "", phone: "", sector: "", message: "" });

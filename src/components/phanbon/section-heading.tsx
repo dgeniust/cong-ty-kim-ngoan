@@ -6,7 +6,7 @@ type Props = {
   align?: "left" | "center";
   /** Heading level – keep one h1 per page, sections use h2. */
   as?: "h1" | "h2";
-  /** Optional element on the right (e.g. "Xem tất cả" link). */
+  /** Optional element on the right (e.g. a "see all" link). */
   action?: React.ReactNode;
   className?: string;
   id?: string;

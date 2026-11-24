@@ -4,7 +4,7 @@ import type { CatalogProduct } from "@/types/catalog";
 import { VERTICALS } from "@/lib/verticals";
 import { ProductVisual } from "./product-visual";
 
-/** Thẻ sản phẩm kiểu Notion: nền thẻ, viền mảnh, bo 12px, hình đặt trong khung bo 8px; cả thẻ là một link. */
+/** Notion-style product card: card background, hairline border, 12px corners, image in an 8px frame; the whole card is one link. */
 export function VProductCard({ product, headingLevel: Heading = "h3" }: { product: CatalogProduct; headingLevel?: "h2" | "h3" }) {
   const href = `${VERTICALS[product.site].base}/san-pham/${product.slug}`;
   return (

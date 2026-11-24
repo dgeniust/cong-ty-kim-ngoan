@@ -3,8 +3,8 @@ import { Reveal } from "@/components/shared/reveal";
 import { cn } from "@/lib/utils";
 
 /**
- * Đầu khối kiểu tạp chí cho chuyên trang (đồng bộ landing tổng & phân bón):
- * đường kẻ + số thứ tự + tên mục → tiêu đề lớn (7/12 cột) + lời dẫn / nút (4/12 cột).
+ * Magazine-style section header for sector sites (matches the hub and fertilizer site):
+ * rule + number + section name → large title (7/12 columns) + intro / button (4/12 columns).
  */
 export function VSectionHead({
   id,

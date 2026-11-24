@@ -13,11 +13,11 @@ const subscribeReducedMotion = (cb: () => void) => {
 const getReducedMotion = () => window.matchMedia(REDUCED).matches;
 
 /**
- * Carousel tự cuộn vòng lặp vô hạn.
- * - Danh sách được render 2 lần nối tiếp; khi cuộn hết bản thứ nhất thì nhảy lùi đúng 1 bản → vòng lặp liền mạch.
- * - Tự trượt bằng requestAnimationFrame (vẫn kéo/vuốt tay được vì là vùng cuộn thật).
- * - Dừng khi rê chuột, chạm, focus bàn phím hoặc tab bị ẩn; chạy lại sau khi thả tay 1,5 giây.
- * - Người dùng bật "giảm chuyển động" thì không tự chạy, chỉ còn cuộn tay + nút.
+ * Infinitely looping auto-scrolling carousel.
+ * - The list is rendered twice back to back; after scrolling past the first copy it jumps back exactly one copy, so the loop is seamless.
+ * - Advances with requestAnimationFrame (still draggable/swipeable because it is a real scroll container).
+ * - Pauses on hover, touch, keyboard focus or a hidden tab; resumes 1.5 s after release.
+ * - With prefers-reduced-motion it never auto-scrolls; only manual scrolling and the buttons remain.
  */
 export function AutoCarousel({
   children,
@@ -27,7 +27,7 @@ export function AutoCarousel({
   itemClassName,
 }: {
   children: React.ReactNode;
-  /** px mỗi giây */
+  /** Pixels per second. */
   speed?: number;
   label: string;
   className?: string;
@@ -44,7 +44,7 @@ export function AutoCarousel({
     if (!el || reduced) return;
     let raf = 0;
     let last = performance.now();
-    let carry = 0; // phần lẻ px chưa cộng (scrollLeft làm tròn số nguyên trên một số trình duyệt)
+    let carry = 0; // sub-pixel remainder (some browsers round scrollLeft to integers)
     const tick = (now: number) => {
       const dt = Math.min(now - last, 64);
       last = now;
@@ -57,7 +57,7 @@ export function AutoCarousel({
           el.scrollLeft += step;
         }
       }
-      // giữ vị trí trong khoảng [0, half) cho cả khi người dùng tự kéo
+      // keep the position within [0, half) even when the user drags
       if (el.scrollLeft >= half) el.scrollLeft -= half;
       else if (el.scrollLeft <= 0 && half > 0) el.scrollLeft += half;
       raf = requestAnimationFrame(tick);
@@ -108,7 +108,7 @@ export function AutoCarousel({
             {child}
           </li>
         ))}
-        {/* bản sao để nối vòng – ẩn với trình đọc màn hình và bàn phím */}
+        {/* loop copy – hidden from screen readers and keyboard */}
         {!reduced &&
           items.map((child, i) => (
             <li key={`b-${i}`} aria-hidden inert className={cn("shrink-0", itemClassName)}>
@@ -117,7 +117,7 @@ export function AutoCarousel({
           ))}
       </ul>
 
-      {/* mép mờ hai bên */}
+      {/* edge fades */}
       <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-v-sunk to-transparent sm:w-16" />
       <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-v-sunk to-transparent sm:w-16" />
 

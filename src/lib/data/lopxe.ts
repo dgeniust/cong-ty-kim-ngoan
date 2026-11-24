@@ -1,6 +1,6 @@
 import type { CatalogCategory, CatalogContent, CatalogProduct } from "@/types/catalog";
 
-/** DỮ LIỆU MẪU – thay bằng API/CMS. Thương hiệu, quy cách chỉ để minh hoạ bố cục. */
+/** SAMPLE DATA – replace via API/CMS. Brands and specs only illustrate the layout. */
 export const categories: CatalogCategory[] = [
   { slug: "xe-du-lich", name: "Lốp xe du lịch", description: "Sedan, hatchback 4–7 chỗ: êm, tiết kiệm nhiên liệu, bám đường ướt.", art: "tyre" },
   { slug: "suv-ban-tai", name: "Lốp SUV – bán tải", description: "Gai lớn, hông dày cho đường hỗn hợp và tải nặng.", art: "tyre-at" },
@@ -110,7 +110,7 @@ export const content: CatalogContent = {
     { title: "Tư vấn đúng cỡ", description: "Đối chiếu cỡ lốp theo đời xe, tải trọng và đường hay chạy trước khi báo giá." },
     { title: "Báo giá rõ ràng", description: "Báo giá trước khi chốt đơn, ghi rõ loại lốp và số lượng, không phát sinh thêm." },
   ],
-  /** khối 05 – ba bước nhận báo giá (admin: “Các bước”) */
+  /** block 05 – the three quote steps (admin: "Các bước") */
   services: [
     { title: "Gửi cỡ lốp hoặc đời xe", description: "Gọi điện, nhắn Zalo hoặc điền form bên cạnh. Chụp ảnh hông lốp đang dùng là nhanh nhất." },
     { title: "Nhận tư vấn và báo giá", description: "Nhân viên gọi lại, gợi ý mức lốp phù hợp và báo giá tại thời điểm hỏi." },

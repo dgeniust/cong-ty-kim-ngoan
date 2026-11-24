@@ -4,8 +4,8 @@ import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
 /**
- * Dải mỏng trên cùng mỗi chuyên trang: quay về landing tổng + chuyển nhanh giữa 3 ngành.
- * `tone` chỉ đổi màu nền/chữ để hợp với theme của chuyên trang.
+ * Thin strip at the top of each sector site: back to the hub + quick switch between the three sectors.
+ * `tone` only changes background/text colours to suit the site's theme.
  */
 export async function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
   const { COMPANY, VERTICAL_LIST } = await getSettings();

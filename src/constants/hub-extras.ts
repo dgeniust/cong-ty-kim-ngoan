@@ -1,24 +1,23 @@
 /**
- * Nội dung tĩnh của landing tổng: LỊCH MÙA VỤ và VÙNG GIAO HÀNG.
+ * Static hub content: the CROP CALENDAR.
  *
- * TODO(khách hàng): xác nhận với kỹ thuật viên & bộ phận giao hàng của Kim Ngoan:
- *  - lịch mùa vụ là lịch tham khảo chung cho vùng Đông Nam Bộ, thời điểm thật tuỳ giống, tuổi cây, thời tiết;
- *  - thời gian giao hàng theo vùng là đề xuất, sửa cho đúng cam kết thực tế trước khi chạy chính thức.
+ * TODO(client): confirm with Kim Ngoan's technicians:
+ *  - the crop calendar is a general reference for the South-East region; real timing depends on variety, tree age and weather.
  */
 
-/* ------------------------------------------------------------------ Lịch mùa vụ */
+/* ------------------------------------------------------------------ Crop calendar */
 
-/** bon = bón phân · bvtv = phòng trừ sâu bệnh · thu = thu hoạch · cham = chăm sóc khác (ra hoa, nghỉ cạo…) */
+/** bon = fertilising · bvtv = pest & disease control · thu = harvest · cham = other care (flowering, tapping rest…) */
 export type StageKind = "bon" | "bvtv" | "thu" | "cham";
 
 type CropStage = {
   name: string;
-  /** tháng bắt đầu / kết thúc (1–12); `to < from` nghĩa là vắt qua năm mới */
+  /** start / end month (1–12); `to < from` means the stage wraps into the new year */
   from: number;
   to: number;
   kind: StageKind;
   note: string;
-  /** danh mục phân bón / thuốc gợi ý (slug trong /phanbon/danh-muc) */
+  /** suggested fertilizer / pesticide categories (slugs under /phanbon/danh-muc) */
   category?: string;
 };
 
@@ -86,7 +85,7 @@ export const CROPS: Crop[] = [
   },
 ];
 
-/** tháng m có nằm trong giai đoạn không (tính cả giai đoạn vắt qua năm mới) */
+/** Whether month m falls inside the stage (handles stages that wrap into the new year). */
 export function inStage(s: Pick<CropStage, "from" | "to">, m: number) {
   return s.from <= s.to ? m >= s.from && m <= s.to : m >= s.from || m <= s.to;
 }

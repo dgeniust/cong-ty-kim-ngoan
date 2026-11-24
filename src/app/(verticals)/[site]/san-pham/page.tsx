@@ -95,7 +95,7 @@ export default async function ProductListing({ params, searchParams }: Props) {
         </form>
       </VPageHead>
       <Container className="grid gap-10 py-12 md:py-16 lg:grid-cols-[250px_1fr] lg:gap-14">
-        {/* Bộ lọc: nhóm hàng + thương hiệu (theo phác thảo của khách) */}
+        {/* Filters: product group + brand (per the client's sketch) */}
         <aside aria-label="Bộ lọc sản phẩm" className="lg:sticky lg:top-28 lg:self-start">
           <p className="mb-2 px-3.5 text-caption font-medium text-v-mute">Nhóm sản phẩm</p>
           <ul className="flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] lg:block lg:space-y-0.5 lg:pb-0 [&::-webkit-scrollbar]:hidden [&_a]:whitespace-nowrap">

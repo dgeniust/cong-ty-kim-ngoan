@@ -10,8 +10,8 @@ const POINTS = [
 ];
 
 /**
- * “Nhận biết thép chính phẩm” – bản vẽ kỹ thuật một đoạn thép thanh vằn có chú thích 4 điểm,
- * bên cạnh là bảng barem để cân thử khi nhận hàng. Hình minh hoạ: ký hiệu thật khác nhau theo nhà máy.
+ * "Spot genuine steel" – technical drawing of a ribbed rebar with 4 callouts, next to the
+ * weight table for a spot check on delivery. Illustrative: real mill markings differ per mill.
  */
 export function RebarAnatomy() {
   const ribs = Array.from({ length: 30 }, (_, i) => 52 + i * 22);
@@ -20,19 +20,19 @@ export function RebarAnatomy() {
       <figure className="flex flex-col justify-center rounded-2xl bg-v-raise p-4 sm:p-6 lg:col-span-8">
         <div className="overflow-x-auto">
         <svg viewBox="0 0 760 330" className="w-full min-w-[560px]" role="img" aria-label="Bản vẽ đoạn thép thanh vằn với 4 điểm kiểm tra: ký hiệu nhà máy, đường kính, mác thép, gân vằn">
-          {/* kích thước chiều dài */}
+          {/* length dimension */}
           <g stroke="#8b8b92" strokeWidth="1" fill="none">
             <path d="M40 92 V108 M720 92 V108 M40 100 H720" />
             <path d="M40 100 l10 -4 v8 Z M720 100 l-10 -4 v8 Z" fill="#8b8b92" />
           </g>
           <text x="380" y="92" textAnchor="middle" fontSize="13" fill="#66666d" fontWeight="600">L = 11,7 m / cây</text>
-          {/* thân thép */}
+          {/* bar body */}
           <rect x="40" y="130" width="680" height="56" rx="8" fill="#f4f4f5" stroke="#111" strokeWidth="2" />
           <path d="M40 140 H720 M40 176 H720" stroke="#111" strokeWidth="1.2" opacity="0.5" />
           {ribs.map((x) => (
             <path key={x} d={`M${x} 131 q 9 27 0 54`} stroke="#111" strokeWidth="1.6" fill="none" opacity="0.55" />
           ))}
-          {/* ký hiệu dập nổi (minh hoạ) */}
+          {/* rolled-in markings (illustrative) */}
           <g fontWeight="800" fontSize="15" fill="#111" textAnchor="middle">
             <rect x="172" y="148" width="36" height="20" rx="3" fill="#fff" stroke="#111" />
             <text x="190" y="163">◆◆</text>
@@ -41,13 +41,13 @@ export function RebarAnatomy() {
             <rect x="440" y="148" width="60" height="20" rx="3" fill="#fff" stroke="#111" />
             <text x="470" y="163">CB400</text>
           </g>
-          {/* kích thước đường kính */}
+          {/* diameter dimension */}
           <g stroke="#8b8b92" strokeWidth="1">
             <path d="M730 130 H752 M730 186 H752 M744 130 V186" />
             <path d="M744 130 l-4 9 h8 Z M744 186 l-4 -9 h8 Z" fill="#8b8b92" />
           </g>
           <text x="752" y="210" textAnchor="end" fontSize="13" fill="#66666d" fontWeight="600">Ø16</text>
-          {/* chú thích */}
+          {/* callouts */}
           {POINTS.map((p) => (
             <g key={p.n}>
               <path d={`M${p.x} 188 V250`} stroke="#111" strokeWidth="1.2" strokeDasharray="3 3" />

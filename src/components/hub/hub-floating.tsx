@@ -5,7 +5,7 @@ import { ArrowUp, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FacebookIcon } from "@/components/shared/social-icons";
 
-/** Cụm nút nổi góc phải dưới: lên đầu trang, Facebook (fanpage), Zalo, gọi hotline. */
+/** Floating buttons, bottom right: back to top, Facebook page, Zalo, hotline. */
 export function HubFloating({ phone, phoneHref, zalo, facebook }: { phone: string; phoneHref: string; zalo: string; facebook?: string }) {
   const [deep, setDeep] = useState(false);
 

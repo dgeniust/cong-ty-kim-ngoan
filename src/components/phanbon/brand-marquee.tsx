@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-/** Hãng phân bón tiêu biểu – bấm để tìm sản phẩm theo hãng. Logo thật sẽ thay ô chữ viết tắt khi có file. */
+/** Featured fertilizer brands – click to search products by brand. Real logos will replace the initials tile once available. */
 const BRANDS = ["Phú Mỹ", "Lâm Thao", "Mặt Trời Mới", "Đầu Trâu", "Con Cò", "Komix"];
 
 /**
- * Dải hãng chạy ngang liên tục (marquee): danh sách nhân đôi, dịch −50% rồi lặp lại liền mạch.
- * Rê chuột hoặc tab vào thì dừng; prefers-reduced-motion thì đứng yên và cuộn ngang bằng tay.
- * Bản sao thứ hai ẩn với trình đọc màn hình và không nhận tab.
+ * Continuously scrolling brand strip (marquee): the list is doubled and shifted −50%, so it loops seamlessly.
+ * Pauses on hover or keyboard focus; with prefers-reduced-motion it stays still and scrolls manually.
+ * The second copy is hidden from screen readers and skipped by Tab.
  */
 export function BrandMarquee() {
   const list = [...BRANDS, ...BRANDS];

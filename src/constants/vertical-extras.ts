@@ -1,16 +1,16 @@
 /**
- * Dữ liệu tĩnh cho trang chủ lốp xe & sắt thép (không nằm trong CMS).
- * TODO(khách hàng): xác nhận cách chia mức lốp theo thương hiệu và các hệ số dự toán thép.
+ * Static data for the tyre & steel home pages (not in the CMS).
+ * TODO(client): confirm the brand-to-tier split for tyres and the steel estimation factors.
  */
 
-/* ------------------------------------------------------------------ Lốp xe: 3 mức */
+/* ------------------------------------------------------------------ Tyres: 3 tiers */
 export type TyreTier = {
   id: "tiet-kiem" | "can-bang" | "cao-cap";
   name: string;
   tagline: string;
-  /** thương hiệu thuộc mức này – dùng để lấy sản phẩm */
+  /** brands in this tier – used to pick products */
   brands: string[];
-  /** điểm 1–5 cho thanh so sánh */
+  /** 1–5 scores for the comparison bars */
   scores: { label: string; value: number }[];
   fits: string[];
   popular?: boolean;
@@ -56,12 +56,12 @@ export const TYRE_TIERS: TyreTier[] = [
   },
 ];
 
-/* ------------------------------------------------------------------ Sắt thép: dự toán khối lượng */
+/* ------------------------------------------------------------------ Steel: quantity estimate */
 
-/** Hệ số thép sơ bộ cho nhà phố bê tông cốt thép (kg thép / m² sàn) – CHỈ THAM KHẢO. */
+/** Rough steel factor for reinforced-concrete town houses (kg steel / m² floor) – REFERENCE ONLY. */
 export const STEEL_PER_M2 = { low: 35, high: 45 };
 
-/** Tỉ lệ chia theo nhóm đường kính – sơ bộ cho nhà phố. */
+/** Split by diameter group – rough figures for town houses. */
 export const STEEL_SPLIT: { label: string; share: number; d: number }[] = [
   { label: "Ø6 – Ø8 (đai, sàn)", share: 0.25, d: 8 },
   { label: "Ø10 – Ø12 (sàn, dầm phụ)", share: 0.3, d: 12 },
@@ -70,6 +70,6 @@ export const STEEL_SPLIT: { label: string; share: number; d: number }[] = [
 ];
 
 
-export const BAR_LENGTH = 11.7; // m / cây thép thanh vằn
-/** khối lượng 1 m thép tròn theo công thức lý thuyết d² × 0,00617 (kg/m) */
+export const BAR_LENGTH = 11.7; // metres per ribbed bar
+/** Weight of 1 m of round bar from the theoretical formula d² × 0.00617 (kg/m). */
 export const kgPerM = (d: number) => d * d * 0.00617;

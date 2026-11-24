@@ -1,8 +1,8 @@
 /**
- * Dữ liệu “Bác sĩ cây trồng”: vị trí trên cây → triệu chứng → nguyên nhân THƯỜNG GẶP + việc nên làm.
- * Kiến thức dinh dưỡng cây trồng phổ thông (nguyên tố di động như N, P, K, Mg biểu hiện ở lá già trước;
- * Fe, Zn, B, Ca biểu hiện ở lá non / đọt trước). Đây là gợi ý, KHÔNG thay chẩn đoán tại vườn.
- * TODO(khách hàng): nhờ kỹ thuật viên Kim Ngoan duyệt câu chữ trước khi chạy chính thức.
+ * "Plant doctor" data: part of the plant → symptom → COMMON causes + what to do.
+ * General crop-nutrition knowledge (mobile nutrients such as N, P, K, Mg show on old leaves first;
+ * Fe, Zn, B, Ca show on young leaves / shoots first). These are hints and do NOT replace an on-site diagnosis.
+ * TODO(client): have a Kim Ngoan technician review the wording before launch.
  */
 export type ZoneId = "la-non" | "la-gia" | "trai" | "re";
 export type SymptomIcon = "yellow" | "scorch" | "interveinal" | "purple" | "young-interveinal" | "small" | "deformed" | "holes" | "drop" | "crack" | "rot" | "root-rot" | "hard-soil" | "knots";
@@ -13,7 +13,7 @@ type Symptom = {
   title: string;
   icon: SymptomIcon;
   cause: string;
-  /** chất / tác nhân (hiện to trong kết quả) */
+  /** nutrient / agent (shown large in the result) */
   tag: string;
   why: string;
   todo: string[];
@@ -38,7 +38,7 @@ const L = {
 };
 
 export const SYMPTOMS: Symptom[] = [
-  // ---------- lá già
+  // ---------- old leaves
   {
     id: "vang-deu",
     zone: "la-gia",
@@ -83,7 +83,7 @@ export const SYMPTOMS: Symptom[] = [
     todo: ["Bổ sung lân (super lân, NPK nhiều P)", "Bón lân gần vùng rễ vì lân ít di chuyển trong đất", "Đất chua làm lân bị giữ chặt — kiểm tra pH"],
     links: [L.npk, L.voCo],
   },
-  // ---------- lá non
+  // ---------- young leaves
   {
     id: "vang-gan-xanh-non",
     zone: "la-non",
@@ -128,7 +128,7 @@ export const SYMPTOMS: Symptom[] = [
     todo: ["Lật mặt dưới lá, đọt non để xác định đúng loại côn trùng", "Dùng thuốc trừ sâu phù hợp, đúng liều, đúng thời gian cách ly", "Phun sáng sớm hoặc chiều mát"],
     links: [L.truSau],
   },
-  // ---------- hoa, trái
+  // ---------- flowers, fruit
   {
     id: "rung-trai",
     zone: "trai",
@@ -162,7 +162,7 @@ export const SYMPTOMS: Symptom[] = [
     todo: ["Cắt bỏ, tiêu huỷ trái bệnh, không để dưới gốc", "Tỉa cành cho tán thông thoáng", "Phun thuốc trừ bệnh theo khuyến cáo, nhất là mùa mưa"],
     links: [L.truBenh],
   },
-  // ---------- rễ, gốc
+  // ---------- roots, stem base
   {
     id: "thoi-re",
     zone: "re",

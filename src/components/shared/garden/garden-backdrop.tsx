@@ -6,22 +6,22 @@ import { cn } from "@/lib/utils";
 import { SteelMotif, TyreMotif } from "./sector-motifs";
 
 /**
- * Nền chung “vườn xanh” của landing tổng (ảnh dựng bằng tools/garden-bg/gen.py, design.md §6).
+ * Shared "green garden" backdrop for the hub and fertilizer landing pages (images from tools/garden-bg/gen.py, design.md §6).
  *
- * - Một lớp dính (sticky) cao đúng 1 màn hình, nằm sau toàn bộ các khối từ Giới thiệu → Liên hệ:
- *   nền đứng yên, nội dung trôi qua → cảm giác một bức nền liền mạch, không bị cắt theo từng khối.
- * - Nền màu do từng khối tự vẽ (SECTION_BG, z −20); lớp này chỉ còn khung lá (z −10) nằm giữa nền khối và nội dung.
- * - Khung lá bám mép trái/phải (từ lg; dưới lg dùng ảnh dọc có lá ở góc): 3 biến thể, đổi nhẹ (mờ dần + trôi 12px) khi cuộn sang khối
- *   có `data-garden` khác. Mép trái và phải luôn dùng hai biến thể khác nhau để bố cục không đối xứng cứng.
- * - Vị trí khung tự lùi ra ngoài khi lề trang hẹp để lá nét không đè lên chữ.
+ * - One sticky layer exactly one viewport tall behind every section: the backdrop stays put while
+ *   content scrolls over it, so it reads as one continuous background instead of being cut per section.
+ * - Section colours are painted by each section (SECTION_BG, z −20); this layer only holds the leaf frames (z −10) between them and the content.
+ * - Leaf frames hug the left/right edges (from lg): 3 variants that cross-fade (and drift 12px) when a section with a different
+ *   `data-garden` scrolls in. Left and right always use different variants so the layout never looks rigidly mirrored.
+ * - Frames move outwards on narrow margins so the sharp leaves never overlap text.
  */
 const VARIANTS = [1, 2, 3] as const;
 type Variant = (typeof VARIANTS)[number];
 const pair = (v: Variant): Variant => ((v % 3) + 1) as Variant;
 
-/** lề trong của nội dung = (100vw − 1280)/2 + 32px; phần lá nét chiếm ~23% chiều cao màn hình */
+/** Content inset = (100vw − 1280)/2 + 32px; the sharp part of the leaves takes ~23% of the viewport height. */
 const EDGE = "clamp(-16.5vh, calc(max(0px, (100vw - 1280px) / 2) + 32px - 23vh), 0px)";
-/** bề rộng dải họa tiết ngành: vừa khoảng lề hai bên nội dung */
+/** Width of the sector-motif strip: roughly the page margin on each side. */
 const MOTIF_W = "clamp(64px, calc((100vw - 1280px) / 2 + 40px), 280px)";
 
 type Motif = "garden" | "lopxe" | "satthep";
@@ -30,9 +30,9 @@ const readMotif = (el: HTMLElement): Motif => (el.dataset.motif === "lopxe" || e
 export function GardenBackdrop() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Variant>(1);
-  // biến thể 2, 3 chỉ tải khi người xem đã cuộn tới phần nền (không tranh băng thông với hero)
+  // variants 2 and 3 load only once the visitor reaches the backdrop (no bandwidth race with the hero)
   const [warm, setWarm] = useState(false);
-  // khối đang xem có thể đổi họa tiết (tab Lốp xe / Sắt thép ở khối Sản phẩm đặt data-motif)
+  // the current section may switch motifs (the Tyres / Steel tabs in the products block set data-motif)
   const [motif, setMotif] = useState<Motif>("garden");
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export function GardenBackdrop() {
   return (
     <div ref={ref} aria-hidden className="pointer-events-none sticky top-0 -z-10 -mb-[100lvh] h-[100lvh] w-full overflow-hidden">
       <div className="absolute inset-0 hidden lg:block">
-        {/* họa tiết ngành thay lá (lốp xe / sắt thép) */}
+        {/* sector motifs replacing the leaves (tyres / steel) */}
         {(["lopxe", "satthep"] as const).map((m) => {
           const Motif = m === "lopxe" ? TyreMotif : SteelMotif;
           const on = motif === m;

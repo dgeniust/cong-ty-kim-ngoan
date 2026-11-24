@@ -39,12 +39,12 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const INPUT = "h-11 w-full rounded-lg border border-v-line bg-v-bg px-3.5 text-lead font-semibold tabular-nums text-v-fg outline-none focus:border-v-accent focus:shadow-[0_0_0_3px_var(--v-tint)]";
 
 /**
- * “Danh sách vật tư” cho nhà thầu / chủ nhà:
- *  - Dự toán theo diện tích (hệ số sơ bộ kg/m² sàn, chia theo nhóm đường kính) → thêm vào danh sách;
- *  - Tính theo số cây (công thức d² × 0,00617) → thêm;
- *  - Chọn từ danh mục → thêm;
- * Bên phải: danh sách + tổng khối lượng + gửi yêu cầu báo giá (giá báo theo thời điểm, không niêm yết).
- * Danh sách lưu trong trình duyệt để quay lại vẫn còn.
+ * "Materials list" for contractors and home owners:
+ *  - estimate by floor area (rough kg/m² factor split by diameter group) → add to the list;
+ *  - calculate by bar count (d² × 0.00617) → add;
+ *  - pick from the catalog → add.
+ * Right side: the list + total weight + send a quote request (prices are quoted at the time, never listed).
+ * The list is kept in the browser so it survives a return visit.
  */
 export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; phone: string; zalo: string }) {
   const id = useId();
@@ -64,23 +64,23 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
   };
 
   const [tab, setTab] = useState<"area" | "bars" | "catalog">("area");
-  // dự toán
+  // estimate
   const [area, setArea] = useState(80);
   const [floors, setFloors] = useState(3);
   const total = area * floors;
   const low = total * STEEL_PER_M2.low;
   const high = total * STEEL_PER_M2.high;
   const mid = (low + high) / 2;
-  // theo cây
+  // by bar count
   const [d, setD] = useState(16);
   const [bars, setBars] = useState(100);
   const barKg = kgPerM(d) * BAR_LENGTH * bars;
-  // danh mục
+  // catalog
   const [slug, setSlug] = useState(products[0]?.slug ?? "");
   const [qty, setQty] = useState(10);
   const prod = products.find((p) => p.slug === slug);
 
-  // tổng
+  // totals
   const kg = cart.reduce((s, l) => s + (l.kg ?? 0), 0);
   const tons = kg / 1000;
   const unknown = cart.filter((l) => l.kg === undefined).length;
@@ -97,7 +97,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
-      {/* trái: 3 cách lập danh sách */}
+      {/* left: three ways to build the list */}
       <div className="rounded-2xl bg-v-raise lg:col-span-7">
         <div role="tablist" aria-label="Cách lập danh sách" className="flex gap-1 overflow-x-auto border-b border-v-line p-2">
           {tabs.map((t) => (
@@ -232,7 +232,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
         </div>
       </div>
 
-      {/* phải: danh sách + tổng + gửi */}
+      {/* right: list + total + send */}
       <aside aria-label="Danh sách vật tư" className="flex flex-col rounded-2xl bg-v-island p-6 text-v-on-island sm:p-8 lg:col-span-5">
         <p className="inline-flex items-center gap-2 text-title font-semibold">
           <ClipboardList className="size-5" aria-hidden /> Danh sách vật tư
@@ -259,7 +259,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
           </ul>
         )}
 
-        {/* tổng khối lượng */}
+        {/* total weight */}
         <div className="mt-5 border-t border-white/15 pt-5" aria-live="polite">
           <p className="flex items-baseline justify-between gap-3">
             <span className="text-caption text-white/60">Tổng khối lượng{unknown ? ` (chưa tính ${unknown} dòng)` : ""}</span>
@@ -270,7 +270,7 @@ export function SteelCart({ products, phone, zalo }: { products: CartProduct[]; 
           </p>
         </div>
 
-        {/* gửi */}
+        {/* send */}
         <form
           noValidate
           className="mt-6 space-y-3"

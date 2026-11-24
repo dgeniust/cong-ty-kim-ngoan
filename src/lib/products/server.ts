@@ -11,8 +11,8 @@ import type { CatalogSite } from "@/lib/verticals";
 import { catalogProductSchema, fertilizerProductSchema } from "./schema";
 
 /**
- * Kho sản phẩm cho 3 chuyên trang: data/products-{phanbon|lopxe|satthep}.json.
- * Chưa có file → dùng dữ liệu mẫu trong code. Admin ghi đè toàn bộ danh sách của 1 ngành.
+ * Product store for the three sector sites: data/products-{phanbon|lopxe|satthep}.json.
+ * No file yet → the sample data in code is used. The admin overwrites a sector's whole list.
  */
 export type ProductSite = "phanbon" | CatalogSite;
 

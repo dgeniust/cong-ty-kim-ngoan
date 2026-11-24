@@ -13,7 +13,7 @@ import { siteNameFor } from "@/lib/site-name";
 
 export const viewport: Viewport = { themeColor: "#082919" };
 
-/** Metadata của chuyên trang phân bón (lấy từ CMS) – ghi đè metadata landing tổng. */
+/** Fertilizer-site metadata (from the CMS) – overrides the hub's root metadata. */
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getContent();
   const brand = site.companyName.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase());

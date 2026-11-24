@@ -16,7 +16,7 @@ export type ExplorerGroup = {
   products: { name: string; brand: string; spec: string; href: string }[];
 };
 
-/** Duyệt theo nhóm vật tư kiểu thanh bên Notion: trái là danh sách nhóm, phải là trang của nhóm đang chọn. */
+/** Browse by material group, Notion-sidebar style: groups on the left, the selected group's page on the right. */
 export function CategoryExplorer({ groups }: { groups: ExplorerGroup[] }) {
   const [active, setActive] = useState(groups[0]?.slug);
   const g = groups.find((x) => x.slug === active) ?? groups[0];

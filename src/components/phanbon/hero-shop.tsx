@@ -8,19 +8,19 @@ import { HeroCropPanel, type HeroCrop } from "./hero-crop-panel";
 
 export type { HeroCrop };
 
-/** Lối vào theo nhóm hàng – mỗi ô một danh mục thật (lib/mock/categories). */
+/** Icons for the four trust points (CMS "features"), in order. */
 const TRUST = [BadgeCheck, Truck, HeartHandshake, Leaf];
 
 /**
- * Banner phân bón kiểu “cửa hàng”: nhìn là biết bán gì.
- *  Trái: tiêu đề nói rõ sản phẩm + tìm kiếm + 6 lối vào nhóm hàng + gọi đặt hàng + 4 cam kết (CMS).
- *  Phải: ảnh thật của vườn đang chọn, tab chọn cây ở trên, 3 sản phẩm gợi ý cho cây đó ở dưới.
- * Cây chọn ở đây dùng chung cho cả trang (bảng tin, gợi ý…).
+ * Shop-style fertilizer banner: what is sold is obvious at a glance.
+ *  Left: headline naming the products + search + brand strip + order by phone + 4 trust points (CMS).
+ *  Right (HeroCropPanel, client): real photo of the selected crop's garden, crop picker, 3 suggested products.
+ * The selected crop is shared with the rest of the page (bulletin, suggestions…).
  */
 export function HeroShop({ crops, products, features, phone, srCompany }: { crops: HeroCrop[]; products: LabelProduct[]; features: { title: string; description: string }[]; phone: string; srCompany: string }) {
   return (
     <div className="grid grid-cols-1 gap-8 pb-16 pt-8 md:pb-24 md:pt-10 lg:grid-cols-12 lg:items-stretch lg:gap-10 [&>*]:min-w-0">
-      {/* TRÁI */}
+      {/* LEFT */}
       <div className="flex flex-col justify-center lg:col-span-6">
         <h1 id="hero-title" className="text-h1 font-semibold text-brand-900">
           <span className="sr-only">{srCompany} – </span>

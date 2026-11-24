@@ -3,12 +3,12 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/shared/reveal";
 import { cn } from "@/lib/utils";
 
-/** Viên nhãn nhỏ đầu khối (kiểu tag Notion). */
+/** Small pill tag at the top of a section (Notion-tag style). */
 function VTag({ children, className }: { children: React.ReactNode; className?: string }) {
   return <p className={cn("inline-flex items-center gap-1.5 rounded-full bg-v-chip px-3 py-1 text-caption font-medium text-v-fg", className)}>{children}</p>;
 }
 
-/** Tiêu đề khối: viên nhãn + tiêu đề lớn + link "xem tất cả". */
+/** Section heading: pill tag + large title + "see all" link. */
 export function VHeading({
   id,
   index,

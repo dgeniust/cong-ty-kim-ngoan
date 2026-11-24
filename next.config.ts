@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
-  //block trang lốp xe và sắt thép khi deploy lên Vercel (chỉ cho phép truy cập trang phân bón)
+  // Blocks the tyre and steel sites on Vercel (only the fertilizer site is public). Re-enable when needed.
   // async rewrites() {
   //   if (process.env.VERCEL === "1") {
   //     return {

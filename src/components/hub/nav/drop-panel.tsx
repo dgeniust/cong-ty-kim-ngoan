@@ -5,7 +5,7 @@ import type { NavItem } from "@/constants/hub-nav";
 import { SECTOR_DOT } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 
-/** Bảng thả xuống của một mục menu (desktop). */
+/** Desktop dropdown panel for one menu item. */
 export function DropPanel({
   item,
   id,

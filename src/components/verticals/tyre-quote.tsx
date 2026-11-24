@@ -40,9 +40,9 @@ function Chips({ label, options, value, onChange }: { label: string; options: st
 }
 
 /**
- * Nhận báo giá lốp: cỡ lốp (lấy sẵn cỡ vừa tra ở banner) · số lượng · mức lốp · số điện thoại.
- * Kim Ngoan không đặt lịch thay lốp và không niêm yết giá (giá đổi theo hãng, đợt hàng) → khách để lại số, nhân viên gọi báo giá.
- * Chỉ giao diện như các form khác: kiểm tra phía client, chép sẵn tin nhắn để gửi Zalo. Nối API khi có backend.
+ * Tyre quote request: size (pre-filled from the banner lookup) · quantity · tier · phone number.
+ * Kim Ngoan does not book fitting appointments or publish prices (they vary by brand and batch), so customers leave a number and staff call back with a quote.
+ * UI only, like the other forms: client-side validation and a pre-written message copied for Zalo. Wire to an API when a backend exists.
  */
 export function TyreQuote({ phone, zalo }: { phone: string; zalo: string }) {
   const id = useId();

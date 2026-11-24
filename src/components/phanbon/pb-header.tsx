@@ -26,7 +26,7 @@ export function PbHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
   const links = nav.map((item) => ({ ...item, href: resolveHref(item.href) }));
   const isActive = (href: string) => (href === "/phanbon" ? pathname === "/phanbon" : !href.includes("#") && pathname.startsWith(href));
 
-  // Cuộn xuống: header trượt lên biến mất · cuộn lên: trượt xuống hiện lại (luôn hiện khi mở menu)
+  // Scrolling down slides the header away; scrolling up brings it back (always shown while the menu is open)
   const hidden = useHideOnScroll({ lock: open });
 
   return (

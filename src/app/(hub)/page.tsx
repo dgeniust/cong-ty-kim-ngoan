@@ -13,9 +13,9 @@ import { getFertilizerProducts } from "@/lib/products/server";
 import { getSettings } from "@/lib/settings/server";
 
 /**
- * Landing tổng `/` – phong cách Business / Editorial Industrial (nhánh fe/bussiness-style-v1), xem design.md §16.
- * Hero (ảnh nền 3 ngành + thanh chỉ số) → Giới thiệu → Sản phẩm (tab trưng bày) → Tin tức → Liên hệ (form + bản đồ).
- * Server Component; chỉ hero, tab sản phẩm, form và bản đồ chạy phía trình duyệt.
+ * Landing hub `/` – Business / Editorial Industrial style (design.md §16).
+ * Hero (three-sector photos + stats bar) → About → Products (showcase tabs) → News → Contact (form + map).
+ * Server Component; only the hero, the product tabs, the form and the map run in the browser.
  */
 export default async function HubHome() {
   const [{ COMPANY, VERTICALS, VERTICAL_LIST }, fertilizers, allNews] = await Promise.all([getSettings(), getFertilizerProducts(), getNews()]);
@@ -33,7 +33,7 @@ export default async function HubHome() {
           </a>
         </div>
       </BizHero>
-      {/* nền chung “vườn xanh”: lớp ảnh dính đứng yên sau các khối, khung lá đổi nhẹ theo khối (design.md §6) */}
+      {/* shared "green garden" backdrop: a sticky image layer behind the sections, leaf frames change per section (design.md §6) */}
       <div className="biz-garden relative isolate overflow-x-clip">
         <GardenBackdrop />
         <AboutSection company={COMPANY} />

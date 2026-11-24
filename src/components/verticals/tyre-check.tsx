@@ -5,15 +5,15 @@ import { AlertTriangle, CalendarClock, CheckCircle2, Ruler } from "lucide-react"
 import { cn } from "@/lib/utils";
 
 const noop = () => () => {};
-// Mốc “bây giờ” phía client: lấy MỘT lần rồi giữ nguyên — getSnapshot của useSyncExternalStore
-// phải trả cùng giá trị giữa các lần gọi, trả Date.now() mới mỗi lần sẽ gây vòng render vô hạn.
+// Client-side "now", read ONCE and then kept: useSyncExternalStore's getSnapshot must return the same
+// value between calls; returning a fresh Date.now() each time causes an infinite render loop.
 let clientNow: number | undefined;
 const getNow = () => (clientNow ??= Date.now());
 
 type Verdict = { level: 0 | 1 | 2 | 3; title: string; text: string };
 const TONE = ["text-[#7ee2a8]", "text-v-fg", "text-[#ffb47a]", "text-v-accent"];
 
-/** Tuổi lốp từ 4 số cuối mã DOT: 2 số đầu = tuần, 2 số sau = năm sản xuất. */
+/** Tyre age from the last 4 digits of the DOT code: first 2 = week, last 2 = year of manufacture. */
 function ageOf(code: string, now: number) {
   if (!/^\d{4}$/.test(code)) return null;
   const week = Number(code.slice(0, 2));
@@ -53,11 +53,11 @@ function VerdictBox({ v }: { v: Verdict }) {
   );
 }
 
-/** Mặt cắt gai lốp: rãnh sâu theo số mm đang chọn, vạch báo mòn 1,6 mm. */
+/** Tread cross-section: groove depth follows the selected mm, with the 1.6 mm wear bar. */
 function TreadSection({ mm }: { mm: number }) {
   const top = 20;
-  const base = 110; // đáy rãnh
-  const scale = (base - top) / 8; // 8 mm = toàn bộ chiều cao
+  const base = 110; // groove bottom
+  const scale = (base - top) / 8; // 8 mm = full height
   const surface = base - mm * scale;
   const twi = base - 1.6 * scale;
   const blocks = [20, 90, 160, 230, 300];
@@ -67,7 +67,7 @@ function TreadSection({ mm }: { mm: number }) {
       {blocks.map((x) => (
         <rect key={x} x={x} y={surface} width="50" height={base - surface} rx="3" fill="#3a3a3a" className="transition-all duration-300 ease-out" />
       ))}
-      {/* vạch báo mòn nằm trong rãnh */}
+      {/* wear bar sits inside the groove */}
       {blocks.slice(0, -1).map((x) => (
         <rect key={x} x={x + 50} y={twi} width="20" height={base - twi} fill="#e07a3f" opacity="0.85" />
       ))}
@@ -79,10 +79,10 @@ function TreadSection({ mm }: { mm: number }) {
 }
 
 /**
- * “Lốp của bạn còn an toàn không?” – hai phép thử tại xe:
- *  1. đọc tuổi lốp từ 4 số cuối mã DOT trên hông lốp;
- *  2. kéo thanh độ sâu gai, xem mặt cắt so với vạch báo mòn 1,6 mm.
- * Kết quả xấu → mời để lại số nhận báo giá (#bao-gia).
+ * "Is your tyre still safe?" – two checks at the car:
+ *  1. read the tyre age from the last 4 digits of the DOT code on the sidewall;
+ *  2. drag the tread-depth slider and compare the cross-section with the 1.6 mm wear bar.
+ * A bad result invites the visitor to leave a number for a quote (#bao-gia).
  */
 export function TyreCheck({ serverNow }: { serverNow: number }) {
   const now = useSyncExternalStore(noop, getNow, () => serverNow);
@@ -105,7 +105,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
           <h3 id="dot-title" className="mt-2 text-h4 font-semibold text-v-fg">Tuổi lốp – đọc mã DOT</h3>
           <p className="mt-1.5 text-small leading-relaxed text-v-mute">Tìm chữ “DOT” trên hông lốp, nhập 4 số cuối trong ô viền.</p>
 
-          {/* mô phỏng dòng chữ nổi trên hông lốp */}
+          {/* mock of the raised lettering on the sidewall */}
           <div className="mt-5 flex flex-wrap items-center gap-2 rounded-xl bg-[#111] px-4 py-4 font-semibold tracking-[0.12em] text-[#8f8f8f] sm:text-lead">
             <span aria-hidden>DOT</span>
             <span aria-hidden>4K2X</span>
@@ -135,7 +135,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
                   </strong>{" "}
                   tuổi.
                 </p>
-                {/* thước tuổi lốp 0–10 năm */}
+                {/* tyre-age ruler 0–10 years */}
                 <div className="relative mt-4 h-2 rounded-full bg-white/[0.08]" aria-hidden>
                   <span className="absolute inset-y-0 left-[50%] w-[10%] bg-[#ffb47a]/40" />
                   <span className="absolute inset-y-0 left-[60%] right-0 rounded-r-full bg-v-accent/40" />
@@ -154,7 +154,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
           </div>
         </section>
 
-        {/* 2. Độ sâu gai */}
+        {/* 2. Tread depth */}
         <section aria-labelledby="gai-title" className={card}>
           <p className="inline-flex items-center gap-2 text-caption font-medium text-v-mute">
             <Ruler className="size-4 text-v-accent" aria-hidden /> Phép thử 2
@@ -176,7 +176,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
         </section>
       </div>
 
-      {/* kết luận chung */}
+      {/* overall verdict */}
       <div className={cn("mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:p-7", worst >= 2 ? "bg-v-accent text-v-on-accent" : "bg-v-raise text-v-fg")}>
         <p className="text-title font-semibold">
           {worst >= 2 ? "Bộ lốp này nên thay sớm. Để lại số điện thoại, chúng tôi gọi báo giá lốp cùng cỡ." : "Lốp còn dùng tốt. Ghi lại 4 số DOT để lần sau kiểm tra lại."}

@@ -5,10 +5,10 @@ import { MousePointerClick, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Bản đồ Google nhúng, KHÔNG bắt con lăn chuột khi người dùng đang cuộn trang:
- * lớp phủ trong suốt chặn tương tác cho tới khi bấm vào bản đồ; rời chuột khỏi bản đồ thì khoá lại.
+ * Embedded Google map that does NOT capture the mouse wheel while the page scrolls:
+ * a transparent overlay blocks interaction until the map is clicked, and re-locks when the pointer leaves.
  */
-/** `compact`: bản nhỏ cho footer (nút chỉ đường gọn hơn); `className` đổi chiều cao/bo góc. */
+/** `compact`: smaller footer variant (tighter directions button); `className` sets height / corners. */
 export function MapEmbed({ query, title, hint, directionsLabel, compact, className }: { query: string; title: string; hint: string; directionsLabel: string; compact?: boolean; className?: string }) {
   const [active, setActive] = useState(false);
   const q = encodeURIComponent(query);

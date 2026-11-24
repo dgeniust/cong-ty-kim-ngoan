@@ -19,10 +19,10 @@ import { VSectionHead } from "./v-section-head";
 import { Container } from "@/components/shared/container";
 
 /**
- * Trang chủ LỐP XE – bố cục v1.1 (design.md §13). Giữ theme đen · trắng · cam.
- * Kim Ngoan bán lốp, không nhận đặt lịch thay và không niêm yết giá → mọi nút dẫn về “nhận báo giá”.
- *  banner hông lốp khổng lồ (tra cỡ) → 01 lốp còn an toàn? → 02 ba mức lốp → 03 loại xe
- *  → 04 nhãn thông số hỏi nhiều → 05 nhận báo giá (3 bước + form) → 06 cam kết → 07 tin tức → gọi ngay.
+ * Tyre site home page (design.md §13). Black · white · orange theme.
+ * Kim Ngoan sells tyres but does not book fitting appointments or publish prices, so every CTA leads to "get a quote".
+ *  giant sidewall banner (size finder) → 01 is your tyre safe? → 02 three tiers → 03 by vehicle type
+ *  → 04 most-asked size labels → 05 get a quote (3 steps + form) → 06 promises → 07 news → call.
  */
 export async function LopXeHome({
   vertical,
@@ -44,12 +44,12 @@ export async function LopXeHome({
   const popular = [...new Set(allProducts.map((p) => p.keySpec).filter((k) => /^\d{3}\/\d{2}R\d{2}$/.test(k)))].slice(0, 5);
   const countBy = (slug: string) => allProducts.filter((p) => p.categorySlug === slug).length;
   const [lead, ...restNews] = news;
-  const serverNow = new Date().getTime(); // mốc thời gian cho công cụ đọc tuổi lốp khi render trên server
+  const serverNow = new Date().getTime(); // reference time for the tyre-age reader during server render
   const ordered = [...allProducts].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
   return (
     <>
-      {/* BANNER: dòng thông tin → tiêu đề + lời dẫn → hông lốp khổng lồ (tra cỡ) → số liệu */}
+      {/* BANNER: info row → title + intro → giant sidewall (size finder) → stats */}
       <section aria-labelledby="hero-title" className="pb-16 pt-6 md:pb-20 md:pt-10">
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-v-fg/80 pb-3 text-caption text-v-fg">
@@ -92,7 +92,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 01. Lốp còn an toàn? */}
+      {/* 01. Is your tyre still safe? */}
       <section id="an-toan" aria-labelledby="an-toan-title" className="scroll-mt-24 py-16 md:py-24">
         <Container>
           <VSectionHead id="an-toan-title" no="01" kicker="Kiểm tra an toàn" title={<Headline h={sec.safety} />} lead={sec.safety?.subtitle} />
@@ -100,7 +100,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 02. Ba mức lốp */}
+      {/* 02. Three tyre tiers */}
       <section aria-labelledby="muc-lop-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
         <Container>
           <VSectionHead id="muc-lop-title" no="02" kicker="Chọn mức lốp" title={<Headline h={sec.tiers} />} lead={sec.tiers?.subtitle} />
@@ -108,7 +108,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 03. Theo loại xe – mục lục đánh số */}
+      {/* 03. By vehicle type – numbered index */}
       <section aria-labelledby="loai-xe-title" className="py-16 md:py-24">
         <Container>
           <VSectionHead
@@ -144,7 +144,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 04. Cỡ lốp hỏi nhiều – nhãn thông số tự cuộn */}
+      {/* 04. Most-asked sizes – auto-scrolling spec labels */}
       <section aria-labelledby="noi-bat-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
         <Container>
           <VSectionHead
@@ -169,7 +169,7 @@ export async function LopXeHome({
         </AutoCarousel>
       </section>
 
-      {/* 05. Nhận báo giá: 3 bước + form */}
+      {/* 05. Get a quote: 3 steps + form */}
       <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 py-16 md:py-24">
         <Container>
           <VSectionHead id="bao-gia-title" no="05" kicker="Báo giá" title={<Headline h={sec.process} />} lead={sec.process?.subtitle} />
@@ -197,7 +197,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 06. Cam kết */}
+      {/* 06. Promises */}
       <section aria-labelledby="cam-ket-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
         <Container className="grid gap-10 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-5">
@@ -221,7 +221,7 @@ export async function LopXeHome({
         </Container>
       </section>
 
-      {/* 07. Tin tức: bài chính + mục lục */}
+      {/* 07. News: lead story + index */}
       {lead && (
         <section aria-labelledby="tin-tuc-title" className="py-16 md:py-24">
           <Container>
@@ -270,7 +270,7 @@ export async function LopXeHome({
         </section>
       )}
 
-      {/* Gọi ngay */}
+      {/* Call now */}
       <section aria-labelledby="cta-title" className="pb-16 md:pb-24">
         <Container>
           <div className="grid gap-8 rounded-2xl bg-v-raise p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">

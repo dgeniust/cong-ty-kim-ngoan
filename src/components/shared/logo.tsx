@@ -38,7 +38,7 @@ export function Logo({ prefix, name, slogan, logo, inverted, compact, className 
             {prefix}
           </div>
         )}
-        {/* tên công ty in hoa, đậm, to – đồng bộ landing tổng và các chuyên trang */}
+        {/* company name in bold uppercase – matches the hub and every sector site */}
         <div className={cn("mt-1.5 text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] md:text-[1.6rem]", inverted ? "text-white" : "text-brand-900")}>{name}</div>
         {slogan && (
           <div className={cn("mt-1.5 text-micro", compact && "hidden sm:block", inverted ? "text-white/60" : "text-ink-subtle")}>

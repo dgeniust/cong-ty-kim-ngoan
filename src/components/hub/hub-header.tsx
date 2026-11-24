@@ -58,7 +58,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
     };
   }, [pathname]);
 
-  // Scrollspy trên trang chủ
+  // Scroll-spy on the home page
   useEffect(() => {
     if (!onHome) return;
     const ids = HUB_NAV.map((m) => m.spy).filter((v): v is string => !!v);
@@ -81,7 +81,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
   }, [onHome]);
 
 
-  // Dropdown: Esc đóng và trả focus về nút; bấm ra ngoài thì đóng
+  // Dropdown: Escape closes and returns focus to its button; clicking outside closes it
   useEffect(() => {
     if (!drop) return;
     const onKey = (e: KeyboardEvent) => {
@@ -130,7 +130,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
     );
   };
 
-  // trong suốt trên hero tối (trang chủ, chữ trắng) → cuộn/mở menu: trắng ngà mờ, chữ xanh than
+  // Transparent over the dark hero (home page, white text) → ivory glass with dark text once scrolled or a menu opens
   const dark = onHome && !(scrolled || open || drop);
 
   return (
@@ -260,7 +260,7 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
           </button>
         </div>
 
-        {/* tiến trình đọc trang */}
+        {/* reading progress */}
         <span
           ref={progress}
           aria-hidden

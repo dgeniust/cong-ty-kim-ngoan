@@ -10,8 +10,8 @@ import { siteNameFor } from "@/lib/site-name";
 type Params = Promise<{ slug: string }>;
 
 /**
- * Danh mục cố định trong code. Không đặt loading.tsx cho nhánh này: trang render động (đọc ?page, ?sap-xep)
- * nên skeleton sẽ được gửi trước khi biết slug sai → mã 200 thay vì 404.
+ * Categories are fixed in code. No loading.tsx for this branch: the page renders dynamically (reads ?page, ?sap-xep),
+ * so a skeleton would stream before an invalid slug is known → status 200 instead of 404.
  */
 export const dynamicParams = false;
 

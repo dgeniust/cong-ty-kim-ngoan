@@ -17,7 +17,7 @@ import { MapEmbed } from "@/components/shared/map-embed";
 import { QuoteForm } from "./quote-form";
 import { Eyebrow, SECTION_BG, SectionTitle, SECTOR_TONE, TONE, type Tone } from "@/components/hub/ui";
 
-/** Liên hệ chia đôi màn hình: thông tin + form gạch chân bên trái, bản đồ tràn chiều cao bên phải. */
+/** Split-screen contact block: details + underline form on the left, full-height map on the right. */
 export function ContactSection({
   company,
   verticalList,

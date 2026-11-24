@@ -13,8 +13,8 @@ const split = (v: string) => {
 };
 
 /**
- * Nhãn thông số lốp – thay cho hình bánh xe vẽ lặp lại: cỡ lốp in to như trên hông lốp,
- * chỉ số tải + tốc độ (VD 91V) màu cam, rồi 3 dòng giải nghĩa.
+ * Tyre spec label (instead of a repeated wheel drawing): the size printed large as on the sidewall,
+ * load + speed index (e.g. 91V) in orange, then 3 lines explaining them.
  */
 export function TyreLabel({ product: p, href }: { product: CatalogProduct; href: string }) {
   const load = split(spec(p, "Chỉ số tải"));
@@ -77,8 +77,8 @@ function Score({ label, value }: { label: string; value: number }) {
 }
 
 /**
- * Ba mức lốp đặt cạnh nhau (neo giá): mức giữa nổi bật “Nhiều người chọn”.
- * Sản phẩm trong mỗi mức lấy theo thương hiệu (lib/data/vertical-extras.ts).
+ * Three tyre tiers side by side (price anchoring); the middle tier is highlighted as "most chosen".
+ * Products in each tier are picked by brand (constants/vertical-extras.ts).
  */
 export function TyreTiers({ tiers, products, base, phone }: { tiers: TyreTier[]; products: CatalogProduct[]; base: string; phone: string }) {
   return (

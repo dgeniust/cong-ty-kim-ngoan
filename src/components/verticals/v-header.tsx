@@ -11,10 +11,10 @@ import { useModalMenu } from "@/hooks/use-modal-menu";
 import { useScrolled } from "@/hooks/use-scrolled";
 
 /**
- * Header chuyên trang lốp xe / sắt thép – CÙNG CẤU TRÚC với header phân bón
- * (components/landing/site-header.tsx) để 3 chuyên trang có điểm chung:
- * thanh nổi bo tròn · logo chữ "CÔNG TY TNHH / KIM NGOAN" (giống landing tổng) · menu dạng viên · tìm kiếm · nút gọi.
- * Màu lấy từ token theme của từng chuyên trang.
+ * Header for the tyre / steel sites – SAME STRUCTURE as the fertilizer header
+ * (components/phanbon/pb-header.tsx) so the three sites feel related:
+ * floating rounded bar · "CÔNG TY TNHH / KIM NGOAN" text logo (as on the hub) · pill menu · search · call button.
+ * Colours come from each site's theme tokens.
  */
 
 export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; company: { prefix: string; name: string; legalName: string } }) {
@@ -32,7 +32,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
 
   useModalMenu(open, close);
 
-  // Cuộn xuống: header trượt lên biến mất · cuộn lên: trượt xuống hiện lại (luôn hiện khi mở menu)
+  // Scrolling down slides the header away; scrolling up brings it back (always shown while the menu is open)
   const hidden = useHideOnScroll({ lock: open });
 
   return (
@@ -47,7 +47,7 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
         )}>
         <div className="w-full px-4 sm:px-6 lg:pl-6 lg:pr-8 2xl:pl-8">
           <div className="flex h-16 items-center justify-between gap-4 md:h-[72px] lg:h-[76px]">
-            {/* logo chữ giống hệt landing tổng: CÔNG TY TNHH / KIM NGOAN, kèm nhãn ngành nhỏ */}
+            {/* text logo identical to the hub (CÔNG TY TNHH / KIM NGOAN) plus a small sector tag */}
             <Link href={vertical.base} className="group flex shrink-0 flex-col gap-1.5 rounded-md text-v-fg">
               <span className="block logo-prefix text-v-mute">{COMPANY.prefix}</span>
               <span className="flex items-center gap-2.5">

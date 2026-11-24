@@ -7,15 +7,15 @@ import type { HeroSlide, Stat } from "@/lib/hub/home";
 import { cn } from "@/lib/utils";
 import { BIZ_WRAP } from "@/components/hub/ui";
 
-/** icon cho 4 chỉ số neo đáy (theo thứ tự buildStats) */
+/** Icons for the stats bar, in buildStats() order. */
 const STAT_ICONS: LucideIcon[] = [CalendarCheck, Package, Layers, Clock];
 
 const AUTOPLAY = 5000;
 
 /**
- * Hero tràn viền: ảnh nền 3 ngành đổi mỗi 5s, chữ (dòng nhỏ, slogan, mô tả) đổi theo từng ngành.
- * Lớp phủ xanh rừng đêm từ trái sang phải giữ chữ đọc rõ. `children` = cụm nút bấm. Đáy hero là thanh chỉ số.
- * Hẹn giờ giữ "thời gian còn lại" khi tạm dừng (rê chuột vào nội dung/nút, focus, tab ẩn, nút tạm dừng).
+ * Full-bleed hero: one background photo per sector, changing every 5 s; the eyebrow, slogan and lead change with it.
+ * A night-forest overlay (left → right) keeps the text readable. `children` = the CTA buttons. A stats bar is pinned to the bottom.
+ * The timer keeps the "remaining time" while paused (hover/focus on the content or controls, hidden tab, pause button).
  */
 export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stats: Stat[]; children: ReactNode }) {
   const n = slides.length;
@@ -24,7 +24,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [lap, setLap] = useState(0); // đổi mỗi lần chuyển slide → khởi động lại thanh thời gian
+  const [lap, setLap] = useState(0); // bumped on every slide change → restarts the progress bar
   const lapRef = useRef(0);
   const remaining = useRef(AUTOPLAY);
 
@@ -64,7 +64,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
     const timer = setTimeout(() => go(index + 1), remaining.current);
     return () => {
       clearTimeout(timer);
-      // còn đúng lượt (chỉ tạm dừng) thì trừ phần đã chạy; đã chuyển slide thì go() đặt lại 6s rồi
+      // same lap (only paused): subtract the time already elapsed; after a slide change go() has reset the full duration
       if (lapRef.current === myLap) remaining.current = Math.max(0, remaining.current - (performance.now() - start));
     };
   }, [running, go, index, lap]);
@@ -85,7 +85,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
 
   return (
     <section id="top" aria-labelledby="hero-title" className="relative isolate -mt-16 flex flex-col overflow-hidden bg-mv-night text-white md:min-h-[max(660px,88svh)] lg:-mt-[76px] lg:min-h-[max(680px,88vh)]">
-      {/* ảnh nền (điện thoại: ảnh nằm trên, chữ bên dưới trên nền xanh rừng đêm) */}
+      {/* background photos (phones: photo on top, text below on night green) */}
       <div className="relative -z-10 h-[46svh] min-h-[280px] md:absolute md:inset-0 md:h-auto">
         {slides.map((s, i) => {
           const on = i === index;
@@ -104,16 +104,16 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
             </div>
           );
         })}
-        {/* overlay xanh rừng đêm #082919: điện thoại phủ trên–dưới để ảnh liền với nền tối; từ md phủ trái → phải 92% → 10% */}
+        {/* #082919 overlay: top-to-bottom on phones so the photo blends into the dark text area; from md left → right 92% → 10% */}
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,41,25,0.55)_0%,rgba(8,41,25,0.1)_30%,rgba(8,41,25,0.2)_65%,rgba(8,41,25,1)_100%)] md:bg-[linear-gradient(90deg,rgba(8,41,25,0.92)_0%,rgba(8,41,25,0.84)_32%,rgba(8,41,25,0.45)_58%,rgba(8,41,25,0.1)_100%)]" />
-        {/* dải tối phía trên để menu trong suốt (chữ trắng) luôn đọc được */}
+        {/* dark band at the top so the transparent header (white text) always stays readable */}
         <div className="absolute inset-x-0 top-0 hidden h-40 bg-[linear-gradient(180deg,rgba(8,41,25,0.55),rgba(8,41,25,0))] md:block" />
       </div>
 
-      {/* nội dung */}
+      {/* content */}
       <div className={cn(BIZ_WRAP, "flex flex-1 flex-col pb-8 pt-4 md:justify-center md:pb-14 md:pt-32")}>
         <div className="max-w-[700px]" {...holdProps}>
-          {/* chữ của mọi slide xếp chồng một ô lưới → chiều cao ổn định; chỉ slide đang hiện là <h1> */}
+          {/* every slide's text is stacked in one grid cell → stable height; only the visible slide is the <h1> */}
           <div className="grid">
             {slides.map((s, i) => {
               const on = i === index;
@@ -143,7 +143,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
           {children}
         </div>
 
-        {/* chọn ảnh */}
+        {/* slide controls */}
         <div className="mt-10 flex flex-wrap items-center gap-1 md:mt-14" role="group" aria-label="Chọn ảnh ngành hàng" {...holdProps}>
           <button type="button" onClick={() => go(index - 1)} aria-label="Ảnh trước" className="mr-2 grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
             <ChevronLeft className="size-5" aria-hidden />
@@ -180,7 +180,7 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
         </div>
       </div>
 
-      {/* thanh chỉ số neo đáy: nền đặc xanh ngọc lục bảo, số vàng, mô tả xanh nhạt */}
+      {/* stats bar pinned to the bottom: solid emerald, gold figures, mint labels */}
       <div className="bg-mv-emerald">
         <dl className={cn(BIZ_WRAP, "grid grid-cols-2 lg:grid-cols-4")}>
           {stats.map((s, i) => {

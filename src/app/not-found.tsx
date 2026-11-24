@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: { absolute: "Không tìm thấy trang
 
 const DOT = { phanbon: "bg-sector-phanbon", lopxe: "bg-sector-lopxe", satthep: "bg-sector-satthep" } as const;
 
-/** 404 cho đường dẫn không thuộc chuyên trang nào – cùng phong cách landing tổng, chỉ đường quay về. */
+/** 404 for paths outside every sector site – hub style, with ways back. */
 export default async function NotFound() {
   const { COMPANY, VERTICAL_LIST } = await getSettings();
   return (

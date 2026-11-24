@@ -5,7 +5,7 @@ import { getCategory } from "@/lib/mock/categories";
 import type { Product } from "@/types/phanbon";
 
 /** Whole card is one link target (stretched link on the title) – bigger hit area, single tab stop. */
-export function ProductCard({ product, headingLevel = "h3", priority = false }: { product: Product; headingLevel?: "h2" | "h3"; /** ảnh nằm ở màn hình đầu → tải sớm (LCP) */ priority?: boolean }) {
+export function ProductCard({ product, headingLevel = "h3", priority = false }: { product: Product; headingLevel?: "h2" | "h3"; /** above-the-fold image → load early (LCP) */ priority?: boolean }) {
   const href = `/phanbon/san-pham/${product.slug}`;
   const Heading = headingLevel;
   const category = getCategory(product.categorySlug)?.name;

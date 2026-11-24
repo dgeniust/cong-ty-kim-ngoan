@@ -5,8 +5,8 @@ import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";
 
 /**
- * Nút chuyên trang (phong cách Business): bo 6px, chữ 500, chuyển màu 200ms.
- * accent = hành động chính duy nhất; tint = hành động phụ; quiet = nút chữ; onInvert = trên mảng màu.
+ * Sector-site button: 6px corners, 500 weight, 200 ms colour transition.
+ * accent = the single primary action; tint = secondary; quiet = text button; onInvert = on a colour field.
  */
 const vButton = cva(
   "group/btn inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg.arrow]:translate-x-0.5",
@@ -17,7 +17,7 @@ const vButton = cva(
         tint: "bg-v-tint text-v-on-tint hover:brightness-110",
         quiet: "bg-v-raise text-v-fg hover:bg-v-tint hover:text-v-on-tint",
         onInvert: "bg-v-on-invert text-v-invert hover:opacity-90",
-        /** giữ tương thích tên cũ */
+        /** legacy name kept for compatibility */
         solid: "bg-v-tint text-v-on-tint hover:brightness-110",
       },
       size: BUTTON_SIZES,

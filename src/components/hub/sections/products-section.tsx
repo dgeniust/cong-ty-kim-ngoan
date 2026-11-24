@@ -5,7 +5,7 @@ import type { Spotlight } from "@/lib/hub/home";
 import { SpotlightTabs } from "./spotlight";
 import { BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle } from "@/components/hub/ui";
 
-/** Khối sản phẩm: tiêu đề + không gian trưng bày 3 ngành (phần tab chạy ở trình duyệt). */
+/** Products block: heading + the three-sector showcase (the tab logic runs in the browser). */
 export function ProductsSection({ spotlights }: { spotlights: Spotlight[] }) {
   return (
     <section data-garden="2" id="san-pham" aria-labelledby="san-pham-title" className={cn(SECTION_BG.mint, "scroll-mt-20 py-24 md:py-32")}>

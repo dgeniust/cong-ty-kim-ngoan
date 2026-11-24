@@ -1,6 +1,6 @@
 import type { CatalogCategory, CatalogContent, CatalogProduct } from "@/types/catalog";
 
-/** DỮ LIỆU MẪU – thay bằng API/CMS. Thương hiệu, quy cách chỉ để minh hoạ bố cục. */
+/** SAMPLE DATA – replace via API/CMS. Brands and specs only illustrate the layout. */
 export const categories: CatalogCategory[] = [
   { slug: "thep-xay-dung", name: "Thép xây dựng", description: "Thép thanh vằn, thép cuộn cho móng, cột, dầm, sàn.", art: "rebar" },
   { slug: "thep-hinh", name: "Thép hình", description: "Thép I, H, U, V cho kết cấu nhà xưởng, nhà tiền chế.", art: "ibeam" },

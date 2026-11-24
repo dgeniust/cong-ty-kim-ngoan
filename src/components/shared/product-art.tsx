@@ -2,8 +2,8 @@ import type { ArtKind } from "@/types/catalog";
 import { cn } from "@/lib/utils";
 
 /**
- * Hình minh hoạ vector cho sản phẩm khi CHƯA có ảnh chụp thật.
- * Khi khách gửi ảnh: điền `images` cho sản phẩm, <ProductVisual> sẽ tự ưu tiên ảnh.
+ * Vector illustration for products that have NO real photo yet.
+ * Once photos arrive, fill the product's `images` and <ProductVisual> uses them automatically.
  */
 
 const STEEL = { hi: "#d9dbde", mid: "#a4a8ad", low: "#6b6f75", deep: "#2a2c2f" };
@@ -16,13 +16,13 @@ function Tyre({ variant }: { variant: "tyre" | "tyre-at" | "tyre-truck" }) {
   return (
     <>
       <ellipse cx="100" cy="186" rx="62" ry="6" fill="#000" opacity="0.28" />
-      {/* thân lốp */}
+      {/* tyre body */}
       <circle cx="100" cy="100" r="84" fill="#1b1b1e" />
       <circle cx="100" cy="100" r="84" fill="none" stroke="#3b3b40" strokeWidth={treadW} strokeDasharray={tread} />
       <circle cx="100" cy="100" r={84 - treadW / 2 - 2} fill="#141416" />
       <circle cx="100" cy="100" r={rimR + 12} fill="none" stroke="#2c2c30" strokeWidth="1.5" />
       <circle cx="100" cy="100" r={rimR + 6} fill="none" stroke="var(--v-spark, #e25a0c)" strokeWidth="1.5" strokeDasharray="38 400" strokeLinecap="round" transform="rotate(-70 100 100)" />
-      {/* mâm */}
+      {/* rim */}
       <circle cx="100" cy="100" r={rimR} fill={STEEL.low} />
       <circle cx="100" cy="100" r={rimR - 4} fill="#232326" />
       {variant === "tyre-truck" ? (
@@ -50,7 +50,7 @@ function Tyre({ variant }: { variant: "tyre" | "tyre-at" | "tyre-truck" }) {
           <circle cx="100" cy="100" r="6" fill="#232326" />
         </>
       )}
-      {/* ánh sáng */}
+      {/* highlight */}
       <path d="M38 62 A72 72 0 0 1 96 26" fill="none" stroke="#fff" strokeOpacity="0.14" strokeWidth="5" strokeLinecap="round" />
     </>
   );
@@ -78,19 +78,19 @@ function Rebar() {
 }
 
 function IBeam() {
-  // Thép chữ I phối cảnh trục đo
+  // I-beam in isometric view
   return (
     <g>
       <ellipse cx="104" cy="176" rx="74" ry="7" fill="#000" opacity="0.14" />
-      {/* cánh trên */}
+      {/* top flange */}
       <path d="M22 62 L122 30 L178 46 L78 78 Z" fill={STEEL.hi} />
       <path d="M22 62 L78 78 L78 88 L22 72 Z" fill={STEEL.mid} />
       <path d="M78 78 L178 46 L178 56 L78 88 Z" fill={STEEL.low} />
-      {/* bụng */}
+      {/* web */}
       <path d="M44 78 L56 82 L56 140 L44 136 Z" fill={STEEL.mid} />
       <path d="M56 82 L156 50 L156 108 L56 140 Z" fill={STEEL.low} />
       <path d="M56 82 L156 50 L156 60 L56 92 Z" fill={STEEL.deep} opacity="0.35" />
-      {/* cánh dưới */}
+      {/* bottom flange */}
       <path d="M22 130 L44 123 L56 127 L56 140 L78 146 L178 114 L178 124 L78 156 L22 140 Z" fill={STEEL.mid} />
       <path d="M78 146 L178 114 L178 124 L78 156 Z" fill={STEEL.deep} opacity="0.55" />
       <path d="M22 130 L78 146 L78 156 L22 140 Z" fill={STEEL.hi} />
@@ -138,7 +138,7 @@ function Pipes({ square }: { square?: boolean }) {
 }
 
 function Roofing() {
-  // Tấm tôn sóng vuông nhìn chéo
+  // Square-wave roofing sheet seen at an angle
   const waves = Array.from({ length: 7 });
   return (
     <g>
