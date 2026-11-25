@@ -151,7 +151,7 @@ export async function LopXeHome({
       </section>
 
       {/* 01. Size finder – real tyre photo + sidewall code */}
-      <section id="tra-co-lop" aria-labelledby="tra-co-lop-title" className="scroll-mt-28 py-16 md:py-24">
+      <section id="tra-co-lop" aria-labelledby="tra-co-lop-title" className="v-band-accent scroll-mt-28 py-16 md:py-24">
         <Container>
           <VSectionHead id="tra-co-lop-title" no="01" kicker="Tra cỡ lốp" title={<Headline h={sec.finder} />} lead={sec.finder?.subtitle} />
           <TyreHero base={base} popular={popular} label="Chọn 3 con số in trên hông lốp" image={M.finder} />
@@ -159,7 +159,7 @@ export async function LopXeHome({
       </section>
 
       {/* 02. Is your tyre still safe? */}
-      <section id="an-toan" aria-labelledby="an-toan-title" className="scroll-mt-24 border-t border-v-line py-16 md:py-24">
+      <section id="an-toan" aria-labelledby="an-toan-title" className="scroll-mt-24 py-16 md:py-24">
         <Container>
           <VSectionHead id="an-toan-title" no="02" kicker="Kiểm tra an toàn" title={<Headline h={sec.safety} />} lead={sec.safety?.subtitle} />
           <TyreCheck serverNow={serverNow} />
@@ -167,7 +167,7 @@ export async function LopXeHome({
       </section>
 
       {/* 03. By vehicle type – photo cards */}
-      <section aria-labelledby="loai-xe-title" className="border-t border-v-line py-16 md:py-24">
+      <section aria-labelledby="loai-xe-title" className="bg-v-sunk py-16 md:py-24">
         <Container>
           <VSectionHead
             id="loai-xe-title"
@@ -207,7 +207,7 @@ export async function LopXeHome({
       </section>
 
       {/* 04. Three tyre tiers */}
-      <section aria-labelledby="muc-lop-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
+      <section aria-labelledby="muc-lop-title" className="py-16 md:py-24">
         <Container>
           <VSectionHead id="muc-lop-title" no="04" kicker="Chọn mức lốp" title={<Headline h={sec.tiers} />} lead={sec.tiers?.subtitle} />
           <TyreTiers tiers={TYRE_TIERS} products={ordered} base={base} phone={vertical.phone} />
@@ -215,7 +215,7 @@ export async function LopXeHome({
       </section>
 
       {/* 05. Tread by road – video + tips */}
-      <section aria-labelledby="gai-lop-title" className="py-16 md:py-24">
+      <section aria-labelledby="gai-lop-title" className="bg-v-sunk py-16 md:py-24">
         <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
           <Reveal className="lg:col-span-7">
             <MediaVideo video={M.roadVideo} className="aspect-[4/3] overflow-hidden rounded-2xl bg-v-raise sm:aspect-video lg:aspect-[4/3]" />
@@ -242,7 +242,7 @@ export async function LopXeHome({
       </section>
 
       {/* 06. Most-asked sizes – auto-scrolling spec labels */}
-      <section aria-labelledby="noi-bat-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
+      <section aria-labelledby="noi-bat-title" className="py-16 md:py-24">
         <Container>
           <VSectionHead
             id="noi-bat-title"
@@ -267,7 +267,7 @@ export async function LopXeHome({
       </section>
 
       {/* 07. At the shop – photo mosaic + address */}
-      <section aria-labelledby="cua-hang-title" className="py-16 md:py-24">
+      <section aria-labelledby="cua-hang-title" className="bg-v-sunk py-16 md:py-24">
         <Container>
           <VSectionHead
             id="cua-hang-title"
@@ -282,7 +282,7 @@ export async function LopXeHome({
               <Photo key={p.src} src={p.src} alt={p.alt} sizes="(min-width: 1024px) 25vw, 50vw" className="aspect-square" />
             ))}
           </div>
-          <div className="mt-6 flex flex-col gap-4 rounded-xl bg-v-raise p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="mt-6 flex flex-col gap-4 rounded-xl bg-v-card p-5 shadow-[0_8px_24px_-18px_rgb(80_40_10/0.35)] sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <p className="flex gap-3 text-body text-v-fg">
               <MapPin className="mt-0.5 size-5 shrink-0 text-v-accent" aria-hidden />
               <span>
@@ -300,7 +300,7 @@ export async function LopXeHome({
       </section>
 
       {/* 08. Get a quote: photo + 3 steps + form */}
-      <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 border-t border-v-line py-16 md:py-24">
+      <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 py-16 md:py-24">
         <Container>
           <VSectionHead id="bao-gia-title" no="08" kicker="Báo giá" title={<Headline h={sec.process} />} lead={sec.process?.subtitle} />
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-8">
@@ -331,7 +331,7 @@ export async function LopXeHome({
       </section>
 
       {/* 09. Promises – photo + story + four commitments */}
-      <section aria-labelledby="cam-ket-title" className="border-y border-v-line bg-v-sunk py-16 md:py-24">
+      <section aria-labelledby="cam-ket-title" className="v-band-accent py-16 md:py-24">
         <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <Reveal className="lg:col-span-5">
             <Photo src={M.promise.src} alt={M.promise.alt} sizes="(min-width: 1024px) 40vw, 100vw" className="aspect-[4/3] lg:aspect-[4/5]" />
@@ -376,13 +376,13 @@ export async function LopXeHome({
               }
             />
             <div className="grid gap-8 lg:grid-cols-12">
-              <Link href={lead.href} className="group flex flex-col justify-between rounded-2xl bg-v-accent p-7 text-v-on-accent sm:p-10 lg:col-span-7">
-                <span className="text-caption font-medium">
+              <Link href={lead.href} className="group flex flex-col justify-between rounded-2xl bg-v-sunk p-7 text-v-fg transition-colors hover:bg-[#efdfcf] sm:p-10 lg:col-span-7">
+                <span className="text-caption font-semibold text-v-accent">
                   {formatDate(lead.date)} · {lead.readingMinutes} phút đọc
                 </span>
                 <span className="mt-16 block text-h2 font-semibold tracking-[-0.03em]">{lead.title}</span>
-                <span className="mt-3 block max-w-xl text-body leading-relaxed opacity-90">{lead.excerpt}</span>
-                <span className="mt-6 inline-flex items-center gap-1 text-small font-semibold">
+                <span className="mt-3 block max-w-xl text-body leading-relaxed text-v-mute">{lead.excerpt}</span>
+                <span className="mt-6 inline-flex items-center gap-1 text-small font-semibold text-v-accent">
                   Đọc bài <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                 </span>
               </Link>
@@ -409,7 +409,7 @@ export async function LopXeHome({
       {/* Call now */}
       <section aria-labelledby="cta-title" className="pb-16 md:pb-24">
         <Container>
-          <div className="grid gap-8 rounded-2xl bg-v-raise p-7 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
+          <div className="v-band-accent grid gap-8 rounded-2xl p-7 shadow-[0_24px_60px_-30px_rgb(120_45_10/0.6)] sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-8 lg:p-14">
             <div className="lg:col-span-6">
               <h2 id="cta-title" className="text-h1 v-display text-v-fg">{content.cta.title}</h2>
               <p className="mt-4 max-w-md text-lead leading-relaxed text-v-mute">{content.cta.description}</p>
@@ -422,7 +422,7 @@ export async function LopXeHome({
               <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-13 items-center justify-between gap-3 rounded-xl bg-v-tint px-5 text-body font-medium text-v-on-tint">
                 Gửi ảnh hông lốp qua Zalo <MessageCircle className="size-5" aria-hidden />
               </a>
-              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-xl bg-v-bg px-5 text-body font-medium text-v-fg transition-colors hover:bg-v-sunk">
+              <Link href={`${base}/lien-he`} className="flex h-13 items-center justify-between gap-3 rounded-xl px-5 text-body font-medium text-v-fg ring-1 ring-white/35 transition-colors hover:bg-white/10">
                 Gửi yêu cầu báo giá <ArrowRight className="size-5" aria-hidden />
               </Link>
             </div>

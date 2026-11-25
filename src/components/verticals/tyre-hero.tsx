@@ -38,7 +38,7 @@ export function TyreHero({ base, popular, label, sub, image }: { base: string; p
   const num = "appearance-none bg-transparent text-center font-semibold tabular-nums tracking-[-0.04em] outline-none transition-colors duration-200 cursor-pointer";
 
   return (
-    <div className="grid overflow-hidden rounded-2xl bg-v-raise lg:grid-cols-12">
+    <div className="theme-lopxe grid overflow-hidden rounded-2xl bg-v-card text-v-fg shadow-[0_24px_60px_-30px_rgb(60_20_0/0.55)] lg:grid-cols-12">
       <div className="relative aspect-[4/3] bg-white lg:col-span-5 lg:aspect-auto">
         <SmartImage src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-contain p-6 sm:p-10" />
         <span className="absolute left-4 top-4 rounded-full bg-v-pill px-3 py-1 text-caption font-semibold text-v-on-pill">Cỡ lốp in trên hông lốp</span>
@@ -49,7 +49,7 @@ export function TyreHero({ base, popular, label, sub, image }: { base: string; p
           go(size);
         }}
         aria-label="Tra cỡ lốp"
-        className="flex flex-col items-center justify-center px-4 py-10 text-center sm:px-8 sm:py-12 lg:col-span-7"
+        className="flex flex-col items-center justify-center bg-v-raise px-4 py-10 text-center sm:px-8 sm:py-12 lg:col-span-7"
       >
         <p className="text-title font-semibold text-v-fg">{label}</p>
         {sub && <p className="mt-1.5 max-w-md text-small text-v-mute">{sub}</p>}

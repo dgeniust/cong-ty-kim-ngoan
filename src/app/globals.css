@@ -385,8 +385,8 @@
      --v-accent is a deeper orange so white button text passes 4.5:1; #e07a3f stays for marks/decoration. */
   --v-bg: #ffffff;
   --v-card: #ffffff;
-  --v-raise: #f6f5f3;
-  --v-sunk: #f8f7f5;
+  --v-raise: #faf5ef;
+  --v-sunk: #f4e9dd;
   --v-fg: #17181b;
   --v-mute: #5b5b63;
   --v-accent: #b9531c;
@@ -401,12 +401,12 @@
   --v-line: rgb(0 0 0 / 0.08);
   --v-pill: #e07a3f;
   --v-on-pill: #17181b;
-  --v-chip: #f6f5f3;
+  --v-chip: #faf5ef;
   --v-ring-1: #e07a3f;
   --v-ring-2: #a1a1aa;
   --v-island: #fbeee5;
   --v-on-island: #17181b;
-  --v-art-bg: #f6f5f3;
+  --v-art-bg: #faf5ef;
   --heading: #17181b;
   --focus: #b9531c;
   --selection-bg: #fbeee5;
@@ -442,6 +442,23 @@
   --focus: #a84b24;
   --selection-bg: #f8ece5;
   --selection-fg: #18181b;
+}
+/* Tyres: accent band – deep orange gradient with white text. Tokens are remapped so every component inside
+   (section heads, buttons, lines) turns light-on-orange; nest `.theme-lopxe` on a card to get back the light palette. */
+.theme-lopxe .v-band-accent {
+  --v-fg: #ffffff;
+  --v-mute: rgb(255 255 255 / 0.85);
+  --v-mark: #ffd9bd;
+  --v-line: rgb(255 255 255 / 0.24);
+  --v-accent: #ffffff;
+  --v-on-accent: #9e4515;
+  --v-accent-hover: #fff1e6;
+  --v-tint: rgb(255 255 255 / 0.16);
+  --v-on-tint: #ffffff;
+  --heading: #ffffff;
+  --focus: #ffffff;
+  color: var(--v-fg);
+  background: linear-gradient(135deg, #9f4419 0%, #b2501c 55%, #c2581f 100%); /* white text ≥ 4.5:1 across the gradient */
 }
 .theme-lopxe,
 .theme-satthep {

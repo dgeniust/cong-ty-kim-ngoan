@@ -22,10 +22,10 @@ export function TyreLabel({ product: p, href }: { product: CatalogProduct; href:
   const structure = spec(p, "Kết cấu");
   const size = p.keySpec.replace(/\s*A\/T$/, "");
   return (
-    <article className="group relative flex h-full flex-col rounded-2xl bg-v-raise p-5 transition-shadow duration-300 hover:shadow-[0_12px_32px_-14px_rgb(0_0_0/0.28)]">
+    <article className="group relative flex h-full flex-col rounded-2xl border-t-4 border-v-spark bg-v-raise p-5 ring-1 ring-v-line transition-shadow duration-300 hover:shadow-[0_12px_32px_-14px_rgb(0_0_0/0.28)]">
       <p className="flex items-center justify-between gap-3 text-caption">
         <span className="font-semibold uppercase tracking-[0.12em] text-v-fg">{p.brand}</span>
-        {(p.featured || p.isNew) && <span className="rounded-full bg-v-tint px-2 py-0.5 text-micro font-medium text-v-on-tint">{p.isNew ? "Mới" : "Bán chạy"}</span>}
+        {(p.featured || p.isNew) && <span className="rounded-full bg-v-pill px-2 py-0.5 text-micro font-semibold text-v-on-pill">{p.isNew ? "Mới" : "Bán chạy"}</span>}
       </p>
       <p className="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1 font-semibold tabular-nums leading-none tracking-[-0.03em] text-v-fg">
         <span className="text-h3 whitespace-nowrap">{size}</span>
@@ -90,14 +90,14 @@ export function TyreTiers({ tiers, products, base, phone }: { tiers: TyreTier[];
             key={t.id}
             className={cn(
               "relative flex flex-col rounded-2xl p-6 sm:p-8",
-              t.popular ? "bg-v-tint text-v-fg ring-2 ring-v-spark lg:py-11" : "bg-v-raise text-v-fg",
+              t.popular ? "v-band-accent shadow-[0_24px_50px_-24px_rgb(120_45_10/0.6)] lg:py-11" : "bg-v-raise text-v-fg ring-1 ring-v-line",
             )}
           >
             {t.popular && <span className="absolute -top-3 left-6 rounded-full bg-v-accent px-3 py-1 text-caption font-semibold text-v-on-accent sm:left-8">Nhiều người chọn</span>}
             <p className="text-caption font-medium text-v-mute">{t.brands.join(" · ")}</p>
             <h3 className="mt-1.5 text-h2 font-semibold !text-current">{t.name}</h3>
             <p className="mt-1.5 text-body text-v-mute">{t.tagline}</p>
-            <div className={cn("mt-6 space-y-2.5 rounded-xl p-4", t.popular ? "bg-v-bg" : "bg-black/[0.03]")}>
+            <div className={cn("mt-6 space-y-2.5 rounded-xl p-4", t.popular ? "theme-lopxe bg-v-bg" : "bg-black/[0.03]")}>
               {t.scores.map((s) => (
                 <Score key={s.label} {...s} />
               ))}

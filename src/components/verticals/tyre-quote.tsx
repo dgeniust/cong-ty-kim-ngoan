@@ -74,7 +74,7 @@ export function TyreQuote({ phone, zalo }: { phone: string; zalo: string }) {
         } catch {}
         n.success("Đã nhận yêu cầu báo giá", { description: `Nhân viên Kim Ngoan sẽ gọi số ${tel} trong giờ làm việc (7:00 – 17:00).` });
       }}
-      className="rounded-2xl bg-v-raise p-6 sm:p-8"
+      className="rounded-2xl border-t-4 border-v-spark bg-v-raise p-6 ring-1 ring-v-line sm:p-8"
     >
       <p className="inline-flex items-center gap-2 text-title font-semibold text-v-fg">
         <ReceiptText className="size-5 text-v-accent" aria-hidden /> Nhận báo giá lốp

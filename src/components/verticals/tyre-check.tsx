@@ -92,7 +92,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
   const aV = age && "months" in age && age.months !== undefined ? ageVerdict(age.months) : null;
   const tV = treadVerdict(mm);
   const worst = Math.max(aV?.level ?? 0, tV.level);
-  const card = "rounded-2xl bg-v-raise p-6 sm:p-8";
+  const card = "rounded-2xl bg-v-raise p-6 ring-1 ring-v-line sm:p-8";
 
   return (
     <div>
