@@ -3,20 +3,20 @@
 import Link from "next/link";
 import { ArrowRight, Droplets, Phone, Wind } from "lucide-react";
 import { Kicker } from "@/components/shared/kicker";
-import { inStage, type StageKind } from "@/lib/content/hub-extras";
-import { calendarFor, cropKey } from "@/lib/content/crop-match";
+import { inStage, type StageKind } from "@/constants/hub-extras";
+import { calendarFor, cropKey, cropLabel as label } from "@/lib/content/crop-match";
 import { useCrop, useMonth } from "@/lib/crop-store";
 import { getCategory } from "@/lib/mock/categories";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { npkOf, type LabelProduct } from "./npk-label";
 
-/* kiểu dữ liệu dự báo (trùng lib/weather.ts – file đó chỉ chạy phía server) */
+/* Forecast types (duplicated from lib/weather.ts, which is server-only) */
 type DayForecast = { date: string; code: number; tmax: number; tmin: number; rain: number; prob: number; wind: number };
 type BulletinCrop = { key: string; name: string };
 type BulletinArticle = { href: string; title: string; tags: string[] };
 
-/* ---------------------------------------------------------------- biểu tượng thời tiết (vẽ tay, cùng nét) */
+/* ---------------------------------------------------------------- weather icons (hand-drawn, same stroke) */
 type Sky = "nang" | "it-may" | "may" | "mua" | "dong" | "suong";
 function skyOf(code: number): Sky {
   if (code >= 95) return "dong";
@@ -79,7 +79,7 @@ function SkyIcon({ sky, className }: { sky: Sky; className?: string }) {
   );
 }
 
-/* ---------------------------------------------------------------- lời khuyên */
+/* ---------------------------------------------------------------- advice */
 type Verdict = { tone: "go" | "wait" | "no"; title: string; text: string };
 function fertVerdict(d: DayForecast): Verdict {
   if (d.rain >= 15 || (d.prob >= 80 && d.rain >= 8)) return { tone: "no", title: "Nên hoãn", text: `Mưa lớn khoảng ${fmt(d.rain)} mm dễ rửa trôi phân. Bón lại sau mưa 1–2 ngày, khi đất còn ẩm.` };
@@ -101,11 +101,11 @@ const fmt = (n: number) => n.toLocaleString("vi-VN", { maximumFractionDigits: 1 
 const dayName = (iso: string, i: number) => {
   if (i === 0) return "Hôm nay";
   if (i === 1) return "Ngày mai";
-  const d = new Date(`${iso}T12:00:00Z`); // giữa ngày UTC → đúng thứ của ngày đó ở mọi múi giờ
+  const d = new Date(`${iso}T12:00:00Z`); // midday UTC → the right weekday in every time zone
   return ["CN", "T2", "T3", "T4", "T5", "T6", "T7"][d.getUTCDay()] + ` ${String(d.getUTCDate()).padStart(2, "0")}/${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 };
 
-/** Mùa mưa Đông Nam Bộ ~ tháng 5–11: lời khuyên thay thế khi chưa lấy được dự báo. */
+/** Rainy season in the South-East region (~May–November): fallback advice when no forecast is available. */
 function seasonal(m: number) {
   return m >= 5 && m <= 11
     ? "Đang mùa mưa: bón khi đất ẩm, tránh bón ngay trước cơn mưa lớn; chú ý thoát nước và nấm bệnh ở gốc, trái."
@@ -113,15 +113,11 @@ function seasonal(m: number) {
 }
 
 const KIND_LABEL: Record<StageKind, string> = { bon: "Bón phân", bvtv: "Phòng sâu bệnh", thu: "Thu hoạch", cham: "Chăm sóc" };
-const label = (name: string) => {
-  const s = name.replace(/^cây\s+/i, "");
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 /**
- * “Bảng tin nhà vườn hôm nay” – tầng xanh rừng đậm của trang:
- * trái: dự báo 5 ngày ở Chơn Thành + 2 kết luận “Bón phân hôm nay?”, “Phun thuốc hôm nay?”;
- * phải: việc tháng này cho cây đã chọn ở hero, phân hợp cây, bài kỹ thuật, gọi kỹ thuật viên.
+ * "Today's farm bulletin" – the dark-green band of the page:
+ * left: 5-day forecast for Chơn Thành + two verdicts ("Fertilise today?", "Spray today?");
+ * right: this month's tasks for the crop chosen in the hero, matching fertilizers, guides, call a technician.
  */
 export function FarmBulletin({
   days,
@@ -170,7 +166,7 @@ export function FarmBulletin({
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-12 [&>*]:min-w-0">
-        {/* THỜI TIẾT */}
+        {/* WEATHER */}
         <section aria-label={`Dự báo thời tiết ${place}`} className="rounded-lg bg-white/[0.06] p-5 ring-1 ring-white/10 sm:p-7 lg:col-span-7">
           {today && fert && spray ? (
             <>
@@ -215,7 +211,7 @@ export function FarmBulletin({
                 })}
               </div>
 
-              {/* 5 ngày */}
+              {/* 5 days */}
               <ol className="mt-6 grid grid-cols-5 gap-1.5" aria-label="Dự báo 5 ngày">
                 {days!.map((d, i) => {
                   const f = fertVerdict(d);
@@ -226,7 +222,7 @@ export function FarmBulletin({
                       <span className="mt-1 text-small font-semibold tabular-nums">
                         {d.tmax}° <span className="font-normal text-white/75">{d.tmin}°</span>
                       </span>
-                      {/* cột mưa */}
+                      {/* rain bar */}
                       <span className="mt-2 flex h-10 w-2.5 items-end overflow-hidden rounded-full bg-white/10" aria-hidden>
                         <span className="w-full rounded-full bg-[#8cc4f0]" style={{ height: `${Math.min(100, (d.rain / 30) * 100)}%` }} />
                       </span>
@@ -253,7 +249,7 @@ export function FarmBulletin({
           )}
         </section>
 
-        {/* VƯỜN CỦA BẠN THÁNG NÀY */}
+        {/* YOUR GARDEN THIS MONTH */}
         <section aria-label={`Việc của vườn ${name} tháng ${month}`} className="flex flex-col rounded-lg bg-white p-5 text-brand-900 sm:p-7 lg:col-span-5">
           <p className="text-caption text-ink-muted">Vườn {name.toLowerCase()} · tháng {month}</p>
           {cal ? (

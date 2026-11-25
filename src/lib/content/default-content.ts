@@ -87,7 +87,7 @@ export const defaultContent: SiteContent = {
       { name: "Cây tiêu", description: "Phát triển mạnh - Ít sâu bệnh", image: "/tieu.webp" },
       { name: "Cây lúa", description: "Xanh lá - Bội thu", image: "/lua.jpg" },
       { name: "Cây ăn trái", description: "Bưởi, cam, quýt - Trái đều, ngọt", image: "/hero-img.jpg" },
-      // TODO(khách hàng): thay ảnh vườn rau thật
+      // TODO(client): replace with a real vegetable-garden photo
       { name: "Rau màu", description: "Lá xanh - Thu hoạch nhanh", image: "/garden.jpg" },
     ],
   },
@@ -111,7 +111,7 @@ export const defaultContent: SiteContent = {
   stories: {
     title: "Vườn thật, người thật",
     subtitle: "Câu chuyện của bà con đang dùng phân, thuốc Kim Ngoan — ảnh thật, kết quả thật, được chủ vườn đồng ý đăng.",
-    // TODO(khách hàng): thêm câu chuyện thật trong admin › Nội dung phân bón › Vườn thật. Không đăng câu chuyện mẫu.
+    // TODO(client): add real stories in admin › Fertilizer content › Real gardens. Never publish sample stories.
     items: [],
   },
   contact: {

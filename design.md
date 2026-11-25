@@ -200,10 +200,11 @@ Nền giấy kẻ ô + **bảng giá thép hôm nay** → **danh sách vật tư
 ## 12. Cấu trúc code
 | Thư mục | Nội dung |
 |---|---|
-| `components/business/` | landing tổng: `ui.tsx` (BIZ_WRAP, nút, Eyebrow, SectionTitle), hero, các section, form, bản đồ |
-| `components/hub/` | header/footer/nút nổi landing tổng |
-| `components/landing/`, `components/phanbon/`, `components/site/` | chuyên trang phân bón |
-| `components/nganh/` | lốp xe & sắt thép (dùng biến `--v-*`) |
+| `components/hub/` | landing tổng: header (`nav/`), footer, nút nổi, `sections/` (hero, giới thiệu, sản phẩm, tin tức, liên hệ, form), `ui.tsx` (BIZ_WRAP, nút, Eyebrow, SectionTitle) |
+| `components/phanbon/` (+ `catalog/`) | chuyên trang phân bón |
+| `components/verticals/` | lốp xe & sắt thép (dùng biến `--v-*`) |
+| `components/shared/` | dùng chung: nền vườn (`garden/`), bản đồ, hình minh hoạ sản phẩm, error view… |
+| `constants/`, `types/`, `hooks/` | nội dung tĩnh, kiểu dữ liệu, hook phía client |
 | `components/ui/` | shadcn (button bo 6px) |
 Chỉ phần tương tác là client component; còn lại server component.
 
@@ -211,4 +212,4 @@ Chỉ phần tương tác là client component; còn lại server component.
 `npx tsc --noEmit` · `npx eslint src` · `next build` · bộ test CDP (landing, nội dung, chuyên trang, admin) · chụp so sánh 25 route × 2 khổ · kiểm tra SEO từng route · Lighthouse · tràn ngang 390px.
 
 ## 14. Cần xác nhận
-Số liệu cam kết, hệ số thép 35–45 kg/m², mốc bậc giá, cách chia mức lốp (`lib/data/vertical-extras.ts`). Các form (báo giá, đặt lịch, danh sách vật tư, liên hệ) hiện chỉ có giao diện – cần nối API.
+Số liệu cam kết, hệ số thép 35–45 kg/m², mốc bậc giá, cách chia mức lốp (`constants/vertical-extras.ts`). Các form (báo giá, đặt lịch, danh sách vật tư, liên hệ) hiện chỉ có giao diện – cần nối API.

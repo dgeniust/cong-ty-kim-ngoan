@@ -1,13 +1,13 @@
 import "server-only";
 
 /**
- * Dự báo thời tiết 5 ngày cho khu vực cửa hàng (Chơn Thành) từ Open-Meteo – miễn phí, không cần khoá API
- * (giấy phép CC BY 4.0: ghi nguồn “Open-Meteo” cạnh dữ liệu). Kết quả cache 30 phút (ISR).
- * Lỗi mạng / hết thời gian chờ → null, giao diện hiện lời khuyên theo mùa thay thế.
+ * 5-day forecast for the store area (Chơn Thành) from Open-Meteo – free, no API key
+ * (CC BY 4.0 licence: credit "Open-Meteo" next to the data). Cached for 30 minutes (ISR).
+ * Network error / timeout → null, and the UI shows seasonal advice instead.
  *
- * WEATHER_FIXTURE=1 (chỉ để kiểm thử khi máy không ra được internet): trả dữ liệu mẫu cố định.
+ * WEATHER_FIXTURE=1 (only for testing on machines without internet access): returns fixed sample data.
  */
-export const WEATHER_PLACE = { name: "Chơn Thành", lat: 11.43, lon: 106.62 }; // toạ độ gần đúng trung tâm Chơn Thành
+export const WEATHER_PLACE = { name: "Chơn Thành", lat: 11.43, lon: 106.62 }; // approximate centre of Chơn Thành
 
 type DayForecast = { date: string; code: number; tmax: number; tmin: number; rain: number; prob: number; wind: number };
 type Forecast = { days: DayForecast[]; fetchedAt: string };
