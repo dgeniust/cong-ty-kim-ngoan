@@ -7,6 +7,7 @@ import { ArticleCard } from "./article-card";
 import { EmptyState } from "./empty-state";
 import { PageHero } from "./page-hero";
 import { Pagination, paginate } from "./pagination";
+import { PB_PAGE_IMAGES } from "@/constants/page-heads";
 
 const PER_PAGE = 7; // 1 featured + 6
 
@@ -18,7 +19,7 @@ export function ArticleListPage({ section, page: pageParam }: { section: Article
 
   return (
     <>
-      <PageHero title={meta.title} description={meta.description} crumbs={[{ label: meta.title }]}>
+      <PageHero title={meta.title} description={meta.description} crumbs={[{ label: meta.title }]} image={PB_PAGE_IMAGES[section]}>
         <nav aria-label="Chuyên mục" className="mt-8 flex flex-wrap gap-2">
           {(Object.keys(articleSections) as ArticleSection[]).map((s) => (
             <Link

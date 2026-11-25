@@ -9,6 +9,7 @@ import { getFertilizerProduct } from "@/lib/products/server";
 import { socialMeta } from "@/lib/seo";
 import { siteNameFor } from "@/lib/site-name";
 import { BrandText } from "@/components/shared/brand-text";
+import { PB_PAGE_IMAGES } from "@/constants/page-heads";
 
 const TITLE = "Liên hệ";
 const DESCRIPTION = "Liên hệ Kim Ngoan để đặt hàng và được tư vấn kỹ thuật miễn phí. Địa chỉ, số điện thoại, giờ làm việc và bản đồ chỉ đường.";
@@ -41,6 +42,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
         title="Liên hệ"
         description="Gọi trực tiếp để được tư vấn ngay, hoặc để lại lời nhắn – kỹ thuật viên sẽ gọi lại cho bạn trong vòng 24 giờ."
         crumbs={[{ label: "Liên hệ" }]}
+        image={PB_PAGE_IMAGES["lien-he"]}
       />
 
       <Container className="grid gap-12 py-14 md:py-20 lg:grid-cols-[360px_1fr] lg:gap-16">

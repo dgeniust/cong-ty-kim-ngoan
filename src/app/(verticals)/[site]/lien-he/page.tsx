@@ -10,6 +10,7 @@ import { isCatalogSite, telHref } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
 import { siteNameFor } from "@/lib/site-name";
+import { V_PAGE_IMAGES } from "@/constants/page-heads";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ "san-pham"?: string }> };
 
@@ -39,7 +40,7 @@ export default async function Contact({ params, searchParams }: Props) {
 
   return (
     <>
-      <VPageHead vertical={vertical} crumbs={[{ label: "Liên hệ" }]} title="Liên hệ báo giá" lead={`${vertical.contactLabel}. Gửi quy cách và số lượng, chúng tôi sẽ gọi lại.`} />
+      <VPageHead vertical={vertical} image={V_PAGE_IMAGES[site]["lien-he"]} crumbs={[{ label: "Liên hệ" }]} title="Liên hệ báo giá" lead={`${vertical.contactLabel}. Gửi quy cách và số lượng, chúng tôi sẽ gọi lại.`} />
       <Container className="grid gap-12 py-12 md:py-20 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
         <address className="not-italic">
           <a href={telHref(vertical.phone)} className="v-display block whitespace-nowrap text-h2 tabular-nums text-v-fg transition-colors hover:text-v-accent">{vertical.phone}</a>

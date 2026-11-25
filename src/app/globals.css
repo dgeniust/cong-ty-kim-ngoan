@@ -411,6 +411,8 @@
   --focus: #b9531c;
   --selection-bg: #fbeee5;
   --selection-fg: #17181b;
+  /* inner-page title band: warm sand → peach */
+  --v-head-bg: linear-gradient(115deg, #fbf5ee 0%, #f6e8da 55%, #fbe3cf 100%);
 }
 .theme-satthep {
   /* Steel: white background, greys, black text */
@@ -442,6 +444,8 @@
   --focus: #a84b24;
   --selection-bg: #f8ece5;
   --selection-fg: #18181b;
+  /* inner-page title band: cool steel greys with a hint of blue */
+  --v-head-bg: linear-gradient(115deg, #f6f8fa 0%, #e9eef3 55%, #dfe7ef 100%);
 }
 /* Tyres: accent band – deep orange gradient with white text. Tokens are remapped so every component inside
    (section heads, buttons, lines) turns light-on-orange; nest `.theme-lopxe` on a card to get back the light palette. */

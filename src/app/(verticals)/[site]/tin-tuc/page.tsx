@@ -10,6 +10,7 @@ import { isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
 import { siteNameFor } from "@/lib/site-name";
+import { V_PAGE_IMAGES } from "@/constants/page-heads";
 
 // Unknown sites 404 at routing time (see `[site]/page.tsx`).
 export const dynamicParams = false;
@@ -31,7 +32,7 @@ export default async function NewsList({ params }: { params: Params }) {
   const [first, ...rest] = await getNews({ site });
   return (
     <>
-      <VPageHead vertical={vertical} crumbs={[{ label: "Tin tức" }]} title="Tin tức & kiến thức" lead={`Kinh nghiệm chọn mua, sử dụng và bảo quản ${vertical.name.toLowerCase()}.`} />
+      <VPageHead vertical={vertical} image={V_PAGE_IMAGES[site]["tin-tuc"]} crumbs={[{ label: "Tin tức" }]} title="Tin tức & kiến thức" lead={`Kinh nghiệm chọn mua, sử dụng và bảo quản ${vertical.name.toLowerCase()}.`} />
       <Container className="py-12 md:py-20">
         {first ? (
           <>

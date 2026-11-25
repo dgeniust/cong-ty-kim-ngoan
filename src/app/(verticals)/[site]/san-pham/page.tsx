@@ -13,6 +13,7 @@ import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/container";
 import { siteNameFor } from "@/lib/site-name";
+import { V_PAGE_IMAGES } from "@/constants/page-heads";
 
 type Props = { params: Promise<{ site: string }>; searchParams: Promise<{ nhom?: string; hang?: string; q?: string }> };
 
@@ -71,6 +72,7 @@ export default async function ProductListing({ params, searchParams }: Props) {
     <>
       <VPageHead
         vertical={vertical}
+        image={V_PAGE_IMAGES[site]["san-pham"]}
         crumbs={category ? [{ label: "Sản phẩm", href: base }, { label: category.name }] : [{ label: "Sản phẩm" }]}
         title={category?.name ?? "Tất cả sản phẩm"}
         lead={category?.description ?? vertical.description}

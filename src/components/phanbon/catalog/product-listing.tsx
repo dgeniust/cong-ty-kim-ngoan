@@ -15,6 +15,7 @@ import { PageHero } from "./page-hero";
 import { Pagination, paginate } from "./pagination";
 import { ProductCard } from "./product-card";
 import { SortSelect } from "./sort-select";
+import { PB_PAGE_IMAGES } from "@/constants/page-heads";
 
 const PER_PAGE = 9;
 
@@ -73,7 +74,7 @@ export async function ProductListing({ title, description, crumbs, basePath, cat
   return (
     <>
       <JsonLd data={itemList} />
-      <PageHero title={title} description={description} crumbs={crumbs} />
+      <PageHero title={title} description={description} crumbs={crumbs} image={PB_PAGE_IMAGES[categorySlug ? "danh-muc" : "san-pham"]} />
       <Container className="grid gap-12 py-12 md:py-16 lg:grid-cols-[272px_1fr]">
         <div className="hidden lg:block">
           <CategorySidebar active={categorySlug} counts={countByCategory(products)} phone={site.phone} />
