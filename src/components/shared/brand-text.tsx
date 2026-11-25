@@ -25,7 +25,7 @@ export function BrandText({ text, markClassName }: { text: string; markClassName
       {parts.map((part, i) =>
         i % 2 === 1 ? (
           <span key={i} className="whitespace-nowrap">
-            <InlineMark className={markClassName} />
+            {/* <InlineMark className={markClassName} /> */}
             {part}
           </span>
         ) : (
