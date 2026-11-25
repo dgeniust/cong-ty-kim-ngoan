@@ -34,7 +34,7 @@ type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent
 export const OG_THEMES = {
   hub: { bg: "#f6f5f4", fg: "#000000", muted: "#615d59", accent: "#0068c9", onAccent: "#ffffff" },
   phanbon: { bg: "#1d3a25", fg: "#ffffff", muted: "#c3d6c6", accent: "#e7c48e", onAccent: "#13281a" },
-  lopxe: { bg: "#17181b", fg: "#ffffff", muted: "#a1a1aa", accent: "#e07a3f", onAccent: "#17181b" },
+  lopxe: { bg: "#ffffff", fg: "#17181b", muted: "#5b5b63", accent: "#b9531c", onAccent: "#ffffff" },
   satthep: { bg: "#ffffff", fg: "#18181b", muted: "#52525b", accent: "#a84b24", onAccent: "#ffffff" },
 } satisfies Record<string, OgTheme>;
 

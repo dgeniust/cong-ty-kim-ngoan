@@ -12,7 +12,7 @@ type Props = {
   alt?: string;
   /**
    * - `auto` (default): plain mark on light backgrounds, white-oval badge on dark ones. The switch is pure CSS
-   *   ("Brand mark" in globals.css): the badge shows inside `.brand-dark`, `[data-dark]` or `.theme-lopxe`.
+   *   ("Brand mark" in globals.css): the badge shows inside `.brand-dark` or `[data-dark]`.
    * - `plain` / `badge`: force one artwork.
    */
   variant?: "auto" | "plain" | "badge";

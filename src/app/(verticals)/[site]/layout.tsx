@@ -57,7 +57,7 @@ export default async function VerticalLayout({ children, params }: { children: R
   return (
     <div className={`theme-${site} min-h-screen bg-v-bg text-v-fg`}>
       <JsonLd data={store} />
-      <SectorSwitcher current={site} tone={site === "lopxe" ? "dark" : "light"} />
+      <SectorSwitcher current={site} tone="light" />
       <VHeader vertical={vertical} company={{ prefix: COMPANY.prefix, name: COMPANY.name, legalName: COMPANY.legalName }} />
       <main id="noi-dung" tabIndex={-1} className="min-h-[60vh] outline-none">
         {children}

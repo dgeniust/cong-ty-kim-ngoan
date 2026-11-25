@@ -8,7 +8,7 @@ application serves a company landing hub and three sector sites, plus a small bu
 | `/` | Landing hub: hero slideshow of the three sectors, about, product showrooms, news, contact form + map | `.theme-hub` (Editorial Industrial – "Golden Harvest & Great Forest") |
 | `/tin-tuc` | All news across sectors, filter `?nganh=phanbon\|lopxe\|satthep` | `.theme-hub` |
 | `/phanbon/**` | Fertilizer & crop-protection site: shop-style hero, farm bulletin (live weather), plant doctor, catalog, search, guides | `.theme-pb` ("Vườn Xanh") |
-| `/lopxe/**` | Car-tyre site: size finder, tiers, catalog, **quote-only** contact flow | `.theme-lopxe` (dark, orange accent) |
+| `/lopxe/**` | Car-tyre site: full-width video hero, size finder, tiers, photo blocks, catalog, **quote-only** contact flow | `.theme-lopxe` (white, orange accent) |
 | `/satthep/**` | Roofing sheet & steel site: quotation-document layout, weight calculators, catalog, quote-only flow | `.theme-satthep` (white/grey) |
 | `/admin/**` | CMS: shared settings, product databases (3 sectors), page content, guided tours | admin UI (shadcn/ui) |
 
@@ -145,6 +145,12 @@ its tree in `.theme-hub`, `.theme-pb`, `.theme-lopxe` or `.theme-satthep`, which
 heading variables. Shared components read the variables, so one component renders in every brand.
 A single type scale (`text-display … text-micro`) and button scale (`lib/ui.ts`: 36/44/52 px) apply
 everywhere; `cn()` is configured with the custom scale so `tailwind-merge` does not drop colour classes.
+
+**Tyre-site media.** Photos and videos of the tyre home page live in `src/constants/lopxe-media.ts`:
+local files from `public/`, free Unsplash photos and Mixkit clips (both licences allow commercial use without
+attribution). `MediaVideo` plays muted loops only while on screen, has a pause button and never autoplays for
+visitors who prefer reduced motion. Before go-live, download the remote files into `public/lopxe/` and point the
+config at them, and swap stock media for real shop photos when available.
 
 **Garden backdrop.** The hub and fertilizer pages share a sticky, fixed image layer
 (`components/shared/garden`) behind the content, with leaf frames that change softly per section.

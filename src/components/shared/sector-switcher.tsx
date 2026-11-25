@@ -8,11 +8,10 @@ import { InlineMark } from "@/components/shared/brand-text";
  * Thin strip at the top of each sector site: back to the hub + quick switch between the three sectors.
  * `tone` only changes background/text colours to suit the site's theme.
  */
-export async function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "dark" | "light" }) {
+export async function SectorSwitcher({ current, tone }: { current: VerticalId; tone: "green" | "light" }) {
   const { COMPANY, VERTICAL_LIST } = await getSettings();
   const tones = {
     green: "bg-brand-950 text-white/70 [--on:#fff] [--brand:#ffffff] [--sep:rgb(255_255_255/0.25)]",
-    dark: "border-b border-white/10 bg-[#17181b] text-white/55 [--on:#e07a3f] [--brand:#ffffff] [--sep:rgb(255_255_255/0.25)]",
     light: "border-b border-black/[0.08] bg-[#f4f4f5] text-black/55 [--on:#000000] [--brand:#000000] [--sep:rgb(0_0_0/0.2)]",
   } as const;
   return (

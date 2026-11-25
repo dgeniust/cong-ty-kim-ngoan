@@ -133,7 +133,7 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
       role="status"
       aria-live="polite"
       data-state={leaving ? "out" : "in"}
-      className={`splash fixed inset-0 z-[100] grid place-items-center${target === "lopxe" ? " brand-dark" : ""}`}
+      className="splash fixed inset-0 z-[100] grid place-items-center"
       style={{ background: T.bg }}
     >
       <span className="sr-only">Đang mở {info.title}…</span>
@@ -163,6 +163,6 @@ function SplashWordmark({ color }: { color: string }) {
 const THEME: Record<SplashSection, { bg: string; ink: string; tagBg: string; tagFg: string }> = {
   hub: { bg: "#f8f9fa", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
   phanbon: { bg: "#f1f5f1", ink: "#264c2f", tagBg: "#264c2f", tagFg: "#ffffff" },
-  lopxe: { bg: "#17181b", ink: "#e07a3f", tagBg: "#e07a3f", tagFg: "#17181b" },
+  lopxe: { bg: "#fbf8f5", ink: "#b9531c", tagBg: "#17181b", tagFg: "#ffffff" },
   satthep: { bg: "#f4f5f7", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
 };

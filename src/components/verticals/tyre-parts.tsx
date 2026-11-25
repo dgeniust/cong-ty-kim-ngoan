@@ -69,7 +69,7 @@ function Score({ label, value }: { label: string; value: number }) {
       <span className="text-v-mute">{label}</span>
       <span className="flex gap-1" role="img" aria-label={`${label}: ${value} trên 5`}>
         {[1, 2, 3, 4, 5].map((i) => (
-          <span key={i} className={cn("h-2 flex-1 rounded-full", i <= value ? "bg-v-accent" : "bg-white/[0.08]")} />
+          <span key={i} className={cn("h-2 flex-1 rounded-full", i <= value ? "bg-v-accent" : "bg-black/[0.08]")} />
         ))}
       </span>
     </div>
@@ -90,14 +90,14 @@ export function TyreTiers({ tiers, products, base, phone }: { tiers: TyreTier[];
             key={t.id}
             className={cn(
               "relative flex flex-col rounded-2xl p-6 sm:p-8",
-              t.popular ? "bg-v-fg text-v-bg lg:py-11" : "bg-v-raise text-v-fg",
+              t.popular ? "bg-v-tint text-v-fg ring-2 ring-v-spark lg:py-11" : "bg-v-raise text-v-fg",
             )}
           >
             {t.popular && <span className="absolute -top-3 left-6 rounded-full bg-v-accent px-3 py-1 text-caption font-semibold text-v-on-accent sm:left-8">Nhiều người chọn</span>}
-            <p className={cn("text-caption font-medium", t.popular ? "text-v-bg/60" : "text-v-mute")}>{t.brands.join(" · ")}</p>
+            <p className="text-caption font-medium text-v-mute">{t.brands.join(" · ")}</p>
             <h3 className="mt-1.5 text-h2 font-semibold !text-current">{t.name}</h3>
-            <p className={cn("mt-1.5 text-body", t.popular ? "text-v-bg/70" : "text-v-mute")}>{t.tagline}</p>
-            <div className={cn("mt-6 space-y-2.5 rounded-xl p-4", t.popular ? "bg-v-bg text-v-fg" : "bg-white/[0.03]")}>
+            <p className="mt-1.5 text-body text-v-mute">{t.tagline}</p>
+            <div className={cn("mt-6 space-y-2.5 rounded-xl p-4", t.popular ? "bg-v-bg" : "bg-black/[0.03]")}>
               {t.scores.map((s) => (
                 <Score key={s.label} {...s} />
               ))}
@@ -105,12 +105,12 @@ export function TyreTiers({ tiers, products, base, phone }: { tiers: TyreTier[];
             <ul className="mt-6 space-y-2 text-small">
               {t.fits.map((f) => (
                 <li key={f} className="flex items-start gap-2">
-                  <Check className={cn("mt-0.5 size-4 shrink-0", t.popular ? "text-v-accent" : "text-v-accent")} strokeWidth={3} aria-hidden /> {f}
+                  <Check className="mt-0.5 size-4 shrink-0 text-v-accent" strokeWidth={3} aria-hidden /> {f}
                 </li>
               ))}
             </ul>
             {items.length > 0 && (
-              <ul className={cn("mt-6 border-t pt-4 text-small", t.popular ? "border-v-bg/15" : "border-v-line")}>
+              <ul className="mt-6 border-t border-v-line pt-4 text-small">
                 {items.map((p) => (
                   <li key={p.slug}>
                     <Link href={`${base}/san-pham/${p.slug}`} className="group flex min-h-9 items-center justify-between gap-3 hover:text-v-accent">

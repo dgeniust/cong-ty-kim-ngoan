@@ -11,7 +11,7 @@ let clientNow: number | undefined;
 const getNow = () => (clientNow ??= Date.now());
 
 type Verdict = { level: 0 | 1 | 2 | 3; title: string; text: string };
-const TONE = ["text-[#7ee2a8]", "text-v-fg", "text-[#ffb47a]", "text-v-accent"];
+const TONE = ["text-[#15803d]", "text-v-fg", "text-[#b45309]", "text-v-accent"];
 
 /** Tyre age from the last 4 digits of the DOT code: first 2 = week, last 2 = year of manufacture. */
 function ageOf(code: string, now: number) {
@@ -43,7 +43,7 @@ function treadVerdict(mm: number): Verdict {
 function VerdictBox({ v }: { v: Verdict }) {
   const Icon = v.level >= 2 ? AlertTriangle : CheckCircle2;
   return (
-    <div className="mt-5 flex gap-3 rounded-xl bg-white/[0.05] p-4">
+    <div className="mt-5 flex gap-3 rounded-xl bg-v-bg p-4">
       <Icon className={cn("mt-0.5 size-5 shrink-0", TONE[v.level])} aria-hidden />
       <div>
         <p className={cn("text-title font-semibold", TONE[v.level])}>{v.title}</p>
@@ -62,7 +62,7 @@ function TreadSection({ mm }: { mm: number }) {
   const twi = base - 1.6 * scale;
   const blocks = [20, 90, 160, 230, 300];
   return (
-    <svg viewBox="0 0 360 130" className="mt-5 w-full" role="img" aria-label={`Mặt cắt gai lốp sâu ${mm.toFixed(1)} mm`}>
+    <svg viewBox="0 0 360 130" className="mt-5 w-full text-v-fg" role="img" aria-label={`Mặt cắt gai lốp sâu ${mm.toFixed(1)} mm`}>
       <rect x="0" y={base} width="360" height="20" fill="#262626" />
       {blocks.map((x) => (
         <rect key={x} x={x} y={surface} width="50" height={base - surface} rx="3" fill="#3a3a3a" className="transition-all duration-300 ease-out" />
@@ -72,8 +72,8 @@ function TreadSection({ mm }: { mm: number }) {
         <rect key={x} x={x + 50} y={twi} width="20" height={base - twi} fill="#e07a3f" opacity="0.85" />
       ))}
       <line x1="0" x2="360" y1={twi} y2={twi} stroke="#e07a3f" strokeDasharray="4 4" strokeWidth="1.5" />
-      <text x="356" y={twi - 6} textAnchor="end" fill="#ff9a5e" fontSize="11" fontWeight="600">vạch báo mòn 1,6 mm</text>
-      <text x="4" y={Math.max(14, surface - 6)} fill="#fafafa" fontSize="12" fontWeight="600">{mm.toFixed(1).replace(".", ",")} mm</text>
+      <text x="356" y={twi - 6} textAnchor="end" fill="#b9531c" fontSize="11" fontWeight="600">vạch báo mòn 1,6 mm</text>
+      <text x="4" y={Math.max(14, surface - 6)} fill="currentColor" fontSize="12" fontWeight="600">{mm.toFixed(1).replace(".", ",")} mm</text>
     </svg>
   );
 }
@@ -106,7 +106,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
           <p className="mt-1.5 text-small leading-relaxed text-v-mute">Tìm chữ “DOT” trên hông lốp, nhập 4 số cuối trong ô viền.</p>
 
           {/* mock of the raised lettering on the sidewall */}
-          <div className="mt-5 flex flex-wrap items-center gap-2 rounded-xl bg-[#111] px-4 py-4 font-semibold tracking-[0.12em] text-[#8f8f8f] sm:text-lead">
+          <div className="mt-5 flex flex-wrap items-center gap-2 rounded-xl bg-[#2b2b2d] px-4 py-4 font-semibold tracking-[0.12em] text-[#a3a3a3] sm:text-lead">
             <span aria-hidden>DOT</span>
             <span aria-hidden>4K2X</span>
             <span aria-hidden className="hidden sm:inline">7Y9</span>
@@ -118,14 +118,14 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
                 inputMode="numeric"
                 maxLength={4}
                 aria-describedby="dot-result"
-                className="h-12 w-28 rounded-lg border-2 border-v-accent bg-transparent text-center text-h4 font-semibold tabular-nums tracking-[0.18em] text-v-fg outline-none focus:shadow-[0_0_0_4px_var(--v-tint)]"
+                className="h-12 w-28 rounded-lg border-2 border-v-spark bg-transparent text-center text-h4 font-semibold tabular-nums tracking-[0.18em] text-white outline-none focus:shadow-[0_0_0_4px_var(--v-tint)]"
               />
             </label>
           </div>
 
           <div id="dot-result" aria-live="polite">
             {age?.error ? (
-              <p className="mt-4 text-small text-[#ffb47a]">{age.error}</p>
+              <p className="mt-4 text-small text-[#b45309]">{age.error}</p>
               ) : age && age.months !== undefined ? (
               <>
                 <p className="mt-4 text-body text-v-fg">
@@ -136,8 +136,8 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
                   tuổi.
                 </p>
                 {/* tyre-age ruler 0–10 years */}
-                <div className="relative mt-4 h-2 rounded-full bg-white/[0.08]" aria-hidden>
-                  <span className="absolute inset-y-0 left-[50%] w-[10%] bg-[#ffb47a]/40" />
+                <div className="relative mt-4 h-2 rounded-full bg-black/[0.08]" aria-hidden>
+                  <span className="absolute inset-y-0 left-[50%] w-[10%] bg-[#f59e0b]/35" />
                   <span className="absolute inset-y-0 left-[60%] right-0 rounded-r-full bg-v-accent/40" />
                   <span className="absolute -top-1 size-4 -translate-x-1/2 rounded-full border-2 border-v-bg bg-v-fg transition-[left] duration-500" style={{ left: `${Math.min(100, (age.months / 120) * 100)}%` }} />
                 </div>
@@ -164,7 +164,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
           <TreadSection mm={mm} />
           <label className="mt-3 block">
             <span className="sr-only">Độ sâu gai (mm)</span>
-            <input type="range" min={0.5} max={8} step={0.1} value={mm} onChange={(e) => setMm(Number(e.target.value))} aria-valuetext={`${mm.toFixed(1)} mm`} className="w-full accent-[#e07a3f]" />
+            <input type="range" min={0.5} max={8} step={0.1} value={mm} onChange={(e) => setMm(Number(e.target.value))} aria-valuetext={`${mm.toFixed(1)} mm`} className="w-full accent-[#b9531c]" />
           </label>
           <p className="flex justify-between text-micro tabular-nums text-v-mute" aria-hidden>
             <span>0,5 mm</span>
@@ -181,7 +181,7 @@ export function TyreCheck({ serverNow }: { serverNow: number }) {
         <p className="text-title font-semibold">
           {worst >= 2 ? "Bộ lốp này nên thay sớm. Để lại số điện thoại, chúng tôi gọi báo giá lốp cùng cỡ." : "Lốp còn dùng tốt. Ghi lại 4 số DOT để lần sau kiểm tra lại."}
         </p>
-        <a href="#bao-gia" className={cn("inline-flex h-11 shrink-0 items-center rounded-full px-6 text-body font-semibold transition-colors", worst >= 2 ? "bg-v-on-accent text-v-accent hover:bg-black" : "bg-v-accent text-v-on-accent hover:bg-v-accent-hover")}>
+        <a href="#bao-gia" className={cn("inline-flex h-11 shrink-0 items-center rounded-full px-6 text-body font-semibold transition-colors", worst >= 2 ? "bg-v-on-accent text-v-accent hover:bg-v-tint" : "bg-v-accent text-v-on-accent hover:bg-v-accent-hover")}>
           {worst >= 2 ? "Nhận báo giá lốp" : "Hỏi thêm về lốp"}
         </a>
       </div>

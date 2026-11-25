@@ -29,7 +29,7 @@ function Chips({ label, options, value, onChange }: { label: string; options: st
             type="button"
             aria-pressed={value === o}
             onClick={() => onChange(o)}
-            className={cn("h-10 rounded-full px-4 text-small font-medium transition-colors duration-200", value === o ? "bg-v-accent text-v-on-accent" : "bg-white/[0.06] text-v-fg hover:bg-v-tint hover:text-v-on-tint")}
+            className={cn("h-10 rounded-full px-4 text-small font-medium transition-colors duration-200", value === o ? "bg-v-accent text-v-on-accent" : "bg-v-bg text-v-fg ring-1 ring-v-line hover:bg-v-tint hover:text-v-on-tint")}
           >
             {o}
           </button>
@@ -109,7 +109,7 @@ export function TyreQuote({ phone, zalo }: { phone: string; zalo: string }) {
             className={cn("h-12 w-full rounded-xl border bg-v-bg px-4 text-lead tabular-nums text-v-fg outline-none placeholder:text-v-mute focus:border-v-accent", err ? "border-v-accent" : "border-v-line")}
           />
           {err && (
-            <span id={`${id}-err`} className="mt-1.5 block text-small text-[#ffb47a]">
+            <span id={`${id}-err`} className="mt-1.5 block text-small text-[#b45309]">
               {err}
             </span>
           )}
@@ -119,7 +119,7 @@ export function TyreQuote({ phone, zalo }: { phone: string; zalo: string }) {
         Gửi yêu cầu báo giá
       </button>
       {done && (
-        <div className="mt-4 rounded-xl bg-white/[0.05] p-4 text-small text-v-fg" aria-live="polite">
+        <div className="mt-4 rounded-xl bg-v-bg p-4 text-small text-v-fg" aria-live="polite">
           <p>Đã chép nội dung hỏi giá. Cần nhanh hơn thì gửi luôn qua Zalo hoặc gọi trực tiếp:</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <a href={zalo} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-full bg-v-tint px-4 font-medium text-v-on-tint">

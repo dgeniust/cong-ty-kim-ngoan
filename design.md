@@ -47,10 +47,12 @@ Nguyên tắc kiểm tra nhanh: *nếu bỏ đường viền mà khối vẫn đ
 ### 2.3 Theme chuyên trang (`.theme-lopxe`, `.theme-satthep`, biến `--v-*`)
 | | Lốp xe | Sắt thép |
 |---|---|---|
-| Nền | than chì `#17181b`, thẻ `#202125` | trắng / `#f4f5f7`, nền kẻ ô bản vẽ |
-| Chữ | `#f4f4f5` / phụ `#a1a1aa` | `#18181b` / phụ `#5b5b63` |
-| Hành động | cam `#e07a3f` | đồng `#a84b24` |
+| Nền | trắng / xám ấm `#f6f5f3` (từ fe/demo-v2) | trắng / `#f4f5f7`, nền kẻ ô bản vẽ |
+| Chữ | `#17181b` / phụ `#5b5b63` | `#18181b` / phụ `#5b5b63` |
+| Hành động | cam đậm `#b9531c` (chữ trắng đạt 4.5:1); cam `#e07a3f` cho chấm, nhãn | đồng `#a84b24` |
 | Màu nhấn tiêu đề | cam | xám `#5b5b63` |
+
+Trang chủ lốp xe dùng ảnh và video thật (cấu hình ở `src/constants/lopxe-media.ts`): hero video toàn màn hình, khối video “Đường nào, gai nấy”, ảnh theo loại xe, lưới ảnh cửa hàng.
 
 Mỗi trang chỉ có **một** màu hành động (nút đặc màu đồng). Màu ngành dùng cho chấm/tag: phân bón `#3a9a4f`, lốp xe `#e07a3f`, sắt thép `#3d7fc2`.
 

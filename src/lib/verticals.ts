@@ -65,7 +65,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     phone: "02713668112",
     seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Chơn Thành, Bình Phước",
     seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Tư vấn đúng cỡ, gọi hoặc nhắn Zalo để nhận báo giá.",
-    themeColor: "#100904",
+    themeColor: "#ffffff",
   },
   satthep: {
     id: "satthep",
