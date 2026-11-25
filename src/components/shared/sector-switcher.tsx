@@ -16,7 +16,7 @@ export async function SectorSwitcher({ current, tone }: { current: VerticalId; t
     light: "border-b border-black/[0.08] bg-[#f4f4f5] text-black/55 [--on:#000000] [--brand:#000000] [--sep:rgb(0_0_0/0.2)]",
   } as const;
   return (
-    <nav aria-label="Các lĩnh vực của Kim Ngoan" className={cn("text-caption", tones[tone])}>
+    <nav aria-label="Các lĩnh vực của Kim Ngoan" className={cn("text-caption", tone !== "light" && "brand-dark", tones[tone])}>
       <div className="mx-auto flex h-9 max-w-7xl items-center gap-5 overflow-x-auto px-4 [scrollbar-width:none] sm:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden">
         <Link href="/" className="inline-flex h-9 shrink-0 items-center font-semibold tracking-wide text-[var(--brand)] transition-opacity hover:opacity-80">
           <InlineMark className="h-[1.3em]" />

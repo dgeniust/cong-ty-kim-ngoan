@@ -180,7 +180,7 @@ export default async function HomePage() {
       </section>
 
       {/* 05. About Kim Ngoan – large captioned photo, story, figures, commitments (all from the CMS) */}
-      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="scroll-mt-24 bg-brand-900 py-20 text-white md:py-28">
+      <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="brand-dark scroll-mt-24 bg-brand-900 py-20 text-white md:py-28">
         <Container className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-6">
             <figure className="lg:sticky lg:top-28">

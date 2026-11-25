@@ -19,10 +19,16 @@ const loadFonts = async () => {
   );
 };
 
-/** Kim Ngoan lotus mark as a data URL (satori cannot fetch relative URLs). */
-let logoCache: string | undefined;
-const logoDataUrl = async () =>
-  (logoCache ??= `data:image/png;base64,${(await readFile(path.join(process.cwd(), "public/brand/kim-ngoan-logo.png"))).toString("base64")}`);
+/** Kim Ngoan lotus mark as a data URL (satori cannot fetch relative URLs). Dark themes get the white-oval badge. */
+const logoCache = new Map<string, string>();
+const logoDataUrl = async (file: string) => {
+  if (!logoCache.has(file)) logoCache.set(file, `data:image/png;base64,${(await readFile(path.join(process.cwd(), "public/brand", file))).toString("base64")}`);
+  return logoCache.get(file)!;
+};
+const isDark = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return 0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255) < 128;
+};
 
 type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent: string };
 export const OG_THEMES = {
@@ -38,7 +44,7 @@ export async function ogImage({ eyebrow, title, subtitle, footer, theme }: { eye
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 72, background: theme.bg, color: theme.fg, fontFamily: "BVP latin, BVP vietnamese, BVP latin-ext" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- satori renders plain <img> only */}
-          <img src={await logoDataUrl()} width={96} height={64} alt="" />
+          {isDark(theme.bg) ? <img src={await logoDataUrl("kim-ngoan-logo-badge.png")} width={104} height={64} alt="" /> : <img src={await logoDataUrl("kim-ngoan-logo.png")} width={96} height={64} alt="" />}
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: 16, letterSpacing: 3, color: theme.muted, fontWeight: 600 }}>CÔNG TY TNHH</span>
             <span style={{ fontSize: 32, fontWeight: 700, letterSpacing: -0.5 }}>KIM NGOAN</span>

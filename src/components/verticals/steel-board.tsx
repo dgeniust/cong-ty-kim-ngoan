@@ -11,7 +11,7 @@ import { BrandText } from "@/components/shared/brand-text";
  */
 export function SteelBoard({ quote, products, base, phone, today }: { quote: NonNullable<CatalogContent["quote"]>; products: CatalogProduct[]; base: string; phone: string; today: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-v-island text-v-on-island">
+    <div className="brand-dark overflow-hidden rounded-2xl bg-v-island text-v-on-island">
       {/* header + title block */}
       <div className="grid gap-6 border-b border-white/10 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>

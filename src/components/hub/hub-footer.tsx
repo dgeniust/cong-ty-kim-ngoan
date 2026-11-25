@@ -21,7 +21,7 @@ const QUICK = HUB_NAV.map((m) => ({ label: m.label === "Giới thiệu" ? "Về 
 export async function HubFooter() {
   const { COMPANY } = await getSettings();
   return (
-    <footer className="relative isolate overflow-hidden bg-mv-night text-white/70">
+    <footer className="brand-dark relative isolate overflow-hidden bg-mv-night text-white/70">
       <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
         {/* brand */}
         <div className="sm:col-span-2 lg:col-span-1">

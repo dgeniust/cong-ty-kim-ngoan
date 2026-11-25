@@ -133,7 +133,7 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
       role="status"
       aria-live="polite"
       data-state={leaving ? "out" : "in"}
-      className="splash fixed inset-0 z-[100] grid place-items-center"
+      className={`splash fixed inset-0 z-[100] grid place-items-center${target === "lopxe" ? " brand-dark" : ""}`}
       style={{ background: T.bg }}
     >
       <span className="sr-only">Đang mở {info.title}…</span>

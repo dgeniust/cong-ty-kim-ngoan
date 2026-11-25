@@ -25,7 +25,7 @@ const SOCIAL = "grid size-11 place-items-center rounded-full bg-white/10 text-wh
 export async function PbFooter({ site, footer }: { site: SiteContent["site"]; footer: SiteContent["footer"] }) {
   const { COMPANY } = await getSettings();
   return (
-    <footer className="theme-pb relative isolate overflow-hidden bg-brand-900 text-white/70">
+    <footer className="brand-dark theme-pb relative isolate overflow-hidden bg-brand-900 text-white/70">
       <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.3fr_0.7fr_1.5fr_auto] lg:px-12 lg:pt-20">
         {/* brand + address + social links */}
         <div>
