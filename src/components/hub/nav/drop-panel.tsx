@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { NavItem } from "@/constants/hub-nav";
 import { SECTOR_DOT } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import { BrandText } from "@/components/shared/brand-text";
 
 /** Desktop dropdown panel for one menu item. */
 export function DropPanel({
@@ -61,7 +62,7 @@ export function DropPanel({
                         onClick={onNavigate}
                         className="group/l flex items-center justify-between rounded-md py-1.5 text-small text-hub-ink-soft transition-colors hover:text-biz-moss"
                       >
-                        {l.label}
+                        <BrandText text={l.label} />
                         <ArrowRight
                           aria-hidden
                           className="size-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover/l:translate-x-0 group-hover/l:opacity-100"
@@ -100,7 +101,7 @@ export function DropPanel({
               className="group/l block rounded-md px-3.5 py-2.5 transition-colors hover:bg-[#f3f7f1]"
             >
               <span className="flex items-center justify-between text-body font-medium text-hub-ink group-hover/l:text-biz-moss">
-                {l.label}
+                <BrandText text={l.label} />
                 <ArrowRight
                   aria-hidden
                   className="size-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover/l:translate-x-0 group-hover/l:opacity-100"
@@ -108,7 +109,7 @@ export function DropPanel({
               </span>
               {l.note && (
                 <span className="mt-0.5 block text-small text-hub-ink-soft">
-                  {l.note}
+                  <BrandText text={l.note} />
                 </span>
               )}
             </Link>

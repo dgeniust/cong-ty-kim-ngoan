@@ -8,6 +8,7 @@ import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { FooterLandscape } from "./footer-landscape";
 import { FacebookIcon } from "@/components/shared/social-icons";
+import { BrandText } from "@/components/shared/brand-text";
 
 const LABEL = "text-[13px] font-semibold uppercase tracking-[0.12em] text-white";
 const LINK = "inline-block py-1 text-body text-white/70 transition-colors duration-200 hover:text-white";
@@ -100,7 +101,7 @@ export async function HubFooter() {
         </div>
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-5 pb-5 text-caption text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
-            <p>© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
+            <p>© {new Date().getFullYear()} <BrandText text={COMPANY.legalName} />. Bảo lưu mọi quyền.</p>
             <p>{COMPANY.address}</p>
           </div>
         </div>

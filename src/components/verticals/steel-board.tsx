@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Phone } from "lucide-react";
 import type { CatalogContent, CatalogProduct } from "@/types/catalog";
 import { telHref } from "@/lib/verticals";
+import { BrandText } from "@/components/shared/brand-text";
 
 
 /**
@@ -27,7 +28,7 @@ export function SteelBoard({ quote, products, base, phone, today }: { quote: Non
         <dl aria-label="Khung tên" className="grid grid-cols-2 border border-white/20 text-micro uppercase tracking-[0.12em] text-white/60 sm:grid-cols-4 [&>div]:border-white/20 [&>div]:px-3 [&>div]:py-2">
           <div className="border-b border-r sm:border-b-0">
             <dt>Đơn vị</dt>
-            <dd className="mt-0.5 font-semibold text-white">Kim Ngoan</dd>
+            <dd className="mt-0.5 font-semibold text-white"><BrandText text="Kim Ngoan" /></dd>
           </div>
           <div className="border-b sm:border-b-0 sm:border-r">
             <dt>Hạng mục</dt>

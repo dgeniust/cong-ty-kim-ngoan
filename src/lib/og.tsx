@@ -19,6 +19,11 @@ const loadFonts = async () => {
   );
 };
 
+/** Kim Ngoan lotus mark as a data URL (satori cannot fetch relative URLs). */
+let logoCache: string | undefined;
+const logoDataUrl = async () =>
+  (logoCache ??= `data:image/png;base64,${(await readFile(path.join(process.cwd(), "public/brand/kim-ngoan-logo.png"))).toString("base64")}`);
+
 type OgTheme = { bg: string; fg: string; muted: string; accent: string; onAccent: string };
 export const OG_THEMES = {
   hub: { bg: "#f6f5f4", fg: "#000000", muted: "#615d59", accent: "#0068c9", onAccent: "#ffffff" },
@@ -32,13 +37,8 @@ export async function ogImage({ eyebrow, title, subtitle, footer, theme }: { eye
     (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 72, background: theme.bg, color: theme.fg, fontFamily: "BVP latin, BVP vietnamese, BVP latin-ext" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <svg width="64" height="64" viewBox="0 0 48 48">
-            <rect width="48" height="48" rx="12" fill={theme.fg === "#ffffff" ? "#ffffff" : "#000000"} />
-            <path d="M14 12v24M14 24l12-12M14 24l12 12" stroke={theme.fg === "#ffffff" ? "#000000" : "#ffffff"} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <circle cx="34" cy="14" r="4" fill="#3b7a48" />
-            <circle cx="34" cy="24" r="4" fill="#e07a3f" />
-            <circle cx="34" cy="34" r="4" fill="#a1a1aa" />
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element -- satori renders plain <img> only */}
+          <img src={await logoDataUrl()} width={96} height={64} alt="" />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: 16, letterSpacing: 3, color: theme.muted, fontWeight: 600 }}>CÔNG TY TNHH</span>
             <span style={{ fontSize: 32, fontWeight: 700, letterSpacing: -0.5 }}>KIM NGOAN</span>

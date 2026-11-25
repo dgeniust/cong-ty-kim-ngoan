@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { SECTOR_DOT } from "@/lib/verticals";
 import { GuideButton, GuideProvider } from "./guide/guide-provider";
 import { NotifyCenter } from "./notify-center";
+import { BrandText } from "@/components/shared/brand-text";
+import { BrandMark } from "@/components/shared/brand-mark";
 
 type AdminNavCounts = {
   phanbon: number;
@@ -84,9 +86,7 @@ export function AdminShell({
           href="/admin"
           className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-2.5 py-2 hover:bg-hub-ink/[0.04]"
         >
-          <span className="grid size-7 place-items-center rounded-md bg-hub-ink text-[13px] font-bold text-white">
-            K
-          </span>
+          <BrandMark className="h-7" />
           <span className="min-w-0 leading-tight">
             <span className="block truncate text-[14px] font-semibold text-hub-ink">
               Kim Ngoan
@@ -196,7 +196,7 @@ export function AdminShell({
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
           <span className="flex-1 text-sm font-semibold">
-            Quản trị Kim Ngoan
+            Quản trị <BrandText text="Kim Ngoan" />
           </span>
           <NotifyCenter variant="icon" />
         </div>

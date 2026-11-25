@@ -16,6 +16,7 @@ import { CATALOG_SITES, isCatalogSite } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
 import { siteNameFor } from "@/lib/site-name";
+import { BrandText } from "@/components/shared/brand-text";
 
 type Params = Promise<{ site: string; slug: string }>;
 
@@ -110,7 +111,7 @@ export default async function NewsDetail({ params }: { params: Params }) {
         <p className="mt-6 flex flex-wrap gap-x-3 text-caption text-v-mute">
           <time dateTime={item.date}>{formatDate(item.date)}</time>
           <span aria-hidden className="text-v-mark">/</span>
-          <span>{item.author}</span>
+          <span><BrandText text={item.author} /></span>
           <span aria-hidden className="text-v-mark">/</span>
           <span>{item.readingMinutes} phút đọc</span>
         </p>

@@ -15,6 +15,7 @@ import { absoluteUrl } from "@/lib/site";
 import { ArticleCard } from "./article-card";
 import { Breadcrumbs } from "./breadcrumbs";
 import { ShareButtons } from "./share-buttons";
+import { BrandText } from "@/components/shared/brand-text";
 
 function Block({ block }: { block: ArticleBlock }) {
   switch (block.type) {
@@ -89,7 +90,7 @@ export async function ArticleDetailPage({ section, slug }: { section: ArticleSec
               <h1 className="text-h1 mt-3 font-bold text-brand-900">{article.title}</h1>
               <p className="mt-5 text-lead text-ink-muted">{article.excerpt}</p>
               <p className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-small text-ink-subtle">
-                <span className="font-medium text-ink-muted">{article.author}</span>
+                <span className="font-medium text-ink-muted"><BrandText text={article.author} /></span>
                 <time dateTime={article.date}>{formatDate(article.date)}</time>
                 <span>{article.readingMinutes} phút đọc</span>
               </p>

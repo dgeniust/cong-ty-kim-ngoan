@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BrandText } from "@/components/shared/brand-text";
 
 /** Shared hub UI pieces (Editorial Industrial style): flat, borderless, very subtle corners. */
 
@@ -60,7 +61,7 @@ export function Eyebrow({ children, className, tone }: { children: ReactNode; cl
   return (
     <p className={cn("flex items-center gap-2.5 text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.16em]", tone ? TONE[tone].ink : "text-hub-blue", className)}>
       {tone && <span aria-hidden className={cn("h-[3px] w-6 rounded-full", TONE[tone].solid)} />}
-      {children}
+      <span>{typeof children === "string" ? <BrandText text={children} /> : children}</span>
     </p>
   );
 }

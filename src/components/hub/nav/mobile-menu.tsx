@@ -6,6 +6,7 @@ import { ChevronDown, Phone } from "lucide-react";
 import { HUB_NAV } from "@/constants/hub-nav";
 import { SECTOR_DOT, telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import { BrandText } from "@/components/shared/brand-text";
 
 /**
  * Full-screen mobile navigation for the landing hub: plain links plus accordion groups.
@@ -95,11 +96,11 @@ export function MobileMenu({ hotline, onNavigate }: { hotline: string; onNavigat
                           )}
                           <span>
                             <span className="block text-body font-medium text-hub-ink">
-                              {l.label}
+                              <BrandText text={l.label} />
                             </span>
                             {l.note && (
                               <span className="block text-small text-hub-ink-soft">
-                                {l.note}
+                                <BrandText text={l.note} />
                               </span>
                             )}
                           </span>

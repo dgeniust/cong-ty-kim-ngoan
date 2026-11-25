@@ -27,6 +27,7 @@ import { getForecast, WEATHER_PLACE } from "@/lib/weather";
 import { resolveHref } from "@/lib/site";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
+import { BrandText } from "@/components/shared/brand-text";
 
 /**
  * Fertilizer landing page (design.md §14), "Vườn Xanh" theme (§3–4):
@@ -84,7 +85,7 @@ export default async function HomePage() {
       <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
-            <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · {site.companyName}</span>
+            <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · <BrandText text={site.companyName} /></span>
             <span className="hidden text-ink-muted sm:inline">{COMPANY.area}</span>
             <a href={telHref(site.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-brand-600">
               <Phone className="size-3.5" aria-hidden /> {site.phone}
@@ -188,7 +189,7 @@ export default async function HomePage() {
               </div>
               <figcaption className="mt-3 flex justify-between gap-4 text-caption text-white/70">
                 <span>Vườn cây trong vùng {COMPANY.area}</span>
-                <span>{site.companyName}</span>
+                <span><BrandText text={site.companyName} /></span>
               </figcaption>
             </figure>
           </Reveal>
@@ -215,7 +216,7 @@ export default async function HomePage() {
             </Reveal>
             {content.features.length > 0 && (
               <>
-                <h3 className="mt-14 text-h4 font-semibold !text-white">Điều Kim Ngoan cam kết</h3>
+                <h3 className="mt-14 text-h4 font-semibold !text-white">Điều <BrandText text="Kim Ngoan" /> cam kết</h3>
                 <ol className="mt-4 grid sm:grid-cols-2 sm:gap-x-6">
                   {content.features.map((f, i) => (
                     <Reveal as="li" key={f.title} delay={i * 70} className="grid grid-cols-[2rem_1fr] gap-2 border-t border-white/15 py-4">
@@ -232,7 +233,7 @@ export default async function HomePage() {
             {about.ctaLabel && (
               <Button asChild className="mt-8 bg-mv-gold text-mv-ink hover:bg-mv-gold-soft">
                 <Link href={resolveHref(about.ctaHref || "/phanbon/gioi-thieu")}>
-                  {about.ctaLabel} <ArrowRight aria-hidden />
+                  <BrandText text={about.ctaLabel} /> <ArrowRight aria-hidden />
                 </Link>
               </Button>
             )}
@@ -248,7 +249,7 @@ export default async function HomePage() {
               id="tin-tuc-title"
               no="06"
               kicker="Kiến thức canh tác"
-              title="Kỹ thuật từ đội ngũ Kim Ngoan"
+              title={<BrandText text="Kỹ thuật từ đội ngũ Kim Ngoan" />}
               action={
                 <Button asChild variant="outline">
                   <Link href="/phanbon/tin-tuc">

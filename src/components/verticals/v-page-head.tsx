@@ -3,6 +3,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { absoluteUrl } from "@/lib/site";
 import type { Vertical } from "@/lib/verticals";
 import { Container } from "@/components/shared/container";
+import { BrandText } from "@/components/shared/brand-text";
 
 
 type VCrumb = { label: string; href?: string };
@@ -26,7 +27,7 @@ export function VPageHead({ vertical, crumbs, title, lead, children }: { vertica
               <li key={i} className="flex items-center gap-2.5">
                 {i > 0 && <span aria-hidden className="opacity-50">/</span>}
                 {c.href && i < trail.length - 1 ? (
-                  <Link href={c.href} className="transition-colors hover:text-v-fg">{c.label}</Link>
+                  <Link href={c.href} className="transition-colors hover:text-v-fg"><BrandText text={c.label} /></Link>
                 ) : (
                   <span aria-current="page" className="max-w-[60vw] truncate text-v-fg">{c.label}</span>
                 )}

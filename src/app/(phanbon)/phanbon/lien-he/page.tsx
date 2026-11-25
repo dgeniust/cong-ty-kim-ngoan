@@ -8,6 +8,7 @@ import { getContent } from "@/lib/content/store";
 import { getFertilizerProduct } from "@/lib/products/server";
 import { socialMeta } from "@/lib/seo";
 import { siteNameFor } from "@/lib/site-name";
+import { BrandText } from "@/components/shared/brand-text";
 
 const TITLE = "Liên hệ";
 const DESCRIPTION = "Liên hệ Kim Ngoan để đặt hàng và được tư vấn kỹ thuật miễn phí. Địa chỉ, số điện thoại, giờ làm việc và bản đồ chỉ đường.";
@@ -44,7 +45,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
       <Container className="grid gap-12 py-14 md:py-20 lg:grid-cols-[360px_1fr] lg:gap-16">
         <div>
-          <h2 className="text-h4 font-semibold text-brand-900">{companyName}</h2>
+          <h2 className="text-h4 font-semibold text-brand-900"><BrandText text={companyName} /></h2>
           <address className="mt-6 space-y-6 not-italic">
             {info.map(({ icon: Icon, label, value, href, strong }) => (
               <div key={label} className="flex items-start gap-4">

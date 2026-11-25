@@ -10,6 +10,7 @@ import { resolveHref } from "@/lib/site";
 import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { FacebookIcon } from "@/components/shared/social-icons";
+import { BrandText } from "@/components/shared/brand-text";
 
 const HOURS = "Thứ 2 – Chủ nhật, 7:00 – 17:00";
 
@@ -69,7 +70,7 @@ export async function PbFooter({ site, footer }: { site: SiteContent["site"]; fo
         </div>
 
         <nav aria-label="Liên kết Kim Ngoan">
-          <p className={LABEL}>Kim Ngoan</p>
+          <p className={LABEL}><BrandText text="Kim Ngoan" /></p>
           <ul className="mt-4 space-y-1">
             {footer.links.map((l, i) => (
               <li key={i}>
@@ -128,7 +129,7 @@ export async function PbFooter({ site, footer }: { site: SiteContent["site"]; fo
         </div>
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-5 pb-5 text-caption text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
-            <p>{footer.copyright}</p>
+            <p><BrandText text={footer.copyright} /></p>
             <p>{site.slogan}</p>
           </div>
         </div>

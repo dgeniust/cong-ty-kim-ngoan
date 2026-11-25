@@ -4,6 +4,7 @@ import { HUB_ABOUT, HUB_COMMITMENTS } from "@/constants/hub-home";
 import type { Settings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 import { BIZ_WRAP, Eyebrow, SECTION_BG, SectionTitle, TONE, type Tone } from "@/components/hub/ui";
+import { BrandText } from "@/components/shared/brand-text";
 
 const COMMIT_TONES: Tone[] = ["leaf", "sun", "sky", "ember"];
 
@@ -37,7 +38,7 @@ export function AboutSection({ company }: { company: Settings["COMPANY"] }) {
               “{HUB_ABOUT.quote}”
             </blockquote>
             <figcaption className="relative mt-3 text-small font-medium text-c-leaf-ink">
-              — {HUB_ABOUT.quoteBy}
+              — <BrandText text={HUB_ABOUT.quoteBy} />
             </figcaption>
           </figure>
         </Reveal>

@@ -4,6 +4,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { MapEmbed } from "@/components/shared/map-embed";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
+import { BrandText } from "@/components/shared/brand-text";
 
 export async function VFooter({ vertical }: { vertical: Vertical }) {
   const { COMPANY, VERTICAL_LIST } = await getSettings();
@@ -21,7 +22,7 @@ export async function VFooter({ vertical }: { vertical: Vertical }) {
             <p className="mt-3 max-w-xs text-body leading-relaxed text-v-mute">{vertical.description}</p>
           </div>
           <nav aria-label="Lĩnh vực khác của Kim Ngoan">
-            <p className="text-small font-semibold text-v-fg">Kim Ngoan</p>
+            <p className="text-small font-semibold text-v-fg"><BrandText text="Kim Ngoan" /></p>
             <ul className="mt-3 space-y-2 text-body">
               <li><Link href="/" className={link}>Trang chủ công ty</Link></li>
               {VERTICAL_LIST.filter((v) => v.id !== vertical.id).map((v) => (
@@ -44,7 +45,7 @@ export async function VFooter({ vertical }: { vertical: Vertical }) {
             <MapEmbed query={COMPANY.mapQuery} title={`Bản đồ đường đến ${COMPANY.legalName}`} hint="Bấm để xem bản đồ" directionsLabel="Chỉ đường" compact className="mt-3 min-h-[200px] rounded-lg lg:h-[200px]" />
           </div>
         </div>
-        <p className="mt-12 border-t border-v-line pt-6 text-caption text-v-mute">© {new Date().getFullYear()} {COMPANY.legalName}. Bảo lưu mọi quyền.</p>
+        <p className="mt-12 border-t border-v-line pt-6 text-caption text-v-mute">© {new Date().getFullYear()} <BrandText text={COMPANY.legalName} />. Bảo lưu mọi quyền.</p>
       </div>
     </footer>
   );

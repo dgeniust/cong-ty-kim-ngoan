@@ -2,6 +2,7 @@ import Link from "next/link";
 import { type VerticalId } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
+import { InlineMark } from "@/components/shared/brand-text";
 
 /**
  * Thin strip at the top of each sector site: back to the hub + quick switch between the three sectors.
@@ -18,6 +19,7 @@ export async function SectorSwitcher({ current, tone }: { current: VerticalId; t
     <nav aria-label="Các lĩnh vực của Kim Ngoan" className={cn("text-caption", tones[tone])}>
       <div className="mx-auto flex h-9 max-w-7xl items-center gap-5 overflow-x-auto px-4 [scrollbar-width:none] sm:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden">
         <Link href="/" className="inline-flex h-9 shrink-0 items-center font-semibold tracking-wide text-[var(--brand)] transition-opacity hover:opacity-80">
+          <InlineMark className="h-[1.3em]" />
           {COMPANY.name}
         </Link>
         <span aria-hidden className="h-3 w-px shrink-0 bg-[var(--sep)]" />

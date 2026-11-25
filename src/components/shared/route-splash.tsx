@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandMark } from "@/components/shared/brand-mark";
 import { Wordmark } from "@/components/shared/wordmark";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -13,7 +14,7 @@ import { usePathname } from "next/navigation";
 export type SplashSection = "hub" | "phanbon" | "lopxe" | "satthep";
 export type SplashBrand = { prefix: string; name: string; sections: Record<SplashSection, { title: string; tagline: string }> };
 
-const MIN_MS = 1050; // long enough for the full logo animation (~0.9 s)
+const MIN_MS = 1150; // long enough for the full logo animation (~1 s)
 const MAX_MS = 2500; // hard cap: never stuck, even if the target errors, 404s or keeps the same path
 const OUT_MS = 260;
 
@@ -137,6 +138,8 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
     >
       <span className="sr-only">Đang mở {info.title}…</span>
       <div aria-hidden className="flex flex-col items-center px-6">
+        {/* lotus mark above the wordmark; it pops in as the wordmark finishes zooming out, so they never overlap */}
+        <BrandMark eager className="splash-mark mb-6 h-[clamp(64px,13vw,104px)] sm:mb-8" />
         <SplashWordmark color={T.ink} />
         {target !== "hub" && (
           <span className="splash-tag mt-7 inline-flex h-8 items-center rounded-full px-3.5 text-caption font-semibold" style={{ background: T.tagBg, color: T.tagFg }}>
