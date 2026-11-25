@@ -143,15 +143,16 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
           {children}
         </div>
 
-        {/* slide controls */}
-        <div className="mt-10 flex flex-wrap items-center gap-1 md:mt-14" role="group" aria-label="Chọn ảnh ngành hàng" {...holdProps}>
-          <button type="button" onClick={() => go(index - 1)} aria-label="Ảnh trước" className="mr-2 grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
+        {/* slide controls – one row at every width: arrows/pause keep 44px, the slide tabs share the rest
+            (up to 184px each); labels appear from `sm`, phones show the numbers only */}
+        <div className="mt-10 flex items-center gap-1 md:mt-14" role="group" aria-label="Chọn ảnh ngành hàng" {...holdProps}>
+          <button type="button" onClick={() => go(index - 1)} aria-label="Ảnh trước" className="mr-1 grid size-11 shrink-0 place-items-center rounded-full sm:mr-2 bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
             <ChevronLeft className="size-5" aria-hidden />
           </button>
           {slides.map((s, i) => {
             const on = i === index;
             return (
-              <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} className="group flex min-h-11 w-16 flex-col justify-center gap-2 pr-3 text-left sm:w-36">
+              <button key={s.id} type="button" onClick={() => go(i)} aria-current={on} className="group flex min-h-11 min-w-0 max-w-46 flex-1 flex-col justify-center gap-2 pr-2 text-left sm:pr-3">
                 <span className="relative block h-[3px] overflow-hidden rounded-full bg-white/25">
                   {on && (
                     <span
@@ -162,18 +163,18 @@ export function BizHero({ slides, stats, children }: { slides: HeroSlide[]; stat
                     />
                   )}
                 </span>
-                <span className={cn("text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-white" : "text-white/70 group-hover:text-white")}>
+                <span className={cn("truncate text-[12px] font-semibold tabular-nums tracking-[0.08em] transition-colors", on ? "text-white" : "text-white/70 group-hover:text-white")}>
                   <span className={cn(on && "text-mv-gold-soft")}>0{i + 1}</span>
                   <span className="sr-only font-medium tracking-normal sm:not-sr-only sm:ml-2"> {s.label}</span>
                 </span>
               </button>
             );
           })}
-          <button type="button" onClick={() => go(index + 1)} aria-label="Ảnh tiếp theo" className="grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
+          <button type="button" onClick={() => go(index + 1)} aria-label="Ảnh tiếp theo" className="grid size-11 shrink-0 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-mv-night">
             <ChevronRight className="size-5" aria-hidden />
           </button>
           {!reduced && (
-            <button type="button" onClick={togglePause} aria-label={paused ? "Tiếp tục tự chuyển ảnh" : "Tạm dừng tự chuyển ảnh"} className="ml-1 grid size-11 place-items-center rounded-full text-white/75 transition-colors hover:bg-white/10 hover:text-white">
+            <button type="button" onClick={togglePause} aria-label={paused ? "Tiếp tục tự chuyển ảnh" : "Tạm dừng tự chuyển ảnh"} className="grid size-11 shrink-0 place-items-center rounded-full text-white/75 sm:ml-1 transition-colors hover:bg-white/10 hover:text-white">
               {paused ? <Play className="size-4" aria-hidden /> : <Pause className="size-4" aria-hidden />}
             </button>
           )}

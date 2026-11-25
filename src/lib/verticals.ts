@@ -45,7 +45,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     id: "phanbon",
     base: "/phanbon",
     name: "Phân bón & thuốc BVTV",
-    short: "Phân bón",
+    short: "Phân bón & Thuốc BVTV",
     tagline: "Vì mùa màng bội thu",
     description: "Phân bón hữu cơ, vô cơ, NPK, vi sinh và thuốc bảo vệ thực vật chính hãng cho cà phê, cao su, sầu riêng, tiêu, lúa.",
     contactLabel: "Liên hệ về phân bón & thuốc BVTV",
