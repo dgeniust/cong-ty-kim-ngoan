@@ -9,10 +9,11 @@ import { mixkit, unsplash, type MediaVideo } from "./media";
 export const PHANBON_MEDIA = {
   /** Full-width hero video (muted loop). */
   heroVideo: {
-    sources: mixkit(39159),
-    poster: "/photos/phanbon-hero.jpg",
-    label: "Vườn cây trồng thẳng hàng nhìn từ trên cao",
-    credit: "Mixkit #39159 – Field covered with trees in a row seen from above",
+    // first clip that loads wins: sunlit terraced paddies, then another terraced-paddy aerial as a fallback
+    sources: [...mixkit(13001), ...mixkit(16132)],
+    poster: unsplash("photo-1730697897511-bafe1f939e6b", 1920),
+    label: "Ruộng lúa bậc thang xanh mướt dưới nắng, quay từ trên cao",
+    credit: "Mixkit #13001 – Aerial view of tiered Indonesian rice paddys in sunlight (fallback #16132)",
   } satisfies MediaVideo,
   /** "Fertilise right" band. */
   fieldVideo: {
