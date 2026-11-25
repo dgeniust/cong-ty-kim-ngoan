@@ -148,7 +148,7 @@ Thứ tự: **Hero → Về Kim Ngoan (ngà) → Sản phẩm (bạc hà) → Ba
 
 - Khung trang: `theme-pb biz-garden relative isolate overflow-x-clip` + `GardenBackdrop` (khung lá dính hai mép), mỗi khối có `data-garden` 1/2/3 và nền `SECTION_BG` (ngà / bạc hà) như landing tổng.
 - `theme-pb` (globals.css) đổi `--color-paper` thành ngà `#FAF9F5`, `--color-surface` thành `#E3EFE6`, `--color-surface-strong` thành `#D3E6D9` để ô, thẻ, vùng chọn ngả xanh thay vì xám lạnh.
-- Nhịp màu: hero (bạc hà) → 01 Bảng tin (xanh rừng `brand-900`) → 02 Bác sĩ cây trồng (ngà) → 03 Sản phẩm (bạc hà) → 04 Vườn thật (ngà) → 05 Về Kim Ngoan (xanh rừng, chữ trắng, nút vàng) → 06 Kiến thức (bạc hà) → form gọi lại (ngà).
+- Nhịp màu (fe/demo-v2): hero video toàn màn hình (phủ xanh rừng) → 01 Theo cây trồng (bạc hà: nhãn hàng + ảnh cây + gợi ý) → 02 Bác sĩ cây trồng (ngà) → 03 Sản phẩm (bạc hà) → 04 Bón đúng cách (xanh rừng, video) → 05 Vườn thật (ngà) → 06 Về Kim Ngoan (xanh rừng, chữ trắng, nút vàng) → 07 Kiến thức (bạc hà) → form gọi lại (ngà).
 - Khối xanh rừng là dải đặc nên che khung lá; tiêu đề trên nền đó dùng `!text-white` (màu heading mặc định là xanh rừng).
 
 ## 6c. Chỉnh sửa sau buổi họp (nhánh `fe/demo-v1`)
@@ -174,7 +174,7 @@ Thứ tự: **Hero → Về Kim Ngoan (ngà) → Sản phẩm (bạc hà) → Ba
 
 ## 7. Phân bón `/phanbon`
 
-Trang chủ: hero cửa hàng (tìm kiếm + nhóm hàng + ảnh theo cây trồng) → bản tin nhà nông (thời tiết, việc nên làm) → nhãn bao NPK → bác sĩ cây trồng → vườn thật → tư vấn nhanh → tin tức.
+Trang chủ: hero video (công ty, tìm kiếm, nhóm sản phẩm đang bán, cam kết) → theo cây trồng (nhãn hàng + ảnh vườn + gợi ý) → bác sĩ cây trồng → nhãn bao NPK → video bón đúng cách → vườn thật → về Kim Ngoan → tin tức → tư vấn nhanh.
 Trang con: sản phẩm (sidebar danh mục + lưới), chi tiết (thư viện ảnh, bảng thông số, gọi/Zalo), danh mục, tin tức & bài viết, giới thiệu, dịch vụ, liên hệ, tìm kiếm.
 Đầu trang con: `page-hero` nền `surface`, breadcrumb, h1, mô tả; nội dung trên nền trắng.
 

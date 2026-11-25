@@ -8,11 +8,11 @@ const BRANDS = ["Phú Mỹ", "Lâm Thao", "Mặt Trời Mới", "Đầu Trâu", 
  * Pauses on hover or keyboard focus; with prefers-reduced-motion it stays still and scrolls manually.
  * The second copy is hidden from screen readers and skipped by Tab.
  */
-export function BrandMarquee() {
+export function BrandMarquee({ label = "Hoặc chọn hãng" }: { label?: string }) {
   const list = [...BRANDS, ...BRANDS];
   return (
     <nav aria-label="Mua theo hãng" className="mt-6">
-      <p className="mb-2.5 text-caption font-medium text-ink-muted">Hoặc chọn hãng</p>
+      <p className="mb-2.5 text-caption font-medium text-ink-muted">{label}</p>
       <div className="group relative -mx-1 overflow-hidden py-1.5 [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)] motion-reduce:overflow-x-auto motion-reduce:[mask-image:none] motion-reduce:[scrollbar-width:none]">
         <ul className="flex w-max animate-[marquee_26s_linear_infinite] group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused] motion-reduce:animate-none">
           {list.map((b, i) => {

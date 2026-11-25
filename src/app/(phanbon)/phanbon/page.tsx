@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { QuickConsult } from "@/components/phanbon/quick-consult";
-import { FarmBulletin } from "@/components/phanbon/farm-bulletin";
-import { HeroShop, type HeroCrop } from "@/components/phanbon/hero-shop";
+import { BrandMarquee } from "@/components/phanbon/brand-marquee";
+import { HeroCropPanel, type HeroCrop } from "@/components/phanbon/hero-crop-panel";
+import { categoryHref, PbHero } from "@/components/phanbon/pb-hero";
+import { MediaVideo } from "@/components/shared/media-video";
+import { PHANBON_COPY, PHANBON_MEDIA } from "@/constants/phanbon-media";
 import { PlantDoctor } from "@/components/phanbon/plant-doctor";
 import { RealGardens } from "@/components/phanbon/real-gardens";
 import { NpkLabel, type LabelProduct } from "@/components/phanbon/npk-label";
@@ -16,34 +19,23 @@ import { ArticleCard } from "@/components/phanbon/catalog/article-card";
 import { Button } from "@/components/ui/button";
 import { getContent } from "@/lib/content/store";
 import { cropKey } from "@/lib/content/crop-match";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatOpeningHours } from "@/lib/format";
 import { getArticles } from "@/lib/mock/articles";
-import { categories } from "@/lib/mock/categories";
-import { normalize } from "@/lib/mock/search";
 import type { Product } from "@/types/phanbon";
 import { getFertilizerProducts } from "@/lib/products/server";
 import { getSettings } from "@/lib/settings/server";
-import { getForecast, WEATHER_PLACE } from "@/lib/weather";
 import { resolveHref } from "@/lib/site";
-import { telHref } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { BrandText } from "@/components/shared/brand-text";
 
 /**
- * Fertilizer landing page (design.md §14), "Vườn Xanh" theme (§3–4):
- *  shop-style hero (search, brands, real garden photo + crop-based suggestions) → 01 farm bulletin (weather + this month's tasks)
- *  → 02 plant doctor → 03 bag-label products → 04 real gardens → 05 about Kim Ngoan → 06 farming guides → call-back form.
- * The crop picked in the hero is shared page-wide (lib/crop-store). Copy comes from the CMS where a field exists.
+ * Fertilizer landing page (design.md §14), "Vườn Xanh" theme (§3–4) – fe/demo-v2 layout:
+ *  full-width video hero (company, products on sale, search, commitments) → 01 by crop (brands + crop photo + suggestions)
+ *  → 02 plant doctor → 03 bag-label products → 04 fertilise right (video + tips) → 05 real gardens → 06 about Kim Ngoan
+ *  → 07 farming guides → call-back form.
+ * The crop picked in section 01 is remembered between visits (lib/crop-store). Copy comes from the CMS where a field exists;
+ * stock media live in constants/phanbon-media.ts.
  */
-
-// the weather forecast is cached for 30 minutes → the page revalidates on the same cadence (ISR)
-export const revalidate = 1800;
-
-/** The CMS stores product groups as text ("Phân bón NPK") → link to the category with that name, else to search. */
-const categoryHref = (label: string) => {
-  const c = categories.find((x) => normalize(x.name) === normalize(label));
-  return c ? `/phanbon/danh-muc/${c.slug}` : `/phanbon/tim-kiem?q=${encodeURIComponent(label)}`;
-};
 
 const toLabel = (p: Product): LabelProduct => ({ slug: p.slug, name: p.name, categorySlug: p.categorySlug, ingredients: p.ingredients, crops: p.crops, packing: p.packing, featured: p.featured, isNew: p.isNew });
 
@@ -67,48 +59,47 @@ function SectionHead({ id, no, kicker, title, lead, action }: { id: string; no: 
 export default async function HomePage() {
   const content = await getContent();
   const { site, about } = content;
-  const slide = content.hero.slides[0];
   const products = await getFertilizerProducts();
   const featured = [...products].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 6);
   const news = getArticles("tin-tuc");
-  const month = Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date()));
-
-  const [{ COMPANY }, forecast] = await Promise.all([getSettings(), getForecast()]);
+  const { COMPANY } = await getSettings();
   const crops: HeroCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
-  const articles = news.map((a) => ({ href: `/phanbon/${a.section}/${a.slug}`, title: a.title, tags: a.tags }));
   const [lead, ...rest] = news.slice(0, 4);
 
   return (
     <div className="biz-garden relative isolate overflow-x-clip">
       <GardenBackdrop />
-      {/* shop-style HERO: info row → headline + search + brands | real garden photo + crop suggestions */}
-      <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
-        <Container>
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
-            <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · <BrandText text={site.companyName} /></span>
-            <span className="hidden text-ink-muted sm:inline">{COMPANY.area}</span>
-            <a href={telHref(site.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-brand-600">
-              <Phone className="size-3.5" aria-hidden /> {site.phone}
-            </a>
+      <PbHero
+        company={`${site.companyPrefix} ${site.companyName}`.trim()}
+        phone={site.phone}
+        area={COMPANY.area}
+        hours={formatOpeningHours(COMPANY.openingHours)}
+        groups={content.products.items}
+        features={content.features}
+      />
+
+      {/* 01. By crop – distributors + crop photo with suggestions (moved down from the old hero) */}
+      <section id="theo-cay-trong" aria-labelledby="theo-cay-title" data-garden="1" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
+        <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12 [&>*]:min-w-0">
+          <div className="lg:col-span-5">
+            <Reveal>
+              <Kicker no="01" className="text-brand-900">Theo cây trồng</Kicker>
+              <h2 id="theo-cay-title" className="mt-7 text-h1 font-semibold text-brand-900">
+                Chọn cây của vườn, <span className="text-brand-600">xem phân hợp</span>
+              </h2>
+              <p className="mt-4 text-lead leading-relaxed text-ink-muted">Bấm vào cây đang trồng để xem ảnh vườn và ba sản phẩm thường dùng cho cây đó. Lựa chọn được ghi nhớ cho lần sau.</p>
+            </Reveal>
+            <BrandMarquee label="Phân phối chính hãng các nhãn" />
+            <ul className="mt-7 grid grid-cols-2 gap-3">
+              {crops.slice(0, 4).map((c) => (
+                <li key={c.key} className="rounded-xl bg-white/80 px-4 py-3 ring-1 ring-brand-900/10">
+                  <span className="block text-body font-semibold text-brand-900">{c.name}</span>
+                  <span className="block text-caption text-ink-muted">{c.description}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-
-          <HeroShop crops={crops} products={products.map(toLabel)} features={content.features} phone={site.phone} srCompany={`${site.companyPrefix} ${site.companyName}`} />
-
-        </Container>
-      </section>
-
-      {/* 01. Today's farm bulletin – dark green band */}
-      <section id="bang-tin" aria-labelledby="bang-tin-title" className="scroll-mt-24 bg-brand-900 py-20 md:py-28">
-        <Container>
-          <FarmBulletin
-            days={forecast?.days ?? null}
-            crops={crops.map((c) => ({ key: c.key, name: c.name }))}
-            products={products.map(toLabel)}
-            articles={articles}
-            serverMonth={month}
-            phone={site.phone}
-            place={WEATHER_PLACE.name}
-          />
+          <HeroCropPanel crops={crops} products={products.map(toLabel)} className="min-h-[36rem] lg:col-span-7 lg:min-h-[40rem]" />
         </Container>
       </section>
 
@@ -172,14 +163,39 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 04. Real gardens, real people */}
-      <section id="vuon-that" aria-labelledby="vuon-that-title" data-garden="1" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
-        <Container>
-          <RealGardens stories={content.stories} zalo={COMPANY.zalo} no="04" />
+      {/* 04. Fertilise right – video + four rules of thumb */}
+      <section aria-labelledby="bon-dung-title" className="brand-dark bg-brand-900 py-20 text-white md:py-28">
+        <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+          <Reveal className="lg:col-span-7">
+            <MediaVideo video={PHANBON_MEDIA.fieldVideo} className="aspect-video overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10" />
+          </Reveal>
+          <div className="lg:col-span-5">
+            <Kicker no="04" className="text-white">{PHANBON_COPY.field.kicker}</Kicker>
+            <h2 id="bon-dung-title" className="mt-7 text-h1 font-semibold !text-white">
+              {PHANBON_COPY.field.title} <span className="text-sun-300">{PHANBON_COPY.field.highlight}</span>
+            </h2>
+            <p className="mt-4 text-lead leading-relaxed text-white/75">{PHANBON_COPY.field.lead}</p>
+            <ol className="mt-7 grid sm:grid-cols-2 sm:gap-x-6">
+              {PHANBON_COPY.field.tips.map((t, i) => (
+                <li key={t.title} className="border-t border-white/15 py-4">
+                  <span className="text-caption font-semibold tabular-nums text-sun-300">0{i + 1}</span>
+                  <span className="mt-1 block text-title font-semibold text-white">{t.title}</span>
+                  <span className="mt-0.5 block text-small leading-relaxed text-white/70">{t.text}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </Container>
       </section>
 
-      {/* 05. About Kim Ngoan – large captioned photo, story, figures, commitments (all from the CMS) */}
+      {/* 05. Real gardens, real people */}
+      <section id="vuon-that" aria-labelledby="vuon-that-title" data-garden="1" className={cn(SECTION_BG.ivory, "scroll-mt-24 py-20 md:py-28")}>
+        <Container>
+          <RealGardens stories={content.stories} zalo={COMPANY.zalo} no="05" />
+        </Container>
+      </section>
+
+      {/* 06. About Kim Ngoan – large captioned photo, story, figures, commitments (all from the CMS) */}
       <section id="gioi-thieu" aria-labelledby="gioi-thieu-title" className="brand-dark scroll-mt-24 bg-brand-900 py-20 text-white md:py-28">
         <Container className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <Reveal className="lg:col-span-6">
@@ -195,7 +211,7 @@ export default async function HomePage() {
           </Reveal>
           <div className="lg:col-span-5 lg:col-start-8">
             <Reveal>
-              <Kicker no="05" className="text-white">{about.title}</Kicker>
+              <Kicker no="06" className="text-white">{about.title}</Kicker>
               <h2 id="gioi-thieu-title" className="mt-7 whitespace-pre-line text-h2 font-semibold !text-white">{about.quote || about.title}</h2>
               <div className="mt-6 space-y-4 text-body leading-relaxed text-white/70">
                 {about.paragraphs.map((p, i) => (
@@ -241,13 +257,13 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 06. Farming guides – lead article + index */}
+      {/* 07. Farming guides – lead article + index */}
       {lead && (
         <section id="tin-tuc" aria-labelledby="tin-tuc-title" data-garden="2" className={cn(SECTION_BG.mint, "scroll-mt-24 py-20 md:py-28")}>
           <Container>
             <SectionHead
               id="tin-tuc-title"
-              no="06"
+              no="07"
               kicker="Kiến thức canh tác"
               title={<BrandText text="Kỹ thuật từ đội ngũ Kim Ngoan" />}
               action={

@@ -12,7 +12,7 @@ import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { AutoCarousel } from "./auto-carousel";
 import { Headline } from "./headline";
-import { MediaVideo } from "./media-video";
+import { MediaVideo } from "@/components/shared/media-video";
 import { TyreQuote } from "./tyre-quote";
 import { TyreCheck } from "./tyre-check";
 import { TyreHero } from "./tyre-hero";

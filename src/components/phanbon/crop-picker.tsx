@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { SmartImage } from "@/components/shared/smart-image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -77,7 +77,7 @@ export function CropPicker({ crops, value, onChange }: { crops: PickerCrop[]; va
               )}
             >
               <span className={cn("relative size-8 shrink-0 overflow-hidden rounded-full bg-brand-100 ring-2 transition-colors", on ? "ring-sun-300" : "ring-transparent")}>
-                {c.image && <Image src={c.image} alt="" fill sizes="32px" className="object-cover" />}
+                {c.image && <SmartImage src={c.image} alt="" fill sizes="32px" className="object-cover" />}
               </span>
               {c.label}
             </button>
