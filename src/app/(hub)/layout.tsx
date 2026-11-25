@@ -19,6 +19,7 @@ export default async function HubLayout({ children }: { children: React.ReactNod
     name: COMPANY.legalName,
     slogan: COMPANY.slogan,
     url: absoluteUrl("/"),
+    logo: absoluteUrl("/brand/kim-ngoan-logo.png"),
     email: COMPANY.email,
     telephone: COMPANY.hotline,
     address: { "@type": "PostalAddress", streetAddress: COMPANY.address, addressCountry: "VN" },

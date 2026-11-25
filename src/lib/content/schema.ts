@@ -19,7 +19,7 @@ export const siteContentSchema = z.object({
     companyPrefix: text,
     companyName: text.min(1),
     slogan: text,
-    logo: text, // empty string => default leaf logo
+    logo: text, // empty string => default Kim Ngoan lotus mark
     phone: text,
     email: text,
     address: text,

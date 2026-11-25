@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
 import { useModalMenu } from "@/hooks/use-modal-menu";
@@ -149,15 +150,19 @@ export function HubHeader({ company: COMPANY }: { company: HeaderCompany }) {
           Bỏ qua đến nội dung chính
         </a>
         <div className="flex h-16 items-center justify-between gap-6 px-4 sm:px-6 lg:h-[76px] lg:pl-6 lg:pr-8 2xl:pl-8">
+          {/* brand: lotus mark on the left, company name to its right – always links to the company home page */}
           <Link
             href="/"
-           
-            className="group flex flex-col gap-1.5 rounded-md text-hub-ink transition-colors group-data-[dark]/hd:text-white"
+            aria-label={`${COMPANY.prefix} ${COMPANY.name} – Trang chủ`}
+            className="group flex shrink-0 items-center gap-3 rounded-md text-hub-ink transition-colors group-data-[dark]/hd:text-white lg:gap-3.5"
           >
-            <span className="block logo-prefix text-hub-ink-soft group-data-[dark]/hd:text-white/75">
-              {COMPANY.prefix}
+            <BrandMark eager className="h-10 lg:h-12" />
+            <span className="flex flex-col gap-1.5">
+              <span className="block logo-prefix text-hub-ink-soft group-data-[dark]/hd:text-white/75">
+                {COMPANY.prefix}
+              </span>
+              <span className="block text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:text-[1.75rem]">{COMPANY.name}</span>
             </span>
-            <span className="block text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] transition-transform duration-300 ease-soft group-hover:-translate-y-px lg:text-[1.75rem]">{COMPANY.name}</span>
           </Link>
 
           <nav

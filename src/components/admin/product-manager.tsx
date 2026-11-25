@@ -41,6 +41,9 @@ export type AdminProduct = {
   art?: ArtKind;
 };
 
+/** Recommended maximum length of the short description (fits two lines on a product card). */
+const SHORT_MAX = 160;
+
 const META: Record<AdminSite, { title: string; noun: string; path: string; description: string; dot: string }> = {
   phanbon: { title: "Phân bón", noun: "sản phẩm phân bón", path: "/phanbon/san-pham", description: "Phân bón, thuốc BVTV hiển thị ở chuyên trang /phanbon và khối sản phẩm trên landing tổng.", dot: "bg-sector-phanbon" },
   lopxe: { title: "Lốp xe", noun: "mẫu lốp", path: "/lopxe/san-pham", description: "Các mẫu lốp hiển thị ở chuyên trang /lopxe: danh mục, bộ lọc thương hiệu, khối bán chạy.", dot: "bg-sector-lopxe" },
@@ -477,8 +480,23 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
               <Toggle label="Hàng mới" hint="Gắn nhãn “Mới”" checked={!!p.isNew} onChange={set("isNew")} />
             </div>
 
-            <div data-tour="peek-short">
-              <TextField label="Mô tả ngắn" required multiline value={p.shortDescription} onChange={set("shortDescription")} error={err("shortDescription")} hint="1–2 câu hiện trên thẻ sản phẩm" />
+            {/* two descriptions: SHORT (card + top of the detail page) and LONG (the "Chi tiết sản phẩm" block) */}
+            <div data-tour="peek-short" className="space-y-6">
+              <TextField
+                label="Mô tả ngắn"
+                required
+                multiline
+                value={p.shortDescription}
+                onChange={set("shortDescription")}
+                error={err("shortDescription")}
+                hint={`${p.shortDescription.length}/${SHORT_MAX} ký tự · 1–2 câu, hiện trên thẻ sản phẩm và đầu trang chi tiết${p.shortDescription.length > SHORT_MAX ? " – nên rút gọn" : ""}`}
+              />
+              <LinesField
+                label="Mô tả chi tiết (dài)"
+                value={p.description}
+                onChange={set("description")}
+                hint="Hiện ở khối “Chi tiết sản phẩm” cuối trang. Mỗi dòng là một đoạn văn – nên viết 2–4 đoạn: dùng cho việc gì, điểm mạnh, lưu ý khi chọn hoặc đặt hàng."
+              />
             </div>
 
             {isCatalog && (
@@ -517,7 +535,6 @@ function ProductPeek({ site, original, initial, categories, brands, onClose, onD
                 <LinesField label="Cây trồng phù hợp" value={p.crops ?? []} onChange={set("crops")} />
               </>
             )}
-            <LinesField label="Mô tả chi tiết" value={p.description} onChange={set("description")} hint="Mỗi dòng là một đoạn văn" />
           </div>
         </div>
 

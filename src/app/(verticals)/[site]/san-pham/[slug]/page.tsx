@@ -60,7 +60,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.shortDescription,
+    description: [product.shortDescription, ...product.description].join(" "),
     sku: product.sku,
     brand: { "@type": "Brand", name: product.brand },
     category: category?.name,
@@ -87,6 +87,7 @@ export default async function ProductDetail({ params }: { params: Params }) {
           <ProductVisual name={product.name} art={product.art} image={product.images?.[0]} preload sizes="(min-width: 1024px) 50vw, 100vw" className="animate-rise aspect-square" />
         </div>
 
+        {/* SHORT part: identity, key spec, short description, highlights, quote box */}
         <div>
           <p className="text-small text-v-mute">
             {product.brand} <span className="text-v-mark">/</span> {product.sku}
@@ -119,27 +120,42 @@ export default async function ProductDetail({ params }: { params: Params }) {
               </VButton>
             </div>
           </div>
-
-          <section aria-labelledby="thong-so-title" className="mt-14">
-            <h2 id="thong-so-title" className="text-h2 v-display text-v-fg">Thông số kỹ thuật</h2>
-            <dl className="mt-5 overflow-hidden rounded-xl bg-v-raise">
-              {product.specs.map((s, i) => (
-                <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-body ${i > 0 ? "border-t border-v-line" : ""}`}>
-                  <dt className="text-v-mute">{s.name}</dt>
-                  <dd className="font-semibold text-v-fg">{s.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-
-          <section aria-labelledby="mo-ta-title" className="mt-14">
-            <h2 id="mo-ta-title" className="text-h2 v-display text-v-fg">Mô tả</h2>
-            {product.description.map((t) => (
-              <p key={t} className="mt-4 text-lead leading-[1.75] text-v-mute">{t}</p>
-            ))}
-          </section>
         </div>
       </Container>
+
+      {/* LONG part: full product detail – long description + technical specs, side by side on desktop */}
+      <section aria-labelledby="chi-tiet-title" className="border-t border-v-line py-14 md:py-20">
+        <Container>
+          <h2 id="chi-tiet-title" className="text-h2 v-display text-v-fg">Chi tiết sản phẩm</h2>
+          <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-16">
+            <div>
+              <h3 className="text-h4 font-semibold text-v-fg">Mô tả</h3>
+              {product.description.length > 0 ? (
+                <div className="mt-4 max-w-[68ch] space-y-4">
+                  {product.description.map((t, i) => (
+                    <p key={i} className="text-lead leading-[1.75] text-v-mute">{t}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-4 text-lead leading-[1.75] text-v-mute">{product.shortDescription}</p>
+              )}
+            </div>
+            {product.specs.length > 0 && (
+              <div>
+                <h3 className="text-h4 font-semibold text-v-fg">Thông số kỹ thuật</h3>
+                <dl className="mt-4 overflow-hidden rounded-xl bg-v-raise">
+                  {product.specs.map((s, i) => (
+                    <div key={s.name} className={`grid grid-cols-[42%_1fr] gap-4 px-4 py-3.5 text-body ${i > 0 ? "border-t border-v-line" : ""}`}>
+                      <dt className="text-v-mute">{s.name}</dt>
+                      <dd className="font-semibold text-v-fg">{s.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
+          </div>
+        </Container>
+      </section>
 
       {related.length > 0 && (
         <section aria-labelledby="lien-quan-title" className="border-t border-v-line bg-v-sunk py-16 md:py-24">

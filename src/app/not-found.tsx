@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
-import { HubMark } from "@/components/hub/hub-mark";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { getSettings } from "@/lib/settings/server";
 import { BUTTON_SIZES } from "@/lib/ui";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ export default async function NotFound() {
     <main className="theme-hub grid min-h-screen place-items-center bg-hub-canvas px-4 py-16 text-hub-ink">
       <div className="w-full max-w-2xl">
         <Link href="/" className="inline-flex items-center gap-3">
-          <HubMark className="size-11" />
+          <BrandMark eager className="h-11" />
           <span className="leading-none">
             <span className="block logo-prefix text-hub-ink-soft">{COMPANY.prefix}</span>
             <span className="mt-1 block logo-name font-semibold">{COMPANY.name}</span>

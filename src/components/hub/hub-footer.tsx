@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { ArrowRight, Mail, Phone } from "lucide-react";
 import { HUB_NAV } from "@/constants/hub-nav";
 import { telHref } from "@/lib/verticals";
@@ -23,9 +24,12 @@ export async function HubFooter() {
       <div className="mx-auto grid max-w-[1280px] gap-x-10 gap-y-12 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.8fr_0.9fr_auto] lg:px-12 lg:pt-20">
         {/* brand */}
         <div className="sm:col-span-2 lg:col-span-1">
-          <Link href="/" className="inline-flex flex-col gap-1.5 text-white">
-            <span className="logo-prefix text-white/60">{COMPANY.prefix}</span>
-            <span className="block text-[1.75rem] font-extrabold uppercase leading-none tracking-[0.01em]">{COMPANY.name}</span>
+          <Link href="/" className="inline-flex items-center gap-3.5 text-white">
+            <BrandMark className="h-12" />
+            <span className="flex flex-col gap-1.5">
+              <span className="logo-prefix text-white/60">{COMPANY.prefix}</span>
+              <span className="block text-[1.75rem] font-extrabold uppercase leading-none tracking-[0.01em]">{COMPANY.name}</span>
+            </span>
           </Link>
           <p className="mt-5 text-title font-semibold text-white">{COMPANY.slogan}</p>
           <p className="mt-2 max-w-xs text-body leading-relaxed">Phân bón, tôn – sắt thép và lốp xe ô tô tại {COMPANY.area}.</p>

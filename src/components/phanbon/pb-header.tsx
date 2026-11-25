@@ -44,14 +44,15 @@ export function PbHeader({ site, nav }: Pick<SiteContent, "site" | "nav">) {
         )}>
         <div className="px-4 sm:px-6 lg:pl-6 lg:pr-8 2xl:pl-8">
           <div className="flex h-16 items-center justify-between gap-4 md:h-[72px]">
-            <Link href="/phanbon" className="shrink-0 rounded-lg">
+            {/* brand → company home page (the "Trang chủ" menu item covers the fertilizer home) */}
+            <Link href="/" aria-label={`${site.companyPrefix} ${site.companyName} – Trang chủ`} className="shrink-0 rounded-lg">
               <Logo
                 prefix={site.companyPrefix}
                 name={site.companyName}
                 slogan=""
                 logo={site.logo}
                 compact
-                className="[&>svg]:size-9 [&>div:first-child]:size-9"
+                eager
               />
             </Link>
 

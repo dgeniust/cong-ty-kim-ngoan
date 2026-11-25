@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import Link from "next/link";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
 import { telHref, type Vertical } from "@/lib/verticals";
@@ -13,7 +14,7 @@ import { useScrolled } from "@/hooks/use-scrolled";
 /**
  * Header for the tyre / steel sites – SAME STRUCTURE as the fertilizer header
  * (components/phanbon/pb-header.tsx) so the three sites feel related:
- * floating rounded bar · "CÔNG TY TNHH / KIM NGOAN" text logo (as on the hub) · pill menu · search · call button.
+ * floating rounded bar · lotus mark + "CÔNG TY TNHH / KIM NGOAN" (as on the hub) · pill menu · search · call button.
  * Colours come from each site's theme tokens.
  */
 
@@ -47,14 +48,17 @@ export function VHeader({ vertical, company: COMPANY }: { vertical: Vertical; co
         )}>
         <div className="w-full px-4 sm:px-6 lg:pl-6 lg:pr-8 2xl:pl-8">
           <div className="flex h-16 items-center justify-between gap-4 md:h-[72px] lg:h-[76px]">
-            {/* text logo identical to the hub (CÔNG TY TNHH / KIM NGOAN) plus a small sector tag */}
-            <Link href={vertical.base} className="group flex shrink-0 flex-col gap-1.5 rounded-md text-v-fg">
-              <span className="block logo-prefix text-v-mute">{COMPANY.prefix}</span>
-              <span className="flex items-center gap-2.5">
-                <span className="block text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] transition-transform duration-300 group-hover:-translate-y-px lg:text-[1.75rem]">{COMPANY.name}</span>
-                <span className="hidden rounded-[4px] bg-v-pill px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-v-on-pill sm:inline">{vertical.short}</span>
-              </span>
-            </Link>
+            {/* brand (as on the hub): lotus mark + company name → company home page; the sector tag links to this site's home */}
+            <div className="flex shrink-0 items-center gap-2.5">
+              <Link href="/" aria-label={`${COMPANY.prefix} ${COMPANY.name} – Trang chủ`} className="group flex items-center gap-3 rounded-md text-v-fg lg:gap-3.5">
+                <BrandMark eager className="h-10 lg:h-12" />
+                <span className="flex flex-col gap-1.5">
+                  <span className="block logo-prefix text-v-mute">{COMPANY.prefix}</span>
+                  <span className="block text-[1.375rem] font-extrabold uppercase leading-none tracking-[0.01em] transition-transform duration-300 group-hover:-translate-y-px lg:text-[1.75rem]">{COMPANY.name}</span>
+                </span>
+              </Link>
+              <Link href={vertical.base} className="hidden self-end rounded-[4px] bg-v-pill px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-v-on-pill transition-opacity hover:opacity-80 sm:inline lg:mb-0.5">{vertical.short}</Link>
+            </div>
 
             <nav aria-label="Điều hướng chính" className="hidden items-center gap-0.5 lg:flex">
               {nav.map((item) => {

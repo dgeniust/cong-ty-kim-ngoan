@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { MapEmbed } from "@/components/shared/map-embed";
 import { telHref, type Vertical } from "@/lib/verticals";
@@ -13,6 +14,7 @@ export async function VFooter({ vertical }: { vertical: Vertical }) {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1.1fr_1.5fr]">
           <div>
             <p className="flex items-center gap-2.5">
+              <BrandMark className="h-9" />
               <span className="logo-name font-semibold text-v-fg">{COMPANY.name}</span>
               <span className="rounded-full bg-v-pill px-2.5 py-0.5 text-micro font-medium text-v-on-pill">{vertical.short}</span>
             </p>
