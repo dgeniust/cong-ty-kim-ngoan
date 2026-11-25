@@ -9,7 +9,7 @@ application serves a company landing hub and three sector sites, plus a small bu
 | `/tin-tuc` | All news across sectors, filter `?nganh=phanbon\|lopxe\|satthep` | `.theme-hub` |
 | `/phanbon/**` | Fertilizer & crop-protection site: shop-style hero, farm bulletin (live weather), plant doctor, catalog, search, guides | `.theme-pb` ("Vườn Xanh") |
 | `/lopxe/**` | Car-tyre site: full-width video hero, size finder, tiers, photo blocks, catalog, **quote-only** contact flow | `.theme-lopxe` (white, orange accent) |
-| `/satthep/**` | Roofing sheet & steel site: quotation-document layout, weight calculators, catalog, quote-only flow | `.theme-satthep` (white/grey) |
+| `/satthep/**` | Roofing sheet & steel site: video hero, quotation-document layout, weight calculators, photo blocks, catalog, quote-only flow | `.theme-satthep` (white/grey) |
 | `/admin/**` | CMS: shared settings, product databases (3 sectors), page content, guided tours | admin UI (shadcn/ui) |
 
 All visible copy is Vietnamese; code, comments and documentation are English.
@@ -146,7 +146,7 @@ heading variables. Shared components read the variables, so one component render
 A single type scale (`text-display … text-micro`) and button scale (`lib/ui.ts`: 36/44/52 px) apply
 everywhere; `cn()` is configured with the custom scale so `tailwind-merge` does not drop colour classes.
 
-**Tyre-site media.** Photos and videos of the tyre home page live in `src/constants/lopxe-media.ts`:
+**Sector-site media.** Photos and videos of the tyre and steel home pages live in `src/constants/lopxe-media.ts` and `src/constants/satthep-media.ts` (helpers in `src/constants/media.ts`); inner-page title photos in `src/constants/page-heads.ts`. Sources:
 local files from `public/`, free Unsplash photos and Mixkit clips (both licences allow commercial use without
 attribution). `MediaVideo` plays muted loops only while on screen, has a pause button and never autoplays for
 visitors who prefer reduced motion. Before go-live, download the remote files into `public/lopxe/` and point the

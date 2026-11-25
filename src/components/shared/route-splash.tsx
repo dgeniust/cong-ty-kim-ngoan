@@ -133,20 +133,27 @@ export function RouteSplash({ brand }: { brand: SplashBrand }) {
       role="status"
       aria-live="polite"
       data-state={leaving ? "out" : "in"}
-      className="splash fixed inset-0 z-[100] grid place-items-center"
+      className="splash brand-dark fixed inset-0 z-[100] grid place-items-center overflow-hidden"
       style={{ background: T.bg }}
     >
       <span className="sr-only">Đang mở {info.title}…</span>
-      <div aria-hidden className="flex flex-col items-center px-6">
+      {/* soft glow behind the lockup */}
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[44%] size-[min(80vmin,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${T.glow} 0%, transparent 62%)` }} />
+      <div aria-hidden className="relative flex flex-col items-center px-6 text-center">
         {/* lotus mark above the wordmark; it pops in as the wordmark finishes zooming out, so they never overlap */}
         <BrandMark eager className="splash-mark mb-6 h-[clamp(64px,13vw,104px)] sm:mb-8" />
         <SplashWordmark color={T.ink} />
-        {target !== "hub" && (
-          <span className="splash-tag mt-7 inline-flex h-8 items-center rounded-full px-3.5 text-caption font-semibold" style={{ background: T.tagBg, color: T.tagFg }}>
-            {info.title}
+        <span className="splash-tag mt-7 inline-flex h-8 items-center rounded-full px-4 text-caption font-semibold shadow-[0_8px_24px_-10px_rgb(0_0_0/0.45)]" style={{ background: T.tagBg, color: T.tagFg }}>
+          {info.title}
+        </span>
+        {info.tagline && (
+          <span className="splash-tag mt-3 max-w-xs text-small" style={{ color: T.sub }}>
+            {info.tagline}
           </span>
         )}
       </div>
+      {/* accent progress line along the bottom edge */}
+      <div aria-hidden className="splash-progress absolute inset-x-0 bottom-0 h-1 origin-left" style={{ background: T.bar }} />
     </div>
   );
 }
@@ -160,9 +167,17 @@ function SplashWordmark({ color }: { color: string }) {
   );
 }
 
-const THEME: Record<SplashSection, { bg: string; ink: string; tagBg: string; tagFg: string }> = {
-  hub: { bg: "#f8f9fa", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
-  phanbon: { bg: "#f1f5f1", ink: "#264c2f", tagBg: "#264c2f", tagFg: "#ffffff" },
-  lopxe: { bg: "#fbf8f5", ink: "#b9531c", tagBg: "#17181b", tagFg: "#ffffff" },
-  satthep: { bg: "#f4f5f7", ink: "#18181b", tagBg: "#a84b24", tagFg: "#ffffff" },
+/**
+ * Each area gets a deep, saturated field in its own colour with a bright wordmark and one accent
+ * (tag, glow, progress line). The lotus switches to its white-oval badge (`.brand-dark`).
+ */
+const THEME: Record<SplashSection, { bg: string; ink: string; tagBg: string; tagFg: string; glow: string; sub: string; bar: string }> = {
+  // hub – night forest + ripe-rice gold ("Mùa Vàng & Đại Ngàn")
+  hub: { bg: "radial-gradient(120% 90% at 50% 0%, #0f4a2e 0%, #082919 58%, #04170d 100%)", ink: "#fbbf24", tagBg: "#f59e0b", tagFg: "#082919", glow: "rgba(251,191,36,0.2)", sub: "rgba(209,250,229,0.82)", bar: "#f59e0b" },
+  // fertilizer – deep garden green + cream / sun gold
+  phanbon: { bg: "linear-gradient(160deg, #23593a 0%, #173f27 55%, #0e2b1a 100%)", ink: "#f8eedf", tagBg: "#e7c48e", tagFg: "#13281a", glow: "rgba(231,196,142,0.24)", sub: "rgba(248,238,223,0.78)", bar: "#e7c48e" },
+  // tyres – the site's deep orange, white wordmark
+  lopxe: { bg: "linear-gradient(150deg, #c8621f 0%, #a8481a 55%, #7a3311 100%)", ink: "#ffffff", tagBg: "#ffffff", tagFg: "#9e4515", glow: "rgba(255,217,189,0.32)", sub: "rgba(255,255,255,0.85)", bar: "#ffd9bd" },
+  // steel – graphite with a copper accent
+  satthep: { bg: "linear-gradient(160deg, #2e353e 0%, #1d2127 58%, #121519 100%)", ink: "#f4f5f7", tagBg: "#a84b24", tagFg: "#ffffff", glow: "rgba(194,103,61,0.28)", sub: "rgba(244,245,247,0.72)", bar: "#d07a4c" },
 };

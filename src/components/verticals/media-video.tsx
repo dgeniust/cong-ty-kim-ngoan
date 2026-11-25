@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
-import type { MediaVideo as Video } from "@/constants/lopxe-media";
+import type { MediaVideo as Video } from "@/constants/media";
 import { cn } from "@/lib/utils";
 
 /**

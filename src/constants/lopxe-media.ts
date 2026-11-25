@@ -1,31 +1,14 @@
 /**
  * Photos and videos of the tyre site home page – the ONLY place to change them.
  *
- * Sources (all free for commercial use, no attribution required – credits kept for reference):
- *  - local files in /public (Kim Ngoan's own photos);
- *  - Unsplash (Unsplash License) – loaded from images.unsplash.com, resized by Unsplash's CDN (`w`);
- *  - Mixkit (Mixkit Stock Video Free License) – loaded from assets.mixkit.co.
- *
+ * Sources: local files in /public, Unsplash photos and Mixkit clips (see constants/media.ts for licences).
  * Before go-live, prefer downloading the remote files into /public/lopxe/ and pointing `src` at them
  * (faster, no dependency on third-party CDNs). Replace stock media with real shop photos/clips when available.
  * Videos: keep them short (10–20 s), muted-friendly, H.264 MP4 ≤ 8 MB; `poster` shows until the video plays
  * and is the only thing shown to visitors who prefer reduced motion.
  */
 
-export type MediaImage = { src: string; alt: string; credit?: string };
-export type MediaVideo = {
-  /** Tried in order – the browser plays the first one it can load. */
-  sources: string[];
-  poster: string;
-  /** Short description for screen readers. */
-  label: string;
-  credit?: string;
-};
-
-/** Unsplash CDN URL for a photo id, resized to `w` px wide. */
-const unsplash = (id: string, w = 1600) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=75`;
-/** Mixkit clip in descending quality; the 360p file always exists. */
-const mixkit = (id: number) => [720, 360].map((q) => `https://assets.mixkit.co/videos/${id}/${id}-${q}.mp4`);
+import { mixkit, unsplash, type MediaImage } from "./media";
 
 export const LOPXE_MEDIA = {
   /** Full-width hero video (muted loop). */
