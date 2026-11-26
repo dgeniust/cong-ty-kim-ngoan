@@ -8,7 +8,7 @@ import { LOPXE_COPY, LOPXE_MEDIA } from "@/constants/lopxe-media";
 import { TYRE_TIERS } from "@/constants/vertical-extras";
 import { formatDate, formatOpeningHours } from "@/lib/format";
 import { getSettings } from "@/lib/settings/server";
-import { telHref, type Vertical } from "@/lib/verticals";
+import { sectorPhones, telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { AutoCarousel } from "./auto-carousel";
 import { Headline } from "./headline";
@@ -101,10 +101,14 @@ export async function LopXeHome({
                   </a>
                 </div>
                 <ul className="mt-8 flex flex-col gap-2 text-small text-white/85 sm:flex-row sm:flex-wrap sm:gap-x-6">
-                  <li>
-                    <a href={telHref(vertical.phone)} className="inline-flex items-center gap-2 font-semibold tabular-nums text-white hover:text-[#f6b98a]">
-                      <Phone className="size-4" aria-hidden /> {vertical.phone}
-                    </a>
+                  <li className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <Phone className="size-4" aria-hidden />
+                    {sectorPhones(vertical).map((p, i) => (
+                      <span key={p} className="inline-flex items-center gap-2">
+                        {i > 0 && <span aria-hidden className="text-white/50">·</span>}
+                        <a href={telHref(p)} className="font-semibold tabular-nums text-white hover:text-[#f6b98a]">{p}</a>
+                      </span>
+                    ))}
                   </li>
                   <li className="inline-flex items-center gap-2">
                     <MapPin className="size-4 shrink-0" aria-hidden /> {COMPANY.area}
@@ -323,7 +327,7 @@ export async function LopXeHome({
             </div>
             <div className="lg:col-span-5 lg:col-start-8">
               <div className="lg:sticky lg:top-28">
-                <TyreQuote phone={vertical.phone} zalo={COMPANY.zalo} />
+                <TyreQuote phones={sectorPhones(vertical)} zalo={COMPANY.zalo} />
               </div>
             </div>
           </div>
@@ -415,10 +419,12 @@ export async function LopXeHome({
               <p className="mt-4 max-w-md text-lead leading-relaxed text-v-mute">{content.cta.description}</p>
             </div>
             <div className="flex flex-col gap-2 lg:col-span-5 lg:col-start-8">
-              <a href={telHref(vertical.phone)} className="flex items-center justify-between gap-3 rounded-xl bg-v-accent px-6 py-5 text-v-on-accent transition-colors hover:bg-v-accent-hover">
-                <span className="text-h2 font-semibold tabular-nums tracking-[-0.03em]">{vertical.phone}</span>
-                <Phone className="size-6" aria-hidden />
-              </a>
+              {sectorPhones(vertical).map((p) => (
+                <a key={p} href={telHref(p)} className="flex items-center justify-between gap-3 rounded-xl bg-v-accent px-6 py-5 text-v-on-accent transition-colors hover:bg-v-accent-hover">
+                  <span className="text-h2 font-semibold tabular-nums tracking-[-0.03em]">{p}</span>
+                  <Phone className="size-6" aria-hidden />
+                </a>
+              ))}
               <a href={COMPANY.zalo} target="_blank" rel="noopener noreferrer" className="flex h-13 items-center justify-between gap-3 rounded-xl bg-v-tint px-5 text-body font-medium text-v-on-tint">
                 Gửi ảnh hông lốp qua Zalo <MessageCircle className="size-5" aria-hidden />
               </a>

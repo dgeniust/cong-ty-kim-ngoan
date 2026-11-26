@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 /** Intrinsic sizes of the three artworks in `public/brand/`. */
 const PLAIN = { src: "/brand/kim-ngoan-logo.svg", w: 682, h: 455 };
 const BADGE = { src: "/brand/kim-ngoan-logo-badge.svg", w: 880, h: 544 };
-/** Same trace in white, no background – for the transparent header over the hero photo. */
-const LIGHT = { src: "/brand/kim-ngoan-logo-white.svg", w: 682, h: 455 };
+/** The original logo (thin pink strokes) with only the white background removed – for the transparent header over the hero photo. */
+const LIGHT = { src: "/brand/kim-ngoan-logo-transparent.png", w: 360, h: 240 };
 
 type Props = {
   className?: string;
@@ -14,7 +14,7 @@ type Props = {
   alt?: string;
   /**
    * - `auto` (default): plain mark on light backgrounds, white-oval badge on dark blocks (`.brand-dark`),
-   *   white transparent mark in the transparent header at the top of the page (`[data-dark]`).
+   *   original pink logo without background in the transparent header at the top of the page (`[data-dark]`).
    *   The switch is pure CSS ("Brand mark" in globals.css).
    * - `plain` / `badge` / `light`: force one artwork.
    */
@@ -26,7 +26,7 @@ type Props = {
  * The plain artwork is the bold-stroke trace (legible from favicon size up; `kim-ngoan-logo-full.svg`
  * keeps the original thin strokes for print). On dark backgrounds the transparent lotus loses contrast,
  * so the badge artwork puts it on a white oval; the hub header at the very top (over the hero photo) uses
- * the white mark with no background instead.
+ * the original pink logo with its background removed instead.
  * Size it by height (e.g. `h-10`); the width follows the aspect ratio.
  * Decorative by default because it always sits next to the company name.
  */
