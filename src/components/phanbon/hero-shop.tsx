@@ -36,7 +36,7 @@ export function HeroShop({ crops, products, features, phone, srCompany }: { crop
 
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <a href={telHref(phone)} className="inline-flex h-12 items-center gap-2 rounded-full bg-sun-300 px-6 text-body font-semibold text-brand-900 transition-colors hover:bg-sun-400">
-            <Phone className="size-4" aria-hidden /> Gọi đặt hàng · <span className="tabular-nums">{phone}</span>
+            <Phone className="size-4" aria-hidden /> Liên hệ · <span className="tabular-nums">{phone}</span>
           </a>
           <Link href="/phanbon/san-pham" className="group inline-flex h-12 items-center gap-2 rounded-full px-5 text-body font-semibold text-brand-900 ring-1 ring-brand-900/20 transition-colors hover:bg-brand-900 hover:text-white">
             Xem tất cả sản phẩm <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />

@@ -85,7 +85,7 @@ export default async function HomePage() {
       <section aria-labelledby="hero-title" data-garden="1" className={cn(SECTION_BG.mint, "pb-10 pt-6 md:pb-14 md:pt-8")}>
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-brand-900 pb-3 text-caption text-brand-900">
-            <span className="font-semibold">{slide?.eyebrow ? slide.eyebrow.charAt(0) + slide.eyebrow.slice(1).toLowerCase() : "Đại lý phân bón"} · <BrandText text={site.companyName} /></span>
+            <span className="font-semibold">Công ty TNHH <BrandText text={site.companyName} /></span>
             <span className="hidden text-ink-muted sm:inline">{COMPANY.area}</span>
             <a href={telHref(site.phone)} className="inline-flex min-h-8 items-center gap-1.5 font-medium tabular-nums hover:text-brand-600">
               <Phone className="size-3.5" aria-hidden /> {site.phone}

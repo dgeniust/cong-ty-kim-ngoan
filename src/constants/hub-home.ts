@@ -112,7 +112,7 @@ export const HUB_PRODUCTS = {
       tab: "Lốp xe ô tô",
       title: "Lốp chính hãng cho xe con, bán tải, xe tải nhẹ",
       text: "Đủ cỡ thông dụng cho xe gia đình, xe dịch vụ và xe chở nông sản. Cho biết cỡ lốp hoặc đời xe, nhân viên tư vấn và báo giá qua điện thoại.",
-      image: "/photos/lopxe-cua-hang.jpg",
+      image: "/photos/lopxe-cua-hang-2.jpg",
       alt: "Kệ lốp xe mới trong cửa hàng",
       caption: "Khu trưng bày lốp tại cửa hàng",
     },
@@ -144,7 +144,7 @@ export const HUB_NEWS = {
 
 export const HUB_CONTACT = {
   eyebrow: "Liên hệ",
-  title: "Cần báo giá? Để lại số, chúng tôi gọi lại.",
+  title: "Cần báo giá? Để lại số, chúng tôi gọi ngay.",
   lead: "Mỗi ngành có người phụ trách riêng. Cần gấp thì gọi thẳng số của từng ngành hoặc nhắn Zalo.",
   formTitle: "Yêu cầu liên hệ nhanh",
   mapHint: "Bấm để xem bản đồ",
