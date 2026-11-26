@@ -124,7 +124,7 @@ export const content: CatalogContent = {
     eyebrow: "Đại lý lốp ô tô chính hãng",
     title: "Lốp chính hãng,",
     highlight: "đúng cỡ xe bạn",
-    description: "Lốp cho xe du lịch, SUV – bán tải, xe tải và xe khách. Cho chúng tôi biết cỡ lốp hoặc đời xe, Kim Ngoan tư vấn loại phù hợp và báo giá trong giờ làm việc.",
+    description: "Lốp cho xe du lịch, SUV – bán tải, xe tải và xe khách. Cho chúng tôi biết cỡ lốp hoặc đời xe, Kim Ngoan tư vấn loại phù hợp và báo giá nhanh.",
     stats: [
       { value: "4", label: "Nhóm lốp theo loại xe" },
       { value: "100%", label: "Lốp chính hãng, bảo hành theo hãng" },

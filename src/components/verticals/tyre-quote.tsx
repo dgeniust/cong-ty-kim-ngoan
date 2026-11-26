@@ -72,7 +72,7 @@ export function TyreQuote({ phone, zalo }: { phone: string; zalo: string }) {
         try {
           navigator.clipboard?.writeText(message).catch(() => {});
         } catch {}
-        n.success("Đã nhận yêu cầu báo giá", { description: `Nhân viên Kim Ngoan sẽ gọi số ${tel} trong giờ làm việc (7:00 – 17:00).` });
+        n.success("Đã nhận yêu cầu báo giá", { description: `Nhân viên Kim Ngoan sẽ gọi số ${tel} sớm nhất.` });
       }}
       className="rounded-2xl border-t-4 border-v-spark bg-v-raise p-6 ring-1 ring-v-line sm:p-8"
     >

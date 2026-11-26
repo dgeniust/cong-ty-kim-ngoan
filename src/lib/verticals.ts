@@ -16,6 +16,8 @@ export type Vertical = {
   /** "Liên hệ về …" line on the hub */
   contactLabel: string;
   phone: string;
+  /** Optional second line for the same sector (e.g. tyres have two sales numbers) */
+  phone2?: string;
   seoTitle: string;
   seoDescription: string;
   themeColor: string;
@@ -37,7 +39,7 @@ export const COMPANY = {
   /** Google Maps embed query – use the exact address / coordinates. */
   mapQuery: "Tổ 3, Ấp 2, Quốc Lộ 13, Xã Thành Tâm, Huyện Chơn Thành, Tỉnh Bình Phước, Việt Nam",
   openingHours: "Mo-Su 07:00-17:00",
-  founded: "2015",
+  founded: "1995", // the fertilizer business started in 1995
 };
 
 export const VERTICALS: Record<VerticalId, Vertical> = {
@@ -62,7 +64,8 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     tagline: "Bám đường. Bền bỉ. Chính hãng.",
     description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách chính hãng. Tư vấn đúng cỡ, báo giá qua điện thoại và Zalo.",
     contactLabel: "Liên hệ về lốp xe ô tô",
-    phone: "02713668112",
+    phone: "0333.882.139",
+    phone2: "0347.404.914",
     seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Chơn Thành, Bình Phước",
     seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Tư vấn đúng cỡ, gọi hoặc nhắn Zalo để nhận báo giá.",
     themeColor: "#ffffff",
@@ -75,7 +78,7 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     tagline: "Vững từ lõi thép.",
     description: "Thép xây dựng, thép hình, thép ống – hộp, tôn lợp và thép tấm cho công trình dân dụng, nhà xưởng.",
     contactLabel: "Liên hệ về tôn – sắt thép",
-    phone: "02713668112",
+    phone: "0944.179.979",
     seoTitle: "Tôn, sắt thép Kim Ngoan – Thép xây dựng, tôn lợp Chơn Thành",
     seoDescription: "Thép xây dựng, thép hình, ống hộp, tôn lợp chính phẩm tại Chơn Thành. Gửi danh sách vật tư để nhận báo giá, giao tận công trình.",
     themeColor: "#08090a",
@@ -95,3 +98,6 @@ export const SECTOR_DOT: Record<VerticalId, string> = {
 };
 
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
+
+/** Every number of a sector (main line first). */
+export const sectorPhones = (v: Pick<Vertical, "phone" | "phone2">) => [v.phone, v.phone2].filter((p): p is string => !!p);
