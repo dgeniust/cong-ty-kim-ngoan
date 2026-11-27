@@ -2,17 +2,20 @@ import { realImage } from "@/lib/og";
 import { fitTitle, metaDescription, socialMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import { ArticleDetailPage } from "@/components/phanbon/catalog/article-detail-page";
-import { getArticle, getArticles } from "@/lib/mock/articles";
+import { getFertilizerArticle, getFertilizerArticles } from "@/lib/articles/server";
 import { siteNameFor } from "@/lib/site-name";
 
 type Params = Promise<{ slug: string }>;
 
-export function generateStaticParams() {
-  return getArticles("gioi-thieu").map((a) => ({ slug: a.slug }));
+/** Articles published from the admin after the build still resolve (rendered on first visit, then cached). */
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return (await getFertilizerArticles("gioi-thieu")).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const a = getArticle("gioi-thieu", (await params).slug);
+  const a = await getFertilizerArticle("gioi-thieu", (await params).slug);
   if (!a) return {};
   const url = `/phanbon/gioi-thieu/${a.slug}`;
   return {

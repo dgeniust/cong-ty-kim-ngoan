@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/shared/container";
-import { articleSections, getArticles } from "@/lib/mock/articles";
+import { articleSections } from "@/lib/mock/articles";
+import { getFertilizerArticles } from "@/lib/articles/server";
 import type { ArticleSection } from "@/types/phanbon";
 import { cn } from "@/lib/utils";
 import { ArticleCard } from "./article-card";
@@ -11,9 +12,9 @@ import { PB_PAGE_IMAGES } from "@/constants/page-heads";
 
 const PER_PAGE = 7; // 1 featured + 6
 
-export function ArticleListPage({ section, page: pageParam }: { section: ArticleSection; page?: string }) {
+export async function ArticleListPage({ section, page: pageParam }: { section: ArticleSection; page?: string }) {
   const meta = articleSections[section];
-  const all = getArticles(section);
+  const all = await getFertilizerArticles(section);
   const { items, page, totalPages } = paginate(all, Number(pageParam) || 1, PER_PAGE);
   const [first, ...rest] = items;
 

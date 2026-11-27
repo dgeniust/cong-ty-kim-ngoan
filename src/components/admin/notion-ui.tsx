@@ -193,7 +193,7 @@ export function ImagesField({ label, value, onChange, error, max = 6 }: { label:
         )}
       </div>
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
-      <div className="mt-2 flex gap-2">
+      {value.length < max && <div className="mt-2 flex gap-2">
         <input value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="hoặc dán đường dẫn ảnh: /images/... hoặc https://..." className={cn(INPUT, "py-1.5 text-sm")} />
         <button
           type="button"
@@ -207,7 +207,7 @@ export function ImagesField({ label, value, onChange, error, max = 6 }: { label:
         >
           Thêm
         </button>
-      </div>
+      </div>}
       {error && <p className="mt-1 text-[13px] text-[#d1242f]">{error}</p>}
     </div>
   );

@@ -16,6 +16,8 @@ import type { CatalogContent, CatalogProduct } from "@/types/catalog";
 import { catalogContentSchema } from "@/lib/catalog-content/schema";
 import { CATALOG_CONTENT_DEFAULTS, resetCatalogContent, saveCatalogContent } from "@/lib/catalog-content/server";
 import type { Product } from "@/types/phanbon";
+import { ARTICLE_SITES, articleSchema, readingMinutes, type ArticleSite } from "@/lib/articles/schema";
+import { getAllArticles, saveArticles } from "@/lib/articles/server";
 
 type ActionResult = { ok: true } | { ok: false; error: string; code?: "FORBIDDEN" };
 
@@ -197,4 +199,43 @@ export async function resetCatalogContentAction(site: ContentSite): Promise<Form
   await resetCatalogContent(site);
   revalidatePath("/", "layout");
   return { ok: true, content: CATALOG_CONTENT_DEFAULTS[site] };
+}
+
+/* =====================================================================
+ * Articles – CRUD per sector site (same flow as products)
+ * ===================================================================== */
+/**
+ * `originalSlug` = slug before editing (null for a new article). `insertAt` restores the position on "Undo".
+ * Slugs are unique per section, so /phanbon/tin-tuc/x and /phanbon/dich-vu/x can coexist.
+ */
+export async function upsertArticleAction(site: ArticleSite, input: unknown, original: { section: string; slug: string } | null, insertAt?: number): Promise<FormResult & { slug?: string }> {
+  const denied = await guard();
+  if (denied) return denied;
+  if (!ARTICLE_SITES.includes(site)) return { ok: false, error: "Chuyên trang không hợp lệ" };
+
+  const parsed = articleSchema.safeParse({ ...(input as object), site });
+  if (!parsed.success) return { ok: false, error: "Vui lòng kiểm tra các ô được đánh dấu", fieldErrors: firstErrors(parsed.error.issues) };
+  const next = { ...parsed.data, readingMinutes: readingMinutes(parsed.data.content) };
+
+  const list = [...(await getAllArticles(site))];
+  const idx = original ? list.findIndex((a) => a.section === original.section && a.slug === original.slug) : -1;
+  const clash = list.findIndex((a) => a.section === next.section && a.slug === next.slug);
+  if (clash !== -1 && clash !== idx) return { ok: false, error: "Đường dẫn (slug) đã tồn tại", fieldErrors: { slug: "Đã có bài viết dùng đường dẫn này trong chuyên mục" } };
+  if (idx >= 0) list[idx] = next;
+  else if (typeof insertAt === "number" && insertAt >= 0) list.splice(Math.min(insertAt, list.length), 0, next);
+  else list.unshift(next);
+
+  await saveArticles(site, list);
+  revalidatePath("/", "layout");
+  return { ok: true, slug: next.slug };
+}
+
+export async function deleteArticleAction(site: ArticleSite, section: string, slug: string): Promise<FormResult> {
+  const denied = await guard();
+  if (denied) return denied;
+  if (!ARTICLE_SITES.includes(site)) return { ok: false, error: "Chuyên trang không hợp lệ" };
+  const list = await getAllArticles(site);
+  await saveArticles(site, list.filter((a) => !(a.section === section && a.slug === slug)));
+  revalidatePath("/", "layout");
+  return { ok: true };
 }

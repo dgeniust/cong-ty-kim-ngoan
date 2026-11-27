@@ -1,15 +1,15 @@
-import { articles } from "./articles";
+import type { Article, Product } from "@/types/phanbon";
 import { getCategory } from "./categories";
-import { products } from "./products";
 
 /** Lowercase + strip Vietnamese diacritics so "phan bon" matches "Phân bón". */
 export function normalize(s: string) {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "d").toLowerCase().trim();
 }
 
-export function search(query: string) {
+/** Searches the lists the page passes in (read from the admin stores, so new products and published articles are found). */
+export function search(query: string, { products, articles }: { products: Product[]; articles: Article[] }) {
   const terms = normalize(query).split(/\s+/).filter(Boolean);
-  if (!terms.length) return { products: [], articles: [] };
+  if (!terms.length) return { products: [] as Product[], articles: [] as Article[] };
   const match = (haystack: string) => {
     const h = normalize(haystack);
     return terms.every((t) => h.includes(t));

@@ -9,6 +9,9 @@ import { EmptyState } from "@/components/phanbon/catalog/empty-state";
 import { PageHero } from "@/components/phanbon/catalog/page-hero";
 import { ProductCard } from "@/components/phanbon/catalog/product-card";
 import { search } from "@/lib/mock/search";
+import { getPublishedArticles } from "@/lib/articles/server";
+import { getFertilizerProducts } from "@/lib/products/server";
+import type { Article } from "@/types/phanbon";
 import { cn } from "@/lib/utils";
 
 type SP = Promise<{ q?: string; loai?: string }>;
@@ -29,7 +32,8 @@ const SUGGESTIONS = ["NPK", "phân hữu cơ", "sầu riêng", "cà phê", "vi s
 export default async function SearchPage({ searchParams }: { searchParams: SP }) {
   const { q = "", loai = "tat-ca" } = await searchParams;
   const query = q.trim();
-  const results = search(query);
+  const [products, articles] = await Promise.all([getFertilizerProducts(), getPublishedArticles("phanbon")]);
+  const results = search(query, { products, articles: articles as Article[] });
   const counts = { "tat-ca": results.products.length + results.articles.length, "san-pham": results.products.length, "bai-viet": results.articles.length };
   const showProducts = loai !== "bai-viet" && results.products.length > 0;
   const showArticles = loai !== "san-pham" && results.articles.length > 0;

@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { getContent } from "@/lib/content/store";
 import { cropKey } from "@/lib/content/crop-match";
 import { formatDate, formatOpeningHours } from "@/lib/format";
-import { getArticles } from "@/lib/mock/articles";
+import { getFertilizerArticles } from "@/lib/articles/server";
 import type { Product } from "@/types/phanbon";
 import { getFertilizerProducts } from "@/lib/products/server";
 import { getSettings } from "@/lib/settings/server";
@@ -61,7 +61,7 @@ export default async function HomePage() {
   const { site, about } = content;
   const products = await getFertilizerProducts();
   const featured = [...products].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 6);
-  const news = getArticles("tin-tuc");
+  const news = await getFertilizerArticles("tin-tuc");
   const { COMPANY } = await getSettings();
   const crops: HeroCrop[] = content.crops.items.map((c) => ({ key: cropKey(c.name), name: c.name, description: c.description, image: c.image }));
   const [lead, ...rest] = news.slice(0, 4);

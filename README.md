@@ -105,8 +105,8 @@ src/
 │  ├─ seo.ts · site-name.ts · og.tsx Metadata helpers (titles, descriptions, socialMeta), OG image renderer
 │  ├─ fonts.ts                       next/font/local definitions
 │  ├─ store/json-file.ts             Atomic JSON-file store (the persistence seam)
-│  ├─ settings/ · products/ · content/ · catalog-content/   zod schemas + server readers/writers
-│  ├─ data/                          Tyre/steel catalog access, sample data, news source (getNews)
+│  ├─ settings/ · products/ · articles/ · content/ · catalog-content/   zod schemas + server readers/writers
+│  ├─ data/                          Tyre/steel catalog access, sample data, news source (getNews → article store)
 │  ├─ mock/                          Fertilizer sample data + search
 │  ├─ hub/home.ts                    Builds landing-hub view data on the server
 │  ├─ auth/ · notify/ · crop-store.ts · ui.ts · utils.ts · format.ts
@@ -158,7 +158,7 @@ The images are generated procedurally by `tools/garden-bg/gen.py` (no third-part
 `unicode-range` (Latin, Vietnamese) so only the needed files load; the Vietnamese family is listed first
 in `--font-sans`. Dancing Script (quotes) is not preloaded.
 
-**File-JSON persistence behind one seam.** Settings, products and page content are validated with zod
+**File-JSON persistence behind one seam.** Settings, products, articles and page content are validated with zod
 and stored as JSON in `DATA_DIR` via `lib/store/json-file.ts` (atomic write-then-rename). When a file
 is missing, sample data in code is used. Replacing that module with a database adapter is the only
 change needed to move off the filesystem. Server Actions call `revalidatePath("/", "layout")` after
@@ -167,7 +167,51 @@ every write.
 **Single sources of truth.** Company name, hotline, address, opening hours, social links and per-site
 SEO come from admin → *Thông tin chung* (`data/settings.json`, defaults in `lib/verticals.ts`); the
 fertilizer site reads them too. News for every surface comes from `getNews({ site?, limit? })`
-(`lib/data/news.ts`), also exposed as `GET /api/tin-tuc`.
+(`lib/data/news.ts`, reading the article store), also exposed as `GET /api/tin-tuc`.
+
+**Articles (admin → *Bài viết*).** Same pattern as products: `lib/articles/schema.ts` (zod),
+`lib/articles/server.ts` (store: `data/articles-{phanbon|lopxe|satthep}.json`, seeded from
+`lib/mock/articles.ts` and `lib/articles/seed.ts`), `upsertArticleAction` / `deleteArticleAction` in
+`app/admin/actions.ts`, UI in `components/admin/article-manager.tsx` (list + side-peek editor).
+- Fertilizer has three sections (`tin-tuc`, `dich-vu`, `gioi-thieu`); tyres and steel only `tin-tuc`.
+  A slug is unique within its section.
+- The body is a list of typed blocks – `p`, `h2`, `ul`, `quote`, `img` – the exact blocks the article pages
+  already render, so an admin-written article looks the same as the built-in ones. No HTML is stored.
+- `draft: true` keeps an article out of every public surface (lists, detail page → 404, hub news, sitemap, API).
+- `readingMinutes` is recomputed on the server at each save (~200 words/minute).
+- Detail pages prerender the articles known at build time and set `dynamicParams = true`, so articles
+  published later render on first visit and are cached; every save/delete calls `revalidatePath`.
+
+**Moving articles to a database.** Only `lib/articles/server.ts` changes (keep its function signatures).
+Suggested PostgreSQL table – blocks stay one JSONB column because they are always read and written
+together with their article and their shape is already validated by zod:
+
+```sql
+create table articles (
+  id               uuid primary key default gen_random_uuid(),
+  site             text not null check (site in ('phanbon','lopxe','satthep')),
+  section          text not null check (section in ('tin-tuc','dich-vu','gioi-thieu')),
+  slug             text not null,
+  title            text not null,
+  excerpt          text not null,
+  cover_url        text,            -- object-storage URL (uploads move off the local disk too)
+  art              text,            -- fallback illustration for tyre/steel
+  published_on     date not null,
+  author           text not null,
+  reading_minutes  int  not null default 1,
+  tags             text[] not null default '{}',
+  content          jsonb not null,  -- [{ "type": "p", "text": "…" }, { "type": "img", "src": "…" }, …]
+  draft            boolean not null default false,
+  created_at       timestamptz not null default now(),
+  updated_at       timestamptz not null default now(),
+  unique (site, section, slug)
+);
+create index articles_public_idx on articles (site, section, published_on desc) where not draft;
+```
+
+`getPublishedArticles(site, section)` becomes `select … where site = $1 and section = $2 and not draft
+order by published_on desc`; `upsertArticleAction` becomes an `insert … on conflict (site, section, slug) do
+update` (or an update by `id`). Tags can move to their own table later if tag pages are needed.
 
 **Authentication.** `proxy.ts` gates `/admin/**` and `/api/admin/**` with a signed cookie; the protected
 admin layout re-checks the session on the server (defence in depth). Admin responses are sent with

@@ -9,7 +9,8 @@ import { SmartImage } from "@/components/shared/smart-image";
 import { SectionHeading } from "@/components/phanbon/section-heading";
 import { getContent } from "@/lib/content/store";
 import { formatDate } from "@/lib/format";
-import { articleSections, getArticle, getArticles } from "@/lib/mock/articles";
+import { articleSections } from "@/lib/mock/articles";
+import { getFertilizerArticle, getFertilizerArticles } from "@/lib/articles/server";
 import type { ArticleBlock, ArticleSection } from "@/types/phanbon";
 import { absoluteUrl } from "@/lib/site";
 import { ArticleCard } from "./article-card";
@@ -53,12 +54,13 @@ function Block({ block }: { block: ArticleBlock }) {
 }
 
 export async function ArticleDetailPage({ section, slug }: { section: ArticleSection; slug: string }) {
-  const article = getArticle(section, slug);
+  const article = await getFertilizerArticle(section, slug);
   if (!article) notFound();
   const { site } = await getContent();
   const meta = articleSections[section];
-  const others = getArticles(section).filter((a) => a.slug !== slug);
-  const latest = getArticles("tin-tuc").filter((a) => a.slug !== slug).slice(0, 4);
+  const [inSection, news] = await Promise.all([getFertilizerArticles(section), getFertilizerArticles("tin-tuc")]);
+  const others = inSection.filter((a) => a.slug !== slug);
+  const latest = news.filter((a) => a.slug !== slug).slice(0, 4);
   const url = absoluteUrl(`/phanbon/${section}/${slug}`);
 
   const structured = {
