@@ -20,19 +20,19 @@ const nextConfig: NextConfig = {
   },
 
   //block trang lốp xe và sắt thép khi deploy lên Vercel (chỉ cho phép truy cập trang phân bón)
-  async rewrites() {
-    if (process.env.VERCEL === "1") {
-      return {
-        beforeFiles: [
-          { source: "/satthep", destination: "/404" },
-          { source: "/satthep/:path(.*)", destination: "/404" },
-          { source: "/lopxe", destination: "/404" },
-          { source: "/lopxe/:path(.*)", destination: "/404" },
-        ],
-      };
-    }
-    return { beforeFiles: [] };
-  },
+  // async rewrites() {
+  //   if (process.env.VERCEL === "1") {
+  //     return {
+  //       beforeFiles: [
+  //         { source: "/satthep", destination: "/404" },
+  //         { source: "/satthep/:path(.*)", destination: "/404" },
+  //         { source: "/lopxe", destination: "/404" },
+  //         { source: "/lopxe/:path(.*)", destination: "/404" },
+  //       ],
+  //     };
+  //   }
+  //   return { beforeFiles: [] };
+  // },
   async headers() {
     return [
       { source: "/:path(.*)", headers: securityHeaders },
