@@ -10,7 +10,7 @@ import { getSettings } from "@/lib/settings/server";
 import { telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { Headline } from "./headline";
-import { MediaVideo } from "./media-video";
+import { MediaVideo } from "@/components/shared/media-video";
 import { RebarAnatomy } from "./rebar-anatomy";
 import { SteelBoard } from "./steel-board";
 import { SteelCart, type CartProduct } from "./steel-cart";

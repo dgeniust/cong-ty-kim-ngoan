@@ -7,7 +7,7 @@ application serves a company landing hub and three sector sites, plus a small bu
 | --- | --- | --- |
 | `/` | Landing hub: hero slideshow of the three sectors, about, product showrooms, news, contact form + map | `.theme-hub` (Editorial Industrial – "Golden Harvest & Great Forest") |
 | `/tin-tuc` | All news across sectors, filter `?nganh=phanbon\|lopxe\|satthep` | `.theme-hub` |
-| `/phanbon/**` | Fertilizer & crop-protection site: shop-style hero, farm bulletin (live weather), plant doctor, catalog, search, guides | `.theme-pb` ("Vườn Xanh") |
+| `/phanbon/**` | Fertilizer & crop-protection site: video hero, crop picker with suggestions, plant doctor, catalog, search, guides | `.theme-pb` ("Vườn Xanh") |
 | `/lopxe/**` | Car-tyre site: full-width video hero, size finder, tiers, photo blocks, catalog, **quote-only** contact flow | `.theme-lopxe` (white, orange accent) |
 | `/satthep/**` | Roofing sheet & steel site: video hero, quotation-document layout, weight calculators, photo blocks, catalog, quote-only flow | `.theme-satthep` (white/grey) |
 | `/admin/**` | CMS: shared settings, product databases (3 sectors), page content, guided tours | admin UI (shadcn/ui) |
@@ -28,7 +28,6 @@ All visible copy is Vietnamese; code, comments and documentation are English.
 - **sonner** – toasts (`useNotify`)
 - **lucide-react** – icons
 - Data: JSON files on disk (`data/`), sample data in code as fallback. No database.
-- External API: [Open-Meteo](https://open-meteo.com) (5-day forecast, no key, CC BY 4.0).
 
 Node.js ≥ 20.9 is required (developed on Node 22).
 
@@ -69,7 +68,6 @@ validates the configuration at start-up and logs every problem immediately.
 | `ADMIN_PASSWORD` | ✓ | Admin password, ≥ 8 characters in production. |
 | `AUTH_SECRET` | ✓ | Session signing key, ≥ 32 characters (`openssl rand -base64 48`). Rotating it signs everyone out. |
 | `DATA_DIR` |  | Directory for admin data and uploads. Default `data` (relative to the project root). Must be writable and backed up. |
-| `WEATHER_FIXTURE` |  | `1` returns fixed sample weather instead of calling Open-Meteo – for offline builds and tests only. |
 
 Platform-provided: `NODE_ENV`, `NEXT_RUNTIME` (read by Next.js / instrumentation).
 
@@ -111,7 +109,7 @@ src/
 │  ├─ data/                          Tyre/steel catalog access, sample data, news source (getNews)
 │  ├─ mock/                          Fertilizer sample data + search
 │  ├─ hub/home.ts                    Builds landing-hub view data on the server
-│  ├─ auth/ · notify/ · weather.ts · crop-store.ts · ui.ts · utils.ts · format.ts
+│  ├─ auth/ · notify/ · crop-store.ts · ui.ts · utils.ts · format.ts
 ├─ instrumentation.ts                Env validation on boot
 └─ proxy.ts                          Admin gate for /admin/** and /api/admin/**
 public/                              Static images (garden/ backdrop set, photos/, decor/…)
@@ -146,7 +144,7 @@ heading variables. Shared components read the variables, so one component render
 A single type scale (`text-display … text-micro`) and button scale (`lib/ui.ts`: 36/44/52 px) apply
 everywhere; `cn()` is configured with the custom scale so `tailwind-merge` does not drop colour classes.
 
-**Sector-site media.** Photos and videos of the tyre and steel home pages live in `src/constants/lopxe-media.ts` and `src/constants/satthep-media.ts` (helpers in `src/constants/media.ts`); inner-page title photos in `src/constants/page-heads.ts`. Sources:
+**Sector-site media.** Photos and videos of the tyre and steel home pages live in `src/constants/lopxe-media.ts` `src/constants/satthep-media.ts` and `src/constants/phanbon-media.ts` (helpers in `src/constants/media.ts`); inner-page title photos in `src/constants/page-heads.ts`. Sources:
 local files from `public/`, free Unsplash photos and Mixkit clips (both licences allow commercial use without
 attribution). `MediaVideo` plays muted loops only while on screen, has a pause button and never autoplays for
 visitors who prefer reduced motion. Before go-live, download the remote files into `public/lopxe/` and point the
@@ -176,8 +174,7 @@ admin layout re-checks the session on the server (defence in depth). Admin respo
 `X-Robots-Tag: noindex` and `Cache-Control: no-store`.
 
 **Caching.** Catalog products, articles and category pages are prerendered (SSG) with
-`generateStaticParams`; items added later render on demand. The fertilizer home uses ISR tied to the
-30-minute weather cache. `next/image` serves AVIF/WebP with a 30-day cache TTL; uploads are served as
+`generateStaticParams`; items added later render on demand. `next/image` serves AVIF/WebP with a 30-day cache TTL; uploads are served as
 immutable.
 
 **Error and loading UI.** Every route group has an `error.tsx` built on `components/shared/error-view.tsx`

@@ -12,7 +12,7 @@ import { sectorPhones, telHref, type Vertical } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { AutoCarousel } from "./auto-carousel";
 import { Headline } from "./headline";
-import { MediaVideo } from "./media-video";
+import { MediaVideo } from "@/components/shared/media-video";
 import { TyreQuote } from "./tyre-quote";
 import { TyreCheck } from "./tyre-check";
 import { TyreHero } from "./tyre-hero";
@@ -75,8 +75,9 @@ export async function LopXeHome({
           overlay={
             <>
               {/* phones: even dark wash (text runs the full height); desktop: dark on the text side + a bottom band under the figures */}
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,14,10,0.7)_0%,rgba(20,14,10,0.6)_40%,rgba(20,14,10,0.9)_100%)] lg:bg-[linear-gradient(90deg,rgba(20,14,10,0.88)_0%,rgba(20,14,10,0.62)_45%,rgba(20,14,10,0.25)_100%)]" />
-              <div className="absolute inset-x-0 bottom-0 hidden h-56 bg-[linear-gradient(0deg,rgba(20,14,10,0.85),rgba(20,14,10,0))] lg:block" />
+              {/* the right half stays clear on desktop so the rolling wheels are visible */}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,14,10,0.6)_0%,rgba(20,14,10,0.42)_40%,rgba(20,14,10,0.88)_100%)] lg:bg-[linear-gradient(90deg,rgba(20,14,10,0.86)_0%,rgba(20,14,10,0.5)_42%,rgba(20,14,10,0)_72%)]" />
+              <div className="absolute inset-x-0 bottom-0 hidden h-48 bg-[linear-gradient(0deg,rgba(20,14,10,0.82),rgba(20,14,10,0))] lg:block" />
             </>
           }
         >

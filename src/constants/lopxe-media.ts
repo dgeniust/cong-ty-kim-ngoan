@@ -13,10 +13,11 @@ import { mixkit, unsplash, type MediaImage } from "./media";
 export const LOPXE_MEDIA = {
   /** Full-width hero video (muted loop). */
   heroVideo: {
-    sources: mixkit(40065),
+    // landscape close-ups of big wheels turning (the old #40065 was a portrait clip, so a wide hero zoomed past the wheel)
+    sources: [...mixkit(47840), ...mixkit(47836)],
     poster: "/photos/lopxe-hero.jpg",
-    label: "Cận cảnh bánh xe lăn trên đường đất",
-    credit: "Mixkit #40065 – Tire of a jeep on a dirt road",
+    label: "Cận cảnh bánh xe gai lớn lăn qua đường bùn",
+    credit: "Mixkit #47840 – Large wheels of an off road vehicle driving through thick mud (fallback #47836)",
   },
   /** Second video – "the right tread for the road you drive". */
   roadVideo: {

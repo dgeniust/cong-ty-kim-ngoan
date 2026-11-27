@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { cropKey, cropLabel as label } from "@/lib/content/crop-match";
 import { setCrop, useCrop } from "@/lib/crop-store";
 import { getCategory } from "@/lib/mock/categories";
 import { cn } from "@/lib/utils";
+import { SmartImage } from "@/components/shared/smart-image";
 import { CropPicker } from "./crop-picker";
 import { npkOf, type LabelProduct } from "./npk-label";
 
@@ -45,11 +45,10 @@ function MiniLabel({ p }: { p: LabelProduct }) {
 }
 
 /**
- * Right half of the fertilizer hero: real photo of the selected crop's garden, the crop picker
- * and three product suggestions for that crop. The selected crop is page-wide state (crop-store),
- * shared with the farm bulletin further down.
+ * Crop panel: real photo of the selected crop's garden, the crop picker and three product suggestions
+ * for that crop. The selected crop is page-wide state (crop-store), remembered between visits.
  */
-export function HeroCropPanel({ crops, products }: { crops: HeroCrop[]; products: LabelProduct[] }) {
+export function HeroCropPanel({ crops, products, className }: { crops: HeroCrop[]; products: LabelProduct[]; className?: string }) {
   const key = useCrop(crops.map((c) => c.key));
   const crop = crops.find((c) => c.key === key) ?? crops[0];
   const picks = [
@@ -63,9 +62,9 @@ export function HeroCropPanel({ crops, products }: { crops: HeroCrop[]; products
   if (!crop) return null;
 
   return (
-    <div className="relative isolate min-h-[34rem] overflow-hidden rounded-lg bg-brand-900 lg:col-span-6 lg:min-h-0">
+    <div className={cn("relative isolate min-h-[34rem] overflow-hidden rounded-lg bg-brand-900", className)}>
       {crops.map((c, i) => (
-        <Image
+        <SmartImage
           key={c.key}
           src={c.image}
           alt={`Vườn ${label(c.name).toLowerCase()}`}
