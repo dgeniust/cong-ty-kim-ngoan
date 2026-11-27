@@ -35,7 +35,7 @@ const NAV_SECTORS: NavSector[] = [
       { label: "Lốp xe du lịch", href: "/lopxe/san-pham?nhom=xe-du-lich" },
       { label: "Lốp SUV – bán tải", href: "/lopxe/san-pham?nhom=suv-ban-tai" },
       { label: "Lốp xe tải nhẹ", href: "/lopxe/san-pham?nhom=xe-tai-nhe" },
-      { label: "Lốp xe tải – xe khách", href: "/lopxe/san-pham?nhom=xe-tai-xe-khach" },
+      { label: "Lốp xe tải, container, xe khách", href: "/lopxe/san-pham?nhom=xe-tai-xe-khach" },
     ],
   },
   {

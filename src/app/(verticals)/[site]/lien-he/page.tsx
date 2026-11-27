@@ -6,7 +6,7 @@ import { VPageHead } from "@/components/verticals/v-page-head";
 
 import { getProduct } from "@/lib/data/catalog";
 import { resolveSite } from "@/lib/site-params";
-import { isCatalogSite, sectorPhones, telHref } from "@/lib/verticals";
+import { isCatalogSite, sectorPhones, telHref, sectorAddress } from "@/lib/verticals";
 import { getSettings } from "@/lib/settings/server";
 import { Container } from "@/components/shared/container";
 import { siteNameFor } from "@/lib/site-name";
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isCatalogSite(site)) return {};
   const v = VERTICALS[site];
   const title = `Liên hệ báo giá ${v.short.toLowerCase()}`;
-  const description = metaDescription([`${v.contactLabel}: ${v.phone}`, `Địa chỉ: ${COMPANY.address}`, "Báo giá nhanh qua điện thoại hoặc Zalo"]);
+  const description = metaDescription([`${v.contactLabel}: ${v.phone}`, `Địa chỉ: ${sectorAddress(v, COMPANY.address)}`, "Báo giá nhanh qua điện thoại hoặc Zalo"]);
   return { title, description, ...socialMeta({ title, description, path: `${v.base}/lien-he`, siteName: await siteNameFor(site) }) };
 }
 
@@ -34,7 +34,7 @@ export default async function Contact({ params, searchParams }: Props) {
     ...sectorPhones(vertical).map((p, i) => ({ icon: Phone, label: i ? "Điện thoại 2" : "Điện thoại", value: p, href: telHref(p) })),
     { icon: MessageCircle, label: "Zalo", value: "Nhắn Zalo báo giá", href: COMPANY.zalo },
     { icon: Mail, label: "Email", value: COMPANY.email, href: `mailto:${COMPANY.email}` },
-    { icon: MapPin, label: "Địa chỉ", value: COMPANY.address },
+    { icon: MapPin, label: "Địa chỉ", value: sectorAddress(vertical, COMPANY.address) },
     { icon: Clock, label: "Giờ mở cửa", value: "07:00 – 17:00, tất cả các ngày" },
   ];
 

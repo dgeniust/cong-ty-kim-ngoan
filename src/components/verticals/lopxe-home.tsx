@@ -8,7 +8,7 @@ import { LOPXE_COPY, LOPXE_MEDIA } from "@/constants/lopxe-media";
 import { TYRE_TIERS } from "@/constants/vertical-extras";
 import { formatDate, formatOpeningHours } from "@/lib/format";
 import { getSettings } from "@/lib/settings/server";
-import { sectorPhones, telHref, type Vertical } from "@/lib/verticals";
+import { sectorPhones, telHref, type Vertical, sectorAddress } from "@/lib/verticals";
 import { cn } from "@/lib/utils";
 import { AutoCarousel } from "./auto-carousel";
 import { Headline } from "./headline";
@@ -71,12 +71,13 @@ export async function LopXeHome({
         <MediaVideo
           priority
           video={M.heroVideo}
+          videoClassName="brightness-[1.15] saturate-[1.08]"
           buttonClassName="bottom-5 right-4 sm:right-6 md:bottom-7 lg:right-8"
           overlay={
             <>
               {/* phones: even dark wash (text runs the full height); desktop: dark on the text side + a bottom band under the figures */}
               {/* the right half stays clear on desktop so the rolling wheels are visible */}
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,14,10,0.6)_0%,rgba(20,14,10,0.42)_40%,rgba(20,14,10,0.88)_100%)] lg:bg-[linear-gradient(90deg,rgba(20,14,10,0.86)_0%,rgba(20,14,10,0.5)_42%,rgba(20,14,10,0)_72%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,14,10,0.66)_0%,rgba(20,14,10,0.58)_45%,rgba(20,14,10,0.88)_100%)] lg:bg-[linear-gradient(90deg,rgba(20,14,10,0.86)_0%,rgba(20,14,10,0.62)_38%,rgba(20,14,10,0)_68%)]" />
               <div className="absolute inset-x-0 bottom-0 hidden h-48 bg-[linear-gradient(0deg,rgba(20,14,10,0.82),rgba(20,14,10,0))] lg:block" />
             </>
           }
@@ -87,10 +88,14 @@ export async function LopXeHome({
                 <p className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3.5 py-1.5 text-caption font-semibold backdrop-blur-sm">
                   <span aria-hidden className="size-1.5 rounded-full bg-v-spark" /> {COMPANY.legalName} · {hero.eyebrow}
                 </p>
-                <h1 id="hero-title" className="mt-6 text-display v-display text-white">
-                  <Headline h={hero} pillClassName="text-[#f6b98a]" />
+                {/* three lines: the promise big, then two shorter lines (service, safety) one size down */}
+                <h1 id="hero-title" className="mt-6 text-white">
+                  <span className="block text-display v-display">{hero.title}</span>
+                  {hero.highlight && <span className="mt-3 block text-[clamp(1.5rem,2.7vw,2.375rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-[#f6b98a]">{hero.highlight}</span>}
+                  {hero.after && <span className="mt-1 block text-[clamp(1.5rem,2.7vw,2.375rem)] font-semibold leading-[1.15] tracking-[-0.02em]">{hero.after}</span>}
                 </h1>
-                <p className="mt-5 max-w-xl text-lead leading-relaxed text-white/85">{hero.description}</p>
+                <p className="mt-5 max-w-xl text-lead leading-relaxed text-white/90">{hero.description}</p>
+                {hero.note && <p className="mt-3 border-l-2 border-[#f6b98a] pl-3 text-body font-semibold italic text-white">{hero.note}</p>}
                 <div className="mt-7 flex flex-wrap gap-2.5">
                   <VButton asChild size="lg">
                     <a href="#bao-gia">
@@ -121,7 +126,7 @@ export async function LopXeHome({
               </div>
 
               {/* vehicle types – the catalogue at a glance */}
-              <nav aria-label="Lốp theo loại xe" className="rounded-2xl bg-white/10 p-2 ring-1 ring-white/15 backdrop-blur-md lg:col-span-5">
+              <nav aria-label="Lốp theo loại xe" className="rounded-2xl bg-[#1c140e]/55 p-2 ring-1 ring-white/15 backdrop-blur-md lg:col-span-5">
                 <p className="px-3 pb-1 pt-2 text-caption font-semibold uppercase tracking-[0.12em] text-white/70">Lốp cho từng loại xe</p>
                 <ul>
                   {categories.map((c) => (
@@ -291,7 +296,7 @@ export async function LopXeHome({
             <p className="flex gap-3 text-body text-v-fg">
               <MapPin className="mt-0.5 size-5 shrink-0 text-v-accent" aria-hidden />
               <span>
-                {COMPANY.address}
+                {sectorAddress(vertical, COMPANY.address)}
                 <span className="block text-small text-v-mute">{hours}</span>
               </span>
             </p>

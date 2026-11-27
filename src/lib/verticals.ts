@@ -18,6 +18,8 @@ export type Vertical = {
   phone: string;
   /** Optional second line for the same sector (e.g. tyres have two sales numbers) */
   phone2?: string;
+  /** Optional shop address of this sector (falls back to the company address) */
+  address?: string;
   seoTitle: string;
   seoDescription: string;
   themeColor: string;
@@ -62,12 +64,13 @@ export const VERTICALS: Record<VerticalId, Vertical> = {
     name: "Lốp xe ô tô",
     short: "Lốp xe",
     tagline: "Bám đường. Bền bỉ. Chính hãng.",
-    description: "Lốp xe du lịch, SUV – bán tải, xe tải và xe khách chính hãng. Tư vấn đúng cỡ, báo giá qua điện thoại và Zalo.",
+    description: "Lốp xe du lịch, SUV – bán tải, xe tải, container và xe khách chính hãng. Tư vấn đúng cỡ, báo giá qua điện thoại và Zalo.",
     contactLabel: "Liên hệ về lốp xe ô tô",
     phone: "0333.882.139",
     phone2: "0347.404.914",
+    address: "Khu phố 5, Chơn Thành, Bình Phước",
     seoTitle: "Lốp xe ô tô chính hãng Kim Ngoan – Chơn Thành, Bình Phước",
-    seoDescription: "Đại lý lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải. Tư vấn đúng cỡ, gọi hoặc nhắn Zalo để nhận báo giá.",
+    seoDescription: "Lốp xe ô tô chính hãng tại Chơn Thành: lốp xe du lịch, SUV, bán tải, xe tải, container. Bảo dưỡng lốp đúng cách, tư vấn đúng cỡ, gọi hoặc nhắn Zalo để nhận báo giá.",
     themeColor: "#ffffff",
   },
   satthep: {
@@ -98,6 +101,9 @@ export const SECTOR_DOT: Record<VerticalId, string> = {
 };
 
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
+
+/** Shop address of a sector, or the company address. */
+export const sectorAddress = (v: Pick<Vertical, "address">, companyAddress: string) => v.address || companyAddress;
 
 /** Every number of a sector (main line first). */
 export const sectorPhones = (v: Pick<Vertical, "phone" | "phone2">) => [v.phone, v.phone2].filter((p): p is string => !!p);

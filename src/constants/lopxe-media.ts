@@ -41,7 +41,7 @@ export const LOPXE_MEDIA = {
     "xe-du-lich": { src: unsplash("photo-1700461213586-81ea85884b99", 900), alt: "Bánh xe du lịch màu trắng", credit: "Unsplash – Vincent Raine" },
     "suv-ban-tai": { src: unsplash("photo-1708805283017-c662be2c7a44", 900), alt: "Lốp SUV trên mặt đường ướt", credit: "Unsplash – Zac Nielson" },
     "xe-tai-nhe": { src: "/hero-tyre.jpg", alt: "Lốp tải nhẹ trên kệ" },
-    "xe-tai-xe-khach": { src: "/photos/lopxe-cua-hang.jpg", alt: "Kho lốp xe tải, xe khách" },
+    "xe-tai-xe-khach": { src: "/photos/lopxe-cua-hang.jpg", alt: "Kho lốp xe tải, container, xe khách" },
   } as Record<string, MediaImage>,
   /** Next to the quote steps. */
   quote: { src: unsplash("photo-1708805282683-50a060eba80f", 1200), alt: "Thợ thay lốp cho khách", credit: "Unsplash – Zac Nielson" },
