@@ -61,7 +61,7 @@ export function PbHero({
             <div className="lg:col-span-7">
               <p className="inline-block max-w-full rounded-2xl bg-white/12 px-3.5 py-1.5 text-caption font-semibold leading-relaxed backdrop-blur-sm">
                 <span aria-hidden className="mr-2 inline-block size-1.5 rounded-full bg-sun-300 align-middle" />
-                <BrandText text={company} /> <span className="whitespace-nowrap">· Đại lý phân bón &amp; thuốc BVTV</span>
+                <BrandText text={company} />
               </p>
               <h1 id="hero-title" className="mt-6 text-display font-semibold !text-white">
                 <span className="sr-only">{company} – </span>
