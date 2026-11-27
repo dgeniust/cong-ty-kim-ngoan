@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowUp, ArrowUpRight, Heading2, Image as ImageIcon, List, Loader2, Newspaper, Pilcrow, Plus, Quote, Search, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, Columns2, Eye, Heading2, Image as ImageIcon, List, Loader2, Monitor, Newspaper, PencilLine, Pilcrow, Plus, Quote, Search, Smartphone, Trash2, X } from "lucide-react";
 import { deleteArticleAction, upsertArticleAction, type FieldErrors } from "@/app/admin/actions";
 import { useNotify } from "@/hooks/use-notify";
 import { failure } from "./notify-helpers";
@@ -12,6 +12,8 @@ import { ART_KINDS } from "@/lib/products/schema";
 import { articleSchema, SECTIONS_BY_SITE, type ArticleSite, type StoredArticle } from "@/lib/articles/schema";
 import type { ArtKind } from "@/types/catalog";
 import type { ArticleBlock } from "@/types/phanbon";
+import type { Vertical } from "@/lib/verticals";
+import type { PreviewMessage } from "./article-preview-frame";
 import { cn } from "@/lib/utils";
 import { BTN_DANGER, BTN_PRIMARY, BTN_TEXT, ImagesField, PageHeader, TextField, Toggle } from "./notion-ui";
 
@@ -19,6 +21,8 @@ type Section = StoredArticle["section"];
 /** Article as edited in the admin – blocks carry a client-only key so React keeps their inputs stable. */
 type Keyed = ArticleBlock & { _k: string };
 type Draft = Omit<StoredArticle, "content" | "site"> & { content: Keyed[] };
+/** Extra data the live preview needs: the fertilizer call-card number, or the tyre/steel site (header, colours). */
+export type PreviewContext = { phone: string; vertical?: Vertical };
 
 const SECTION_LABEL: Record<Section, string> = { "tin-tuc": "Tin tức", "dich-vu": "Dịch vụ", "gioi-thieu": "Giới thiệu" };
 const SECTION_TONE: Record<Section, string> = { "tin-tuc": "bg-hub-sky-soft text-[#0b5394]", "dich-vu": "bg-hub-mint-soft text-[#1a6b46]", "gioi-thieu": "bg-hub-marigold-soft text-[#7a5200]" };
@@ -96,7 +100,7 @@ function Thumb({ a, className }: { a: Pick<Draft, "cover" | "art" | "title">; cl
   );
 }
 
-export function ArticleManager({ site, articles }: { site: ArticleSite; articles: StoredArticle[] }) {
+export function ArticleManager({ site, articles, preview }: { site: ArticleSite; articles: StoredArticle[]; preview: PreviewContext }) {
   const meta = META[site];
   const sections = SECTIONS_BY_SITE[site];
   const router = useRouter();
@@ -265,6 +269,7 @@ export function ArticleManager({ site, articles }: { site: ArticleSite; articles
           site={site}
           original={editing.original}
           initial={editing.data}
+          preview={preview}
           onClose={() => setEditing(null)}
           onDelete={() => editing.original && setConfirmDelete(articles.find((a) => a.section === editing.original!.section && a.slug === editing.original!.slug) ?? null)}
           onSaved={() => {
@@ -307,7 +312,15 @@ function PropRow({ label, children, error }: { label: string; children: React.Re
 }
 const PROP_INPUT = "w-full rounded-md px-2 py-1.5 text-sm text-hub-ink outline-none transition-colors placeholder:text-hub-ink/30 hover:bg-hub-ink/[0.04] focus:bg-hub-paper focus:shadow-[0_0_0_1px_var(--color-hub-blue),0_0_0_4px_var(--color-hub-blue-tint)] aria-[invalid=true]:shadow-[0_0_0_1px_#d1242f]";
 
-function ArticlePeek({ site, original, initial, onClose, onDelete, onSaved }: { site: ArticleSite; original: { section: Section; slug: string } | null; initial: Draft; onClose: () => void; onDelete: () => void; onSaved: () => void }) {
+function ArticlePeek({ site, original, initial, preview, onClose, onDelete, onSaved }: { site: ArticleSite; original: { section: Section; slug: string } | null; initial: Draft; preview: PreviewContext; onClose: () => void; onDelete: () => void; onSaved: () => void }) {
+  // write / split (write + live preview) / preview only; split needs a wide screen, so it starts there on desktops
+  const wide = useWide();
+  const [mode, setMode] = useState<"edit" | "split" | "preview">(() => (typeof window !== "undefined" && window.innerWidth >= WIDE ? "split" : "edit"));
+  const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [focusBlock, setFocusBlock] = useState<{ index: number; at: number } | null>(null);
+  const shown = mode === "split" && !wide ? "edit" : mode;
+  const showEditor = shown !== "preview";
+  const showPreview = shown !== "edit";
   const [d, setD] = useState(initial);
   const [slugTouched, setSlugTouched] = useState(original !== null);
   const [tagText, setTagText] = useState(initial.tags.join(", "));
@@ -400,7 +413,7 @@ function ArticlePeek({ site, original, initial, onClose, onDelete, onSaved }: { 
   return (
     <div className="fixed inset-0 z-50">
       <button type="button" aria-label="Đóng" onClick={close} className="absolute inset-0 animate-fade bg-black/20" />
-      <aside role="dialog" aria-modal="true" aria-label={original ? `Sửa ${initial.title}` : "Viết bài mới"} className="absolute inset-y-0 right-0 flex w-full max-w-[760px] animate-[peek_.24s_cubic-bezier(.2,.8,.2,1)] flex-col border-l border-hub-line bg-hub-paper shadow-[-8px_0_32px_rgb(0_0_0/0.08)]">
+      <aside role="dialog" aria-modal="true" aria-label={original ? `Sửa ${initial.title}` : "Viết bài mới"} className={cn("absolute inset-y-0 right-0 flex w-full animate-[peek_.24s_cubic-bezier(.2,.8,.2,1)] flex-col border-l border-hub-line bg-hub-paper shadow-[-8px_0_32px_rgb(0_0_0/0.08)] transition-[max-width] duration-300", showPreview ? "max-w-[1680px]" : "max-w-[760px]")}>
         <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-hub-line px-3">
           <div className="flex min-w-0 items-center gap-1.5 text-sm text-hub-ink/55">
             <button type="button" onClick={close} aria-label="Đóng" className="grid size-8 place-items-center rounded-md hover:bg-hub-ink/5">
@@ -411,14 +424,40 @@ function ArticlePeek({ site, original, initial, onClose, onDelete, onSaved }: { 
             <span aria-hidden>/</span>
             <span className="truncate text-hub-ink">{original ? "Sửa bài viết" : "Bài viết mới"}</span>
           </div>
-          {original && !initial.draft && (
-            <a href={href(site, original.section, original.slug)} target="_blank" rel="noopener" className={cn(BTN_TEXT, "h-8 px-2.5")}>
-              Mở trên web <ArrowUpRight />
-            </a>
-          )}
+          <div className="flex items-center gap-2">
+            <Segmented
+              label="Chế độ soạn"
+              value={shown}
+              onChange={setMode}
+              options={[
+                { value: "edit", label: "Soạn bài", icon: PencilLine },
+                ...(wide ? [{ value: "split" as const, label: "Chia đôi", icon: Columns2 }] : []),
+                { value: "preview", label: "Xem trước", icon: Eye },
+              ]}
+            />
+            {showPreview && (
+              <Segmented
+                label="Khổ màn hình xem trước"
+                value={device}
+                onChange={setDevice}
+                iconOnly
+                options={[
+                  { value: "desktop", label: "Máy tính", icon: Monitor },
+                  { value: "mobile", label: "Điện thoại", icon: Smartphone },
+                ]}
+              />
+            )}
+            {original && !initial.draft && (
+              <a href={href(site, original.section, original.slug)} target="_blank" rel="noopener" className={cn(BTN_TEXT, "hidden h-8 px-2.5 xl:inline-flex")}>
+                Mở trên web <ArrowUpRight />
+              </a>
+            )}
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto overscroll-contain px-6 pb-10 pt-8 sm:px-10">
+        <div className="flex min-h-0 flex-1">
+        {showEditor && (
+        <div className={cn("overflow-y-auto overscroll-contain px-6 pb-10 pt-8 sm:px-10", showPreview ? "w-[min(640px,42%)] shrink-0 border-r border-hub-line" : "flex-1")}>
           <Thumb a={d} className="h-16 w-24 rounded-xl" />
           <label className="sr-only" htmlFor="article-title">Tiêu đề bài viết</label>
           <textarea
@@ -519,7 +558,14 @@ function ArticlePeek({ site, original, initial, onClose, onDelete, onSaved }: { 
                 <span className="text-[12px] tabular-nums text-hub-ink/40">{words} chữ · ~{Math.max(1, Math.round(words / 200))} phút đọc</span>
               </div>
               {err("content") && <p className="mb-2 text-[13px] text-[#d1242f]">{err("content")}</p>}
-              <ol className="space-y-2">
+              <ol
+                className="space-y-2"
+                onFocusCapture={(e) => {
+                  // keep the preview on the block being edited
+                  const i = Number((e.target as HTMLElement).closest<HTMLElement>("[data-index]")?.dataset.index);
+                  if (!Number.isNaN(i)) setFocusBlock({ index: i, at: Date.now() });
+                }}
+              >
                 {d.content.map((b, i) => (
                   <BlockEditor
                     key={b._k}
@@ -550,6 +596,9 @@ function ArticlePeek({ site, original, initial, onClose, onDelete, onSaved }: { 
               </div>
             </section>
           </div>
+        </div>
+        )}
+        {showPreview && <PreviewPane site={site} draft={d} preview={preview} device={device} focus={focusBlock} />}
         </div>
 
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-hub-line px-4 py-3">
@@ -590,7 +639,7 @@ function BlockEditor({ block, index, count, error, onChange, onMove, onRemove }:
   const tool = "grid size-7 place-items-center rounded-md text-hub-ink/45 hover:bg-hub-ink/5 hover:text-hub-ink disabled:pointer-events-none disabled:opacity-30";
 
   return (
-    <li data-block={block._k} className={cn("group rounded-lg border bg-hub-paper p-2 transition-colors", error ? "border-[#d1242f]" : "border-hub-line focus-within:border-hub-blue/50")}>
+    <li data-block={block._k} data-index={index} className={cn("group rounded-lg border bg-hub-paper p-2 transition-colors", error ? "border-[#d1242f]" : "border-hub-line focus-within:border-hub-blue/50")}>
       <div className="flex items-center justify-between gap-2 px-1">
         <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-hub-ink/50">
           <Icon className="size-3.5" aria-hidden /> {label}
@@ -629,5 +678,135 @@ function BlockEditor({ block, index, count, error, onChange, onMove, onRemove }:
       )}
       {error && <p className="px-2 pt-1 text-[12px] text-[#d1242f]">{error}</p>}
     </li>
+  );
+}
+
+/* ---------------- Live preview ---------------- */
+
+const WIDE = 1200;
+const subscribeWide = (cb: () => void) => {
+  const mq = window.matchMedia(`(min-width: ${WIDE}px)`);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+/** True on screens wide enough for the editor and the preview side by side. */
+function useWide() {
+  return useSyncExternalStore(subscribeWide, () => window.matchMedia(`(min-width: ${WIDE}px)`).matches, () => false);
+}
+
+function Segmented<T extends string>({ label, value, onChange, options, iconOnly }: { label: string; value: T; onChange: (v: T) => void; options: { value: T; label: string; icon: typeof Eye }[]; iconOnly?: boolean }) {
+  return (
+    <div role="radiogroup" aria-label={label} className="flex rounded-md bg-hub-canvas p-0.5">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          aria-checked={value === o.value}
+          aria-label={iconOnly ? o.label : undefined}
+          title={iconOnly ? o.label : undefined}
+          onClick={() => onChange(o.value)}
+          className={cn("inline-flex h-7 items-center gap-1.5 rounded px-2 text-[13px] transition-colors", value === o.value ? "bg-hub-paper font-medium text-hub-ink shadow-[0_1px_2px_rgb(0_0_0/0.08)]" : "text-hub-ink/55 hover:text-hub-ink")}
+        >
+          <o.icon className="size-3.5" aria-hidden />
+          {!iconOnly && <span className="hidden sm:inline">{o.label}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const FRAME_WIDTH = { desktop: 1280, mobile: 390 } as const;
+
+/** What the frame draws: the draft as the page would show it (empty blocks are left out, as on save). */
+function previewMessage(site: ArticleSite, d: Draft, ctx: PreviewContext): PreviewMessage {
+  const content = d.content
+    .map(({ _k, ...b }) => {
+      void _k;
+      return b as ArticleBlock;
+    })
+    .filter((b) => (b.type === "ul" ? b.items.length > 0 : b.type === "img" ? !!b.src : b.text.trim()));
+  const words = content.map((b) => (b.type === "ul" ? b.items.join(" ") : b.type === "img" ? (b.caption ?? "") : b.text)).join(" ").split(/\s+/).filter(Boolean).length;
+  const common = {
+    title: d.title.trim() || "Tiêu đề bài viết",
+    excerpt: d.excerpt.trim() || "Tóm tắt bài viết sẽ hiện ở đây.",
+    author: d.author || "Kim Ngoan",
+    date: d.date || today(),
+    readingMinutes: Math.max(1, Math.round(words / 200)),
+    tags: d.tags,
+    content,
+  };
+  if (site === "phanbon") return { type: "kn-preview-data", site, sectionTitle: SECTION_LABEL[d.section], phone: ctx.phone, article: { ...common, section: d.section, cover: d.cover ?? "" } };
+  return { type: "kn-preview-data", site, vertical: ctx.vertical!, article: { ...common, cover: d.cover, art: d.art } };
+}
+
+/**
+ * The article rendered by /admin/xem-truoc inside an iframe, at a real viewport width (1280 px desktop or 390 px phone)
+ * and scaled down to fit, so the page's responsive layout is exactly what visitors get.
+ */
+function PreviewPane({ site, draft, preview, device, focus }: { site: ArticleSite; draft: Draft; preview: PreviewContext; device: "desktop" | "mobile"; focus: { index: number; at: number } | null }) {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const [ready, setReady] = useState(false);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const width = FRAME_WIDTH[device];
+  const pad = device === "mobile" ? 48 : 32;
+  const scale = box.w ? Math.min(1, (box.w - pad) / width) : 0;
+  const height = device === "mobile" ? Math.min(844, (box.h - pad) / Math.max(scale, 0.01)) : (box.h - pad) / Math.max(scale, 0.01);
+
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setBox({ w: e.contentRect.width, h: e.contentRect.height }));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // the frame says when it is listening
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin === window.location.origin && e.source === frameRef.current?.contentWindow && e.data?.type === "kn-preview-ready") setReady(true);
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  // send the draft (lightly debounced while typing)
+  const message = useMemo(() => previewMessage(site, draft, preview), [site, draft, preview]);
+  useEffect(() => {
+    if (!ready) return;
+    const t = setTimeout(() => frameRef.current?.contentWindow?.postMessage(message, window.location.origin), 120);
+    return () => clearTimeout(t);
+  }, [message, ready]);
+
+  useEffect(() => {
+    if (ready && focus) frameRef.current?.contentWindow?.postMessage({ type: "kn-preview-focus", index: focus.index } satisfies PreviewMessage, window.location.origin);
+  }, [focus, ready]);
+
+  return (
+    <section aria-label="Xem trước bài viết" className="flex min-w-0 flex-1 flex-col bg-hub-canvas">
+      <p className="flex items-center justify-between gap-3 border-b border-hub-line px-4 py-2 text-[12px] text-hub-ink/50">
+        <span className="inline-flex items-center gap-1.5">
+          <Eye className="size-3.5" aria-hidden /> Xem trước – bài hiển thị đúng như trên website{draft.draft ? " (đang là bản nháp)" : ""}
+        </span>
+        <span className="tabular-nums">{width}px{scale && scale < 1 ? ` · thu nhỏ ${Math.round(scale * 100)}%` : ""}</span>
+      </p>
+      <div ref={boxRef} className="relative min-h-0 flex-1 overflow-hidden">
+        {scale > 0 && (
+          <div
+            className={cn("absolute left-1/2 top-4 -translate-x-1/2 overflow-hidden bg-white", device === "mobile" ? "rounded-[28px] shadow-[0_0_0_8px_#1f1f1f,0_20px_50px_rgb(0_0_0/0.25)]" : "rounded-md shadow-[0_0_0_1px_var(--color-hub-line),0_12px_32px_rgb(0_0_0/0.10)]")}
+            style={{ width: width * scale, height: height * scale }}
+          >
+            <iframe
+              ref={frameRef}
+              src="/admin/xem-truoc"
+              title="Xem trước bài viết"
+              className="origin-top-left border-0"
+              style={{ width, height, transform: `scale(${scale})` }}
+            />
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

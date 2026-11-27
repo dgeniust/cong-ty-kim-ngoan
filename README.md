@@ -179,6 +179,11 @@ fertilizer site reads them too. News for every surface comes from `getNews({ sit
   already render, so an admin-written article looks the same as the built-in ones. No HTML is stored.
 - `draft: true` keeps an article out of every public surface (lists, detail page → 404, hub news, sitemap, API).
 - `readingMinutes` is recomputed on the server at each save (~200 words/minute).
+- **Live preview.** The editor has three modes – *Soạn bài*, *Chia đôi* (default on screens ≥ 1200 px) and
+  *Xem trước* – plus a desktop (1280 px) / phone (390 px) switch. The preview is `/admin/xem-truoc` in an
+  iframe: the editor posts the draft (`postMessage`, same origin only) and the frame renders it with the
+  **same components as the live pages** (`PbArticleView`, `VArticleView`), at a real viewport width, scaled
+  to fit. Focusing a block scrolls the preview to it; links inside the preview are inert.
 - Detail pages prerender the articles known at build time and set `dynamicParams = true`, so articles
   published later render on first visit and are cached; every save/delete calls `revalidatePath`.
 
