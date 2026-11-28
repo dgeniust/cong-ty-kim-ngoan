@@ -6,6 +6,7 @@ export const articleSections: Record<ArticleSection, { title: string; descriptio
   "tin-tuc": { title: "Tin tức", description: "Kiến thức canh tác, kỹ thuật bón phân và tin tức nông nghiệp mới nhất." },
 };
 
+/** SAMPLE fertilizer articles – seed of the article store (lib/articles/server.ts). Read articles through that store. */
 export const articles: Article[] = [
   {
     slug: "ky-thuat-bon-phan-cho-ca-phe-mua-mua",
@@ -123,11 +124,3 @@ export const articles: Article[] = [
     content: [{ type: "p", text: "Các kỹ thuật viên của Kim Ngoan thường xuyên được đào tạo, cập nhật kiến thức canh tác mới." }],
   },
 ];
-
-export function getArticles(section: ArticleSection) {
-  return articles.filter((a) => a.section === section).sort((a, b) => b.date.localeCompare(a.date));
-}
-
-export function getArticle(section: ArticleSection, slug: string) {
-  return articles.find((a) => a.section === section && a.slug === slug);
-}

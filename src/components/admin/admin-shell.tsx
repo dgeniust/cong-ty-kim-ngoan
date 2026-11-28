@@ -9,6 +9,7 @@ import {
   Home,
   LogOut,
   Menu,
+  Newspaper,
   Package,
   Settings2,
   X,
@@ -32,10 +33,12 @@ type AdminNavCounts = {
 export function AdminShell({
   user,
   counts,
+  articleCounts,
   children,
 }: {
   user: string;
   counts: AdminNavCounts;
+  articleCounts: AdminNavCounts;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -68,6 +71,11 @@ export function AdminShell({
       label: "Sắt thép",
       id: "satthep" as const,
     },
+  ];
+  const articleDbs = [
+    { href: "/admin/bai-viet/phanbon", label: "Phân bón", id: "phanbon" as const },
+    { href: "/admin/bai-viet/lopxe", label: "Lốp xe", id: "lopxe" as const },
+    { href: "/admin/bai-viet/satthep", label: "Sắt thép", id: "satthep" as const },
   ];
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -155,6 +163,20 @@ export function AdminShell({
               <span className="text-[12px] tabular-nums text-hub-ink/45">
                 {counts[d.id]}
               </span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      <div data-tour="nav-articles" className="mt-6">
+        <p className="px-2.5 text-[12px] font-medium text-hub-ink/45">Bài viết</p>
+        <nav aria-label="Bài viết" className="mt-1 space-y-0.5">
+          {articleDbs.map((d) => (
+            <Link key={d.href} href={d.href} aria-current={isActive(d.href) ? "page" : undefined} className={item(isActive(d.href))}>
+              <Newspaper className="size-4 shrink-0" strokeWidth={1.8} aria-hidden />
+              <span className="flex-1">{d.label}</span>
+              <span aria-hidden className={cn("size-1.5 rounded-full", SECTOR_DOT[d.id])} />
+              <span className="text-[12px] tabular-nums text-hub-ink/45">{articleCounts[d.id]}</span>
             </Link>
           ))}
         </nav>

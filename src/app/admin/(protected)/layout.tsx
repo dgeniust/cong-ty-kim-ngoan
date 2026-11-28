@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { getSession } from "@/lib/auth/server";
 import { getCatalogProducts, getFertilizerProducts } from "@/lib/products/server";
+import { getAllArticles } from "@/lib/articles/server";
 
 export const metadata: Metadata = { title: { absolute: "Quản trị · Kim Ngoan" }, robots: { index: false, follow: false } };
 
@@ -10,9 +11,9 @@ export const metadata: Metadata = { title: { absolute: "Quản trị · Kim Ngoa
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
   if (session?.role !== "ADMIN") redirect("/admin/login");
-  const [pb, lx, st] = await Promise.all([getFertilizerProducts(), getCatalogProducts("lopxe"), getCatalogProducts("satthep")]);
+  const [pb, lx, st, apb, alx, ast] = await Promise.all([getFertilizerProducts(), getCatalogProducts("lopxe"), getCatalogProducts("satthep"), getAllArticles("phanbon"), getAllArticles("lopxe"), getAllArticles("satthep")]);
   return (
-    <AdminShell user={session.sub} counts={{ phanbon: pb.length, lopxe: lx.length, satthep: st.length }}>
+    <AdminShell user={session.sub} counts={{ phanbon: pb.length, lopxe: lx.length, satthep: st.length }} articleCounts={{ phanbon: apb.length, lopxe: alx.length, satthep: ast.length }}>
       {children}
     </AdminShell>
   );

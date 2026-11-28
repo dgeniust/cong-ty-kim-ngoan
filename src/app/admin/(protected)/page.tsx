@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowUpRight, BookOpenText, FileText, PackagePlus, Package, PencilLine, Play, Settings2, Sprout } from "lucide-react";
+import { ArrowUpRight, BookOpenText, FileText, Newspaper, PackagePlus, Package, PencilLine, Play, Settings2, Sprout } from "lucide-react";
 import { GuideLauncher } from "@/components/admin/guide/guide-provider";
 import { ProductArt } from "@/components/shared/product-art";
 import { getSession } from "@/lib/auth/server";
 import { getCatalogProducts, getFertilizerProducts } from "@/lib/products/server";
+import { getAllArticles } from "@/lib/articles/server";
 import { getRawSettings } from "@/lib/settings/server";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** Admin landing page: welcome, entry points to each area, short guides. */
 export default async function AdminOverview() {
-  const [session, settings, pb, lx, st] = await Promise.all([getSession(), getRawSettings(), getFertilizerProducts(), getCatalogProducts("lopxe"), getCatalogProducts("satthep")]);
+  const [session, settings, pb, lx, st, apb, alx, ast] = await Promise.all([getSession(), getRawSettings(), getFertilizerProducts(), getCatalogProducts("lopxe"), getCatalogProducts("satthep"), getAllArticles("phanbon"), getAllArticles("lopxe"), getAllArticles("satthep")]);
   const hour = new Date().getHours();
   const greet = hour < 11 ? "Chào buổi sáng" : hour < 18 ? "Chào buổi chiều" : "Chào buổi tối";
 
@@ -87,6 +88,33 @@ export default async function AdminOverview() {
               </span>
               <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-hub-blue">
                 Quản lý <ArrowUpRight className="size-4" aria-hidden />
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      {/* the 3 article databases */}
+      <h2 className="mt-12 flex items-center gap-2 text-[13px] font-medium text-hub-ink/50">
+        <Newspaper className="size-4" aria-hidden /> Bài viết
+      </h2>
+      <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+        {[
+          { href: "/admin/bai-viet/phanbon", label: "Phân bón & thuốc BVTV", list: apb, dot: "bg-sector-phanbon" },
+          { href: "/admin/bai-viet/lopxe", label: "Lốp xe ô tô", list: alx, dot: "bg-sector-lopxe" },
+          { href: "/admin/bai-viet/satthep", label: "Tôn – sắt thép", list: ast, dot: "bg-sector-satthep" },
+        ].map((d) => (
+          <li key={d.href}>
+            <Link href={d.href} className="group flex h-full flex-col rounded-xl border border-hub-line bg-hub-paper p-5 transition-colors hover:border-hub-ink/20">
+              <span className="inline-flex items-center gap-2 text-[16px] font-semibold tracking-[-0.01em] text-hub-ink">
+                <span aria-hidden className={cn("size-2 rounded-full", d.dot)} /> {d.label}
+              </span>
+              <span className="mt-2 flex flex-wrap gap-1.5 text-[12px]">
+                <span className="rounded-full bg-hub-canvas px-2 py-0.5 tabular-nums text-hub-ink/70">{d.list.filter((a) => !a.draft).length} đã đăng</span>
+                {d.list.some((a) => a.draft) && <span className="rounded-full bg-hub-marigold-soft px-2 py-0.5 tabular-nums text-[#7a5200]">{d.list.filter((a) => a.draft).length} bản nháp</span>}
+              </span>
+              <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-hub-blue">
+                Viết & quản lý bài <ArrowUpRight className="size-4" aria-hidden />
               </span>
             </Link>
           </li>

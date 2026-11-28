@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCategories, getProducts } from "@/lib/data/catalog";
 import { getNews } from "@/lib/data/news";
-import { articles } from "@/lib/mock/articles";
+import { getPublishedArticles } from "@/lib/articles/server";
 import { categories } from "@/lib/mock/categories";
 import { getFertilizerProducts } from "@/lib/products/server";
 import { absoluteUrl } from "@/lib/site";
@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry(`${pb}/lien-he`, 0.6, "yearly"),
     ...categories.map((c) => entry(`${pb}/danh-muc/${c.slug}`, c.parent ? 0.7 : 0.8, "weekly")),
     ...(await getFertilizerProducts()).map((p) => entry(`${pb}/san-pham/${p.slug}`, 0.8, "monthly")),
-    ...articles.map((a) => entry(`${pb}/${a.section}/${a.slug}`, 0.6, "monthly", new Date(a.date))),
+    ...(await getPublishedArticles("phanbon")).map((a) => entry(`${pb}/${a.section}/${a.slug}`, 0.6, "monthly", new Date(a.date))),
   ];
 
   const catalogs = (
