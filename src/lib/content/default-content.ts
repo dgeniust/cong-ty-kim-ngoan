@@ -56,7 +56,6 @@ export const defaultContent: SiteContent = {
     { icon: "ShieldCheck", title: "Sản phẩm chính hãng", description: "Chất lượng, uy tín" },
     { icon: "Truck", title: "Giao hàng nhanh chóng", description: "Đúng hẹn, tận nơi" },
     { icon: "Sprout", title: "Tư vấn kỹ thuật tận tâm", description: "Đồng hành cùng nhà nông" },
-    { icon: "Handshake", title: "Giá cả hợp lý", description: "Hỗ trợ tối đa" },
   ],
   products: {
     title: "Sản phẩm của chúng tôi",
@@ -82,14 +81,14 @@ export const defaultContent: SiteContent = {
     title: "Cây trồng tiêu biểu",
     subtitle: "Chúng tôi cung cấp giải pháp dinh dưỡng và bảo vệ cây trồng cho nhiều loại cây trồng chủ lực",
     items: [
-      { name: "Cây cà phê", description: "Năng suất cao - Chất lượng tốt", image: CROP_PHOTOS.coffee },
+      { name: "Cây cà phê", description: "Năng suất cao - Chất lượng tốt", image: "/coffee.jpg" },
       { name: "Cây cao su", description: "Bền vững - Hiệu quả lâu dài", image: "/caosu.jpg" },
-      { name: "Cây sầu riêng", description: "Trái to - Ngọt đậm", image: "/photos/phanbon-vuon-sau-rieng.jpg" },
-      { name: "Cây tiêu", description: "Phát triển mạnh - Ít sâu bệnh", image: CROP_PHOTOS.pepper },
-      { name: "Cây lúa", description: "Xanh lá - Bội thu", image: CROP_PHOTOS.rice },
+      { name: "Cây sầu riêng", description: "Trái to - Ngọt đậm", image: "/durian.jpg" },
+      { name: "Cây tiêu", description: "Phát triển mạnh - Ít sâu bệnh", image: "/tieu.webp" },
+      { name: "Cây lúa", description: "Xanh lá - Bội thu", image: "/lua.jpg" },
       { name: "Cây ăn trái", description: "Bưởi, cam, quýt - Trái đều, ngọt", image: "/hero-img.jpg" },
       // TODO(client): replace with a real vegetable-garden photo
-      { name: "Rau màu", description: "Lá xanh - Thu hoạch nhanh", image: CROP_PHOTOS.vegetables },
+      { name: "Rau màu", description: "Lá xanh - Thu hoạch nhanh", image: "/garden.jpg" },
     ],
   },
   about: {
@@ -97,7 +96,7 @@ export const defaultContent: SiteContent = {
     quote: "Nông nghiệp phát triển\nlà cuộc sống ấm no hơn",
     image: "/hero-img.jpg",
     paragraphs: [
-      "Công ty TNHH Kim Ngoan là đại lý phân bón uy tín tại khu vực Chơn Thành – Bình Phước, chuyên cung cấp các loại phân bón và thuốc bảo vệ thực vật chất lượng cao, phục vụ bà con nông dân.",
+      "Công ty TNHH Kim Ngoan là nhà cung ứng phân bón uy tín tại khu vực Chơn Thành – Bình Phước, chuyên cung cấp các loại phân bón và thuốc bảo vệ thực vật chất lượng cao, phục vụ bà con nông dân.",
       "Với phương châm \"Chất lượng tạo nên niềm tin\", chúng tôi luôn nỗ lực mang đến những sản phẩm tốt nhất, dịch vụ chuyên nghiệp và giải pháp nông nghiệp hiệu quả cho mọi nhà nông.",
     ],
     ctaLabel: "Câu chuyện Kim Ngoan",
